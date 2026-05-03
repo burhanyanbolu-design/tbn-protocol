@@ -7,6 +7,10 @@ Flow:
   Bot B → HANDSHAKE_ACCEPT (sends certificate, verifies A) → Bot A
   Bot A → HANDSHAKE_COMPLETE (verifies B, confirms) → Bot B
   ✅ Encrypted channel established
+
+v2 addition: certification compatibility check.
+RESTRICTED bots can only connect to COMMUNITY bots.
+NONE bots cannot connect to anyone.
 """
 
 import json
@@ -78,12 +82,12 @@ class TrustChannel:
 class HandshakeProtocol:
     """
     Executes the 3-step TBN Trust Handshake between two bots.
-    In Phase 1 this runs in-process (simulated network).
-    Phase 2+ will run over HTTP/WebSocket.
+    Now includes certification compatibility check (Step 0).
     """
 
-    def __init__(self, bica: BICA):
+    def __init__(self, bica: BICA, ca=None):
         self.bica = bica
+        self.ca = ca  # CertificationAuthority (optional — enables tier checks)
 
     def handshake(
         self, initiator: BotIdentity, responder: BotIdentity
@@ -99,7 +103,16 @@ class HandshakeProtocol:
         print(f"  Responder : {responder.full_id} ({responder.name})")
         print(f"{'='*60}")
 
-        # ── Step 1: Initiator sends HANDSHAKE_INIT ──────────────────
+        # ── Step 0: Certification compatibility check ────────────────
+        if self.ca:
+            compatible, reason = self.ca.check_compatibility(
+                initiator.full_id, responder.full_id
+            )
+            if not compatible:
+                raise HandshakeError(f"Certification incompatible: {reason}")
+            print(f"\n[Step 0] Cert check: {reason} ✅")
+
+        # ── Step 1: Initiator sends HANDSHAKE_INIT ───────────────────
         print("\n[Step 1] Initiator → HANDSHAKE_INIT")
         init_msg = BotMessage(
             sender_id=initiator.full_id,
@@ -109,7 +122,7 @@ class HandshakeProtocol:
         init_msg.sign(initiator)
         print(f"  Sent: {init_msg}")
 
-        # ── Step 2: Responder verifies initiator, sends HANDSHAKE_ACCEPT ──
+        # ── Step 2: Responder verifies initiator ─────────────────────
         print("\n[Step 2] Responder verifying initiator certificate...")
         init_cert = init_msg.payload["certificate"]
 
@@ -118,7 +131,6 @@ class HandshakeProtocol:
                 f"Responder rejected initiator: {init_cert['bot_id']}"
             )
 
-        # Verify message signature using initiator's public key
         initiator_pub = serialization.load_pem_public_key(
             init_cert["public_key_pem"].encode()
         )
@@ -145,7 +157,7 @@ class HandshakeProtocol:
         accept_msg.sign(responder)
         print(f"  Sent: {accept_msg}")
 
-        # ── Step 3: Initiator verifies responder, sends HANDSHAKE_COMPLETE ──
+        # ── Step 3: Initiator verifies responder ─────────────────────
         print("\n[Step 3] Initiator verifying responder certificate...")
         accept_cert = accept_msg.payload["certificate"]
 
@@ -180,7 +192,7 @@ class HandshakeProtocol:
         complete_msg.sign(initiator)
         print(f"  Sent: {complete_msg}")
 
-        # ── Handshake complete — create trust channels ───────────────
+        # ── Handshake complete ───────────────────────────────────────
         initiator_channel = TrustChannel(initiator, accept_cert)
         responder_channel = TrustChannel(responder, init_cert)
 

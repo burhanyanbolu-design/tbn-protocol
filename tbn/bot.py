@@ -14,9 +14,10 @@ class Bot:
     and exchange verified Bot Language messages.
     """
 
-    def __init__(self, name: str, bica: BICA):
+    def __init__(self, name: str, bica: BICA, ca=None):
         self.name = name
         self.bica = bica
+        self.ca = ca  # CertificationAuthority (optional)
         self.identity = BotIdentity(name)
         self._channels: dict[str, TrustChannel] = {}
 
@@ -30,14 +31,14 @@ class Bot:
     def connect(self, other: "Bot") -> TrustChannel:
         """
         Initiate a trust handshake with another bot.
+        If a CertificationAuthority is set, cert compatibility is checked first.
         Returns the established TrustChannel.
         """
-        protocol = HandshakeProtocol(self.bica)
+        protocol = HandshakeProtocol(self.bica, ca=self.ca or other.ca)
         my_channel, their_channel = protocol.handshake(
             initiator=self.identity,
             responder=other.identity,
         )
-        # Store channels on both bots
         self._channels[other.bot_id] = my_channel
         other._channels[self.bot_id] = their_channel
         return my_channel

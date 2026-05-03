@@ -29,8 +29,8 @@ class ValidatorBot(Bot):
 
     BOT_TYPE = "VALIDATOR"
 
-    def __init__(self, name: str, bica: BICA):
-        super().__init__(name, bica)
+    def __init__(self, name: str, bica: BICA, ca=None):
+        super().__init__(name, bica, ca=ca)
         self._validation_count = 0
 
     def validate(self, results: list[dict]) -> list[dict]:
