@@ -26,5 +26,47 @@
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtPz8hxUR8xLrg2CfNanb\nLklV2thEDQed8KUlzv27bd7W0/hqZBpU7AQEscombKQBl5t/1LrXOJo8D3qZYO1J\n8lrUbBWCVcnE2t+pYV5QG1Y+Mjn6lUZOTLnxlODcwE0MjoYOl80Shba/p8zctZYz\nWKufhC89XlTYtpdwKk4CCUDXqnl9SuBH+c8JNuQKnyAxL46lJYWhE9ToO/arSvXX\n7yB0olyFX62Bd0/myHR6wd+qawMaIYlh2kiTgv+6dFdHJm7LkLoSPjium1ivGjl4\nBF61dnftrg3pbR+DEzHsq3x7XGFisdgfj8c4ufUxKV1FdC56yyvUrllKb5ETQ0by\nsQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:43:22.112493+00:00",
     "tbn_version": "0.1.0"
+  },
+  "tbn-bot-29dc912a08e2cdaf": {
+    "bot_id": "tbn-bot-29dc912a08e2cdaf",
+    "name": "SearchBot-London",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsld6v3KIT6rsr9C0TAsn\nkLoN38dOmbrG/4i3Ohegwt3HyejbGiXXNqfGNT68nqKJnhvKBBzJaJ5f+iR/u+sA\nyr6sKHF8+TsWzVt7gJUDZM/OnZvMKUTR9/66+5opFOYWtkklbkxswh+1d4W4k9Kh\nFdp/RX++CqH3XdjwxMlu8J1WzCrwlTupJAFFNbEaN1LzDIiveX33Yy/bPe20W3w8\ndi/djfFx+POIOq/lUs5MYA1fhO/U20mR/XcoUVv7E3A9FFBzNJL+KuGkwlKUG5DY\nnX6m+EuTJzPOzz0dqOFVbgehlR7N6vW2QSZSAvpXhEOioTIBFOoD7vCg20DGP1qq\n1QIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:45:43.119091+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-e27c5a84577dcbb9": {
+    "bot_id": "tbn-bot-e27c5a84577dcbb9",
+    "name": "ValidatorBot-London",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAurkz1pzfYuIlPWoFiWtu\n+g764Q91thRTO7UmL+OJzSmVZp44RbVN0/AoD9wBz0G2tefYy5SWOghQOtMHNHhe\nJPTvgjAjd0dxnVBor+UvKWn+xnp0+nmIaCMw77xWHfcuQuz+c82P4nm+KdUt9cAZ\ntXJ4yu9XSDDWUCSiTLLiq6cglpxFJA7FFzEGIl9Tfzkh9B1UIIe7azxM7TiG8hvf\nGrMrYRYzVlfGLPU10x6HXbO8gJzonlOB9YYB/PqteiG5cst45476F7TNGd3pPXP/\nS/mrp6NPSRDG35Nn5/CdcCVdqxGJMrEevjdkyG3NWRuGTnM3R8wd+A3bUvhiY+j/\nIQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:45:43.204390+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-e6a2bdc58331b746": {
+    "bot_id": "tbn-bot-e6a2bdc58331b746",
+    "name": "SearchBot-NewYork",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyH1k1vo87qd2Lmr/YL2Z\nf0rvrSfEFhlmekHINsEbuj9Z3ailrbUHhv8JuBJq5D06v20ZJaHYNFBRXny7puXF\n7daT5PffMFLpKgQPfpcEOzJAuBoPNKO1LQW9q4Ehpn1amRhTuKIpVuXbSyMVeTc1\nFhqvuHYeGhyJ3I51h5/4J0rd9NHvja0XYtRwDmlYNtgvVY24fjxk4ZQpMnrJ5LbN\nQg4Dxevvm56paP6GVSx/tOuwNJUH6gF74Cjdt4ad5g9w8ZqYK9rG8890XgW30x7r\nPsecP3t6+BdYljkFb3CxfChXNGk2n7bL5NXhpmmJtWWExUaDKv1xDskkaAncvT66\nVwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:45:43.243658+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-49e240e96866b3c9": {
+    "bot_id": "tbn-bot-49e240e96866b3c9",
+    "name": "MessengerBot-NewYork",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvCvY8TNFUUsuGcHKRkwR\nFaUIw2v8TXMLxU5gIg6rzsS80T92dODPcGUg9z9jgYlDE0PQw1XQMjoBQ9CkKIoZ\n2ykzX88yB9OTPBpOmrRKSaV0Vd9XPJJr3pAPgK0+hFJu8IMMoOVEhNGibqgTZrkM\nz/X/SRM+JvJvAZDsWKDY9ViP7kbiWxAW+V3VAx+43EGlLvMonApQD0+3Te+mtA90\n0K01uA0r6Zk98xXQ1N/hTSPPVrwIRV8clUUnT9lMIBVyI7q+5nd/n8cOXDi11AI9\nxsmAnQg3rNzDJ9ykajCzlrAmnWTxE7imJy1CCOIjTulAnGvb6M/SESq+7CqVaCUK\nCwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:45:43.256543+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-59a1ffa4c5c9d362": {
+    "bot_id": "tbn-bot-59a1ffa4c5c9d362",
+    "name": "SearchBot-Singapore",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmjHAxbCRWxJvA5kSE3j1\n+/WsMOQgFc7+tELTAeoyxVDiTwQ8N5mL280MihI2dXp8vG/A7bL9DoOS4bFRPsgN\nHxOUPQG3AEh230rEiT2jL02O2XGXh2/d4pL06OMcvijrWOfZUW+RLaG1jN/4jp8f\nxupWYJ/KB0DNb8WikprQ9liFzNx1N7MoDM44vbBTBYKf793cifw1l8JV2xg+1f8V\n8xd9RN/tA/bTh6K1b2rf1G7EAUBuV3V3oBMZ0B/MHDYohGoD10msXWevQxarq+RN\nQ44+K5di1jFk8DaNVHUc9QH+hyD2L8PK6fqVl9IYUdY3QJ4StiWUdde3AJ/p1e7v\newIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:45:43.423539+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-88454f08c84b0029": {
+    "bot_id": "tbn-bot-88454f08c84b0029",
+    "name": "ValidatorBot-Singapore",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyyadw4gSS4qNkCB3szb0\nAWQwZpLFOErzj6VX+GE+zh7AQj/3nQJ5W3YJW5PilZOOcDb7nCCKvF8jCqAIlOF8\nYpARVrXQxZSwJk0QxnBjhd24JT/Ibnm0aGaG2H882SJMPzi5PBkFr/mifR6fowk1\nOOJmc+UKxuu1rmDFolgWavyHy+odjjWqp/V/hfgMsVpK4jP+f5xnDmJD+QoZpWGP\nkFTciU6ZlPhBuchs8ElGVjd420QoWzNRDXqI8d8r2jtO4mdP8v66XtOqOQeqGkxP\n8l8Euw860EBB27Ae/iOewmOf2yfFfE4pzLqG5jkFcnCWS4yvf0Wly9nJY7oYYJYH\nKwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:45:43.469823+00:00",
+    "tbn_version": "0.1.0"
   }
 }
