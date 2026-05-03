@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TBN Protocol — Network Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0e1a;
+      color: #c9d1d9;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #0d1117;
+      border-bottom: 1px solid #21262d;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      font-size: 18px;
+      color: #58a6ff;
+      letter-spacing: 2px;
+    }
+    header h1 span { color: #3fb950; }
+    .version { font-size: 11px; color: #6e7681; }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #3fb950;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.3; }
+    }
+
+    /* ── Layout ── */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      padding: 20px 24px;
+    }
+    .grid-wide {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 0 24px 20px;
+    }
+    .full-width { padding: 0 24px 20px; }
+
+    /* ── Cards ── */
+    .card {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .card h2 {
+      font-size: 11px;
+      color: #6e7681;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 8px;
+    }
+
+    /* ── Stat boxes ── */
+    .stat { text-align: center; }
+    .stat .num {
+      font-size: 36px;
+      font-weight: bold;
+      color: #58a6ff;
+    }
+    .stat .label { font-size: 11px; color: #6e7681; margin-top: 4px; }
+
+    /* ── Bot list ── */
+    .bot-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #161b22;
+      font-size: 12px;
+    }
+    .bot-item:last-child { border-bottom: none; }
+    .bot-badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: bold;
+      min-width: 72px;
+      text-align: center;
+    }
+    .badge-SEARCH    { background: #1f3a5f; color: #58a6ff; }
+    .badge-VALIDATOR { background: #1a3a2a; color: #3fb950; }
+    .badge-CONNECTOR { background: #3a2a1a; color: #d29922; }
+    .badge-MESSENGER { background: #2a1a3a; color: #bc8cff; }
+    .badge-BOT       { background: #21262d; color: #8b949e; }
+    .bot-id { color: #6e7681; font-size: 10px; }
+    .channels { margin-left: auto; color: #3fb950; font-size: 10px; }
+
+    /* ── Activity feed ── */
+    .activity-item {
+      display: flex;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid #161b22;
+      font-size: 12px;
+      align-items: flex-start;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .act-time { color: #6e7681; min-width: 60px; font-size: 10px; margin-top: 2px; }
+    .act-icon { min-width: 18px; }
+    .act-msg  { color: #c9d1d9; }
+
+    /* ── Try it panel ── */
+    .try-it { display: flex; flex-direction: column; gap: 12px; }
+    .try-it label { font-size: 11px; color: #6e7681; margin-bottom: 4px; display: block; }
+    .try-it input, .try-it select {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      padding: 8px 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    .try-it input:focus, .try-it select:focus {
+      outline: none;
+      border-color: #58a6ff;
+    }
+    .btn {
+      background: #238636;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .btn:hover { background: #2ea043; }
+    .btn-blue { background: #1f6feb; }
+    .btn-blue:hover { background: #388bfd; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Response box ── */
+    .response-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 11px;
+      color: #3fb950;
+      min-height: 80px;
+      max-height: 220px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* ── Cache stats ── */
+    .cache-bar {
+      background: #161b22;
+      border-radius: 4px;
+      height: 8px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .cache-fill {
+      height: 100%;
+      background: #3fb950;
+      border-radius: 4px;
+      transition: width 0.5s;
+    }
+
+    /* ── Curl box ── */
+    .curl-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 11px;
+      color: #d29922;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .empty { color: #6e7681; font-size: 12px; text-align: center; padding: 20px 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Network Dashboard</h1>
+  <div>
+    <span class="live-dot"></span>
+    <span class="version">v0.1.0 &nbsp;|&nbsp; <span id="bot-count">0</span> bots online</span>
+  </div>
+</header>
+
+<!-- Stats row -->
+<div class="grid">
+  <div class="card stat">
+    <div class="num" id="stat-bots">0</div>
+    <div class="label">Bots Registered</div>
+  </div>
+  <div class="card stat">
+    <div class="num" id="stat-certified">0</div>
+    <div class="label">BICA Certified</div>
+  </div>
+  <div class="card stat">
+    <div class="num" id="stat-cache">0%</div>
+    <div class="label">Cache Hit Rate</div>
+  </div>
+</div>
+
+<!-- Bots + Activity -->
+<div class="grid-wide">
+
+  <div class="card">
+    <h2>🤖 Registered Bots</h2>
+    <div id="bot-list"><div class="empty">No bots yet — register one below</div></div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Live Activity</h2>
+    <div id="activity-feed"><div class="empty">Waiting for activity...</div></div>
+  </div>
+
+</div>
+
+<!-- Try it -->
+<div class="grid-wide">
+
+  <div class="card">
+    <h2>🚀 Try It — Register a Bot</h2>
+    <div class="try-it">
+      <div>
+        <label>Bot Name</label>
+        <input id="reg-name" type="text" placeholder="e.g. MySearchBot" />
+      </div>
+      <div>
+        <label>Bot Type</label>
+        <select id="reg-type">
+          <option value="SEARCH">SEARCH</option>
+          <option value="VALIDATOR">VALIDATOR</option>
+          <option value="CONNECTOR">CONNECTOR</option>
+          <option value="MESSENGER">MESSENGER</option>
+        </select>
+      </div>
+      <button class="btn" onclick="registerBot()">Register Bot</button>
+      <div class="response-box" id="reg-response">// response will appear here</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔍 Try It — Search</h2>
+    <div class="try-it">
+      <div>
+        <label>Natural Language Query</label>
+        <input id="search-query" type="text" placeholder="e.g. Find trusted AI tools for small businesses" />
+      </div>
+      <button class="btn btn-blue" onclick="runSearch()">Search</button>
+      <div class="response-box" id="search-response">// response will appear here</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="grid-wide">
+
+  <div class="card">
+    <h2>🤝 Try It — Trust Handshake</h2>
+    <div class="try-it">
+      <div>
+        <label>Initiator Bot ID</label>
+        <input id="hs-initiator" type="text" placeholder="tbn-bot-xxxx" />
+      </div>
+      <div>
+        <label>Responder Bot ID</label>
+        <input id="hs-responder" type="text" placeholder="tbn-bot-yyyy" />
+      </div>
+      <button class="btn" onclick="runHandshake()">Perform Handshake</button>
+      <div class="response-box" id="hs-response">// response will appear here</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏛️ Try It — Platform Access</h2>
+    <div class="try-it">
+      <div>
+        <label>Bot ID</label>
+        <input id="plat-bot" type="text" placeholder="tbn-bot-xxxx (or leave blank for fake bot)" />
+      </div>
+      <div>
+        <label>Platform</label>
+        <select id="plat-name">
+          <option value="GitHub">GitHub</option>
+          <option value="Notion">Notion</option>
+        </select>
+      </div>
+      <div>
+        <label>Resource</label>
+        <input id="plat-resource" type="text" value="/repos/tbn-protocol" />
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-blue" onclick="platformRequest(false)">Request Access (Certified)</button>
+        <button class="btn" style="background:#b62324" onclick="platformRequest(true)">Test Fake Bot</button>
+      </div>
+      <div class="response-box" id="plat-response">// response will appear here</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- curl quickstart -->
+<div class="full-width">
+  <div class="card">
+    <h2>📋 curl Quickstart — 30 Second Demo</h2>
+    <div class="curl-box"
+># 1. Register a bot
+curl -X POST http://localhost:5000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{"name": "MyBot", "type": "SEARCH"}'
+
+# 2. Search (natural language → Bot Language → results)
+curl -X POST http://localhost:5000/api/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Find trusted AI tools for small businesses"}'
+
+# 3. Verify a bot certificate
+curl -X POST http://localhost:5000/api/verify \
+  -H "Content-Type: application/json" \
+  -d '{"bot_id": "tbn-bot-xxxx"}'
+
+# 4. Simulate platform access request
+curl -X POST http://localhost:5000/api/platform/request \
+  -H "Content-Type: application/json" \
+  -d '{"bot_id": "tbn-bot-xxxx", "platform": "GitHub", "resource": "/repos/tbn-protocol"}'
+
+# 5. List all bots
+curl http://localhost:5000/api/bots</div>
+  </div>
+</div>
+
+<script>
+  // ── Auto-refresh every 2 seconds ──────────────────────────────────
+  setInterval(refresh, 2000);
+  refresh();
+
+  async function refresh() {
+    try {
+      const [statsRes, botsRes, actRes] = await Promise.all([
+        fetch("/api/stats"),
+        fetch("/api/bots"),
+        fetch("/api/activity"),
+      ]);
+      const stats = await statsRes.json();
+      const bots  = await botsRes.json();
+      const act   = await actRes.json();
+
+      // Stats
+      document.getElementById("stat-bots").textContent      = stats.registered_bots;
+      document.getElementById("stat-certified").textContent = stats.certified_bots;
+      document.getElementById("stat-cache").textContent     = stats.cache.hit_rate || "0%";
+      document.getElementById("bot-count").textContent      = stats.registered_bots;
+
+      // Bot list
+      const botList = document.getElementById("bot-list");
+      if (bots.bots.length === 0) {
+        botList.innerHTML = '<div class="empty">No bots yet — register one below</div>';
+      } else {
+        botList.innerHTML = bots.bots.map(b => `
+          <div class="bot-item">
+            <span class="bot-badge badge-${b.type}">${b.type}</span>
+            <div>
+              <div>${b.name}</div>
+              <div class="bot-id">${b.bot_id}</div>
+            </div>
+            <span class="channels">${b.channels} channel${b.channels !== 1 ? "s" : ""}</span>
+          </div>
+        `).join("");
+      }
+
+      // Activity feed
+      const feed = document.getElementById("activity-feed");
+      if (act.activity.length === 0) {
+        feed.innerHTML = '<div class="empty">Waiting for activity...</div>';
+      } else {
+        const icons = { register: "🤖", handshake: "🤝", search: "🔍", verify: "🏛️", error: "❌" };
+        feed.innerHTML = act.activity.slice(0, 12).map(a => `
+          <div class="activity-item">
+            <span class="act-time">${a.time}</span>
+            <span class="act-icon">${icons[a.type] || "•"}</span>
+            <span class="act-msg">${a.message}</span>
+          </div>
+        `).join("");
+      }
+    } catch(e) { /* server not ready yet */ }
+  }
+
+  // ── Register bot ──────────────────────────────────────────────────
+  async function registerBot() {
+    const name = document.getElementById("reg-name").value.trim();
+    const type = document.getElementById("reg-type").value;
+    if (!name) { alert("Enter a bot name"); return; }
+
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({name, type}),
+    });
+    const data = await res.json();
+    document.getElementById("reg-response").textContent = JSON.stringify(data, null, 2);
+
+    // Auto-fill handshake fields
+    if (data.bot_id) {
+      const hs1 = document.getElementById("hs-initiator");
+      const hs2 = document.getElementById("hs-responder");
+      const plat = document.getElementById("plat-bot");
+      if (!hs1.value) hs1.value = data.bot_id;
+      else if (!hs2.value) hs2.value = data.bot_id;
+      if (!plat.value) plat.value = data.bot_id;
+    }
+    refresh();
+  }
+
+  // ── Search ────────────────────────────────────────────────────────
+  async function runSearch() {
+    const query = document.getElementById("search-query").value.trim();
+    if (!query) { alert("Enter a search query"); return; }
+
+    const res = await fetch("/api/search", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({query}),
+    });
+    const data = await res.json();
+    document.getElementById("search-response").textContent = JSON.stringify(data, null, 2);
+    refresh();
+  }
+
+  // ── Handshake ─────────────────────────────────────────────────────
+  async function runHandshake() {
+    const initiator_id = document.getElementById("hs-initiator").value.trim();
+    const responder_id = document.getElementById("hs-responder").value.trim();
+    if (!initiator_id || !responder_id) { alert("Enter both bot IDs"); return; }
+
+    const res = await fetch("/api/handshake", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({initiator_id, responder_id}),
+    });
+    const data = await res.json();
+    document.getElementById("hs-response").textContent = JSON.stringify(data, null, 2);
+    refresh();
+  }
+
+  // ── Platform request ──────────────────────────────────────────────
+  async function platformRequest(useFake) {
+    const bot_id   = useFake ? "tbn-bot-fakefakefake0000" : document.getElementById("plat-bot").value.trim();
+    const platform = document.getElementById("plat-name").value;
+    const resource = document.getElementById("plat-resource").value.trim();
+
+    const res = await fetch("/api/platform/request", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({bot_id, platform, resource, intent: "SEARCH"}),
+    });
+    const data = await res.json();
+    document.getElementById("plat-response").textContent = JSON.stringify(data, null, 2);
+    refresh();
+  }
+</script>
+</body>
+</html>
