@@ -200,15 +200,153 @@
     }
 
     .empty { color: #6e7681; font-size: 12px; text-align: center; padding: 20px 0; }
+
+    /* ── Tour overlay ── */
+    #tour-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    #tour-overlay.active { display: flex; }
+    #tour-box {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      width: 560px;
+      max-width: 95vw;
+      padding: 28px 32px;
+      position: relative;
+    }
+    #tour-box h2 {
+      color: #58a6ff;
+      font-size: 15px;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    #tour-step-label {
+      font-size: 10px;
+      color: #6e7681;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    #tour-description {
+      font-size: 13px;
+      color: #c9d1d9;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      min-height: 60px;
+    }
+    #tour-output {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 11px;
+      color: #3fb950;
+      min-height: 100px;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-bottom: 16px;
+    }
+    .tour-progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .tour-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #21262d;
+      transition: background 0.3s;
+    }
+    .tour-dot.done  { background: #3fb950; }
+    .tour-dot.active { background: #58a6ff; }
+    .tour-btn-row { display: flex; gap: 10px; align-items: center; }
+    #tour-next-btn {
+      background: #238636;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 20px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    #tour-next-btn:hover { background: #2ea043; }
+    #tour-next-btn:disabled { background: #21262d; color: #6e7681; cursor: not-allowed; }
+    #tour-close-btn {
+      background: none;
+      border: 1px solid #30363d;
+      color: #6e7681;
+      border-radius: 6px;
+      padding: 9px 16px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    #tour-close-btn:hover { color: #c9d1d9; border-color: #6e7681; }
+    .tour-spinner {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border: 2px solid #3fb950;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Tour launch button ── */
+    .tour-launch {
+      background: linear-gradient(135deg, #1f6feb, #238636);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    .tour-launch:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
 
+<!-- Tour overlay -->
+<div id="tour-overlay">
+  <div id="tour-box">
+    <h2 id="tour-title">TBN GUIDED TOUR</h2>
+    <div id="tour-step-label">Step 1 of 5</div>
+    <div class="tour-progress" id="tour-dots"></div>
+    <div id="tour-description">Loading...</div>
+    <div id="tour-output">// output will appear here</div>
+    <div class="tour-btn-row">
+      <button id="tour-next-btn" onclick="tourNext()">▶ Run Step</button>
+      <button id="tour-close-btn" onclick="closeTour()">✕ Close</button>
+      <span id="tour-status" style="font-size:11px;color:#6e7681;margin-left:auto"></span>
+    </div>
+  </div>
+</div>
+
 <header>
   <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Network Dashboard</h1>
-  <div>
-    <span class="live-dot"></span>
-    <span class="version">v0.1.0 &nbsp;|&nbsp; <span id="bot-count">0</span> bots online</span>
+  <div style="display:flex;align-items:center;gap:16px">
+    <button class="tour-launch" onclick="startTour()">▶ Guided Tour</button>
+    <div>
+      <span class="live-dot"></span>
+      <span class="version">v0.1.0 &nbsp;|&nbsp; <span id="bot-count">0</span> bots online</span>
+    </div>
   </div>
 </header>
 
@@ -484,6 +622,249 @@ curl http://localhost:5000/api/bots</div>
     const data = await res.json();
     document.getElementById("plat-response").textContent = JSON.stringify(data, null, 2);
     refresh();
+  }
+
+  // ── GUIDED TOUR ──────────────────────────────────────────────────
+  const TOUR_STEPS = [
+    {
+      title: "STEP 1 — Register Two Bots",
+      description:
+        "Every bot on the TBN network gets a unique cryptographic identity —\n" +
+        "a SHA-256 fingerprint of its RSA public key.\n\n" +
+        "We're registering AlphaBot (SearchBot) and BetaBot (ValidatorBot).\n" +
+        "Both are automatically certified in the BICA trust registry.\n\n" +
+        "👉 Watch the Live Activity feed update in real time.",
+      run: async () => {
+        const a = await apiPost("/api/register", { name: "TourAlphaBot", type: "SEARCH" });
+        const b = await apiPost("/api/register", { name: "TourBetaBot",  type: "VALIDATOR" });
+        window._tourBotA = a.bot_id;
+        window._tourBotB = b.bot_id;
+        return {
+          "AlphaBot ID":   a.bot_id,
+          "BetaBot ID":    b.bot_id,
+          "BICA status":   "both bots certified in trust registry",
+          "Message":       a.message,
+        };
+      },
+    },
+    {
+      title: "STEP 2 — Trust Handshake",
+      description:
+        "Before two bots can exchange any data, they must verify each other\n" +
+        "through a 3-step cryptographic handshake — like HTTPS for AI agents.\n\n" +
+        "Step 1: AlphaBot sends its certificate\n" +
+        "Step 2: BetaBot verifies via BICA, sends its certificate back\n" +
+        "Step 3: AlphaBot verifies BetaBot — encrypted channel established\n\n" +
+        "👉 No data flows until both bots are verified.",
+      run: async () => {
+        const hs = await apiPost("/api/handshake", {
+          initiator_id: window._tourBotA,
+          responder_id: window._tourBotB,
+        });
+        return {
+          "Status":    hs.status,
+          "Initiator": hs.initiator.name + " (" + hs.initiator.id.slice(0,20) + "...)",
+          "Responder": hs.responder.name + " (" + hs.responder.id.slice(0,20) + "...)",
+          "Channel":   hs.channel,
+          "Message":   hs.message,
+        };
+      },
+    },
+    {
+      title: "STEP 3 — Bot Language Compiler",
+      description:
+        "Humans speak English. Bots speak Bot Language (BL).\n\n" +
+        "The compiler translates your natural language query into a structured,\n" +
+        "signed BL message with intent, trust level, data type, and filters.\n\n" +
+        "Query: \"Find trusted AI tools for small businesses\"\n\n" +
+        "👉 Watch plain English become a machine-readable protocol message.",
+      run: async () => {
+        const s = await apiPost("/api/search", {
+          query: "Find trusted AI tools for small businesses",
+          bot_id: window._tourBotA,
+        });
+        return {
+          "Human query":   "Find trusted AI tools for small businesses",
+          "── Bot Language ──": "",
+          "INTENT":        s.compiled ? s.compiled.intent      : "(cached from earlier)",
+          "TRUST_LEVEL":   s.compiled ? s.compiled.trust_level : "(cached)",
+          "DATA_TYPE":     s.compiled ? s.compiled.data_type   : "(cached)",
+          "FILTERS":       s.compiled ? JSON.stringify(s.compiled.filters) : "(cached)",
+          "── Results ──":  "",
+          "Source":        s.source,
+          "Count":         s.count,
+          "Results":       s.results.map(r => r.name).join(", "),
+        };
+      },
+    },
+    {
+      title: "STEP 4 — Seeded Network Cache",
+      description:
+        "After a bot searches, it seeds the results to the network cache.\n" +
+        "The next bot asking the same question gets an instant answer — no search needed.\n\n" +
+        "This is how the TBN network gets smarter over time.\n" +
+        "Like BitTorrent — the more bots share, the faster the network.\n\n" +
+        "👉 Same query again — watch the source change to 'cache'.",
+      run: async () => {
+        const s1 = await apiPost("/api/search", { query: "Find trusted AI tools for small businesses" });
+        const s2 = await apiPost("/api/search", { query: "developer AI platforms" });
+        const stats = await apiGet("/api/stats");
+        return {
+          "First search source":  s1.source + " ⚡ (already cached)",
+          "Second search source": s2.source,
+          "Cache hit rate":       stats.cache.hit_rate,
+          "Cached queries":       stats.cache.cached_queries,
+          "Cache hits":           stats.cache.cache_hits,
+          "Cache misses":         stats.cache.cache_misses,
+        };
+      },
+    },
+    {
+      title: "STEP 5 — Platform Access Control",
+      description:
+        "External platforms (GitHub, Notion, APIs) use TBN to verify\n" +
+        "incoming bots before granting access.\n\n" +
+        "Certified bot  → access granted ✅\n" +
+        "Unknown/fake bot → access denied ❌\n\n" +
+        "Every attempt is logged in the immutable audit trail.\n\n" +
+        "👉 This is the security layer that makes AI agent deployment safe.",
+      run: async () => {
+        const certified = await apiPost("/api/platform/request", {
+          bot_id: window._tourBotA, platform: "GitHub",
+          resource: "/repos/tbn-protocol", intent: "SEARCH",
+        });
+        const fake = await apiPost("/api/platform/request", {
+          bot_id: "tbn-bot-fakefakefake0000", platform: "GitHub",
+          resource: "/repos/tbn-protocol", intent: "SEARCH",
+        });
+        const stats = await apiGet("/api/stats");
+        return {
+          "── Certified Bot ──": "",
+          "Bot ID":   window._tourBotA.slice(0,24) + "...",
+          "Granted":  String(certified.granted) + " ✅",
+          "Level":    certified.access_level,
+          "── Fake Bot ──": "",
+          "Bot ID ":  "tbn-bot-fakefakefake0000",
+          "Granted ": String(fake.granted) + " ❌ blocked",
+          "── Audit Log ──": "",
+          "Total requests": stats.audit.total_requests,
+          "Granted total":  stats.audit.granted,
+          "Denied total":   stats.audit.denied,
+          "Grant rate":     stats.audit.grant_rate,
+        };
+      },
+    },
+  ];
+
+  let tourStep = 0;
+  let tourRunning = false;
+
+  function startTour() {
+    tourStep = 0;
+    tourRunning = false;
+    document.getElementById("tour-next-btn").onclick = tourNext;
+    document.getElementById("tour-overlay").classList.add("active");
+    renderTourStep();
+  }
+
+  function closeTour() {
+    document.getElementById("tour-overlay").classList.remove("active");
+    refresh();
+  }
+
+  function renderTourStep() {
+    const step = TOUR_STEPS[tourStep];
+    document.getElementById("tour-title").textContent = step.title;
+    document.getElementById("tour-step-label").textContent =
+      "Step " + (tourStep + 1) + " of " + TOUR_STEPS.length;
+    document.getElementById("tour-description").textContent = step.description;
+    document.getElementById("tour-output").textContent = "// click ▶ Run Step to execute";
+    document.getElementById("tour-next-btn").textContent = "▶ Run Step";
+    document.getElementById("tour-next-btn").disabled = false;
+    document.getElementById("tour-next-btn").style.background = "#238636";
+    document.getElementById("tour-next-btn").onclick = tourNext;
+    document.getElementById("tour-status").textContent = "";
+
+    const dots = document.getElementById("tour-dots");
+    dots.innerHTML = TOUR_STEPS.map(function(_, i) {
+      const cls = i < tourStep ? "done" : i === tourStep ? "active" : "";
+      return '<div class="tour-dot ' + cls + '"></div>';
+    }).join("");
+  }
+
+  async function tourNext() {
+    if (tourRunning) return;
+    tourRunning = true;
+
+    const btn    = document.getElementById("tour-next-btn");
+    const out    = document.getElementById("tour-output");
+    const status = document.getElementById("tour-status");
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="tour-spinner"></span> Running...';
+    out.textContent = "// executing...";
+    status.textContent = "";
+
+    try {
+      const result = await TOUR_STEPS[tourStep].run();
+      out.textContent = formatTourResult(result);
+      refresh();
+
+      tourStep++;
+      if (tourStep >= TOUR_STEPS.length) {
+        document.getElementById("tour-title").textContent = "🎉 TOUR COMPLETE";
+        document.getElementById("tour-step-label").textContent = "All 5 steps demonstrated";
+        document.getElementById("tour-description").textContent =
+          "You've just seen the full TBN Protocol in action:\n\n" +
+          "✅ Cryptographic bot identity (BICA)\n" +
+          "✅ 3-step trust handshake\n" +
+          "✅ Bot Language Compiler (NL → BL)\n" +
+          "✅ Seeded network cache\n" +
+          "✅ Platform access control + audit log\n\n" +
+          "This is the trust infrastructure the AI agent economy needs.";
+        btn.textContent = "✕ Close Tour";
+        btn.disabled = false;
+        btn.style.background = "#1f6feb";
+        btn.onclick = closeTour;
+        document.querySelectorAll(".tour-dot").forEach(function(d) {
+          d.classList.remove("active");
+          d.classList.add("done");
+        });
+      } else {
+        status.textContent = "Step " + tourStep + " complete ✅";
+        btn.textContent = "▶ Next Step";
+        btn.disabled = false;
+        btn.onclick = function() { renderTourStep(); tourRunning = false; };
+      }
+    } catch(e) {
+      out.textContent = "Error: " + e.message;
+      btn.textContent = "▶ Retry";
+      btn.disabled = false;
+      status.textContent = "❌ failed";
+    }
+
+    tourRunning = false;
+  }
+
+  function formatTourResult(obj) {
+    return Object.entries(obj).map(function(entry) {
+      const k = entry[0], v = entry[1];
+      if (k.startsWith("──")) return "\n" + k;
+      return (k + "                      ").slice(0, 22) + " " + v;
+    }).join("\n");
+  }
+
+  async function apiPost(url, body) {
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return r.json();
+  }
+
+  async function apiGet(url) {
+    return (await fetch(url)).json();
   }
 </script>
 </body>

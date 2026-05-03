@@ -110,5 +110,19 @@
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoxqO7I5FTcXKab7mGoFj\nfZe6BEp2uoPPbcGZt4RikyvfMJ1OEp014D++NGQcgIXVDCZRQpTae1KPXE798mwa\n9zWF+PZc2krXDQm3yUsSbQyuurxx9/akzxJt9WSq4R/YslRJ7dsa8tOj9b/RrLe3\n6Ws5BPMfXb333lldB8s9D9P++0X8fxByMFOdH7axoZG8bH/54aidQAjL1PYOhgGH\nNqihYBZUkZVAmQeKjBno/e13S2VSIMyyW4TD2OKmpfH/Z7glVT+OoGLOJSfHLJqX\n+kNaw84jP+a4hBG5F1L7cnkbyp4AAtVYOVXZLDa5TqOayp2rI1jYiovVxvESZBTY\nTQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:53:42.512109+00:00",
     "tbn_version": "0.1.0"
+  },
+  "tbn-bot-0565c73b40bd0d67": {
+    "bot_id": "tbn-bot-0565c73b40bd0d67",
+    "name": "AlphaBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAniNU5PqK4gOsQcsa+pBZ\n8vpqKxBixc0ycne+IseQ+L7wqM+SzegoI2/QnmkRy7HIjXG2Fg5hwnZrwaE6A2U+\nMf+KbNCpYBPg0+VyEXMwKs2/Tz5gv4drT5b+Ye3tOd/dBf55r+2q84KL4T82hBiO\ndDzP9sJiSuQWXY4ctj5ZaAhwjWS7TTEkOUQ8o7dwucRqBkH0iqleQ0H9uTBBHuXb\nERyb8LKbu3x8YYa0O9fPx4MDW90h2aBkQ6ifcDDyOOL6ACUbexS1iZ+s6PtaQKkR\napy95crYmbAh6MMCPVaKn0VOYS4bUYZDO9cn1FWBvnq3+ScDwwZxXZez3lhMECGb\n5QIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:59:27.093713+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-81f448154f4913de": {
+    "bot_id": "tbn-bot-81f448154f4913de",
+    "name": "BetaBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsS0JWVPzZDEquzlq2e2x\n3J/u/sdQ3j8SnRyJKMkXGDfl177s1QFvCts6qAIRSZzDyn46vQ4kalnBsdJLakBm\ntA2C2agwZqpmTw7884n4zGd1eVAcc2RXdoqu54IF8+SyrIiafDIzmMj3zGGivAWL\nAtNNyih+UyVpkVI/gUa1HGQYM04y2gu7yJ8YmAMwR6eNEk7KTd4b+sjR2sQ0gUIu\n3q6E7xUVzzpz7YAYwRCb/DAaw6g3F4GIzMAx/JjnGqHDUFUXeck6NrX0uYzyS1Ml\n3xPfZbR9iY7/jUf90AkaAuU8kqgMmMnyibxMOFuchM5E1kC4NWyDGKLgkYKU8H1S\nJQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T11:00:28.005566+00:00",
+    "tbn_version": "0.1.0"
   }
 }
