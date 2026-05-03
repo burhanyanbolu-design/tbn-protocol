@@ -366,6 +366,28 @@
   </div>
 </div>
 
+<!-- Cert tier row -->
+<div class="grid" style="padding-top:0">
+  <div class="card" style="padding:12px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:11px;color:#6e7681">🟢 COMMUNITY</span>
+      <span id="stat-community" style="font-size:20px;font-weight:bold;color:#3fb950">0</span>
+    </div>
+  </div>
+  <div class="card" style="padding:12px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:11px;color:#6e7681">🔵 STANDARD</span>
+      <span id="stat-standard" style="font-size:20px;font-weight:bold;color:#58a6ff">0</span>
+    </div>
+  </div>
+  <div class="card" style="padding:12px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:11px;color:#6e7681">🟡 RESTRICTED</span>
+      <span id="stat-restricted" style="font-size:20px;font-weight:bold;color:#d29922">0</span>
+    </div>
+  </div>
+</div>
+
 <!-- Bots + Activity -->
 <div class="grid-wide">
 
@@ -465,6 +487,62 @@
 
 </div>
 
+<!-- Certification + BL v2 Encryption -->
+<div class="grid-wide">
+
+  <div class="card">
+    <h2>🏅 Try It — Bot Certification</h2>
+    <div class="try-it">
+      <div>
+        <label>Bot ID</label>
+        <input id="cert-bot-id" type="text" placeholder="tbn-bot-xxxx (from registered bots above)" />
+      </div>
+      <div>
+        <label>Certification Level</label>
+        <select id="cert-level">
+          <option value="STANDARD">🔵 STANDARD — public data only</option>
+          <option value="COMMUNITY">🟢 COMMUNITY — full access (requires ethical declaration)</option>
+          <option value="RESTRICTED">🟡 RESTRICTED — read-only</option>
+        </select>
+      </div>
+      <div id="cert-community-fields" style="display:none">
+        <label>Purpose (required for COMMUNITY)</label>
+        <input id="cert-purpose" type="text" placeholder="e.g. Trusted AI tool discovery for TBN network" />
+        <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
+          <input type="checkbox" id="cert-ethical" style="width:auto" />
+          <label style="margin:0;color:#c9d1d9">I declare this bot will operate ethically</label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="certifyBot()">🏅 Certify Bot</button>
+        <button class="btn" style="background:#b62324" onclick="reportViolation()">⚠️ Report Violation</button>
+      </div>
+      <div class="response-box" id="cert-response">// response will appear here</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔒 Try It — BL v2 Encryption</h2>
+    <div class="try-it">
+      <div>
+        <label>Sender Bot ID</label>
+        <input id="enc-sender" type="text" placeholder="tbn-bot-xxxx" />
+      </div>
+      <div>
+        <label>Receiver Bot ID</label>
+        <input id="enc-receiver" type="text" placeholder="tbn-bot-yyyy" />
+      </div>
+      <div>
+        <label>Query to encrypt</label>
+        <input id="enc-query" type="text" value="Find trusted AI tools for small businesses" />
+      </div>
+      <button class="btn btn-blue" onclick="encryptDemo()">🔒 Encrypt Message</button>
+      <div class="response-box" id="enc-response">// shows plaintext → AES-256-GCM ciphertext → decrypted</div>
+    </div>
+  </div>
+
+</div>
+
 <!-- curl quickstart -->
 <div class="full-width">
   <div class="card">
@@ -517,19 +595,26 @@ curl http://localhost:5000/api/bots</div>
       document.getElementById("stat-cache").textContent     = stats.cache.hit_rate || "0%";
       document.getElementById("bot-count").textContent      = stats.registered_bots;
 
+      // Cert tier counts
+      const byLevel = stats.certification ? stats.certification.by_level : {};
+      document.getElementById("stat-community").textContent  = byLevel.COMMUNITY  || 0;
+      document.getElementById("stat-standard").textContent   = byLevel.STANDARD   || 0;
+      document.getElementById("stat-restricted").textContent = byLevel.RESTRICTED  || 0;
+
       // Bot list
       const botList = document.getElementById("bot-list");
       if (bots.bots.length === 0) {
         botList.innerHTML = '<div class="empty">No bots yet — register one below</div>';
       } else {
+        const certBadge = {"COMMUNITY":"🟢","STANDARD":"🔵","RESTRICTED":"🟡","NONE":"⚪"};
         botList.innerHTML = bots.bots.map(b => `
           <div class="bot-item">
             <span class="bot-badge badge-${b.type}">${b.type}</span>
             <div>
-              <div>${b.name}</div>
+              <div>${b.name} <span style="font-size:13px">${certBadge[b.cert_level] || "⚪"}</span> <span style="font-size:10px;color:#6e7681">${b.cert_level || "NONE"}</span></div>
               <div class="bot-id">${b.bot_id}</div>
             </div>
-            <span class="channels">${b.channels} channel${b.channels !== 1 ? "s" : ""}</span>
+            <span class="channels">${b.channels} ch</span>
           </div>
         `).join("");
       }
@@ -570,9 +655,15 @@ curl http://localhost:5000/api/bots</div>
       const hs1 = document.getElementById("hs-initiator");
       const hs2 = document.getElementById("hs-responder");
       const plat = document.getElementById("plat-bot");
+      const cert = document.getElementById("cert-bot-id");
+      const encS = document.getElementById("enc-sender");
+      const encR = document.getElementById("enc-receiver");
       if (!hs1.value) hs1.value = data.bot_id;
       else if (!hs2.value) hs2.value = data.bot_id;
       if (!plat.value) plat.value = data.bot_id;
+      if (!cert.value) cert.value = data.bot_id;
+      if (!encS.value) encS.value = data.bot_id;
+      else if (!encR.value) encR.value = data.bot_id;
     }
     refresh();
   }
@@ -624,7 +715,66 @@ curl http://localhost:5000/api/bots</div>
     refresh();
   }
 
-  // ── GUIDED TOUR ──────────────────────────────────────────────────
+  // ── Certification level toggle ───────────────────────────────────
+  document.getElementById("cert-level").addEventListener("change", function() {
+    document.getElementById("cert-community-fields").style.display =
+      this.value === "COMMUNITY" ? "block" : "none";
+  });
+
+  // ── Certify bot ───────────────────────────────────────────────────
+  async function certifyBot() {
+    const bot_id  = document.getElementById("cert-bot-id").value.trim();
+    const level   = document.getElementById("cert-level").value;
+    const purpose = document.getElementById("cert-purpose").value.trim();
+    const ethical = document.getElementById("cert-ethical").checked;
+    if (!bot_id) { alert("Enter a Bot ID"); return; }
+
+    const res = await apiPost("/api/certify", { bot_id, level, purpose, ethical_declaration: ethical });
+    document.getElementById("cert-response").textContent = JSON.stringify(res, null, 2);
+    refresh();
+  }
+
+  // ── Report violation ──────────────────────────────────────────────
+  async function reportViolation() {
+    const bot_id    = document.getElementById("cert-bot-id").value.trim();
+    const violation = prompt("Describe the violation:");
+    if (!bot_id || !violation) return;
+
+    const res = await apiPost("/api/violation", { bot_id, violation });
+    document.getElementById("cert-response").textContent = JSON.stringify(res, null, 2);
+    refresh();
+  }
+
+  // ── BL v2 encryption demo ─────────────────────────────────────────
+  async function encryptDemo() {
+    const sender_id   = document.getElementById("enc-sender").value.trim();
+    const receiver_id = document.getElementById("enc-receiver").value.trim();
+    const query       = document.getElementById("enc-query").value.trim();
+    if (!sender_id || !receiver_id) { alert("Enter both bot IDs"); return; }
+
+    const res = await apiPost("/api/encrypt_demo", { sender_id, receiver_id, query });
+    const out = document.getElementById("enc-response");
+
+    if (res.error) {
+      out.textContent = "Error: " + res.error;
+      return;
+    }
+
+    out.textContent =
+      "PLAINTEXT PAYLOAD:\n" +
+      JSON.stringify(res.plaintext_payload, null, 2) +
+      "\n\n🔒 AFTER AES-256-GCM ENCRYPTION:\n" +
+      "  payload_hash : " + res.encrypted.payload_hash + "\n" +
+      "  session_key  : " + res.encrypted.session_key + "\n" +
+      "  payload      : " + res.encrypted.payload + "\n" +
+      "  signature    : " + res.encrypted.signature + "\n" +
+      "\n✅ DECRYPTION RESULT:\n" +
+      "  success          : " + res.decryption.success + "\n" +
+      "  recovered_intent : " + res.decryption.recovered_intent + "\n" +
+      "  recovered_query  : " + res.decryption.recovered_query;
+
+    refresh();
+  }
   const TOUR_STEPS = [
     {
       title: "STEP 1 — Register Two Bots",

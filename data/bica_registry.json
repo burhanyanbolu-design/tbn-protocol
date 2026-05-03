@@ -201,5 +201,41 @@
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAneyl/ZSR0LaMlZbmX/az\nw8Zs8h250OqRbxgPqh/9OD3Te/xZ+2bKEQDnNhbPh2OAvrrG2afmLEBNcl0NZsnv\nVDIsuavJdLT7SaXRDAJ9OVxen4a3q29IGRoPHrmpURIz0ZwZHG4Y0l9iV+gL99DM\n6gM6e7o8i03o7nKm92UIlzkvx9JnEVeGbjO7fp9sFKLb8g1J7wJhtIytx+fnvizQ\n7V0bx1GetdtHUasWHb22WlwfNLYtbYxIkIwadROnSCGYFmDtd9IWI9ZA7RyIEbef\nZggF9zdeGeCZEBjoX//SJzfeE1WZ73KwumHmrRM5Q/AqhMGH48RL5vEpRyKYndu5\nMQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T11:18:50.181592+00:00",
     "tbn_version": "0.1.0"
+  },
+  "tbn-bot-d95c4428e2a31289": {
+    "bot_id": "tbn-bot-d95c4428e2a31289",
+    "name": "AlphaBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0OxsdSleC+qGdzyBifhF\n976/3uFvnOt/1RO0yV5/L+HDm7YN75KitbO7dA558QssBi7ZsFiY+taKRSR+nsmq\nMwT1HG/1P6nPZyAPRlCBGN8vl7l3ZB104ISZmCvCMm/5dUeap+B79BKMXa/70X+F\nU1+g7H85xFlhTDX1VN+UoSwkAUVGft5IX+A8aEm7WUTapeoEdp6d7/anT1y87mn9\nbqjr+4lM4vVCGnIZtik6rg/bnwrx5Gl6kccSlKbJPpbU/3mEmujHz8vR+sw+Ww1v\nHoHEOkNNyLRFbnlPZznTCwsdZEgSHCBkqUpUYOkIro6llNFxY29EXGRzW64o0nWB\nHwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T12:36:57.276449+00:00",
+    "tbn_version": "0.1.0",
+    "cert_level": "COMMUNITY",
+    "purpose": "Trusted AI search for TBN network"
+  },
+  "tbn-bot-4ae2019dc0bc9ee1": {
+    "bot_id": "tbn-bot-4ae2019dc0bc9ee1",
+    "name": "BetaBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtW7Tu79bPfcpjW3NJYPB\nfzz/+J1J73QB/CuQiDpKnscALDdI8b1Vh7FKLcopV/NKCIQq9yDZb85fqagLZXKU\n7GgYE5kcqesxpGNGl3APbcIEjVUkOSwSy1egou5sZ5Spi3b+8Vq0GlRYLVvdIvP9\ndOWCmjA0IMOxqnyWGnA4fzjlkWJ+XmapGT2ZR+jXh5AlVc/FqiTivZ5EprUXZ0kW\nlpxSOOTD5KF1RWWi5DmDemQqB3dM+WpROi66y3r4V66A6bc75WBL7KZSgzbgYE6M\nliLn9XJaY+tvNq0B0OgZw0uE1tJoyGVSWhVwZLLivxzxuAUVgaCowRg8oMqo8Vpy\nTQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T12:36:59.368329+00:00",
+    "tbn_version": "0.1.0",
+    "cert_level": "STANDARD",
+    "purpose": ""
+  },
+  "tbn-bot-73d95154eadebbac": {
+    "bot_id": "tbn-bot-73d95154eadebbac",
+    "name": "AlphaBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2vyZdeqyqKFL2EbBhp04\neqMvmgxlb7GkhW/R/NasqXmpBeBehnDXUgR1GmmbmToyHaPCxHw5dun3t8lF3bS4\nB7tF3S/dzCpoKV7mgLEKqTcPMGrZWQ4/MK0YD11iSr02qhzOAD4g8Eg4zuIuWWkL\n3jnSz1VeHOGVphDakgCjlBl58fkvyJTb7xUpy3tGJEziyHnJGCSZWXdBI2YX/Emu\nXF89pSb1qDkowfmCKEvtKeHeLNIwHryoI7rW4/+oEjjz9XeOa9y2uOHOEID0zNsM\nSXju1ENdpwR24QCNx1StJ97wd0KjwWUhDNNz78mblX/lAEfRu/SLNe+Gq1aYyA6f\nAwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T12:37:32.237224+00:00",
+    "tbn_version": "0.1.0",
+    "cert_level": "COMMUNITY",
+    "purpose": "Trusted AI search"
+  },
+  "tbn-bot-c662802468d7e9cd": {
+    "bot_id": "tbn-bot-c662802468d7e9cd",
+    "name": "BetaBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0sb1/ZC9PJIo0g0WNerU\nSdqctcYPsugTHNRvAFADt93xkNtAaNDXBWJa/lh/2bRk1m/PxTtRL4Z1amS5qnwJ\nEPvt6COF3gE6vkI5v5xCTspZBW1EUth5WSuyQUnAY5MPdw5ZXTKYgQL4oTumdAc4\ngbcbRGQFQPSitNKX95MyCXdd2O9qk6yJw3ofUTHlnMQOV+prV0ujKLtkCuHD5rY2\n22TszZBn7tUPW5UNn8ywm1TY0HxGom9lBZIUGM77bM6GBWbVGwvgs1I59Km9laY3\nHcCfpU2pLRIwUrNTZYyhj2/KyLOSDZb/I7ub/UujLlZGt3n7AhXyPXs87pu4o+CI\nSwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T12:37:34.499676+00:00",
+    "tbn_version": "0.1.0",
+    "cert_level": "STANDARD",
+    "purpose": ""
   }
 }
