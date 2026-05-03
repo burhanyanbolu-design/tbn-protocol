@@ -68,5 +68,33 @@
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyyadw4gSS4qNkCB3szb0\nAWQwZpLFOErzj6VX+GE+zh7AQj/3nQJ5W3YJW5PilZOOcDb7nCCKvF8jCqAIlOF8\nYpARVrXQxZSwJk0QxnBjhd24JT/Ibnm0aGaG2H882SJMPzi5PBkFr/mifR6fowk1\nOOJmc+UKxuu1rmDFolgWavyHy+odjjWqp/V/hfgMsVpK4jP+f5xnDmJD+QoZpWGP\nkFTciU6ZlPhBuchs8ElGVjd420QoWzNRDXqI8d8r2jtO4mdP8v66XtOqOQeqGkxP\n8l8Euw860EBB27Ae/iOewmOf2yfFfE4pzLqG5jkFcnCWS4yvf0Wly9nJY7oYYJYH\nKwIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.469823+00:00",
     "tbn_version": "0.1.0"
+  },
+  "tbn-bot-a9d2281cb116551f": {
+    "bot_id": "tbn-bot-a9d2281cb116551f",
+    "name": "MySearchBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA36P5y6QS5XGbZThvNJjS\nxyzPNR96yYSiCcryy/8dAMNoSg7s1Trg1lKflG+qTQs7XEE3zQZbkWECwca2RR/u\nwvD4EK8+1KNFWDlYtqFBpdSeD50cY7Bd55YaM/LZp+fKp85b361xtuEuiY5wOlyF\nMM4DzTxeG4OYepFyocqXoWMKPZcNGoamKteE+TM9AgAEeZC471W9pkJd78ISHwIg\n6+fa3vgiLpy88qSTPmFGwUpPc7CKSyfGNL38b4QgrOIXPMRZQKqXVoQEZBs3ofvV\njMbSJ+O8PkS4UWgby8Vz5xWx5ikrujKvVGYfkvMkoP5olieNaoHgEFC6iklK2yv4\nHwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:47:54.231392+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-e2b1c338f877aba9": {
+    "bot_id": "tbn-bot-e2b1c338f877aba9",
+    "name": "MyValidatorBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxoeiATGje34WMqspLa6O\nByFRDaMe4wN5PpGb65H90mlUlfGGLIjuWfIYrjwH/Mvv68r7Bu8K3l8meDo3lCyk\nncVsLC/ArV92nI9nu7szvaNF9cTuFnCT/h+6R0MP1mmXNn1GNpNXkwujhqgh/53i\nDb21EShFTOiJiun0cq9eHunUnzwOI/m+UfFOGP5wXTfca8SI7mbMkB65st1WT9VU\nCP5M0XTmMiEXB4izzKEURUqn3Y9rEUxqhbKMeRXzUfshSjJLxof21Qa3ppkWgk/q\nWy4d4vzzaNQlhe/QNBfUqPufJDaRLDG3/tcNxJ+K0ojP9UI6GlmUrRYUIiHNOyti\n8QIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:47:54.294411+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-fe0818e36ef4061a": {
+    "bot_id": "tbn-bot-fe0818e36ef4061a",
+    "name": "MySearchBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApfhjUpkCNdYLIEsdpHjY\nVbW4If2nPy96VEns9kuBQPH5i26SaLSN4EB+bhK2b5NNbeFWmjxdL3GNUMXVzB1h\n0bPaH3xjaFxkUm6eOAePKpkCOD0zqhtAMPM1zeMBUjuJH5jePQKGtrWMPMSqj/xI\nuZGrgX2E6DCd4oXSN4c1NF1JfCsp8iYqAWJ25oaJjwVDT1Xhk4WdJ3cCtO3lW7nG\nNI6EWLY9+OIucwb2azd8ZuOfQTsSMsZ6pgEsyLDMpyrSYAS/l5W/WN6CKkaxviLE\nHuMFhceD+D5BncUkh/NqciXwJG/fd1iq42gWR4tIzE62edu6w1KjINFJVPxK+EoU\nTwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:48:26.564948+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-f5ee508bdeb37cbe": {
+    "bot_id": "tbn-bot-f5ee508bdeb37cbe",
+    "name": "MyValidatorBot",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz/nlF7RAiMVj5GC26bD/\nvaVNGqVBCDuL17VOQ4AMctEkSTCNkeTwA8RgzbXf9J51ewlh/FKn6qs7jIGXk7IW\n3IHesy7hMxwPV48Czwp9Dc//n5mJkfrb0dGiTHnYMPbtRNbzCOs4d7EP8LZxZhDA\nSoWHq+RMXMjUTq41Vk1RWOSDYua8Np8pJI4+3zCRN6d8Dfy7j4MhVde30qyE/sQ0\nUSmExwHfHLNcJwMw+SVIZK6dbIbb8fuXcBkWnnGuXcPSXyVoqJVGOlfFU3D/dX66\nQjLTtQngsWP1tXQ5tx+gHVUmiCXAkhHtAvu55mTxbBcrpRfn8ztLkG9J6dz9KOfP\n/wIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:48:26.605149+00:00",
+    "tbn_version": "0.1.0"
   }
 }
