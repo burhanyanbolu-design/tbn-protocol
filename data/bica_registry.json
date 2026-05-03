@@ -1,0 +1,30 @@
+{
+  "tbn-bot-2ccebd853e36d207": {
+    "bot_id": "tbn-bot-2ccebd853e36d207",
+    "name": "SearchBot-1",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzTVSsYbCStuMs77UimJt\nmuCTcxk6KMMpbg3MiPb1IkuKE41MT5iex6I4FKd+uRaTFFrXHXfaKJImSgH4TQdh\nqFkCbpjmhAzTlgRNManq4dl9K4Xe19pwMgCFtqfO1UvX0YoPinx1vAxDn3RXl6pq\nCjKQSTHdn+nOab80Snq1soNDcN1yo08bM4YbtVhgZq3PxMhhs6BhiwJrqxG2Jiov\n4QkiZ0Av/mCLgX0YH+Dg3qYioQzb7jdmnNlsGEwUEz9z/ZXu2CIbFHqi8j9SXwUc\nR2xue/C7LwnAaWLPq3jiuxUhIjagwB7/yzsLwV25lFhosrtBCw/pqPuXAlmgCLIb\nlQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:43:22.029652+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-94c5482be7f16711": {
+    "bot_id": "tbn-bot-94c5482be7f16711",
+    "name": "ValidatorBot-1",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1/LQ3QSXnxL9f9FApGlH\n+14Y7Yh0HisIzjQtwaVjKl0F+Lc7ZxOdIFRvTarAq8nGvp6zQ+0slmqpZWo5IPAI\nz+88NX6JnsZDWslvaGWOE0b7/NZXfA+S7uWzl6SPH3QpNYOL9te83l0p7yhmSqTP\n8QN2D9dBzI2E5sNeAC+ts8jvCpbkNsYInf9aoBX6NNmuco2unyFLgizGdKPLF9jt\no1hYA18gS/MEHyoNtuMsi5U6bvXptCtMHC80/dg6KUPn+yCyw0a5wYlJlUI7Gj8K\nfTQQceDhRtErUlCCHdUEh3Pnb/z6DOLWw/qdmrLq3C1ysYQ3QYutKKsxKRK/XKH4\nGQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:43:22.069903+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-b0b20bca9ac6246a": {
+    "bot_id": "tbn-bot-b0b20bca9ac6246a",
+    "name": "ConnectorBot-1",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA39PgQoB1SqvSp+qYr3Cp\nqILrhvXt9m5OpePVJL+2aCs+elRFoctRiE6VziYCbE0yaLNB+TaG/Y4kYGykcp6V\nrTQaLm/YgDDxNGy4KRME9SKMXrSrlJomHet75BBNp+Vk7v4bHX28bmUA9TfWjhjX\nooUuwMHXPLhLeHe8Hn17hbYsQN2yrY5SiH6rnKB6X8p1wdu4N/NDL2haZU2G7cB8\nf3Y8Ns8oqPWRiRHsUADWhPjy9dC9o1117S4kOX2s6K8Ktqsc/nIKSntzGJJ+hYY3\ntgbIuNElFgdahDGN7PqSEBebQlozEO1zcFPKGA93f9FzPdCP7iGjTIqAZX6O8Qyi\ntQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:43:22.099477+00:00",
+    "tbn_version": "0.1.0"
+  },
+  "tbn-bot-08b531539c0926ea": {
+    "bot_id": "tbn-bot-08b531539c0926ea",
+    "name": "MessengerBot-1",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtPz8hxUR8xLrg2CfNanb\nLklV2thEDQed8KUlzv27bd7W0/hqZBpU7AQEscombKQBl5t/1LrXOJo8D3qZYO1J\n8lrUbBWCVcnE2t+pYV5QG1Y+Mjn6lUZOTLnxlODcwE0MjoYOl80Shba/p8zctZYz\nWKufhC89XlTYtpdwKk4CCUDXqnl9SuBH+c8JNuQKnyAxL46lJYWhE9ToO/arSvXX\n7yB0olyFX62Bd0/myHR6wd+qawMaIYlh2kiTgv+6dFdHJm7LkLoSPjium1ivGjl4\nBF61dnftrg3pbR+DEzHsq3x7XGFisdgfj8c4ufUxKV1FdC56yyvUrllKb5ETQ0by\nsQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "created_at": "2026-05-03T10:43:22.112493+00:00",
+    "tbn_version": "0.1.0"
+  }
+}

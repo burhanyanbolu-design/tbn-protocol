@@ -100,17 +100,22 @@ class BICA:
     """
     Bot Identity & Certification Authority.
     Maintains a registry of verified bots and issues/revokes trust.
-    Phase 1: in-memory registry. Phase 2+: persistent store.
+    Phase 1: in-memory registry.
+    Phase 2: optional JSON persistence via registry_path.
     """
 
-    def __init__(self):
+    def __init__(self, registry_path: str = None):
         self._registry: dict[str, dict] = {}
+        self._registry_path = registry_path
+        if registry_path:
+            self._load()
 
     def register(self, identity: BotIdentity) -> None:
         """Register a bot's certificate in the trust registry."""
         cert = identity.to_certificate()
         self._registry[cert["bot_id"]] = cert
         print(f"[BICA] Registered: {cert['bot_id']} ({cert['name']})")
+        self._save()
 
     def verify_certificate(self, cert: dict) -> bool:
         """Check if a certificate is in the registry."""
@@ -126,7 +131,29 @@ class BICA:
         if bot_id in self._registry:
             del self._registry[bot_id]
             print(f"[BICA] Revoked: {bot_id}")
+            self._save()
 
     def list_bots(self) -> list[dict]:
         """Return all registered bot certificates."""
         return list(self._registry.values())
+
+    # ------------------------------------------------------------------
+    # Persistence
+    # ------------------------------------------------------------------
+
+    def _save(self) -> None:
+        """Save registry to JSON file if a path was provided."""
+        if not self._registry_path:
+            return
+        import json, os
+        os.makedirs(os.path.dirname(self._registry_path) or ".", exist_ok=True)
+        with open(self._registry_path, "w") as f:
+            json.dump(self._registry, f, indent=2)
+
+    def _load(self) -> None:
+        """Load registry from JSON file if it exists."""
+        import json, os
+        if os.path.exists(self._registry_path):
+            with open(self._registry_path) as f:
+                self._registry = json.load(f)
+            print(f"[BICA] Loaded {len(self._registry)} bots from {self._registry_path}")
