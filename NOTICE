@@ -1,0 +1,38 @@
+TBN Protocol — Trusted Bot Network
+Copyright (C) 2026 Burhan Yanbolu / Hardin Enterprises Ltd
+
+This product includes software developed by Hardin Enterprises Ltd.
+
+Licensed under the GNU Affero General Public License v3.0 (AGPL-3.0)
+See LICENSE file for full license text.
+
+IMPORTANT NOTICE FOR NETWORK SERVICE PROVIDERS:
+
+If you run a modified version of this software as a network service,
+you MUST make the complete source code of your modified version
+available to all users of that service under the AGPL-3.0 license.
+
+This includes:
+- All modifications to the original code
+- Any additional modules or components
+- Configuration files and deployment scripts
+- API endpoints and service interfaces
+
+Failure to comply with the AGPL-3.0 license terms may result in
+legal action and termination of your license to use this software.
+
+For commercial licensing options that do not require open-sourcing
+your modifications, please contact:
+
+Burhan Yanbolu
+Hardin Enterprises Ltd
+Email: burhan@hardinai.co.uk
+Website: https://hardinai.co.uk
+
+Trademarks:
+- "TBN Protocol" is a trademark of Hardin Enterprises Ltd
+- "Trusted Bot Network" is a trademark of Hardin Enterprises Ltd
+- "BICA" (Bot Identity & Certification Authority) is a trademark of Hardin Enterprises Ltd
+
+All trademarks and registered trademarks are the property of their
+respective owners.

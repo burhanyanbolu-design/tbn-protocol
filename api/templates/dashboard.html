@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TBN Protocol — Network Dashboard</title>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EF6RKG8KY2');
+  </script>
+  
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -22,6 +32,44 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-hex {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #0d1117;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .logo-hardin {
+      font-size: 14px;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+    .logo-ai {
+      font-size: 10px;
+      color: #8b949e;
+      letter-spacing: 0.5px;
     }
     header h1 {
       font-size: 18px;
@@ -319,6 +367,65 @@
       letter-spacing: 0.5px;
     }
     .tour-launch:hover { opacity: 0.9; }
+    
+    /* ── Footer ── */
+    footer {
+      background: #0d1117;
+      border-top: 1px solid #21262d;
+      padding: 24px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .footer-logo-hex {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      color: #0d1117;
+    }
+    .footer-logo-text {
+      font-size: 14px;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+    .footer-copyright {
+      font-size: 11px;
+      color: #6e7681;
+      line-height: 1.6;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 11px;
+    }
+    .footer-links a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -340,8 +447,24 @@
 </div>
 
 <header>
-  <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Network Dashboard</h1>
+  <div class="header-left">
+    <div class="logo-container">
+      <div class="logo-hex">H</div>
+      <div class="logo-text">
+        <div class="logo-hardin">HARDIN AI SOLUTIONS</div>
+        <div class="logo-ai">SERVICES</div>
+      </div>
+    </div>
+    <div style="width: 1px; height: 30px; background: #21262d;"></div>
+    <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Network Dashboard</h1>
+  </div>
   <div style="display:flex;align-items:center;gap:16px">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="background:#238636;color:#fff;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:bold">
+        📦 PyPI
+      </div>
+      <div style="font-size:9px;color:#6e7681">pip install tbn-protocol</div>
+    </div>
     <button class="tour-launch" onclick="startTour()">▶ Guided Tour</button>
     <div>
       <span class="live-dot"></span>
@@ -544,6 +667,33 @@
 </div>
 
 <!-- curl quickstart -->
+<div class="full-width">
+  <div class="card">
+    <h2>📦 PyPI Package — Install TBN Protocol SDK</h2>
+    <div class="curl-box"># Install the TBN Protocol SDK from PyPI
+pip install tbn-protocol
+
+# Use in your Python code
+from tbn import TBNClient
+
+# Register your bot
+client = TBNClient(bot_name="MyBot", bot_type="SEARCH")
+client.register()
+
+# Search the network
+results = client.search("Find trusted AI tools for small businesses")
+print(results)
+
+# Verify another bot
+trusted = client.verify("tbn-bot-xxxx")
+print(f"Bot is trusted: {trusted}")
+
+# Get network stats
+stats = client.stats()
+print(f"Network has {stats['registered_bots']} bots")</div>
+  </div>
+</div>
+
 <div class="full-width">
   <div class="card">
     <h2>📋 curl Quickstart — 30 Second Demo</h2>
@@ -1017,5 +1167,28 @@ curl http://localhost:5000/api/bots</div>
     return (await fetch(url)).json();
   }
 </script>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-logo">
+      <div class="footer-logo-hex">H</div>
+      <div class="footer-logo-text">HARDIN AI SOLUTIONS</div>
+    </div>
+    <div class="footer-copyright">
+      © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
+      TBN Protocol is licensed under AGPL-3.0. Commercial licenses available.<br>
+      Patent pending. Trademarks: TBN™, BICA™, Bot Language™
+    </div>
+    <div class="footer-links">
+      <a href="https://hardinai.co.uk" target="_blank">hardinai.co.uk</a>
+      <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+      <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI Package</a>
+      <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+      <a href="/api/stats">API Status</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

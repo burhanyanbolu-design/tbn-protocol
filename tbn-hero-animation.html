@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBN Protocol - The Complete Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 40px;
+            position: relative;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero .tagline {
+            font-size: 36px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Problem Section */
+        .problem {
+            background: #1a1f3a;
+        }
+
+        .problem-visual {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            margin: 60px 0;
+        }
+
+        .bot {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 30px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .bot::before {
+            content: '🤖';
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .x-mark {
+            font-size: 120px;
+            color: #ff4757;
+            animation: shake 1s infinite;
+            text-shadow: 0 0 30px rgba(255, 71, 87, 0.5);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-15deg) scale(1.1); }
+            75% { transform: rotate(15deg) scale(1.1); }
+        }
+
+        h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 24px;
+            text-align: center;
+            line-height: 1.8;
+            max-width: 900px;
+            opacity: 0.9;
+        }
+
+        /* Solution Section */
+        .solution {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1f3a 100%);
+        }
+
+        /* Registration Section */
+        .registration {
+            background: #0f1729;
+        }
+
+        .registration-flow {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin: 60px 0;
+        }
+
+        .arrow {
+            font-size: 80px;
+            animation: slideRight 2s ease-in-out infinite;
+        }
+
+        @keyframes slideRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+        }
+
+        .certificate {
+            width: 300px;
+            height: 220px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: float 3s ease-in-out infinite 0.5s;
+            color: #333;
+        }
+
+        .certificate h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .certificate p {
+            font-size: 16px;
+            text-align: left;
+            margin: 8px 0;
+            color: #555;
+        }
+
+        /* Handshake Section */
+        .handshake-section {
+            background: #1a1f3a;
+        }
+
+        .handshake-visual {
+            margin: 60px 0;
+        }
+
+        .handshake {
+            font-size: 200px;
+            animation: handshakeAnim 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
+        }
+
+        @keyframes handshakeAnim {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.05); }
+            75% { transform: rotate(10deg) scale(1.05); }
+        }
+
+        .steps {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .step {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            flex: 1;
+        }
+
+        .step h4 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 16px;
+        }
+
+        /* Encryption Section */
+        .encryption {
+            background: linear-gradient(135deg, #0f1729 0%, #1a1f3a 100%);
+        }
+
+        .lock {
+            font-size: 180px;
+            animation: lockPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(68, 255, 68, 0.6));
+        }
+
+        @keyframes lockPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Certification Section */
+        .certification {
+            background: #1a1f3a;
+        }
+
+        .badges {
+            display: flex;
+            gap: 80px;
+            margin: 60px 0;
+        }
+
+        .badge-item {
+            text-align: center;
+        }
+
+        .badge {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            margin: 0 auto 20px;
+            animation: badgePulse 2s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .badge.green {
+            background: linear-gradient(135deg, #44ff44, #00cc00);
+            animation-delay: 0s;
+        }
+
+        .badge.blue {
+            background: linear-gradient(135deg, #4444ff, #0000cc);
+            animation-delay: 0.3s;
+        }
+
+        .badge.yellow {
+            background: linear-gradient(135deg, #ffff44, #cccc00);
+            animation-delay: 0.6s;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .badge-label {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .badge-desc {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        /* Network Section */
+        .network-section {
+            background: linear-gradient(135deg, #0f1729 0%, #1a1f3a 100%);
+        }
+
+        .network {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 60px 0;
+        }
+
+        .node {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            position: absolute;
+            animation: nodePulse 2s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .node:nth-child(1) { top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 0s; }
+        .node:nth-child(2) { top: 20%; left: 30%; animation-delay: 0.2s; }
+        .node:nth-child(3) { top: 20%; right: 30%; animation-delay: 0.4s; }
+        .node:nth-child(4) { bottom: 20%; left: 20%; animation-delay: 0.6s; }
+        .node:nth-child(5) { bottom: 20%; right: 20%; animation-delay: 0.8s; }
+        .node:nth-child(6) { top: 50%; left: 10%; animation-delay: 1s; }
+        .node:nth-child(7) { top: 50%; right: 10%; animation-delay: 1.2s; }
+
+        .line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.3), rgba(102, 126, 234, 0.8));
+            transform-origin: left center;
+            animation: lineGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes lineGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .check-mark {
+            font-size: 180px;
+            animation: checkPop 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(68, 255, 68, 0.8));
+        }
+
+        @keyframes checkPop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .url {
+            font-size: 56px;
+            font-weight: bold;
+            margin: 30px 0;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .cta-button {
+            padding: 20px 50px;
+            font-size: 24px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            animation: bounce 2s infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="section hero">
+        <h1>TBN Protocol</h1>
+        <p class="tagline">Trust Infrastructure for AI Agents</p>
+        <p style="font-size: 32px; margin-top: 20px; opacity: 0.9;">Think HTTPS for Bots</p>
+    </div>
+
+    <!-- Problem Section -->
+    <div class="section problem">
+        <h2>The Problem</h2>
+        <div class="problem-visual">
+            <div class="bot"></div>
+            <div class="x-mark">❌</div>
+            <div class="bot"></div>
+        </div>
+        <p>AI agents are everywhere - ChatGPT plugins, AutoGPT, LangChain agents.<br>
+        But when bots from different companies try to communicate,<br>
+        <strong>they can't verify each other. No trust. No security.</strong></p>
+    </div>
+
+    <!-- Solution Section -->
+    <div class="section solution">
+        <h2>The Solution</h2>
+        <p style="font-size: 32px; color: #667eea; font-weight: bold; margin-bottom: 40px;">
+            TBN gives every AI agent a cryptographic identity
+        </p>
+        <p>Just like HTTPS became essential for websites,<br>
+        TBN will become essential for AI agents.</p>
+    </div>
+
+    <!-- Registration Section -->
+    <div class="section registration">
+        <h2>Step 1: Bot Registration</h2>
+        <div class="registration-flow">
+            <div class="bot"></div>
+            <div class="arrow">→</div>
+            <div class="certificate">
+                <h3>🎫 Certificate</h3>
+                <p><strong>Bot ID:</strong> tbn-bot-a1cc0d69</p>
+                <p><strong>Public Key:</strong> RSA-2048 ✓</p>
+                <p><strong>Created:</strong> 2026-05-03</p>
+                <p><strong>Status:</strong> <span style="color: #44ff44;">✓ Verified</span></p>
+            </div>
+        </div>
+        <p>Every bot gets a unique cryptographic certificate<br>
+        Like an SSL certificate, but for AI agents</p>
+    </div>
+
+    <!-- Handshake Section -->
+    <div class="section handshake-section">
+        <h2>Step 2: Trust Handshake</h2>
+        <div class="handshake-visual">
+            <div class="handshake">🤝</div>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <h4>1. Send Certificate</h4>
+                <p>Bot A sends its certificate to Bot B</p>
+            </div>
+            <div class="step">
+                <h4>2. Verify</h4>
+                <p>Bot B checks certificate with BICA registry</p>
+            </div>
+            <div class="step">
+                <h4>3. Establish Channel</h4>
+                <p>Bots exchange encrypted keys and connect</p>
+            </div>
+        </div>
+        <p style="margin-top: 40px;">3-step verification before any data flows<br>
+        <strong>Completely automatic. No human intervention.</strong></p>
+    </div>
+
+    <!-- Encryption Section -->
+    <div class="section encryption">
+        <h2>Step 3: Secure Communication</h2>
+        <div class="lock">🔒</div>
+        <p style="font-size: 28px; margin-top: 40px;">
+            All communication encrypted with <strong>AES-256-GCM</strong><br>
+            Military-grade security<br>
+            <span style="color: #44ff44;">Hackers see only gibberish</span>
+        </p>
+    </div>
+
+    <!-- Certification Section -->
+    <div class="section certification">
+        <h2>Three Trust Levels</h2>
+        <div class="badges">
+            <div class="badge-item">
+                <div class="badge green">🟢</div>
+                <div class="badge-label">COMMUNITY</div>
+                <p class="badge-desc">Full Access<br>Read, Write, Clone</p>
+            </div>
+            <div class="badge-item">
+                <div class="badge blue">🔵</div>
+                <div class="badge-label">STANDARD</div>
+                <p class="badge-desc">Public Only<br>Search, Clone</p>
+            </div>
+            <div class="badge-item">
+                <div class="badge yellow">🟡</div>
+                <div class="badge-label">RESTRICTED</div>
+                <p class="badge-desc">Read Only<br>Search Only</p>
+            </div>
+        </div>
+        <p>Trust levels enforced automatically<br>
+        Ethical bots get full access. Untrusted bots are restricted.</p>
+    </div>
+
+    <!-- Network Section -->
+    <div class="section network-section">
+        <h2>Network Effects</h2>
+        <div class="network">
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+        </div>
+        <p style="font-size: 32px; color: #667eea; font-weight: bold;">
+            More Bots = More Valuable
+        </p>
+        <p style="margin-top: 20px;">
+            As more bots join TBN, the network becomes the standard<br>
+            First mover advantage. No competitors.
+        </p>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="section cta">
+        <h2>Live Now!</h2>
+        <div class="check-mark">✅</div>
+        <p class="url">tbn.hardinai.co.uk</p>
+        <p style="font-size: 28px; margin-top: 20px;">
+            The trust layer for the AI agent economy
+        </p>
+        <button class="cta-button" onclick="window.open('https://tbn.hardinai.co.uk', '_blank')">
+            Try It Now →
+        </button>
+    </div>
+
+    <div class="scroll-indicator">↓</div>
+
+    <script>
+        // Hide scroll indicator after first scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                document.querySelector('.scroll-indicator').style.opacity = '0';
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

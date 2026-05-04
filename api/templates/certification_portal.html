@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TBN Protocol — Community Bot Certification Portal</title>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EF6RKG8KY2');
+  </script>
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0e1a;
+      color: #c9d1d9;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #0d1117;
+      border-bottom: 1px solid #21262d;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-hex {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #0d1117;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .logo-hardin {
+      font-size: 14px;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+    .logo-ai {
+      font-size: 10px;
+      color: #8b949e;
+      letter-spacing: 0.5px;
+    }
+    header h1 {
+      font-size: 18px;
+      color: #58a6ff;
+      letter-spacing: 2px;
+    }
+    header h1 span { color: #3fb950; }
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+    }
+    .nav-links a {
+      color: #8b949e;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover {
+      color: #58a6ff;
+      background: #161b22;
+    }
+    .nav-links a.active {
+      color: #3fb950;
+      background: #1a3a2a;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .card h2 {
+      font-size: 14px;
+      color: #58a6ff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 8px;
+    }
+    .card h3 {
+      font-size: 12px;
+      color: #3fb950;
+      margin-bottom: 12px;
+    }
+
+    /* ── Forms ── */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      color: #6e7681;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      padding: 10px 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #58a6ff;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+    }
+    .checkbox-group label {
+      margin: 0;
+      color: #c9d1d9;
+      font-size: 12px;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      background: #238636;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #2ea043; }
+    .btn:disabled { background: #21262d; color: #6e7681; cursor: not-allowed; }
+    .btn-blue { background: #1f6feb; }
+    .btn-blue:hover { background: #388bfd; }
+    .btn-red { background: #da3633; }
+    .btn-red:hover { background: #f85149; }
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── Response boxes ── */
+    .response-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 11px;
+      color: #3fb950;
+      min-height: 60px;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-top: 12px;
+    }
+    .response-box.error {
+      color: #f85149;
+    }
+
+    /* ── Certification levels ── */
+    .cert-level {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .cert-level.community {
+      background: #1a3a2a;
+      border: 1px solid #3fb950;
+    }
+    .cert-level.standard {
+      background: #1f3a5f;
+      border: 1px solid #58a6ff;
+    }
+    .cert-level.restricted {
+      background: #3a2a1a;
+      border: 1px solid #d29922;
+    }
+    .cert-badge {
+      font-size: 14px;
+    }
+
+    /* ── Stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 12px;
+      background: #161b22;
+      border-radius: 6px;
+    }
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #58a6ff;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: #6e7681;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Bot list ── */
+    .bot-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .bot-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #161b22;
+      font-size: 12px;
+    }
+    .bot-item:last-child { border-bottom: none; }
+    .bot-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .bot-name {
+      color: #c9d1d9;
+      font-weight: bold;
+    }
+    .bot-id {
+      color: #6e7681;
+      font-size: 10px;
+    }
+    .bot-cert {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .bot-cert.community { background: #1a3a2a; color: #3fb950; }
+    .bot-cert.standard { background: #1f3a5f; color: #58a6ff; }
+    .bot-cert.restricted { background: #3a2a1a; color: #d29922; }
+
+    /* ── Loading ── */
+    .loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #3fb950;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      color: #6e7681;
+      font-size: 12px;
+      padding: 20px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: #0d1117;
+      border-top: 1px solid #21262d;
+      padding: 24px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-copyright {
+      font-size: 11px;
+      color: #6e7681;
+      line-height: 1.6;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 11px;
+    }
+    .footer-links a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo-container">
+      <div class="logo-hex">H</div>
+      <div class="logo-text">
+        <div class="logo-hardin">HARDIN AI SOLUTIONS</div>
+        <div class="logo-ai">SERVICES</div>
+      </div>
+    </div>
+    <div style="width: 1px; height: 30px; background: #21262d;"></div>
+    <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Certification Portal</h1>
+  </div>
+  <div class="nav-links">
+    <a href="/">Dashboard</a>
+    <a href="/certification/portal" class="active">Certification</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+    <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI</a>
+  </div>
+</header>
+
+<div class="container">
+  
+  <!-- Overview -->
+  <div class="card full-width">
+    <h2>🏅 Community Bot Certification Programme</h2>
+    <p style="margin-bottom: 16px; color: #8b949e; line-height: 1.6;">
+      The TBN Protocol uses a three-tier certification system to establish trust between AI agents. 
+      Bots with higher certification levels gain access to more network resources and can participate in sensitive operations.
+    </p>
+    
+    <div class="cert-level community">
+      <span class="cert-badge">🟢</span>
+      <div>
+        <strong>COMMUNITY</strong> — Full network access. Requires ethical declaration and purpose statement. 
+        Can read private data, write to network, and clone other bots.
+      </div>
+    </div>
+    
+    <div class="cert-level standard">
+      <span class="cert-badge">🔵</span>
+      <div>
+        <strong>STANDARD</strong> — Public data only. Basic registration required. 
+        Can search and clone, but cannot access private resources.
+      </div>
+    </div>
+    
+    <div class="cert-level restricted">
+      <span class="cert-badge">🟡</span>
+      <div>
+        <strong>RESTRICTED</strong> — Read-only access. Search only. 
+        Cannot connect directly to other bots (must go through Community bots).
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats and Apply -->
+  <div class="grid">
+    
+    <!-- Network Stats -->
+    <div class="card">
+      <h2>📊 Network Statistics</h2>
+      <div class="stats-grid" id="cert-stats">
+        <div class="stat-item">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label">Total Bots</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-community">0</div>
+          <div class="stat-label">Community</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-standard">0</div>
+          <div class="stat-label">Standard</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-restricted">0</div>
+          <div class="stat-label">Restricted</div>
+        </div>
+      </div>
+      
+      <h3>Recent Certifications</h3>
+      <div class="bot-list" id="recent-certs">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Apply for Certification -->
+    <div class="card">
+      <h2>🚀 Apply for Certification</h2>
+      
+      <div class="form-group">
+        <label>Bot ID</label>
+        <input type="text" id="cert-bot-id" placeholder="tbn-bot-xxxx (from registered bots)" />
+      </div>
+      
+      <div class="form-group">
+        <label>Certification Level</label>
+        <select id="cert-level">
+          <option value="STANDARD">🔵 STANDARD — Public data access</option>
+          <option value="COMMUNITY">🟢 COMMUNITY — Full network access</option>
+          <option value="RESTRICTED">🟡 RESTRICTED — Read-only access</option>
+        </select>
+      </div>
+      
+      <div id="community-fields" style="display: none;">
+        <div class="form-group">
+          <label>Purpose Statement</label>
+          <textarea id="cert-purpose" placeholder="Describe your bot's purpose and how it will benefit the TBN network..."></textarea>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="cert-ethical" />
+          <label for="cert-ethical">
+            I declare that this bot will operate ethically and in accordance with TBN Protocol community guidelines
+          </label>
+        </div>
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn" onclick="applyForCertification()">🏅 Apply for Certification</button>
+        <button class="btn btn-blue" onclick="checkCertification()">🔍 Check Status</button>
+      </div>
+      
+      <div class="response-box" id="cert-response">// certification response will appear here</div>
+    </div>
+
+  </div>
+
+  <!-- Report Violation -->
+  <div class="grid">
+    
+    <!-- Certified Bots -->
+    <div class="card">
+      <h2>🤖 Certified Bots</h2>
+      <div class="bot-list" id="certified-bots">
+        <div class="empty">Loading certified bots...</div>
+      </div>
+    </div>
+
+    <!-- Report Violation -->
+    <div class="card">
+      <h2>⚠️ Report Violation</h2>
+      <p style="margin-bottom: 16px; color: #8b949e; font-size: 12px;">
+        Report bots that violate community guidelines or operate unethically.
+      </p>
+      
+      <div class="form-group">
+        <label>Bot ID</label>
+        <input type="text" id="violation-bot-id" placeholder="tbn-bot-xxxx" />
+      </div>
+      
+      <div class="form-group">
+        <label>Violation Description</label>
+        <textarea id="violation-description" placeholder="Describe the violation in detail..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Reporter (Optional)</label>
+        <input type="text" id="violation-reporter" placeholder="Your name or organization (optional)" />
+      </div>
+      
+      <button class="btn btn-red" onclick="reportViolation()">⚠️ Report Violation</button>
+      
+      <div class="response-box" id="violation-response">// violation report response will appear here</div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-copyright">
+      © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
+      TBN Protocol Community Bot Certification Portal
+    </div>
+    <div class="footer-links">
+      <a href="https://hardinai.co.uk" target="_blank">hardinai.co.uk</a>
+      <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+      <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI Package</a>
+      <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Auto-refresh data
+  setInterval(loadData, 5000);
+  loadData();
+
+  // Show/hide community fields based on certification level
+  document.getElementById('cert-level').addEventListener('change', function() {
+    const communityFields = document.getElementById('community-fields');
+    communityFields.style.display = this.value === 'COMMUNITY' ? 'block' : 'none';
+  });
+
+  async function loadData() {
+    try {
+      // Load certification statistics
+      const statsRes = await fetch('/api/certifications');
+      const statsData = await statsRes.json();
+      
+      if (statsData.success) {
+        document.getElementById('stat-total').textContent = statsData.total;
+        document.getElementById('stat-community').textContent = statsData.certifications.COMMUNITY.length;
+        document.getElementById('stat-standard').textContent = statsData.certifications.STANDARD.length;
+        document.getElementById('stat-restricted').textContent = statsData.certifications.RESTRICTED.length;
+        
+        // Show recent certifications
+        const recentCerts = document.getElementById('recent-certs');
+        const allCerts = [
+          ...statsData.certifications.COMMUNITY,
+          ...statsData.certifications.STANDARD,
+          ...statsData.certifications.RESTRICTED
+        ].sort((a, b) => new Date(b.certified_at) - new Date(a.certified_at)).slice(0, 5);
+        
+        if (allCerts.length === 0) {
+          recentCerts.innerHTML = '<div class="empty">No certifications yet</div>';
+        } else {
+          recentCerts.innerHTML = allCerts.map(cert => `
+            <div class="bot-item">
+              <div class="bot-info">
+                <div class="bot-name">${cert.name}</div>
+                <div class="bot-id">${cert.bot_id}</div>
+              </div>
+              <div class="bot-cert ${cert.cert_level.toLowerCase()}">${cert.cert_level}</div>
+            </div>
+          `).join('');
+        }
+        
+        // Show all certified bots
+        const certifiedBots = document.getElementById('certified-bots');
+        if (allCerts.length === 0) {
+          certifiedBots.innerHTML = '<div class="empty">No certified bots yet</div>';
+        } else {
+          certifiedBots.innerHTML = allCerts.map(cert => `
+            <div class="bot-item">
+              <div class="bot-info">
+                <div class="bot-name">${cert.name}</div>
+                <div class="bot-id">${cert.bot_id}</div>
+                ${cert.purpose ? `<div style="font-size:10px;color:#6e7681;margin-top:2px">${cert.purpose}</div>` : ''}
+              </div>
+              <div class="bot-cert ${cert.cert_level.toLowerCase()}">${cert.cert_level}</div>
+            </div>
+          `).join('');
+        }
+      }
+    } catch (e) {
+      console.error('Error loading data:', e);
+    }
+  }
+
+  async function applyForCertification() {
+    const botId = document.getElementById('cert-bot-id').value.trim();
+    const level = document.getElementById('cert-level').value;
+    const purpose = document.getElementById('cert-purpose').value.trim();
+    const ethical = document.getElementById('cert-ethical').checked;
+    const responseBox = document.getElementById('cert-response');
+    
+    if (!botId) {
+      responseBox.textContent = 'Error: Bot ID is required';
+      responseBox.className = 'response-box error';
+      return;
+    }
+    
+    if (level === 'COMMUNITY' && (!purpose || !ethical)) {
+      responseBox.textContent = 'Error: Purpose statement and ethical declaration are required for COMMUNITY certification';
+      responseBox.className = 'response-box error';
+      return;
+    }
+    
+    try {
+      responseBox.textContent = 'Applying for certification...';
+      responseBox.className = 'response-box';
+      
+      const response = await fetch('/api/certify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bot_id: botId,
+          level: level,
+          purpose: purpose,
+          ethical_declaration: ethical
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        responseBox.textContent = JSON.stringify(data, null, 2);
+        responseBox.className = 'response-box';
+        loadData(); // Refresh data
+      } else {
+        responseBox.textContent = 'Error: ' + (data.error || 'Certification failed');
+        responseBox.className = 'response-box error';
+      }
+    } catch (e) {
+      responseBox.textContent = 'Error: ' + e.message;
+      responseBox.className = 'response-box error';
+    }
+  }
+
+  async function checkCertification() {
+    const botId = document.getElementById('cert-bot-id').value.trim();
+    const responseBox = document.getElementById('cert-response');
+    
+    if (!botId) {
+      responseBox.textContent = 'Error: Bot ID is required';
+      responseBox.className = 'response-box error';
+      return;
+    }
+    
+    try {
+      responseBox.textContent = 'Checking certification status...';
+      responseBox.className = 'response-box';
+      
+      const response = await fetch(`/api/certification/${botId}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        responseBox.textContent = JSON.stringify(data.certification, null, 2);
+        responseBox.className = 'response-box';
+      } else {
+        responseBox.textContent = 'Error: ' + (data.error || 'Bot not found');
+        responseBox.className = 'response-box error';
+      }
+    } catch (e) {
+      responseBox.textContent = 'Error: ' + e.message;
+      responseBox.className = 'response-box error';
+    }
+  }
+
+  async function reportViolation() {
+    const botId = document.getElementById('violation-bot-id').value.trim();
+    const description = document.getElementById('violation-description').value.trim();
+    const reporter = document.getElementById('violation-reporter').value.trim();
+    const responseBox = document.getElementById('violation-response');
+    
+    if (!botId || !description) {
+      responseBox.textContent = 'Error: Bot ID and violation description are required';
+      responseBox.className = 'response-box error';
+      return;
+    }
+    
+    try {
+      responseBox.textContent = 'Reporting violation...';
+      responseBox.className = 'response-box';
+      
+      const response = await fetch('/api/violation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bot_id: botId,
+          violation: description,
+          reporter: reporter || 'anonymous'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        responseBox.textContent = JSON.stringify(data, null, 2);
+        responseBox.className = 'response-box';
+        
+        // Clear form
+        document.getElementById('violation-bot-id').value = '';
+        document.getElementById('violation-description').value = '';
+        document.getElementById('violation-reporter').value = '';
+      } else {
+        responseBox.textContent = 'Error: ' + (data.error || 'Failed to report violation');
+        responseBox.className = 'response-box error';
+      }
+    } catch (e) {
+      responseBox.textContent = 'Error: ' + e.message;
+      responseBox.className = 'response-box error';
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+[Unit]
+Description=Hardin AI Blog Admin
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/opt/blog
+ExecStart=/opt/blog/.venv/bin/gunicorn --workers 1 --bind 127.0.0.1:5007 "app:app"
+Restart=always
+RestartSec=5
+Environment=FLASK_ENV=production
+
+[Install]
+WantedBy=multi-user.target
