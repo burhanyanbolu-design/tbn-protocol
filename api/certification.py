@@ -11,6 +11,21 @@ import os
 
 certification = Blueprint('certification', __name__)
 
+def _send_violation_email(bot_id, violation, reporter, violation_count, revoked):
+    """Send violation email notification in background."""
+    try:
+        from tbn.notifications import notify_violation
+        notify_violation(
+            bot_id=bot_id,
+            bot_name=bot_id,
+            violation=violation,
+            reporter=reporter,
+            violation_count=violation_count,
+            revoked=revoked
+        )
+    except Exception as e:
+        print(f"[Notify] Email error: {e}")
+
 @certification.route("/portal")
 def certification_portal():
     """Render the certification portal web interface."""
@@ -126,7 +141,15 @@ def report_violation():
         }
         
         _log_violation(violation_record)
-        
+
+        # Send email notification
+        import threading
+        threading.Thread(
+            target=_send_violation_email,
+            args=(bot_id, violation, reporter, 1, False),
+            daemon=True
+        ).start()
+
         return jsonify({
             "success": True,
             "message": "Violation reported successfully",
