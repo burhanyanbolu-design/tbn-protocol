@@ -16,7 +16,7 @@ def certification_portal():
     """Render the certification portal web interface."""
     return render_template("certification_portal.html")
 
-@certification.route("/api/certify", methods=["POST"])
+@certification.route("/certify", methods=["POST"])
 def certify_bot():
     """
     Certify a bot with a specific level.
@@ -95,7 +95,7 @@ def certify_bot():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@certification.route("/api/violation", methods=["POST"])
+@certification.route("/violation", methods=["POST"])
 def report_violation():
     """
     Report a bot violation.
@@ -136,7 +136,7 @@ def report_violation():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@certification.route("/api/certifications", methods=["GET"])
+@certification.route("/certifications", methods=["GET"])
 def list_certifications():
     """List all bot certifications."""
     try:
@@ -175,7 +175,7 @@ def list_certifications():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@certification.route("/api/certification/<bot_id>", methods=["GET"])
+@certification.route("/certification/<bot_id>", methods=["GET"])
 def get_certification(bot_id):
     """Get certification details for a specific bot."""
     try:
@@ -207,7 +207,7 @@ def get_certification(bot_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@certification.route("/api/violations", methods=["GET"])
+@certification.route("/violations", methods=["GET"])
 def list_violations():
     """List recent violations (admin endpoint)."""
     try:

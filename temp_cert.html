@@ -569,7 +569,7 @@
   async function loadData() {
     try {
       // Load certification statistics
-      const statsRes = await fetch('/certification/certifications');
+      const statsRes = await fetch('/api/certifications');
       const statsData = await statsRes.json();
       
       if (statsData.success) {
@@ -645,7 +645,7 @@
       responseBox.textContent = 'Applying for certification...';
       responseBox.className = 'response-box';
       
-      const response = await fetch('/certification/certify', {
+      const response = await fetch('/api/certify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -686,7 +686,7 @@
       responseBox.textContent = 'Checking certification status...';
       responseBox.className = 'response-box';
       
-      const response = await fetch(`/certification/certification/${botId}`);
+      const response = await fetch(`/api/certification/${botId}`);
       const data = await response.json();
       
       if (data.success) {
@@ -718,7 +718,7 @@
       responseBox.textContent = 'Reporting violation...';
       responseBox.className = 'response-box';
       
-      const response = await fetch('/certification/violation', {
+      const response = await fetch('/api/violation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
