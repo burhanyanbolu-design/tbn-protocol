@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBN Protocol - How It Works</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            height: 700px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 24px;
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .bot {
+            width: 100px;
+            height: 100px;
+            background: #667eea;
+            border-radius: 20px;
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        .bot::before {
+            content: '🤖';
+            font-size: 60px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .bots-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 100px;
+            margin: 40px 0;
+        }
+
+        .x-mark {
+            font-size: 80px;
+            color: #ff4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .check-mark {
+            font-size: 80px;
+            color: #44ff44;
+            animation: checkPulse 1s infinite;
+        }
+
+        @keyframes checkPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .certificate {
+            width: 200px;
+            height: 150px;
+            background: #f0f0f0;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .certificate-text {
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        .handshake {
+            font-size: 100px;
+            animation: shake 2s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .lock {
+            font-size: 100px;
+            animation: lockPulse 2s infinite;
+        }
+
+        @keyframes lockPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            margin: 10px;
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .badge.green { background: #44ff44; }
+        .badge.blue { background: #4444ff; }
+        .badge.yellow { background: #ffff44; }
+
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .network {
+            position: relative;
+            width: 400px;
+            height: 300px;
+        }
+
+        .node {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 50%;
+            position: absolute;
+            animation: nodePulse 2s infinite;
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .line {
+            position: absolute;
+            height: 2px;
+            background: #667eea;
+            transform-origin: left center;
+            animation: lineGrow 2s ease-in-out infinite;
+        }
+
+        @keyframes lineGrow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .progress {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .url {
+            font-size: 32px;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress">
+            <span id="current-slide">1</span> / 7
+        </div>
+
+        <!-- Slide 1: The Problem -->
+        <div class="slide active" id="slide1">
+            <h1>The Problem</h1>
+            <div class="bots-container">
+                <div class="bot"></div>
+                <div class="x-mark">❌</div>
+                <div class="bot"></div>
+            </div>
+            <p>AI agents can't verify each other.<br>No trust. No security.</p>
+        </div>
+
+        <!-- Slide 2: Introducing TBN -->
+        <div class="slide" id="slide2">
+            <h1>TBN Protocol</h1>
+            <h2>Trust Infrastructure for AI Agents</h2>
+            <p style="font-size: 28px; color: #667eea; font-weight: bold;">Think HTTPS for Bots</p>
+        </div>
+
+        <!-- Slide 3: Bot Registration -->
+        <div class="slide" id="slide3">
+            <h2>Step 1: Bot Registration</h2>
+            <div class="bots-container">
+                <div class="bot"></div>
+                <div style="font-size: 60px;">→</div>
+                <div class="certificate">
+                    <div class="certificate-text">
+                        <strong>Certificate</strong><br>
+                        Bot ID: tbn-bot-xxx<br>
+                        Public Key: ✓<br>
+                        Verified ✓
+                    </div>
+                </div>
+            </div>
+            <p>Every bot gets a cryptographic certificate</p>
+        </div>
+
+        <!-- Slide 4: Trust Handshake -->
+        <div class="slide" id="slide4">
+            <h2>Step 2: Trust Handshake</h2>
+            <div class="handshake">🤝</div>
+            <p>3-step verification before any data flows<br>
+            Bots verify each other automatically</p>
+        </div>
+
+        <!-- Slide 5: Encryption -->
+        <div class="slide" id="slide5">
+            <h2>Step 3: Secure Communication</h2>
+            <div class="lock">🔒</div>
+            <p>All communication encrypted with AES-256<br>
+            Military-grade security</p>
+        </div>
+
+        <!-- Slide 6: Certification Levels -->
+        <div class="slide" id="slide6">
+            <h2>Three Trust Levels</h2>
+            <div class="badges-container">
+                <div>
+                    <div class="badge green">🟢</div>
+                    <p style="font-size: 18px;">COMMUNITY<br>Full Access</p>
+                </div>
+                <div>
+                    <div class="badge blue">🔵</div>
+                    <p style="font-size: 18px;">STANDARD<br>Public Only</p>
+                </div>
+                <div>
+                    <div class="badge yellow">🟡</div>
+                    <p style="font-size: 18px;">RESTRICTED<br>Read Only</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Live Now -->
+        <div class="slide" id="slide7">
+            <h1>Live Now!</h1>
+            <div class="check-mark">✅</div>
+            <p class="url">tbn.hardinai.co.uk</p>
+            <p style="margin-top: 30px;">The trust layer for the AI agent economy</p>
+        </div>
+
+        <div class="controls">
+            <button onclick="prevSlide()">← Previous</button>
+            <button onclick="nextSlide()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            document.getElementById('slide' + currentSlide).classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide;
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide--;
+            if (currentSlide < 1) currentSlide = totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance slides every 5 seconds (optional)
+        // setInterval(nextSlide, 5000);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>

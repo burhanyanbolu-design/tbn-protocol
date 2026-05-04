@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 240">
+  <defs>
+    <style>
+      .logo-text { fill: #ffffff; font-family: 'Arial', sans-serif; font-weight: bold; }
+      .logo-hex { fill: none; stroke: #00d9ff; stroke-width: 3; }
+      .logo-h { fill: #00d9ff; }
+      .logo-services { fill: #8b949e; font-weight: normal; }
+    </style>
+  </defs>
+  
+  <!-- Hexagon -->
+  <polygon class="logo-hex" points="100,40 160,20 220,40 220,120 160,140 100,120"/>
+  
+  <!-- H inside hexagon -->
+  <text class="logo-h" x="140" y="105" font-size="80" font-weight="bold">H</text>
+  
+  <!-- HARDIN text -->
+  <text class="logo-text" x="250" y="110" font-size="72">HARDIN</text>
+  
+  <!-- SERVICES text -->
+  <text class="logo-services" x="620" y="70" font-size="32">SERVICES</text>
+  
+  <!-- AI SOLUTIONS text -->
+  <text class="logo-text" x="250" y="160" font-size="32">AI SOLUTIONS</text>
+</svg>

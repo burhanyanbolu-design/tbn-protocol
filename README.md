@@ -6,7 +6,7 @@
 **Author:** Burhan Yanbolu  
 **Company:** Hardin Enterprises Ltd (trading as Hardin AI Solutions)  
 **Status:** Active Development — v0.1.0  
-**License:** MIT
+**License:** AGPL-3.0
 
 ---
 
@@ -52,6 +52,22 @@ Three core components:
 
 ## Quick Start
 
+### Option 1: Install from PyPI (Recommended)
+
+```bash
+# Install the TBN Protocol SDK
+pip install tbn-protocol
+
+# Use in your Python code
+python -c "
+from tbn import TBNClient
+client = TBNClient('MyBot', 'SEARCH')
+print('TBN Protocol SDK ready!')
+"
+```
+
+### Option 2: Run from Source
+
 ```bash
 # Clone and install
 git clone https://github.com/burhanyanbolu-design/tbn-protocol
@@ -90,7 +106,8 @@ curl -X POST http://localhost:5000/api/platform/request \
 ### SDK — 5 Lines to Register a Bot
 
 ```python
-from tbn.sdk import TBNClient
+# Install: pip install tbn-protocol
+from tbn import TBNClient
 
 client = TBNClient(bot_name="MySearchBot", bot_type="SEARCH")
 client.register()
@@ -325,9 +342,9 @@ python server.py
 - [x] Phase 4: SDK, platform integration, public registry
 - [x] Bot Language v2: AES-256-GCM encryption
 - [x] Community Bot certification programme (3 tiers)
+- [x] **TBN SDK published to PyPI** — `pip install tbn-protocol`
 - [ ] AWS Lightsail deployment (live network nodes)
 - [ ] GitHub-backed public BICA registry
-- [ ] TBN SDK published to PyPI
 - [ ] Community Bot certification portal (web UI)
 - [ ] Integration with Hardin AI Search Engine
 
@@ -354,6 +371,36 @@ Hardin AI Search Engine — live at [hardin-ai-search.vercel.app](https://hardin
 - Self-replicating bot army (Scout, Extractor, Validator, Writer bots)
 - 143 active users
 - TBN is the trust layer built on top of this foundation
+
+---
+
+## License & Commercial Use
+
+**TBN Protocol is licensed under AGPL-3.0**
+
+### What This Means:
+
+✅ **You CAN:**
+- Use TBN for personal projects
+- Use TBN for commercial projects
+- Modify the code
+- Distribute the code
+
+⚠️ **You MUST:**
+- **Open-source your modifications** if you run TBN as a network service
+- Include the AGPL-3.0 license
+- Provide access to your modified source code
+- Credit the original authors
+
+### Why AGPL?
+
+AGPL protects the TBN network by ensuring that anyone who runs a modified TBN service must share their improvements with the community. This prevents companies from taking the code, improving it, and keeping those improvements private.
+
+### Commercial Licensing
+
+If you need to use TBN in a proprietary service without open-sourcing your modifications, **commercial licenses are available**.
+
+**Contact:** burhan@hardinai.co.uk
 
 ---
 

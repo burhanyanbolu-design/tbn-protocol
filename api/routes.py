@@ -12,10 +12,12 @@ GET  /api/activity          — recent activity feed
 GET  /api/stats             — network stats
 """
 
+import os
 from flask import Blueprint, request, jsonify
 from tbn.bots import SearchBot, ValidatorBot, ConnectorBot, MessengerBot
 from tbn.platform_integration import PlatformAdapter, BotRequest, AccessLevel
 from tbn.certification import CertificationAuthority, CertLevel
+from tbn.github_bica import GitHubBICA
 from . import state
 
 api = Blueprint("api", __name__)
@@ -27,8 +29,22 @@ BOT_CLASSES = {
     "MESSENGER": MessengerBot,
 }
 
-# Shared certification authority
-ca = CertificationAuthority(state.bica)
+# Shared certification authority with GitHub BICA support
+def get_bica():
+    """Get BICA instance based on environment."""
+    if os.environ.get("TBN_ENV") == "production":
+        github_token = os.environ.get("TBN_GITHUB_TOKEN", "")
+        github_repo = os.environ.get("TBN_GITHUB_REPO", "burhanyanbolu-design/tbn-bica-registry")
+        
+        if github_token:
+            return GitHubBICA(repo=github_repo, token=github_token)
+        else:
+            print("⚠️  No GitHub token configured, using local BICA")
+            return state.bica
+    else:
+        return state.bica
+
+ca = CertificationAuthority(get_bica())
 
 # ── Sample data loaded into every SearchBot ──────────────────────────
 SAMPLE_INDEX = [
@@ -253,19 +269,22 @@ def platform_request():
 @api.route("/bots", methods=["GET"])
 def list_bots():
     """List all registered bots."""
+    # Get all certificates from BICA registry
+    certs = state.bica.list_bots()
+    
     return jsonify({
         "bots": [
             {
-                "bot_id": b.bot_id,
-                "name": b.name,
-                "type": getattr(b, "BOT_TYPE", "BOT"),
-                "channels": len(b._channels),
-                "cert_level": ca.get_level(b.bot_id).value,
+                "bot_id": cert["bot_id"],
+                "name": cert["name"],
+                "type": state.bots.get(cert["bot_id"]).BOT_TYPE if cert["bot_id"] in state.bots else "UNKNOWN",
+                "channels": len(state.bots[cert["bot_id"]]._channels) if cert["bot_id"] in state.bots else 0,
+                "cert_level": ca.get_level(cert["bot_id"]).value,
             }
-            for b in state.bots.values()
+            for cert in certs
         ],
-        "total": len(state.bots),
-        "registry_total": len(state.bica.list_bots()),
+        "total": len(certs),
+        "registry_total": len(certs),
     })
 
 
