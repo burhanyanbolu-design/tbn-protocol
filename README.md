@@ -5,8 +5,12 @@
 
 **Author:** Burhan Yanbolu  
 **Company:** Hardin Enterprises Ltd (trading as Hardin AI Solutions)  
-**Status:** Active Development — v0.1.0  
+**Status:** Live — v0.1.0  
 **License:** AGPL-3.0
+
+[![PyPI](https://img.shields.io/pypi/v/tbn-protocol?color=blue&label=PyPI)](https://pypi.org/project/tbn-protocol/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-tbn.hardinai.co.uk-green)](https://tbn.hardinai.co.uk)
+[![BICA Registry](https://img.shields.io/badge/BICA%20Registry-GitHub-orange)](https://github.com/burhanyanbolu-design/tbn-bica-registry)
 
 ---
 
@@ -45,8 +49,20 @@ Three core components:
 | Component | What it does |
 |-----------|-------------|
 | **BICA** — Bot Identity & Certification Authority | Every bot gets a cryptographic ID (RSA key pair + SHA-256 fingerprint). Like SSL certs for websites. |
-| **Bot Language (BL)** | A structured, AES-256-GCM encrypted protocol for agent-to-agent communication. Think: JSON + encryption + intent logic. |
+| **Bot Language (BL)** | A structured, AES-256-GCM encrypted protocol for agent-to-agent communication. |
 | **Trust Handshake Protocol** | 3-step verification before any data flows. Bots don't talk until both sides are verified. |
+
+---
+
+## Live Network
+
+| URL | Description |
+|-----|-------------|
+| [tbn.hardinai.co.uk](https://tbn.hardinai.co.uk) | Live network dashboard |
+| [tbn.hardinai.co.uk/register](https://tbn.hardinai.co.uk/register) | Register a bot (web UI) |
+| [tbn.hardinai.co.uk/certification/portal](https://tbn.hardinai.co.uk/certification/portal) | Community Bot Certification Portal |
+| [tbn.hardinai.co.uk/admin/violations](https://tbn.hardinai.co.uk/admin/violations) | Violations Dashboard |
+| [github.com/burhanyanbolu-design/tbn-bica-registry](https://github.com/burhanyanbolu-design/tbn-bica-registry) | Public BICA Registry (GitHub-backed) |
 
 ---
 
@@ -55,26 +71,24 @@ Three core components:
 ### Option 1: Install from PyPI (Recommended)
 
 ```bash
-# Install the TBN Protocol SDK
 pip install tbn-protocol
+```
 
-# Use in your Python code
-python -c "
+```python
 from tbn import TBNClient
-client = TBNClient('MyBot', 'SEARCH')
-print('TBN Protocol SDK ready!')
-"
+
+client = TBNClient(bot_name="MyBot", bot_type="SEARCH")
+client.register()
+result = client.search("Find trusted AI tools for small businesses")
+print(result)
 ```
 
 ### Option 2: Run from Source
 
 ```bash
-# Clone and install
 git clone https://github.com/burhanyanbolu-design/tbn-protocol
 cd tbn-protocol
 pip install -r requirements.txt
-
-# Run the live dashboard
 python server.py
 # Open http://localhost:5000
 ```
@@ -83,36 +97,24 @@ python server.py
 
 ```bash
 # 1. Register a bot
-curl -X POST http://localhost:5000/api/register \
+curl -X POST https://tbn.hardinai.co.uk/api/register \
   -H "Content-Type: application/json" \
   -d '{"name": "MyBot", "type": "SEARCH"}'
 
 # 2. Search (natural language → Bot Language → results)
-curl -X POST http://localhost:5000/api/search \
+curl -X POST https://tbn.hardinai.co.uk/api/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Find trusted AI tools for small businesses"}'
 
 # 3. Verify a bot certificate
-curl -X POST http://localhost:5000/api/verify \
+curl -X POST https://tbn.hardinai.co.uk/api/verify \
   -H "Content-Type: application/json" \
   -d '{"bot_id": "tbn-bot-xxxx"}'
 
-# 4. Test platform access (certified bot vs fake bot)
-curl -X POST http://localhost:5000/api/platform/request \
+# 4. Apply for Community certification
+curl -X POST https://tbn.hardinai.co.uk/certification/certify \
   -H "Content-Type: application/json" \
-  -d '{"bot_id": "tbn-bot-xxxx", "platform": "GitHub", "resource": "/repos/tbn-protocol"}'
-```
-
-### SDK — 5 Lines to Register a Bot
-
-```python
-# Install: pip install tbn-protocol
-from tbn import TBNClient
-
-client = TBNClient(bot_name="MySearchBot", bot_type="SEARCH")
-client.register()
-result = client.search("Find trusted AI tools for small businesses")
-print(result)
+  -d '{"bot_id": "tbn-bot-xxxx", "level": "COMMUNITY", "purpose": "AI tool discovery", "ethical_declaration": true}'
 ```
 
 ---
@@ -134,6 +136,78 @@ print(result)
 
 ---
 
+## Community Bot Certification
+
+Three tiers — baked into every handshake:
+
+| Tier | Badge | Access | Requirement |
+|------|-------|--------|-------------|
+| **Community** | 🟢 | Full access — read private, write, clone | Ethical declaration + purpose statement |
+| **Standard** | 🔵 | Public data only — search, clone | Name + registration |
+| **Restricted** | 🟡 | Read-only — search only | Registration only |
+
+Rules:
+- STANDARD ↔ RESTRICTED connections are **blocked**
+- RESTRICTED bots can only connect **via Community Bots**
+- 3 violations → **auto-revoked**, blocked from all handshakes
+- No ethical declaration → **cannot get Community certification**
+
+### Certification Portal
+
+The web-based certification portal at [tbn.hardinai.co.uk/certification/portal](https://tbn.hardinai.co.uk/certification/portal) allows:
+
+- Apply for certification (COMMUNITY, STANDARD, RESTRICTED)
+- Check certification status by bot ID
+- View all certified bots on the network
+- Report violations against bots
+
+---
+
+## GitHub-Backed BICA Registry
+
+All bot certificates are stored in a public, verifiable GitHub repository:
+
+**[github.com/burhanyanbolu-design/tbn-bica-registry](https://github.com/burhanyanbolu-design/tbn-bica-registry)**
+
+```
+tbn-bica-registry/
+├── registry/
+│   ├── bots/
+│   │   ├── tbn-bot-53baff3d.json   ← alhabot certificate
+│   │   ├── tbn-bot-7bc35d16.json   ← betabot certificate
+│   │   └── ...                     ← all bot certificates
+│   └── stats.json                  ← network statistics
+└── README.md                       ← auto-generated overview
+```
+
+Every registration is a git commit — full audit trail, publicly verifiable.
+
+---
+
+## Bot Registration UI
+
+Register bots via the web interface at [tbn.hardinai.co.uk/register](https://tbn.hardinai.co.uk/register):
+
+- Choose bot name, type, and description
+- Select capabilities (search, read, write, clone, connect, verify)
+- Auto-certified at STANDARD level on registration
+- 3-step flow: Configure → Register → Get Certified
+
+---
+
+## Violations & Trust Enforcement
+
+The violations dashboard at [tbn.hardinai.co.uk/admin/violations](https://tbn.hardinai.co.uk/admin/violations) shows:
+
+- Total violations across the network
+- Revoked bots (auto-revoked after 3 violations)
+- Pending review cases
+- Full violations log with timestamps
+
+**Email alerts** are sent to the network administrator for every violation reported.
+
+---
+
 ## Bot Language (BL) v2
 
 Every message is structured, signed, and encrypted end-to-end.
@@ -144,26 +218,12 @@ Every message is structured, signed, and encrypted end-to-end.
   "message_id": "uuid-v4",
   "sender_id":  "tbn-bot-a1cc0d69...",
   "receiver_id": "tbn-bot-33f592d9...",
-  "timestamp":  "2026-05-03T11:00:00Z",
+  "timestamp":  "2026-05-04T11:00:00Z",
   "signature":  "RSA-PSS signed",
   "encrypted":  true,
   "session_key": "RSA-encrypted AES-256 session key",
   "payload":    "AES-256-GCM encrypted",
   "payload_hash": "SHA-256 integrity check"
-}
-```
-
-Decrypted payload:
-
-```json
-{
-  "INTENT":      "SEARCH",
-  "TARGET":      "VERIFIED_SOURCES",
-  "TRUST_LEVEL": "HIGH",
-  "DATA_TYPE":   "AI_TOOLS",
-  "QUERY":       "Find trusted AI tools for small businesses",
-  "FILTERS":     { "audience": "SMALL_BUSINESS" },
-  "PRIORITY":    1
 }
 ```
 
@@ -177,132 +237,15 @@ Full spec: [`docs/BOT-LANGUAGE-SPEC.md`](docs/BOT-LANGUAGE-SPEC.md)
 |-----|------|
 | 🔍 **SearchBot** | Finds information across the network |
 | ✅ **ValidatorBot** | Verifies accuracy and trust of data |
-| 🔌 **ConnectorBot** | Bridges TBN to external platforms (GitHub, APIs) |
+| 🔌 **ConnectorBot** | Bridges TBN to external platforms |
 | 📨 **MessengerBot** | Routes messages between bots |
 | 🧠 **CompilerBot** | Translates human language → Bot Language |
 
 ---
 
-## Community Bot Certification
+## API Reference
 
-Three tiers — baked into every handshake:
-
-| Tier | Badge | Access | Requirement |
-|------|-------|--------|-------------|
-| **Community Bot** | 🟢 | Full access — search, read private, write, clone | Ethical declaration + purpose statement |
-| **Standard Bot** | 🔵 | Public data only — search, clone | Name + registration |
-| **Restricted Bot** | 🟡 | Read-only — search only | Registration only |
-
-Rules:
-- STANDARD ↔ RESTRICTED connections are **blocked**
-- RESTRICTED bots can only connect **via Community Bots**
-- 3 violations → **auto-revoked**, blocked from all handshakes
-- No ethical declaration → **cannot get Community certification**
-
----
-
-## Platform Integration
-
-External platforms verify incoming bots before granting access.  
-Every access attempt is logged in an immutable audit trail.
-
-```python
-from tbn.platform_integration import PlatformAdapter
-
-github = PlatformAdapter(name="GitHub", bica=bica)
-granted, level = github.verify_request(bot_request)
-# certified bot  → granted=True,  level=READ_PUBLIC
-# fake/unknown   → granted=False, blocked
-```
-
----
-
-## Distributed Network
-
-```
-Node: London, UK          Node: New York, USA       Node: Singapore
-  ├── SearchBot              ├── SearchBot              ├── SearchBot
-  └── ValidatorBot           └── MessengerBot           └── ValidatorBot
-         ↕                          ↕                          ↕
-         └──────────── Peer routing ──────────────────────────┘
-                    Seeded cache shared across all nodes
-```
-
-- Cross-node message routing
-- Seeded network cache (bots share results — grows smarter over time)
-- Self-cloning under load (parallel execution, auto-destroy after task)
-
----
-
-## Project Structure
-
-```
-tbn-protocol/
-├── tbn/
-│   ├── identity.py          BICA — bot identity & certification
-│   ├── bot_language.py      Bot Language v2 (AES-256-GCM encrypted)
-│   ├── compiler.py          Bot Language Compiler + CompilerBot
-│   ├── handshake.py         Trust Handshake Protocol
-│   ├── bot.py               Base Bot class
-│   ├── certification.py     Community Bot certification (3 tiers)
-│   ├── network.py           Distributed network nodes
-│   ├── cloning.py           Self-scaling bot replication
-│   ├── seeded_network.py    Distributed result cache
-│   ├── platform_integration.py  External platform adapters + audit log
-│   ├── sdk.py               Public SDK (TBNClient)
-│   └── bots/
-│       ├── search_bot.py
-│       ├── validator_bot.py
-│       ├── connector_bot.py
-│       ├── messenger_bot.py
-│       └── __init__.py
-├── api/
-│   ├── routes.py            REST API endpoints
-│   ├── state.py             Shared server state
-│   └── templates/
-│       └── dashboard.html   Live network dashboard
-├── docs/
-│   └── BOT-LANGUAGE-SPEC.md Bot Language v2 specification
-├── demo.py                  Phase 1: trust handshake demo
-├── demo_phase2.py           Phase 2: compiler + 4 bot types
-├── demo_phase3.py           Phase 3: distributed nodes + cloning
-├── demo_phase4.py           Phase 4: SDK + platform integration
-├── demo_bot_language.py     Bot Language v2 full demo
-├── demo_certification.py    Community Bot certification demo
-├── server.py                Flask API server + dashboard
-└── requirements.txt
-```
-
----
-
-## Run the Demos
-
-```bash
-# Phase 1 — trust handshake
-python demo.py
-
-# Phase 2 — compiler + 4 bot types
-python demo_phase2.py
-
-# Phase 3 — distributed nodes + self-cloning
-python demo_phase3.py
-
-# Phase 4 — SDK + platform integration
-python demo_phase4.py
-
-# Bot Language v2 — encryption + compiler
-python demo_bot_language.py
-
-# Community Bot certification
-python demo_certification.py
-
-# Live dashboard + API
-python server.py
-```
-
----
-
-## API Endpoints
+### Core API
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -315,6 +258,58 @@ python server.py
 | `GET`  | `/api/activity` | Live activity feed |
 | `GET`  | `/api/stats` | Network stats |
 
+### Certification API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/certification/certify` | Apply for certification |
+| `GET`  | `/certification/certifications` | List all certifications |
+| `GET`  | `/certification/certification/<bot_id>` | Get bot certification |
+| `POST` | `/certification/violation` | Report a violation |
+| `GET`  | `/certification/violations` | List all violations |
+
+---
+
+## Project Structure
+
+```
+tbn-protocol/
+├── tbn/
+│   ├── identity.py              BICA — bot identity & certification
+│   ├── bot_language.py          Bot Language v2 (AES-256-GCM)
+│   ├── compiler.py              Bot Language Compiler
+│   ├── handshake.py             Trust Handshake Protocol
+│   ├── bot.py                   Base Bot class
+│   ├── certification.py         Community Bot certification (3 tiers)
+│   ├── network.py               Distributed network nodes
+│   ├── cloning.py               Self-scaling bot replication
+│   ├── seeded_network.py        Distributed result cache
+│   ├── platform_integration.py  External platform adapters
+│   ├── github_bica.py           GitHub-backed BICA registry
+│   ├── notifications.py         Email notification system
+│   ├── sdk.py                   Public SDK (TBNClient)
+│   └── bots/
+│       ├── search_bot.py
+│       ├── validator_bot.py
+│       ├── connector_bot.py
+│       └── messenger_bot.py
+├── api/
+│   ├── routes.py                REST API endpoints
+│   ├── certification.py         Certification API + portal routes
+│   ├── state.py                 Shared server state
+│   └── templates/
+│       ├── dashboard.html       Live network dashboard
+│       ├── register_bot.html    Bot registration UI
+│       ├── certification_portal.html  Certification portal
+│       └── violations_dashboard.html  Violations dashboard
+├── data/
+│   └── bica_registry.json       Local bot registry
+├── docs/
+│   └── BOT-LANGUAGE-SPEC.md     Bot Language v2 specification
+├── server.py                    Flask API server
+└── requirements.txt
+```
+
 ---
 
 ## Technology Stack
@@ -326,11 +321,10 @@ python server.py
 | Payload encryption | AES-256-GCM |
 | Session key exchange | RSA-OAEP |
 | Message signing | RSA-PSS |
-| Bot Language | JSON schema + AES encryption |
-| Trust registry | JSON (GitHub-backed in production) |
-| API server | Flask |
-| Routing | Multi-node peer network |
-| Scaling | Python threading + clone manager |
+| Trust registry | GitHub-backed JSON (public, verifiable) |
+| API server | Flask + Gunicorn |
+| Hosting | AWS Lightsail (Ubuntu 22.04) |
+| Domain | tbn.hardinai.co.uk |
 
 ---
 
@@ -343,9 +337,14 @@ python server.py
 - [x] Bot Language v2: AES-256-GCM encryption
 - [x] Community Bot certification programme (3 tiers)
 - [x] **TBN SDK published to PyPI** — `pip install tbn-protocol`
-- [ ] AWS Lightsail deployment (live network nodes)
-- [ ] GitHub-backed public BICA registry
-- [ ] Community Bot certification portal (web UI)
+- [x] **AWS Lightsail deployment** — live at tbn.hardinai.co.uk
+- [x] **GitHub-backed public BICA registry**
+- [x] **Community Bot certification portal** (web UI)
+- [x] **Bot registration UI** (web form)
+- [x] **Violations dashboard** (admin panel)
+- [x] **Email notifications** for violations and certifications
+- [ ] Webhook support for violation alerts
+- [ ] Multi-node deployment (London + New York)
 - [ ] Integration with Hardin AI Search Engine
 
 ---
@@ -363,52 +362,23 @@ python server.py
 
 ---
 
-## Proof of Concept
-
-Hardin AI Search Engine — live at [hardin-ai-search.vercel.app](https://hardin-ai-search.vercel.app)
-
-- 88+ AI tools indexed
-- Self-replicating bot army (Scout, Extractor, Validator, Writer bots)
-- 143 active users
-- TBN is the trust layer built on top of this foundation
-
----
-
 ## License & Commercial Use
 
 **TBN Protocol is licensed under AGPL-3.0**
 
-### What This Means:
+✅ You CAN use, modify, and distribute TBN freely.  
+⚠️ You MUST open-source modifications if you run TBN as a network service.
 
-✅ **You CAN:**
-- Use TBN for personal projects
-- Use TBN for commercial projects
-- Modify the code
-- Distribute the code
-
-⚠️ **You MUST:**
-- **Open-source your modifications** if you run TBN as a network service
-- Include the AGPL-3.0 license
-- Provide access to your modified source code
-- Credit the original authors
-
-### Why AGPL?
-
-AGPL protects the TBN network by ensuring that anyone who runs a modified TBN service must share their improvements with the community. This prevents companies from taking the code, improving it, and keeping those improvements private.
-
-### Commercial Licensing
-
-If you need to use TBN in a proprietary service without open-sourcing your modifications, **commercial licenses are available**.
-
-**Contact:** burhan@hardinai.co.uk
+**Commercial licenses available** for proprietary use.  
+Contact: burhan@hardinai.co.uk
 
 ---
 
 ## Contact
 
 **Burhan Yanbolu**  
-Founder, Hardin Enterprises Ltd  
-[hardinai.co.uk](https://hardinai.co.uk)  
+Founder, Hardin Enterprises Ltd (trading as Hardin AI Solutions)  
+[hardinai.co.uk](https://hardinai.co.uk) | [burhan@hardinai.co.uk](mailto:burhan@hardinai.co.uk)  
 GitHub: [@burhanyanbolu-design](https://github.com/burhanyanbolu-design)
 
 ---
