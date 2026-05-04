@@ -61,6 +61,11 @@ def register_page():
     return render_template("register_bot.html")
 
 
+@app.route("/admin/violations")
+def violations_dashboard():
+    return render_template("violations_dashboard.html")
+
+
 @app.route("/health")
 def health():
     return {"status": "ok", "service": "tbn-protocol"}
