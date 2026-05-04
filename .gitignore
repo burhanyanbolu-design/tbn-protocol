@@ -9,3 +9,19 @@ venv/
 dist/
 build/
 .DS_Store
+
+# SSH keys
+*.pem
+*.key
+
+# Temporary/utility scripts
+transfer_file.py
+fix_*.py
+cleanup_*.py
+read_blog_config.py
+check_registry.py
+setup_github_bica.py
+certification_portal_base64.txt
+
+# Test outputs
+temp_cert.html
