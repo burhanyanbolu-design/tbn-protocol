@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TBN Protocol — Register a Bot</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EF6RKG8KY2');
+  </script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0e1a;
+      color: #c9d1d9;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: #0d1117;
+      border-bottom: 1px solid #21262d;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .logo-container { display: flex; align-items: center; gap: 12px; }
+    .logo-hex {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 20px; color: #0d1117;
+    }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .logo-hardin { font-size: 14px; font-weight: bold; color: #fff; letter-spacing: 1px; }
+    .logo-ai { font-size: 10px; color: #8b949e; letter-spacing: 0.5px; }
+    header h1 { font-size: 18px; color: #58a6ff; letter-spacing: 2px; }
+    header h1 span { color: #3fb950; }
+    .nav-links { display: flex; gap: 16px; font-size: 12px; }
+    .nav-links a {
+      color: #8b949e; text-decoration: none;
+      padding: 8px 12px; border-radius: 6px; transition: all 0.2s;
+    }
+    .nav-links a:hover { color: #58a6ff; background: #161b22; }
+    .nav-links a.active { color: #3fb950; background: #1a3a2a; }
+
+    /* Layout */
+    .container { max-width: 800px; margin: 0 auto; padding: 32px 24px; }
+
+    /* Cards */
+    .card {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card h2 {
+      font-size: 14px; color: #58a6ff;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 10px;
+    }
+
+    /* Form */
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 11px; color: #6e7681;
+      margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      padding: 10px 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: #58a6ff;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-hint { font-size: 10px; color: #6e7681; margin-top: 4px; }
+
+    /* Capabilities checkboxes */
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .cap-item {
+      display: flex; align-items: center; gap: 8px;
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 6px; padding: 8px 12px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .cap-item:hover { border-color: #58a6ff; }
+    .cap-item input[type="checkbox"] { width: auto; cursor: pointer; }
+    .cap-item label { font-size: 12px; color: #c9d1d9; cursor: pointer; margin: 0; text-transform: none; letter-spacing: normal; }
+    .cap-item.checked { border-color: #3fb950; background: #1a3a2a; }
+
+    /* Bot type cards */
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .type-card {
+      background: #161b22; border: 2px solid #30363d;
+      border-radius: 8px; padding: 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .type-card:hover { border-color: #58a6ff; }
+    .type-card.selected { border-color: #3fb950; background: #1a3a2a; }
+    .type-card .type-name { font-size: 13px; font-weight: bold; color: #c9d1d9; margin-bottom: 4px; }
+    .type-card .type-desc { font-size: 11px; color: #6e7681; }
+    .type-card .type-icon { font-size: 20px; margin-bottom: 8px; }
+
+    /* Buttons */
+    .btn {
+      background: #238636; color: #fff; border: none;
+      border-radius: 6px; padding: 12px 24px;
+      cursor: pointer; font-family: 'Courier New', monospace;
+      font-size: 13px; font-weight: bold; transition: background 0.2s;
+      width: 100%;
+    }
+    .btn:hover { background: #2ea043; }
+    .btn:disabled { background: #21262d; color: #6e7681; cursor: not-allowed; }
+
+    /* Success state */
+    .success-box {
+      display: none;
+      background: #1a3a2a;
+      border: 1px solid #3fb950;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+    }
+    .success-box.visible { display: block; }
+    .success-icon { font-size: 48px; margin-bottom: 16px; }
+    .success-title { font-size: 18px; color: #3fb950; margin-bottom: 8px; }
+    .success-bot-id {
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 6px; padding: 12px;
+      font-size: 14px; color: #58a6ff;
+      margin: 16px 0; word-break: break-all;
+    }
+    .success-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .btn-blue { background: #1f6feb; }
+    .btn-blue:hover { background: #388bfd; }
+    .btn-outline {
+      background: transparent; color: #58a6ff;
+      border: 1px solid #58a6ff; border-radius: 6px;
+      padding: 10px 20px; cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 12px; transition: all 0.2s; flex: 1;
+    }
+    .btn-outline:hover { background: #1f6feb; color: #fff; }
+
+    /* Response box */
+    .response-box {
+      background: #161b22; border: 1px solid #30363d;
+      border-radius: 6px; padding: 12px;
+      font-size: 11px; color: #3fb950;
+      min-height: 60px; max-height: 200px;
+      overflow-y: auto; white-space: pre-wrap;
+      word-break: break-all; margin-top: 16px;
+      display: none;
+    }
+    .response-box.error { color: #f85149; }
+    .response-box.visible { display: block; }
+
+    /* Steps indicator */
+    .steps {
+      display: flex; align-items: center;
+      gap: 0; margin-bottom: 32px;
+    }
+    .step {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: #6e7681;
+    }
+    .step.active { color: #58a6ff; }
+    .step.done { color: #3fb950; }
+    .step-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #21262d; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 11px; font-weight: bold;
+    }
+    .step.active .step-num { background: #1f6feb; color: #fff; }
+    .step.done .step-num { background: #238636; color: #fff; }
+    .step-line { flex: 1; height: 1px; background: #21262d; margin: 0 8px; }
+
+    /* Footer */
+    footer {
+      background: #0d1117; border-top: 1px solid #21262d;
+      padding: 24px; margin-top: 40px; text-align: center;
+    }
+    .footer-copyright { font-size: 11px; color: #6e7681; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; font-size: 11px; margin-top: 8px; }
+    .footer-links a { color: #58a6ff; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo-container">
+      <div class="logo-hex">H</div>
+      <div class="logo-text">
+        <div class="logo-hardin">HARDIN AI SOLUTIONS</div>
+        <div class="logo-ai">SERVICES</div>
+      </div>
+    </div>
+    <div style="width:1px;height:30px;background:#21262d"></div>
+    <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Register a Bot</h1>
+  </div>
+  <div class="nav-links">
+    <a href="/">Dashboard</a>
+    <a href="/register" class="active">Register Bot</a>
+    <a href="/certification/portal">Certification</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div>
+      <span>Configure Bot</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div>
+      <span>Register</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <span>Get Certified</span>
+    </div>
+  </div>
+
+  <!-- Registration Form -->
+  <div id="registration-form">
+
+    <div class="card">
+      <h2>🤖 Bot Details</h2>
+
+      <div class="form-group">
+        <label>Bot Name *</label>
+        <input type="text" id="bot-name" placeholder="e.g. MySearchBot, TrustValidator, DataConnector" />
+        <div class="form-hint">Choose a unique, descriptive name for your bot</div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="bot-description" placeholder="Describe what your bot does and how it will be used on the TBN network..."></textarea>
+        <div class="form-hint">Optional but recommended for community trust</div>
+      </div>
+
+      <div class="form-group">
+        <label>Bot Type *</label>
+        <div class="type-grid">
+          <div class="type-card selected" onclick="selectType('SEARCH', this)">
+            <div class="type-icon">🔍</div>
+            <div class="type-name">SEARCH</div>
+            <div class="type-desc">Natural language search and discovery across the TBN network</div>
+          </div>
+          <div class="type-card" onclick="selectType('VALIDATOR', this)">
+            <div class="type-icon">✅</div>
+            <div class="type-name">VALIDATOR</div>
+            <div class="type-desc">Verify bot certificates and validate trust relationships</div>
+          </div>
+          <div class="type-card" onclick="selectType('CONNECTOR', this)">
+            <div class="type-icon">🔗</div>
+            <div class="type-name">CONNECTOR</div>
+            <div class="type-desc">Bridge between platforms and external services</div>
+          </div>
+          <div class="type-card" onclick="selectType('MESSENGER', this)">
+            <div class="type-icon">💬</div>
+            <div class="type-name">MESSENGER</div>
+            <div class="type-desc">Secure message passing between trusted bots</div>
+          </div>
+        </div>
+        <input type="hidden" id="bot-type" value="SEARCH" />
+      </div>
+
+      <div class="form-group">
+        <label>Capabilities</label>
+        <div class="capabilities-grid">
+          <div class="cap-item" onclick="toggleCap(this, 'search')">
+            <input type="checkbox" checked /> <label>🔍 Search</label>
+          </div>
+          <div class="cap-item" onclick="toggleCap(this, 'read')">
+            <input type="checkbox" /> <label>📖 Read</label>
+          </div>
+          <div class="cap-item" onclick="toggleCap(this, 'write')">
+            <input type="checkbox" /> <label>✏️ Write</label>
+          </div>
+          <div class="cap-item" onclick="toggleCap(this, 'clone')">
+            <input type="checkbox" /> <label>🔄 Clone</label>
+          </div>
+          <div class="cap-item" onclick="toggleCap(this, 'connect')">
+            <input type="checkbox" /> <label>🔗 Connect</label>
+          </div>
+          <div class="cap-item" onclick="toggleCap(this, 'verify')">
+            <input type="checkbox" /> <label>✅ Verify</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <h2>🏅 Initial Certification</h2>
+      <p style="color:#8b949e;font-size:12px;margin-bottom:16px;line-height:1.6">
+        All bots are automatically certified at <strong style="color:#58a6ff">STANDARD</strong> level on registration.
+        You can upgrade to COMMUNITY level after registration via the Certification Portal.
+      </p>
+
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;background:#1f3a5f;border:1px solid #58a6ff;border-radius:8px;padding:14px">
+          <div style="font-size:13px;font-weight:bold;color:#58a6ff;margin-bottom:6px">🔵 STANDARD (Default)</div>
+          <div style="font-size:11px;color:#8b949e;line-height:1.5">
+            Public data access only. Can search and clone, but cannot access private resources.
+          </div>
+        </div>
+        <div style="flex:1;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px">
+          <div style="font-size:13px;font-weight:bold;color:#3fb950;margin-bottom:6px">🟢 COMMUNITY (Upgrade)</div>
+          <div style="font-size:11px;color:#8b949e;line-height:1.5">
+            Full network access. Requires ethical declaration. Apply after registration.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="registerBot()" id="register-btn">🚀 Register Bot on TBN Network</button>
+    <div class="response-box" id="reg-response"></div>
+
+  </div>
+
+  <!-- Success State -->
+  <div class="success-box" id="success-box">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">Bot Successfully Registered!</div>
+    <p style="color:#8b949e;font-size:12px;margin-bottom:8px">Your bot is now live on the TBN network</p>
+    <div class="success-bot-id" id="success-bot-id"></div>
+    <div style="font-size:12px;color:#8b949e;margin-bottom:8px">
+      <span id="success-bot-name"></span> &nbsp;|&nbsp; 
+      <span id="success-bot-type"></span> &nbsp;|&nbsp; 
+      🔵 STANDARD certified
+    </div>
+    <div class="success-actions">
+      <button class="btn-outline" onclick="window.location.href='/'">📊 View Dashboard</button>
+      <button class="btn-outline btn-blue" onclick="goToCertify()" style="background:#1f6feb;color:#fff;border-color:#1f6feb">🏅 Apply for COMMUNITY</button>
+      <button class="btn-outline" onclick="registerAnother()">➕ Register Another</button>
+    </div>
+  </div>
+
+  <!-- Network Stats -->
+  <div class="card" style="margin-top:24px">
+    <h2>📊 Network Status</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+      <div style="background:#161b22;border-radius:6px;padding:12px">
+        <div style="font-size:24px;font-weight:bold;color:#58a6ff" id="net-total">-</div>
+        <div style="font-size:10px;color:#6e7681;text-transform:uppercase">Total Bots</div>
+      </div>
+      <div style="background:#161b22;border-radius:6px;padding:12px">
+        <div style="font-size:24px;font-weight:bold;color:#3fb950" id="net-community">-</div>
+        <div style="font-size:10px;color:#6e7681;text-transform:uppercase">Community</div>
+      </div>
+      <div style="background:#161b22;border-radius:6px;padding:12px">
+        <div style="font-size:24px;font-weight:bold;color:#58a6ff" id="net-standard">-</div>
+        <div style="font-size:10px;color:#6e7681;text-transform:uppercase">Standard</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-copyright">
+    © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.
+  </div>
+  <div class="footer-links">
+    <a href="https://hardinai.co.uk" target="_blank">hardinai.co.uk</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+    <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI</a>
+    <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+  </div>
+</footer>
+
+<script>
+  let registeredBotId = null;
+
+  // Load network stats
+  loadStats();
+  setInterval(loadStats, 5000);
+
+  async function loadStats() {
+    try {
+      const res = await fetch('/certification/certifications');
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('net-total').textContent = data.total;
+        document.getElementById('net-community').textContent = data.certifications.COMMUNITY.length;
+        document.getElementById('net-standard').textContent = data.certifications.STANDARD.length;
+      }
+    } catch(e) {}
+  }
+
+  function selectType(type, el) {
+    document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('bot-type').value = type;
+  }
+
+  function toggleCap(el, cap) {
+    el.classList.toggle('checked');
+    const cb = el.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+  }
+
+  function getCapabilities() {
+    const caps = [];
+    document.querySelectorAll('.cap-item.checked').forEach(el => {
+      const label = el.querySelector('label').textContent.trim();
+      const cap = label.split(' ')[1].toLowerCase();
+      caps.push(cap);
+    });
+    // Also check checked checkboxes
+    document.querySelectorAll('.cap-item input[type="checkbox"]:checked').forEach(cb => {
+      const label = cb.parentElement.querySelector('label').textContent.trim();
+      const cap = label.split(' ')[1].toLowerCase();
+      if (!caps.includes(cap)) caps.push(cap);
+    });
+    return [...new Set(caps)];
+  }
+
+  async function registerBot() {
+    const name = document.getElementById('bot-name').value.trim();
+    const type = document.getElementById('bot-type').value;
+    const description = document.getElementById('bot-description').value.trim();
+
+    if (!name) {
+      alert('Please enter a bot name');
+      return;
+    }
+
+    const btn = document.getElementById('register-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Registering...';
+
+    const responseBox = document.getElementById('reg-response');
+    responseBox.classList.add('visible');
+    responseBox.className = 'response-box visible';
+    responseBox.textContent = 'Registering bot on TBN network...';
+
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, type, description })
+      });
+
+      const data = await response.json();
+
+      if (data.bot_id) {
+        registeredBotId = data.bot_id;
+
+        // Update steps
+        document.getElementById('step1').className = 'step done';
+        document.getElementById('step2').className = 'step done';
+        document.getElementById('step3').className = 'step active';
+
+        // Show success
+        document.getElementById('registration-form').style.display = 'none';
+        const successBox = document.getElementById('success-box');
+        successBox.classList.add('visible');
+        document.getElementById('success-bot-id').textContent = data.bot_id;
+        document.getElementById('success-bot-name').textContent = data.name;
+        document.getElementById('success-bot-type').textContent = data.type;
+
+        loadStats();
+      } else {
+        responseBox.className = 'response-box visible error';
+        responseBox.textContent = 'Error: ' + (data.error || 'Registration failed');
+        btn.disabled = false;
+        btn.textContent = '🚀 Register Bot on TBN Network';
+      }
+    } catch(e) {
+      responseBox.className = 'response-box visible error';
+      responseBox.textContent = 'Error: ' + e.message;
+      btn.disabled = false;
+      btn.textContent = '🚀 Register Bot on TBN Network';
+    }
+  }
+
+  function goToCertify() {
+    window.location.href = '/certification/portal';
+  }
+
+  function registerAnother() {
+    document.getElementById('registration-form').style.display = 'block';
+    document.getElementById('success-box').classList.remove('visible');
+    document.getElementById('bot-name').value = '';
+    document.getElementById('bot-description').value = '';
+    document.getElementById('register-btn').disabled = false;
+    document.getElementById('register-btn').textContent = '🚀 Register Bot on TBN Network';
+    document.getElementById('reg-response').classList.remove('visible');
+
+    // Reset steps
+    document.getElementById('step1').className = 'step active';
+    document.getElementById('step2').className = 'step';
+    document.getElementById('step3').className = 'step';
+  }
+</script>
+
+</body>
+</html>

@@ -56,6 +56,11 @@ def dashboard():
     return render_template("dashboard.html")
 
 
+@app.route("/register")
+def register_page():
+    return render_template("register_bot.html")
+
+
 @app.route("/health")
 def health():
     return {"status": "ok", "service": "tbn-protocol"}
