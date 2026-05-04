@@ -9,25 +9,7 @@ from datetime import datetime, timezone
 import json
 import os
 
-from ..tbn.github_bica import GitHubBICA
-from ..tbn.identity import BICA
-
 certification = Blueprint('certification', __name__)
-
-# Initialize BICA (GitHub-backed in production, local in development)
-def get_bica():
-    """Get BICA instance based on environment."""
-    if os.environ.get("TBN_ENV") == "production":
-        github_token = os.environ.get("TBN_GITHUB_TOKEN", "")
-        github_repo = os.environ.get("TBN_GITHUB_REPO", "burhanyanbolu-design/tbn-bica-registry")
-        
-        if github_token:
-            return GitHubBICA(repo=github_repo, token=github_token)
-        else:
-            print("⚠️  No GitHub token configured, using local BICA")
-            return BICA(registry_path="data/bica_registry.json")
-    else:
-        return BICA(registry_path="data/bica_registry.json")
 
 @certification.route("/portal")
 def certification_portal():
@@ -48,6 +30,10 @@ def certify_bot():
     }
     """
     try:
+        # Import here to avoid circular imports
+        from .state import bica
+        from tbn.certification import CertificationAuthority, CertLevel
+        
         data = request.get_json()
         bot_id = data.get("bot_id", "").strip()
         level = data.get("level", "STANDARD").upper()
@@ -67,29 +53,31 @@ def certify_bot():
             if not ethical_declaration:
                 return jsonify({"error": "Ethical declaration is required for COMMUNITY certification"}), 400
         
-        # Get BICA instance
-        bica = get_bica()
+        # Get certification authority
+        ca = CertificationAuthority(bica)
         
         # Check if bot exists
-        if hasattr(bica, 'get_bot_certificate'):
-            # GitHub BICA
-            cert = bica.get_bot_certificate(bot_id)
-            if not cert:
-                return jsonify({"error": "Bot not found in registry"}), 404
-            
-            # Certify the bot
-            success = bica.certify_bot(bot_id, level, purpose, ethical_declaration)
-        else:
-            # Local BICA
-            bots = bica.list_bots()
-            bot_cert = next((b for b in bots if b["bot_id"] == bot_id), None)
-            if not bot_cert:
-                return jsonify({"error": "Bot not found in registry"}), 404
-            
-            # For local BICA, we'll simulate certification
-            success = True
+        bots = bica.list_bots()
+        bot_cert = next((b for b in bots if b["bot_id"] == bot_id), None)
+        if not bot_cert:
+            return jsonify({"error": "Bot not found in registry"}), 404
         
-        if success:
+        # Get bot identity for certification
+        from .state import bots as registered_bots
+        bot = registered_bots.get(bot_id)
+        if not bot:
+            return jsonify({"error": "Bot not found in active registry"}), 404
+        
+        # Certify the bot
+        try:
+            cert_level = CertLevel(level)
+            cert = ca.certify(
+                identity=bot.identity,
+                level=cert_level,
+                purpose=purpose,
+                ethical_declaration=ethical_declaration,
+            )
+            
             # Log certification event
             _log_certification_event(bot_id, level, purpose, ethical_declaration)
             
@@ -98,11 +86,11 @@ def certify_bot():
                 "bot_id": bot_id,
                 "cert_level": level,
                 "purpose": purpose if level == "COMMUNITY" else None,
-                "certified_at": datetime.now(timezone.utc).isoformat(),
+                "certified_at": cert.issued_at,
                 "message": f"Bot certified as {level}"
             })
-        else:
-            return jsonify({"error": "Certification failed"}), 500
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
             
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -139,9 +127,6 @@ def report_violation():
         
         _log_violation(violation_record)
         
-        # For now, we'll just log violations
-        # In a full implementation, this would trigger a review process
-        
         return jsonify({
             "success": True,
             "message": "Violation reported successfully",
@@ -155,7 +140,10 @@ def report_violation():
 def list_certifications():
     """List all bot certifications."""
     try:
-        bica = get_bica()
+        from .state import bica
+        from tbn.certification import CertificationAuthority
+        
+        ca = CertificationAuthority(bica)
         bots = bica.list_bots()
         
         # Group by certification level
@@ -166,14 +154,16 @@ def list_certifications():
         }
         
         for bot in bots:
-            level = bot.get("cert_level", "STANDARD")
+            cert = ca.get_cert(bot["bot_id"])
+            level = cert.level.value if cert else "STANDARD"
+            
             if level in certifications:
                 certifications[level].append({
                     "bot_id": bot["bot_id"],
                     "name": bot["name"],
                     "cert_level": level,
-                    "certified_at": bot.get("certified_at", bot.get("created_at")),
-                    "purpose": bot.get("purpose", "")
+                    "certified_at": cert.issued_at if cert else bot.get("created_at"),
+                    "purpose": cert.purpose if cert else ""
                 })
         
         return jsonify({
@@ -189,29 +179,28 @@ def list_certifications():
 def get_certification(bot_id):
     """Get certification details for a specific bot."""
     try:
-        bica = get_bica()
+        from .state import bica
+        from tbn.certification import CertificationAuthority
         
-        if hasattr(bica, 'get_bot_certificate'):
-            # GitHub BICA
-            cert = bica.get_bot_certificate(bot_id)
-        else:
-            # Local BICA
-            bots = bica.list_bots()
-            cert = next((b for b in bots if b["bot_id"] == bot_id), None)
+        ca = CertificationAuthority(bica)
+        bots = bica.list_bots()
+        bot_cert = next((b for b in bots if b["bot_id"] == bot_id), None)
         
-        if not cert:
+        if not bot_cert:
             return jsonify({"error": "Bot not found"}), 404
+        
+        cert = ca.get_cert(bot_id)
         
         return jsonify({
             "success": True,
             "certification": {
-                "bot_id": cert["bot_id"],
-                "name": cert["name"],
-                "cert_level": cert.get("cert_level", "STANDARD"),
-                "certified_at": cert.get("certified_at", cert.get("created_at")),
-                "purpose": cert.get("purpose", ""),
-                "ethical_declaration": cert.get("ethical_declaration", False),
-                "created_at": cert["created_at"]
+                "bot_id": bot_cert["bot_id"],
+                "name": bot_cert["name"],
+                "cert_level": cert.level.value if cert else "STANDARD",
+                "certified_at": cert.issued_at if cert else bot_cert.get("created_at"),
+                "purpose": cert.purpose if cert else "",
+                "ethical_declaration": cert.ethical_declaration if cert else False,
+                "created_at": bot_cert["created_at"]
             }
         })
         
