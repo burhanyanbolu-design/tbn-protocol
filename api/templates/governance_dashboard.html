@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TBN Protocol — Data Governance</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-EF6RKG8KY2");</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Courier New",monospace;background:#0a0e1a;color:#c9d1d9;min-height:100vh}
+    header{background:#0d1117;border-bottom:1px solid #21262d;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo-hex{width:40px;height:40px;background:linear-gradient(135deg,#00d9ff,#0099cc);clip-path:polygon(30% 0%,70% 0%,100% 50%,70% 100%,30% 100%,0% 50%);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:20px;color:#0d1117}
+    header h1{font-size:18px;color:#58a6ff;letter-spacing:2px;margin-left:12px}
+    header h1 span{color:#3fb950}
+    .nav-links{display:flex;gap:16px;font-size:12px}
+    .nav-links a{color:#8b949e;text-decoration:none;padding:8px 12px;border-radius:6px}
+    .nav-links a:hover{color:#58a6ff;background:#161b22}
+    .nav-links a.active{color:#3fb950;background:#1a3a2a}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .stat-card{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:16px;text-align:center}
+    .stat-num{font-size:28px;font-weight:bold;color:#58a6ff}
+    .stat-label{font-size:10px;color:#6e7681;text-transform:uppercase;margin-top:4px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+    .card{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:20px;margin-bottom:24px}
+    .card h2{font-size:14px;color:#58a6ff;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;border-bottom:1px solid #21262d;padding-bottom:8px}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;font-size:11px;color:#6e7681;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px}
+    .form-group input,.form-group select,.form-group textarea{width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;padding:9px 12px;font-family:"Courier New",monospace;font-size:12px}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#58a6ff}
+    .form-group textarea{resize:vertical;min-height:70px}
+    .btn{background:#238636;color:#fff;border:none;border-radius:6px;padding:10px 18px;cursor:pointer;font-family:"Courier New",monospace;font-size:12px;font-weight:bold;transition:background 0.2s}
+    .btn:hover{background:#2ea043}
+    .btn-blue{background:#1f6feb}.btn-blue:hover{background:#388bfd}
+    .btn-red{background:#da3633}.btn-red:hover{background:#f85149}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+    .response-box{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;font-size:11px;color:#3fb950;min-height:60px;max-height:200px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-top:12px}
+    .response-box.error{color:#f85149}
+    .agreement-item{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px;margin-bottom:10px}
+    .agreement-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .agreement-name{font-size:13px;font-weight:bold;color:#c9d1d9}
+    .agreement-id{font-size:10px;color:#6e7681}
+    .level-badge{font-size:10px;padding:3px 8px;border-radius:4px;font-weight:bold}
+    .level-FULL{background:#1a3a2a;color:#3fb950}
+    .level-LIMITED{background:#1f3a5f;color:#58a6ff}
+    .level-RESTRICTED{background:#3a2a1a;color:#d29922}
+    .log-item{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid #161b22;font-size:11px}
+    .log-item:last-child{border-bottom:none}
+    .log-allowed{color:#3fb950}
+    .log-denied{color:#f85149}
+    .log-time{color:#6e7681;min-width:80px;font-size:10px}
+    .empty{text-align:center;color:#6e7681;font-size:12px;padding:20px}
+    .tag{display:inline-block;background:#21262d;color:#8b949e;padding:2px 6px;border-radius:4px;font-size:10px;margin:2px}
+    .tag.allowed{background:#1a3a2a;color:#3fb950}
+    .tag.blocked{background:#3a1a1a;color:#f85149}
+    footer{background:#0d1117;border-top:1px solid #21262d;padding:20px;margin-top:40px;text-align:center;font-size:11px;color:#6e7681}
+  </style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="logo-hex">H</div>
+    <div style="display:flex;flex-direction:column;line-height:1.2">
+      <div style="font-size:14px;font-weight:bold;color:#fff;letter-spacing:1px">HARDIN AI SOLUTIONS</div>
+      <div style="font-size:10px;color:#8b949e">SERVICES</div>
+    </div>
+    <div style="width:1px;height:30px;background:#21262d"></div>
+    <h1>TBN <span>PROTOCOL</span> &nbsp;&#8212;&nbsp; Data Governance</h1>
+  </div>
+  <div class="nav-links">
+    <a href="/">Dashboard</a>
+    <a href="/register">Register Bot</a>
+    <a href="/certification/portal">Certification</a>
+    <a href="/admin/violations">Violations</a>
+    <a href="/governance/portal" class="active">&#128274; Governance</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" id="stat-agreements">0</div><div class="stat-label">Agreements</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Access Attempts</div></div>
+    <div class="stat-card" style="border-color:#3fb950"><div class="stat-num" style="color:#3fb950" id="stat-allowed">0</div><div class="stat-label">Allowed</div></div>
+    <div class="stat-card" style="border-color:#f85149"><div class="stat-num" style="color:#f85149" id="stat-denied">0</div><div class="stat-label">Denied</div></div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <h2>&#128221; Create Data Sharing Agreement</h2>
+      <div class="form-group"><label>Company ID</label><input type="text" id="ag-company-id" placeholder="e.g. nhs-royal-london" /></div>
+      <div class="form-group"><label>Company Name</label><input type="text" id="ag-company-name" placeholder="e.g. Royal London Hospital NHS Trust" /></div>
+      <div class="form-group">
+        <label>Access Level</label>
+        <select id="ag-access-level">
+          <option value="LIMITED">&#128309; LIMITED - Specific fields only</option>
+          <option value="FULL">&#128994; FULL - All allowed data</option>
+          <option value="RESTRICTED">&#128993; RESTRICTED - Minimal access</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Allowed Data Types (comma separated)</label><input type="text" id="ag-data-types" placeholder="patient_demographics, medical_records" /></div>
+      <div class="form-group"><label>Allowed Fields (JSON format)</label><textarea id="ag-allowed-fields" placeholder='{"patient_demographics": ["name", "dob", "nhs_number"]}'></textarea></div>
+      <div class="form-group"><label>Blocked Fields (JSON format)</label><textarea id="ag-blocked-fields" placeholder='{"patient_demographics": ["address", "phone", "email"]}'></textarea></div>
+      <div class="form-group"><label>Max Records Per Request</label><input type="number" id="ag-max-records" value="100" /></div>
+      <div class="form-group"><label>Rate Limit (requests per minute)</label><input type="number" id="ag-rate-limit" value="60" /></div>
+      <div class="form-group"><label>Required Cert Levels (comma separated)</label><input type="text" id="ag-cert-levels" placeholder="COMMUNITY, STANDARD" /></div>
+      <button class="btn" onclick="createAgreement()">&#128221; Create Agreement</button>
+      <div class="response-box" id="ag-response">// response will appear here</div>
+    </div>
+
+    <div class="card">
+      <h2>&#9989; Validate Data Scope</h2>
+      <p style="font-size:11px;color:#8b949e;margin-bottom:14px">Test if a bot is allowed to access specific data under a company agreement.</p>
+      <div class="form-group"><label>Bot ID</label><input type="text" id="val-bot-id" placeholder="tbn-bot-xxxx" /></div>
+      <div class="form-group"><label>Company ID</label><input type="text" id="val-company-id" placeholder="nhs-royal-london" /></div>
+      <div class="form-group"><label>Data Type</label><select id="val-data-type"><option value="patient_demographics">patient_demographics</option><option value="medical_records">medical_records</option><option value="financial_data">financial_data</option><option value="public_data">public_data</option><option value="search_results">search_results</option></select></div>
+      <div class="form-group"><label>Fields Requested (comma separated)</label><input type="text" id="val-fields" placeholder="name, dob, nhs_number" /></div>
+      <div class="form-group"><label>Max Records</label><input type="number" id="val-max-records" value="50" /></div>
+      <div class="form-group"><label>Purpose</label><input type="text" id="val-purpose" placeholder="Clinical decision support" /></div>
+      <div class="form-group"><label>Bot Cert Level</label><select id="val-cert-level"><option value="COMMUNITY">&#128994; COMMUNITY</option><option value="STANDARD">&#128309; STANDARD</option><option value="RESTRICTED">&#128993; RESTRICTED</option></select></div>
+      <div class="form-group"><label>Environment</label><select id="val-env"><option value="external">External</option><option value="internal">Internal</option></select></div>
+      <button class="btn btn-blue" onclick="validateScope()">&#9989; Validate Scope</button>
+      <div class="response-box" id="val-response">// validation result will appear here</div>
+    </div>
+
+  </div>
+
+  <div class="grid-2">
+
+    <div class="card">
+      <h2>&#128196; Active Agreements</h2>
+      <div id="agreements-list"><div class="empty">No agreements yet</div></div>
+    </div>
+
+    <div class="card">
+      <h2>&#128203; Access Log</h2>
+      <div id="access-log"><div class="empty">No access attempts yet</div></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h2>&#128260; Dynamic Access Level Control</h2>
+    <p style="font-size:11px;color:#8b949e;margin-bottom:14px">Change a company access level instantly without recreating the agreement.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div class="form-group" style="flex:1;margin:0"><label>Company ID</label><input type="text" id="dyn-company-id" placeholder="nhs-royal-london" /></div>
+      <div class="form-group" style="flex:1;margin:0"><label>New Access Level</label><select id="dyn-level"><option value="FULL">FULL</option><option value="LIMITED">LIMITED</option><option value="RESTRICTED">RESTRICTED</option></select></div>
+      <button class="btn" onclick="updateAccessLevel()" style="margin-bottom:0">&#128260; Update Level</button>
+    </div>
+    <div class="response-box" id="dyn-response">// response will appear here</div>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
+  TBN Protocol &mdash; Data Governance Layer
+</footer>
+
+<script>
+  setInterval(loadData, 8000);
+  loadData();
+
+  async function loadData() {
+    try {
+      const [statsRes, agreementsRes, logRes] = await Promise.all([
+        fetch("/governance/stats"),
+        fetch("/governance/agreements"),
+        fetch("/governance/log?limit=20"),
+      ]);
+      const stats = await statsRes.json();
+      const agreements = await agreementsRes.json();
+      const log = await logRes.json();
+
+      if (stats.success) {
+        document.getElementById("stat-agreements").textContent = stats.stats.total_agreements;
+        document.getElementById("stat-total").textContent = stats.stats.total_access_attempts;
+        document.getElementById("stat-allowed").textContent = stats.stats.allowed;
+        document.getElementById("stat-denied").textContent = stats.stats.denied;
+      }
+
+      if (agreements.success) {
+        const list = document.getElementById("agreements-list");
+        if (agreements.agreements.length === 0) {
+          list.innerHTML = "<div class=\"empty\">No agreements yet</div>";
+        } else {
+          list.innerHTML = agreements.agreements.map(a => `
+            <div class="agreement-item">
+              <div class="agreement-header">
+                <div>
+                  <div class="agreement-name">${a.company_name}</div>
+                  <div class="agreement-id">${a.company_id}</div>
+                </div>
+                <span class="level-badge level-${a.access_level}">${a.access_level}</span>
+              </div>
+              <div style="font-size:10px;color:#6e7681;margin-top:6px">
+                Data types: ${a.allowed_data_types.map(t => "<span class=\"tag\">" + t + "</span>").join("")}
+              </div>
+              <div style="font-size:10px;color:#6e7681;margin-top:4px">
+                Max records: ${a.max_records_per_request} &nbsp;|&nbsp; Rate: ${a.rate_limit_per_minute}/min &nbsp;|&nbsp; Cert: ${a.allowed_cert_levels.join(", ")}
+              </div>
+            </div>`).join("");
+        }
+      }
+
+      if (log.success) {
+        const logEl = document.getElementById("access-log");
+        if (log.log.length === 0) {
+          logEl.innerHTML = "<div class=\"empty\">No access attempts yet</div>";
+        } else {
+          logEl.innerHTML = log.log.map(e => `
+            <div class="log-item">
+              <span class="log-time">${new Date(e.timestamp).toLocaleTimeString()}</span>
+              <span class="${e.allowed ? "log-allowed" : "log-denied"}">${e.allowed ? "ALLOW" : "DENY"}</span>
+              <div style="flex:1">
+                <div style="color:#c9d1d9;font-size:11px">${e.bot_id} &rarr; ${e.data_type}</div>
+                <div style="color:#6e7681;font-size:10px">${e.reason || e.purpose || ""}</div>
+              </div>
+            </div>`).join("");
+        }
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  async function createAgreement() {
+    const companyId = document.getElementById("ag-company-id").value.trim();
+    const companyName = document.getElementById("ag-company-name").value.trim();
+    const accessLevel = document.getElementById("ag-access-level").value;
+    const dataTypesRaw = document.getElementById("ag-data-types").value.trim();
+    const allowedFieldsRaw = document.getElementById("ag-allowed-fields").value.trim();
+    const blockedFieldsRaw = document.getElementById("ag-blocked-fields").value.trim();
+    const maxRecords = parseInt(document.getElementById("ag-max-records").value);
+    const rateLimit = parseInt(document.getElementById("ag-rate-limit").value);
+    const certLevelsRaw = document.getElementById("ag-cert-levels").value.trim();
+    const responseBox = document.getElementById("ag-response");
+
+    if (!companyId || !companyName) {
+      responseBox.textContent = "Error: Company ID and name are required";
+      responseBox.className = "response-box error";
+      return;
+    }
+
+    let allowedFields = {}, blockedFields = {};
+    try { if (allowedFieldsRaw) allowedFields = JSON.parse(allowedFieldsRaw); } catch(e) { responseBox.textContent = "Error: Invalid JSON in allowed fields"; responseBox.className = "response-box error"; return; }
+    try { if (blockedFieldsRaw) blockedFields = JSON.parse(blockedFieldsRaw); } catch(e) { responseBox.textContent = "Error: Invalid JSON in blocked fields"; responseBox.className = "response-box error"; return; }
+
+    const payload = {
+      company_id: companyId,
+      company_name: companyName,
+      access_level: accessLevel,
+      allowed_data_types: dataTypesRaw ? dataTypesRaw.split(",").map(s => s.trim()) : [],
+      allowed_fields: allowedFields,
+      blocked_fields: blockedFields,
+      max_records_per_request: maxRecords,
+      rate_limit_per_minute: rateLimit,
+      allowed_cert_levels: certLevelsRaw ? certLevelsRaw.split(",").map(s => s.trim().toUpperCase()) : ["COMMUNITY", "STANDARD"],
+    };
+
+    try {
+      responseBox.textContent = "Creating agreement...";
+      responseBox.className = "response-box";
+      const res = await fetch("/governance/agreements", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
+      const data = await res.json();
+      responseBox.textContent = JSON.stringify(data, null, 2);
+      responseBox.className = data.success ? "response-box" : "response-box error";
+      if (data.success) loadData();
+    } catch(e) { responseBox.textContent = "Error: " + e.message; responseBox.className = "response-box error"; }
+  }
+
+  async function validateScope() {
+    const botId = document.getElementById("val-bot-id").value.trim();
+    const companyId = document.getElementById("val-company-id").value.trim();
+    const dataType = document.getElementById("val-data-type").value;
+    const fieldsRaw = document.getElementById("val-fields").value.trim();
+    const maxRecords = parseInt(document.getElementById("val-max-records").value);
+    const purpose = document.getElementById("val-purpose").value.trim();
+    const certLevel = document.getElementById("val-cert-level").value;
+    const env = document.getElementById("val-env").value;
+    const responseBox = document.getElementById("val-response");
+
+    if (!botId || !companyId) { responseBox.textContent = "Error: Bot ID and Company ID required"; responseBox.className = "response-box error"; return; }
+
+    const payload = {
+      bot_id: botId, company_id: companyId, data_type: dataType,
+      fields_requested: fieldsRaw ? fieldsRaw.split(",").map(s => s.trim()) : [],
+      max_records: maxRecords, purpose: purpose,
+      bot_cert_level: certLevel, environment: env,
+    };
+
+    try {
+      responseBox.textContent = "Validating...";
+      responseBox.className = "response-box";
+      const res = await fetch("/governance/validate", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload) });
+      const data = await res.json();
+      responseBox.textContent = JSON.stringify(data, null, 2);
+      responseBox.className = data.allowed ? "response-box" : "response-box error";
+      loadData();
+    } catch(e) { responseBox.textContent = "Error: " + e.message; responseBox.className = "response-box error"; }
+  }
+
+  async function updateAccessLevel() {
+    const companyId = document.getElementById("dyn-company-id").value.trim();
+    const level = document.getElementById("dyn-level").value;
+    const responseBox = document.getElementById("dyn-response");
+    if (!companyId) { responseBox.textContent = "Error: Company ID required"; responseBox.className = "response-box error"; return; }
+    try {
+      const res = await fetch("/governance/agreements/" + companyId + "/access-level", { method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify({access_level: level}) });
+      const data = await res.json();
+      responseBox.textContent = JSON.stringify(data, null, 2);
+      responseBox.className = data.success ? "response-box" : "response-box error";
+      if (data.success) loadData();
+    } catch(e) { responseBox.textContent = "Error: " + e.message; responseBox.className = "response-box error"; }
+  }
+</script>
+</body>
+</html>
