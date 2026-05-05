@@ -33,11 +33,13 @@ import logging
 from flask import Flask, render_template
 from api.routes import api
 from api.certification import certification
+from api.governance import governance
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates")
 app.register_blueprint(api, url_prefix="/api")
 app.register_blueprint(certification, url_prefix="/certification")
+app.register_blueprint(governance, url_prefix="/governance")
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
@@ -64,6 +66,16 @@ def register_page():
 @app.route("/admin/violations")
 def violations_dashboard():
     return render_template("violations_dashboard.html")
+
+
+@app.route("/demo")
+def demo():
+    return render_template("demo.html")
+
+
+@app.route("/demo/nhs")
+def demo_nhs():
+    return render_template("demo_nhs.html")
 
 
 @app.route("/health")
