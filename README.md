@@ -54,6 +54,46 @@ Three core components:
 
 ---
 
+## 🏢 Open Protocol, Centralized Network
+
+**TBN Protocol is open source. TBN Network is centralized.**
+
+Like Docker (open) + Docker Hub (centralized), or Git (open) + GitHub (centralized):
+
+### What's Open Source:
+- ✅ **TBN Protocol** — Specification and implementation
+- ✅ **Client SDK** — `pip install tbn-protocol`
+- ✅ **Bot Language** — Encrypted communication protocol
+- ✅ **Documentation** — Full technical specs
+
+### What's Centralized:
+- 🔒 **The Registry** — Hosted at [tbn.hardinai.co.uk](https://tbn.hardinai.co.uk)
+- 🔒 **Bot Certification** — Only we can issue trusted certificates
+- 🔒 **Network Trust** — Companies trust OUR certification authority
+- 🔒 **Enterprise Features** — Analytics, SLAs, compliance tools
+
+### Why Centralized?
+
+**Trust requires a single source of truth.**
+
+- **Network Effect** — All companies and bots in one place
+- **Trust** — "TBN-certified" means something because we control it
+- **Reliability** — Enterprise-grade infrastructure, 99.9% uptime
+- **Security** — Centralized monitoring, compliance, and enforcement
+
+### Can I Self-Host?
+
+Yes, for **development and testing**. But for production:
+
+- ❌ Your bots won't be recognized by companies
+- ❌ Companies won't trust your certifications
+- ❌ You won't have access to the bot ecosystem
+- ❌ No network effect, no value
+
+**For production, connect to the official TBN Network.**
+
+---
+
 ## Live Network
 
 | URL | Description |
@@ -359,6 +399,18 @@ tbn-protocol/
 **Market:** Every company building AI agents needs this.  
 **Moat:** Network effect — more certified bots = more valuable network.  
 **Revenue:** Bot certificates (SaaS), enterprise compliance packages, BICA API access.
+
+---
+
+## 💰 Pricing
+
+| Tier | Price | Features |
+|------|-------|----------|
+| **Free** | $0/month | • 1,000 verifications/month<br>• Basic bot registration<br>• STANDARD certification<br>• Community support |
+| **Pro** | $99/month | • 10,000 verifications/month<br>• COMMUNITY certification<br>• Analytics dashboard<br>• Email support |
+| **Enterprise** | Custom | • Unlimited verifications<br>• Custom certification levels<br>• SLA guarantees<br>• Compliance tools (GDPR, SOC2)<br>• Dedicated support<br>• Multi-region deployment |
+
+**[Sign up at tbn.hardinai.co.uk](https://tbn.hardinai.co.uk)**
 
 ---
 
