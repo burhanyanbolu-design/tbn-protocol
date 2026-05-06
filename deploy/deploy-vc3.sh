@@ -40,13 +40,27 @@ sudo ./venv/bin/pip install --upgrade pip
 sudo ./venv/bin/pip install -r requirements.txt
 
 echo -e "${YELLOW}Step 3: Configuring environment variables...${NC}"
-if [ ! -f ".env" ]; then
-    echo -e "${RED}Creating .env file - YOU MUST ADD YOUR ALPACA API KEYS!${NC}"
-    sudo tee .env > /dev/null <<EOF
+
+# Prompt for Alpaca API keys
+echo ""
+echo -e "${YELLOW}=== Alpaca API Configuration ===${NC}"
+echo "Get your API keys from: https://app.alpaca.markets/paper/dashboard/overview"
+echo ""
+
+# Check if .env already exists
+if [ -f ".env" ]; then
+    echo -e "${GREEN}.env file already exists${NC}"
+    read -p "Do you want to update the API keys? (y/n): " UPDATE_KEYS
+    if [ "$UPDATE_KEYS" != "y" ]; then
+        echo "Keeping existing .env file"
+    else
+        read -p "Enter your Alpaca API Key: " ALPACA_KEY
+        read -p "Enter your Alpaca Secret Key: " ALPACA_SECRET
+        
+        sudo tee .env > /dev/null <<EOF
 # Alpaca API Configuration
-# Get your keys from: https://app.alpaca.markets/paper/dashboard/overview
-ALPACA_API_KEY=your_api_key_here
-ALPACA_SECRET_KEY=your_secret_key_here
+ALPACA_API_KEY=$ALPACA_KEY
+ALPACA_SECRET_KEY=$ALPACA_SECRET
 ALPACA_BASE_URL=https://paper-api.alpaca.markets
 
 # Server Configuration
@@ -64,9 +78,40 @@ MAX_DAILY_LOSS=400
 MARKET_OPEN=09:30
 MARKET_CLOSE=16:00
 EOF
-    echo -e "${RED}⚠️  IMPORTANT: Edit /opt/vc3/.env and add your Alpaca API keys!${NC}"
+        echo -e "${GREEN}✓ API keys updated${NC}"
+    fi
 else
-    echo -e "${GREEN}.env file already exists${NC}"
+    read -p "Enter your Alpaca API Key (or press Enter to skip): " ALPACA_KEY
+    read -p "Enter your Alpaca Secret Key (or press Enter to skip): " ALPACA_SECRET
+    
+    if [ -z "$ALPACA_KEY" ] || [ -z "$ALPACA_SECRET" ]; then
+        ALPACA_KEY="your_api_key_here"
+        ALPACA_SECRET="your_secret_key_here"
+        echo -e "${RED}⚠️  Using placeholder keys - you MUST update them later!${NC}"
+    fi
+    
+    sudo tee .env > /dev/null <<EOF
+# Alpaca API Configuration
+ALPACA_API_KEY=$ALPACA_KEY
+ALPACA_SECRET_KEY=$ALPACA_SECRET
+ALPACA_BASE_URL=https://paper-api.alpaca.markets
+
+# Server Configuration
+PORT=$PORT
+HOST=127.0.0.1
+
+# Trading Configuration
+MAX_POSITIONS=5
+POSITION_SIZE=500
+STOP_LOSS_PCT=1.5
+TAKE_PROFIT_PCT=3.0
+MAX_DAILY_LOSS=400
+
+# Market Hours (NY Time)
+MARKET_OPEN=09:30
+MARKET_CLOSE=16:00
+EOF
+    echo -e "${GREEN}✓ .env file created${NC}"
 fi
 
 echo -e "${YELLOW}Step 4: Creating systemd service...${NC}"
@@ -98,19 +143,24 @@ sudo systemctl daemon-reload
 sudo systemctl enable $SERVICE_NAME
 sudo systemctl restart $SERVICE_NAME
 
+# Wait a moment for service to start
+sleep 2
+
 echo ""
 echo -e "${GREEN}=========================================="
 echo "VC3 Deployment Complete!"
 echo "==========================================${NC}"
 echo ""
 echo "Service Status:"
-sudo systemctl status $SERVICE_NAME --no-pager -l
+sudo systemctl status $SERVICE_NAME --no-pager -l || true
 echo ""
-echo -e "${YELLOW}Next Steps:${NC}"
-echo "1. Edit /opt/vc3/.env and add your Alpaca API keys"
-echo "2. Restart the service: sudo systemctl restart vc3"
-echo "3. Check logs: sudo journalctl -u vc3 -f"
-echo "4. Visit: https://vc3.hardinai.co.uk"
+echo -e "${YELLOW}Checking if bot is running on port $PORT...${NC}"
+if sudo netstat -tlnp | grep -q ":$PORT"; then
+    echo -e "${GREEN}✓ Bot is listening on port $PORT${NC}"
+else
+    echo -e "${RED}✗ Bot is NOT listening on port $PORT${NC}"
+    echo "Check logs: sudo journalctl -u vc3 -n 50"
+fi
 echo ""
 echo -e "${YELLOW}Useful Commands:${NC}"
 echo "  sudo systemctl status vc3       # Check status"
@@ -118,5 +168,8 @@ echo "  sudo systemctl restart vc3      # Restart bot"
 echo "  sudo systemctl stop vc3         # Stop bot"
 echo "  sudo journalctl -u vc3 -f       # View live logs"
 echo "  sudo journalctl -u vc3 -n 100   # View last 100 log lines"
+echo ""
+echo -e "${YELLOW}Visit your dashboard:${NC}"
+echo "  https://vc3.hardinai.co.uk"
 echo ""
 echo -e "${RED}⚠️  Remember: The bot only trades Mon-Fri 9:30am-4:00pm NY time${NC}"
