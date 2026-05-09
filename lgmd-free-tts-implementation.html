@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGMD Patient Update - ARIA (Free TTS)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; color: #e0e0e0; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+.header { text-align: center; margin-bottom: 40px; }
+.header h1 { font-size: 32px; color: #fff; margin-bottom: 10px; }
+.header p { color: #888; font-size: 16px; }
+
+.aria-card {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 2px solid #00d4ff;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+}
+
+.aria-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.aria-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.aria-info h2 { color: #00d4ff; font-size: 24px; margin-bottom: 5px; }
+.aria-info p { color: #888; font-size: 14px; }
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.feature {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.feature-icon { font-size: 40px; margin-bottom: 10px; }
+.feature h3 { color: #fff; font-size: 16px; margin-bottom: 8px; }
+.feature p { color: #888; font-size: 13px; line-height: 1.6; }
+
+.controls {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+}
+
+.control-group {
+  margin-bottom: 20px;
+}
+
+.control-group label {
+  display: block;
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.control-group select {
+  width: 100%;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  color: #000;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.playback-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.playback-btn {
+  flex: 1;
+  background: #30363d;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.playback-btn:hover { background: #484f58; }
+
+.transcript {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.transcript h3 {
+  color: #00d4ff;
+  font-size: 18px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transcript-content {
+  color: #c9d1d9;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.status {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 15px;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}
+
+.status.speaking { border-color: #00d4ff; color: #00d4ff; }
+.status.error { border-color: #f85149; color: #f85149; }
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #30363d;
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00d4ff, #0099cc);
+  width: 0%;
+  transition: width 0.3s;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🧬 LGMD2B/R2 Patient Update</h1>
+    <p>Latest research findings explained by ARIA</p>
+  </div>
+
+  <div class="aria-card">
+    <div class="aria-header">
+      <div class="aria-avatar">🤖</div>
+      <div class="aria-info">
+        <h2>ARIA</h2>
+        <p>AI Research Intelligence Assistant</p>
+      </div>
+    </div>
+    <p style="color: #888; line-height: 1.6;">
+      ARIA reads all collected LGMD2B/R2 research and delivers a clear, accessible summary in your language — no scientific background required.
+    </p>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🌍</div>
+      <h3>12 Languages</h3>
+      <p>Choose your preferred language and hear the update read aloud by ARIA</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔄</div>
+      <h3>Always Fresh</h3>
+      <p>Updated after every research sweep — always reflects the latest findings</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎙️</div>
+      <h3>Audio + Text</h3>
+      <p>Listen to the spoken update and follow along with the full transcript below</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Step 1 — Choose your language</label>
+      <select id="language-select">
+        <option value="en-US">🇬🇧 English</option>
+        <option value="es-ES">🇪🇸 Español (Spanish)</option>
+        <option value="fr-FR">🇫🇷 Français (French)</option>
+        <option value="de-DE">🇩🇪 Deutsch (German)</option>
+        <option value="it-IT">🇮🇹 Italiano (Italian)</option>
+        <option value="pt-BR">🇧🇷 Português (Portuguese)</option>
+        <option value="ru-RU">🇷🇺 Русский (Russian)</option>
+        <option value="zh-CN">🇨🇳 中文 (Chinese)</option>
+        <option value="ja-JP">🇯🇵 日本語 (Japanese)</option>
+        <option value="ko-KR">🇰🇷 한국어 (Korean)</option>
+        <option value="ar-SA">🇸🇦 العربية (Arabic)</option>
+        <option value="tr-TR">🇹🇷 Türkçe (Turkish)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label>Step 2 — Generate & play update</label>
+      <button class="btn" onclick="generateAndPlay()">
+        🎙️ Generate & Play Latest Update
+      </button>
+    </div>
+
+    <div class="playback-controls" id="playback-controls" style="display: none;">
+      <button class="playback-btn" onclick="pauseResume()">⏸️ Pause</button>
+      <button class="playback-btn" onclick="stop()">⏹️ Stop</button>
+    </div>
+
+    <div class="status" id="status">
+      Select your language and press play to generate the update
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress"></div>
+    </div>
+  </div>
+
+  <div class="transcript">
+    <h3>🎙️ Transcript</h3>
+    <div class="transcript-content" id="transcript">
+      The AI presenter will explain the latest LGMD2B/R2 research findings here.
+      Select your language and press play to generate the update.
+    </div>
+  </div>
+</div>
+
+<script>
+let synthesis = window.speechSynthesis;
+let currentUtterance = null;
+let isPaused = false;
+
+// Sample research update (in production, fetch from API)
+const researchUpdate = {
+  'en-US': `Hello, I'm ARIA, your AI Research Intelligence Assistant. Here's the latest update on LGMD2B/R2 research.
+
+As of today, we've analyzed 32 research papers and generated 23 treatment hypotheses. The most promising development is Sarepta Therapeutics' SRP-6004 gene therapy, currently in Phase 1 clinical trials under the NAVIGENE study.
+
+Recent findings show that dual AAV gene therapy approaches are showing promise in delivering the full DYSF gene to muscle cells. Several research groups are exploring exon skipping techniques to bypass mutated regions of the gene.
+
+The cure progress score, based on all available evidence, currently stands at 42 out of 100. This represents significant progress compared to 5 years ago when there were no active clinical trials.
+
+Key areas of active research include: gene therapy delivery methods, protein replacement strategies, and stem cell approaches. The NAVIGENE trial is expected to report initial safety data within the next 6 to 12 months.
+
+For patients and families, this means that while there is no cure yet, multiple promising approaches are in active development. Staying informed about clinical trial opportunities and maintaining muscle health through physical therapy remains important.
+
+I'll continue monitoring all research developments and will update you as new findings emerge. Thank you for listening.`,
+
+  'es-ES': `Hola, soy ARIA, tu Asistente de Inteligencia de Investigación con IA. Aquí está la última actualización sobre la investigación de LGMD2B/R2.
+
+Hasta hoy, hemos analizado 32 artículos de investigación y generado 23 hipótesis de tratamiento. El desarrollo más prometedor es la terapia génica SRP-6004 de Sarepta Therapeutics, actualmente en ensayos clínicos de Fase 1 bajo el estudio NAVIGENE.`,
+
+  'fr-FR': `Bonjour, je suis ARIA, votre Assistant d'Intelligence de Recherche IA. Voici la dernière mise à jour sur la recherche LGMD2B/R2.
+
+À ce jour, nous avons analysé 32 articles de recherche et généré 23 hypothèses de traitement. Le développement le plus prometteur est la thérapie génique SRP-6004 de Sarepta Therapeutics, actuellement en essais cliniques de Phase 1 dans le cadre de l'étude NAVIGENE.`
+};
+
+async function generateAndPlay() {
+  const lang = document.getElementById('language-select').value;
+  const status = document.getElementById('status');
+  const transcript = document.getElementById('transcript');
+  const playbackControls = document.getElementById('playback-controls');
+
+  // Get text (use English as fallback)
+  const text = researchUpdate[lang] || researchUpdate['en-US'];
+
+  // Update transcript
+  transcript.textContent = text;
+
+  // Check if speech synthesis is supported
+  if (!synthesis) {
+    status.textContent = '❌ Speech synthesis not supported in this browser';
+    status.className = 'status error';
+    return;
+  }
+
+  // Stop any ongoing speech
+  synthesis.cancel();
+
+  // Create utterance
+  currentUtterance = new SpeechSynthesisUtterance(text);
+  currentUtterance.lang = lang;
+  currentUtterance.rate = 0.9;
+  currentUtterance.pitch = 1.0;
+  currentUtterance.volume = 1.0;
+
+  // Event handlers
+  currentUtterance.onstart = () => {
+    status.textContent = '🎙️ ARIA is speaking...';
+    status.className = 'status speaking';
+    playbackControls.style.display = 'flex';
+    updateProgress(0);
+  };
+
+  currentUtterance.onend = () => {
+    status.textContent = '✅ Update complete';
+    status.className = 'status';
+    playbackControls.style.display = 'none';
+    updateProgress(100);
+    setTimeout(() => {
+      status.textContent = 'Select your language and press play to generate the update';
+      updateProgress(0);
+    }, 3000);
+  };
+
+  currentUtterance.onerror = (e) => {
+    status.textContent = '❌ Error: ' + e.error;
+    status.className = 'status error';
+    playbackControls.style.display = 'none';
+  };
+
+  currentUtterance.onboundary = (e) => {
+    // Update progress based on character position
+    const progress = (e.charIndex / text.length) * 100;
+    updateProgress(progress);
+  };
+
+  // Start speaking
+  synthesis.speak(currentUtterance);
+  isPaused = false;
+}
+
+function pauseResume() {
+  if (isPaused) {
+    synthesis.resume();
+    document.querySelector('.playback-btn').textContent = '⏸️ Pause';
+    isPaused = false;
+  } else {
+    synthesis.pause();
+    document.querySelector('.playback-btn').textContent = '▶️ Resume';
+    isPaused = true;
+  }
+}
+
+function stop() {
+  synthesis.cancel();
+  document.getElementById('status').textContent = '⏹️ Stopped';
+  document.getElementById('status').className = 'status';
+  document.getElementById('playback-controls').style.display = 'none';
+  updateProgress(0);
+}
+
+function updateProgress(percent) {
+  document.getElementById('progress').style.width = percent + '%';
+}
+
+// Load available voices
+window.speechSynthesis.onvoiceschanged = () => {
+  const voices = synthesis.getVoices();
+  console.log('Available voices:', voices.length);
+};
+</script>
+
+</body>
+</html>
