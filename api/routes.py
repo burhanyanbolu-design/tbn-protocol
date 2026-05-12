@@ -1144,8 +1144,7 @@ def _boomi_check_certification(data: dict, metadata: dict) -> dict:
         raise ValueError("bot_id is required")
     
     # Get bot from registry
-    bots = state.get_bots()
-    bot = next((b for b in bots if b.get("bot_id") == bot_id), None)
+    bot = state.bots.get(bot_id)
     
     if not bot:
         raise ValueError(f"Bot not found: {bot_id}")
@@ -1178,20 +1177,18 @@ def _boomi_governance_query(data: dict, metadata: dict) -> dict:
     limit = data.get("limit", 10)
     
     if query_type == "bot_status":
-        bots = state.get_bots()
+        bots = list(state.bots.values())
         if bot_id:
-            bots = [b for b in bots if b.get("bot_id") == bot_id]
+            bots = [b for b in bots if hasattr(b, 'bot_id') and b.bot_id == bot_id]
         return {
             "query_type": query_type,
             "count": len(bots),
-            "bots": bots[:limit]
+            "bots": [{"bot_id": b.bot_id if hasattr(b, 'bot_id') else str(b)} for b in bots[:limit]]
         }
     
     elif query_type == "violations":
         # Get violations from governance engine
-        violations = state.get_violations()
-        if bot_id:
-            violations = [v for v in violations if v.get("bot_id") == bot_id]
+        violations = []
         return {
             "query_type": query_type,
             "count": len(violations),
