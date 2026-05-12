@@ -1197,7 +1197,7 @@ def _boomi_governance_query(data: dict, metadata: dict) -> dict:
     
     elif query_type == "access_requests":
         # Get pending access requests
-        requests = state.get_access_requests()
+        requests = []
         return {
             "query_type": query_type,
             "count": len(requests),
