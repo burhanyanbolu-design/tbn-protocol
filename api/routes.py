@@ -1189,6 +1189,8 @@ def _boomi_governance_query(data: dict, metadata: dict) -> dict:
     elif query_type == "violations":
         # Get violations from governance engine
         violations = []
+        if bot_id:
+            violations = [v for v in violations if v.get("bot_id") == bot_id]
         return {
             "query_type": query_type,
             "count": len(violations),
