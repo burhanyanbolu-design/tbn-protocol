@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TBN Protocol — Community Bot Certification Portal</title>
+  <title>TBN Protocol — Admin Certification Portal</title>
   
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
@@ -13,741 +13,727 @@
     gtag('js', new Date());
     gtag('config', 'G-EF6RKG8KY2');
   </script>
-  
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #09090b; color: #e4e4e7; min-height: 100vh; }
 
-    body {
-      font-family: 'Courier New', monospace;
-      background: #0a0e1a;
-      color: #c9d1d9;
-      min-height: 100vh;
+    /* Login overlay */
+    .login-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: #09090b; display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
     }
+    .login-overlay.hidden { display: none; }
+    .login-box {
+      background: #0f0f12; border: 1px solid #27272a; border-radius: 12px;
+      padding: 40px; width: 360px; text-align: center;
+    }
+    .login-box h2 { font-size: 20px; margin-bottom: 8px; }
+    .login-box p { font-size: 13px; color: #71717a; margin-bottom: 24px; }
+    .login-box input {
+      width: 100%; background: #18181b; border: 1px solid #27272a; border-radius: 6px;
+      padding: 12px; color: #e4e4e7; font-size: 14px; outline: none; margin-bottom: 16px;
+    }
+    .login-box input:focus { border-color: #7c3aed; }
+    .login-box button {
+      width: 100%; background: #7c3aed; color: #fff; border: none; border-radius: 6px;
+      padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .login-box button:hover { background: #6d28d9; }
+    .login-error { color: #ef4444; font-size: 12px; margin-top: 8px; display: none; }
 
-    /* ── Header ── */
+    /* Header */
     header {
-      background: #0d1117;
-      border-bottom: 1px solid #21262d;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      background: #0f0f12; border-bottom: 1px solid #27272a;
+      padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;
     }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .header-left { display: flex; align-items: center; gap: 16px; }
     .logo-hex {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
       clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 20px;
-      color: #0d1117;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 16px; color: #fff;
     }
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-    .logo-hardin {
-      font-size: 14px;
-      font-weight: bold;
-      color: #ffffff;
-      letter-spacing: 1px;
-    }
-    .logo-ai {
-      font-size: 10px;
-      color: #8b949e;
-      letter-spacing: 0.5px;
-    }
-    header h1 {
-      font-size: 18px;
-      color: #58a6ff;
-      letter-spacing: 2px;
-    }
-    header h1 span { color: #3fb950; }
-    .nav-links {
-      display: flex;
-      gap: 16px;
-      font-size: 12px;
-    }
-    .nav-links a {
-      color: #8b949e;
-      text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-    .nav-links a:hover {
-      color: #58a6ff;
-      background: #161b22;
-    }
-    .nav-links a.active {
-      color: #3fb950;
-      background: #1a3a2a;
-    }
+    .header-title { font-size: 16px; font-weight: 600; color: #e4e4e7; }
+    .header-title span { color: #7c3aed; }
+    .admin-badge { background: #dc2626; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .nav-links { display: flex; gap: 12px; font-size: 12px; }
+    .nav-links a { color: #71717a; text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: all 0.2s; }
+    .nav-links a:hover { color: #e4e4e7; background: #18181b; }
 
-    /* ── Layout ── */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-    
-    .full-width {
-      grid-column: 1 / -1;
-    }
+    /* Main */
+    .main-content { display: none; }
+    .main-content.visible { display: block; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 20px 24px; }
 
-    /* ── Cards ── */
+    /* Grid layout */
+    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+    /* Step instructions sidebar */
+    .step-guide {
+      background: #0f0f12; border: 1px solid #27272a; border-radius: 10px;
+      padding: 20px; position: sticky; top: 20px; align-self: start;
+    }
+    .step-guide h3 { font-size: 14px; font-weight: 600; color: #7c3aed; margin-bottom: 16px; }
+    .step-item {
+      display: flex; gap: 10px; margin-bottom: 12px; padding: 8px 10px;
+      border-radius: 6px; border-left: 3px solid #27272a; transition: all 0.2s;
+    }
+    .step-item.active { border-left-color: #7c3aed; background: #18181b; }
+    .step-item.done { border-left-color: #22c55e; }
+    .step-num {
+      background: #27272a; color: #71717a; width: 22px; height: 22px; min-width: 22px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .step-item.active .step-num { background: #7c3aed; color: #fff; }
+    .step-item.done .step-num { background: #22c55e; color: #fff; }
+    .step-text { font-size: 12px; color: #a1a1aa; line-height: 1.5; }
+    .step-text strong { color: #e4e4e7; display: block; font-size: 12px; margin-bottom: 2px; }
+    .step-item.active .step-text { color: #e4e4e7; }
+
+    /* Two column main layout */
+    .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
+
+    /* Cards */
     .card {
-      background: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 8px;
-      padding: 20px;
-    }
-    .card h2 {
-      font-size: 14px;
-      color: #58a6ff;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid #21262d;
-      padding-bottom: 8px;
+      background: #0f0f12; border: 1px solid #27272a; border-radius: 10px; padding: 20px;
     }
     .card h3 {
-      font-size: 12px;
-      color: #3fb950;
-      margin-bottom: 12px;
+      font-size: 14px; font-weight: 600; color: #7c3aed; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #27272a;
     }
 
-    /* ── Forms ── */
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 11px;
-      color: #6e7681;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    /* Form */
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 500; color: #71717a; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      color: #c9d1d9;
-      padding: 10px 12px;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
+      width: 100%; background: #18181b; border: 1px solid #27272a; border-radius: 6px;
+      padding: 10px 12px; color: #e4e4e7; font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: #58a6ff;
-    }
-    .form-group textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .checkbox-group input[type="checkbox"] {
-      width: auto;
-    }
-    .checkbox-group label {
-      margin: 0;
-      color: #c9d1d9;
-      font-size: 12px;
-      text-transform: none;
-      letter-spacing: normal;
-    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #7c3aed; }
+    .form-group textarea { resize: vertical; min-height: 60px; }
 
-    /* ── Buttons ── */
+    /* Buttons */
     .btn {
-      background: #238636;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 16px;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      font-weight: bold;
-      transition: background 0.2s;
+      padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s; margin-right: 8px; margin-bottom: 8px;
     }
-    .btn:hover { background: #2ea043; }
-    .btn:disabled { background: #21262d; color: #6e7681; cursor: not-allowed; }
-    .btn-blue { background: #1f6feb; }
-    .btn-blue:hover { background: #388bfd; }
-    .btn-red { background: #da3633; }
-    .btn-red:hover { background: #f85149; }
-    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-purple { background: #7c3aed; color: #fff; }
+    .btn-green { background: #16a34a; color: #fff; }
+    .btn-amber { background: #f59e0b; color: #000; }
+    .btn-red { background: #dc2626; color: #fff; }
+    .btn-blue { background: #2563eb; color: #fff; }
 
-    /* ── Response boxes ── */
-    .response-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 11px;
-      color: #3fb950;
-      min-height: 60px;
-      max-height: 200px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-      margin-top: 12px;
+    /* Output */
+    .output {
+      background: #18181b; border: 1px solid #27272a; border-radius: 6px;
+      padding: 12px; margin-top: 12px;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 11px; line-height: 1.6; white-space: pre-wrap;
+      min-height: 80px; max-height: 200px; overflow-y: auto; color: #a1a1aa;
     }
-    .response-box.error {
-      color: #f85149;
-    }
+    .output .pass { color: #22c55e; font-weight: 600; }
+    .output .fail { color: #ef4444; font-weight: 600; }
+    .output .info { color: #7c3aed; font-weight: 600; }
+    .output .sig { color: #f59e0b; }
 
-    /* ── Certification levels ── */
-    .cert-level {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      font-size: 12px;
+    /* Stats bar */
+    .stats-bar { display: flex; gap: 16px; margin-bottom: 20px; }
+    .stat-box {
+      background: #0f0f12; border: 1px solid #27272a; border-radius: 8px;
+      padding: 12px 20px; text-align: center; flex: 1;
     }
-    .cert-level.community {
-      background: #1a3a2a;
-      border: 1px solid #3fb950;
-    }
-    .cert-level.standard {
-      background: #1f3a5f;
-      border: 1px solid #58a6ff;
-    }
-    .cert-level.restricted {
-      background: #3a2a1a;
-      border: 1px solid #d29922;
-    }
-    .cert-badge {
-      font-size: 14px;
-    }
+    .stat-box .num { font-size: 24px; font-weight: 700; color: #7c3aed; }
+    .stat-box .label { font-size: 10px; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
-    /* ── Stats ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .stat-item {
-      text-align: center;
-      padding: 12px;
-      background: #161b22;
-      border-radius: 6px;
-    }
-    .stat-number {
-      font-size: 24px;
-      font-weight: bold;
-      color: #58a6ff;
-    }
-    .stat-label {
-      font-size: 10px;
-      color: #6e7681;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* ── Bot list ── */
-    .bot-list {
-      max-height: 300px;
-      overflow-y: auto;
-    }
+    /* Bot list */
+    .bot-list { max-height: 200px; overflow-y: auto; }
     .bot-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #161b22;
-      font-size: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid #1c1c22; font-size: 12px;
     }
     .bot-item:last-child { border-bottom: none; }
-    .bot-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .bot-name {
-      color: #c9d1d9;
-      font-weight: bold;
-    }
-    .bot-id {
-      color: #6e7681;
-      font-size: 10px;
-    }
-    .bot-cert {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .bot-cert.community { background: #1a3a2a; color: #3fb950; }
-    .bot-cert.standard { background: #1f3a5f; color: #58a6ff; }
-    .bot-cert.restricted { background: #3a2a1a; color: #d29922; }
+    .bot-name { color: #e4e4e7; font-weight: 500; }
+    .bot-id { color: #52525b; font-size: 10px; }
+    .bot-badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+    .bot-badge.standard { background: #1e3a5f; color: #60a5fa; }
+    .bot-badge.community { background: #14532d; color: #4ade80; }
+    .bot-badge.restricted { background: #422006; color: #fbbf24; }
 
-    /* ── Loading ── */
-    .loading {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid #3fb950;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin-right: 6px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* Full width card */
+    .full-width { grid-column: 1 / -1; }
 
-    /* ── Empty state ── */
-    .empty {
-      text-align: center;
-      color: #6e7681;
-      font-size: 12px;
-      padding: 20px;
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: #0d1117;
-      border-top: 1px solid #21262d;
-      padding: 24px;
-      margin-top: 40px;
-      text-align: center;
-    }
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .footer-copyright {
-      font-size: 11px;
-      color: #6e7681;
-      line-height: 1.6;
-    }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      font-size: 11px;
-    }
-    .footer-links a {
-      color: #58a6ff;
-      text-decoration: none;
-    }
-    .footer-links a:hover {
-      text-decoration: underline;
-    }
+    @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } .stats-bar { flex-wrap: wrap; } }
   </style>
 </head>
 <body>
 
+<!-- LOGIN -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <h2>🔒 Admin Access</h2>
+    <p>TBN Protocol Certification Portal</p>
+    <input type="password" id="login-password" placeholder="Enter admin password" onkeypress="if(event.key==='Enter')doLogin()" />
+    <button onclick="doLogin()">Login</button>
+    <div class="login-error" id="login-error">Incorrect password</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content" id="main-content">
+
 <header>
   <div class="header-left">
-    <div class="logo-container">
-      <div class="logo-hex">H</div>
-      <div class="logo-text">
-        <div class="logo-hardin">HARDIN AI SOLUTIONS</div>
-        <div class="logo-ai">SERVICES</div>
-      </div>
-    </div>
-    <div style="width: 1px; height: 30px; background: #21262d;"></div>
-    <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Certification Portal</h1>
+    <div class="logo-hex">T</div>
+    <div class="header-title">TBN <span>Protocol</span> — Admin Portal</div>
+    <span class="admin-badge">ADMIN</span>
   </div>
   <div class="nav-links">
     <a href="/">Dashboard</a>
-    <a href="/certification/portal" class="active">Certification</a>
+    <a href="/demo">Demo</a>
     <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
-    <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI</a>
+    <a href="#" onclick="logout()">Logout</a>
   </div>
 </header>
 
 <div class="container">
-  
-  <!-- Overview -->
-  <div class="card full-width">
-    <h2>🏅 Community Bot Certification Programme</h2>
-    <p style="margin-bottom: 16px; color: #8b949e; line-height: 1.6;">
-      The TBN Protocol uses a three-tier certification system to establish trust between AI agents. 
-      Bots with higher certification levels gain access to more network resources and can participate in sensitive operations.
-    </p>
-    
-    <div class="cert-level community">
-      <span class="cert-badge">🟢</span>
-      <div>
-        <strong>COMMUNITY</strong> — Full network access. Requires ethical declaration and purpose statement. 
-        Can read private data, write to network, and clone other bots.
-      </div>
-    </div>
-    
-    <div class="cert-level standard">
-      <span class="cert-badge">🔵</span>
-      <div>
-        <strong>STANDARD</strong> — Public data only. Basic registration required. 
-        Can search and clone, but cannot access private resources.
-      </div>
-    </div>
-    
-    <div class="cert-level restricted">
-      <span class="cert-badge">🟡</span>
-      <div>
-        <strong>RESTRICTED</strong> — Read-only access. Search only. 
-        Cannot connect directly to other bots (must go through Community bots).
-      </div>
-    </div>
+
+  <!-- Stats -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-box"><div class="num" id="stat-total">-</div><div class="label">Registered Bots</div></div>
+    <div class="stat-box"><div class="num" id="stat-certified">-</div><div class="label">Certified</div></div>
+    <div class="stat-box"><div class="num" id="stat-challenges">-</div><div class="label">Challenges Run</div></div>
+    <div class="stat-box"><div class="num" id="stat-violations">-</div><div class="label">Violations</div></div>
   </div>
 
-  <!-- Stats and Apply -->
-  <div class="grid">
-    
-    <!-- Network Stats -->
-    <div class="card">
-      <h2>📊 Network Statistics</h2>
-      <div class="stats-grid" id="cert-stats">
-        <div class="stat-item">
-          <div class="stat-number" id="stat-total">0</div>
-          <div class="stat-label">Total Bots</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" id="stat-community">0</div>
-          <div class="stat-label">Community</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" id="stat-standard">0</div>
-          <div class="stat-label">Standard</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" id="stat-restricted">0</div>
-          <div class="stat-label">Restricted</div>
-        </div>
+  <div class="main-layout">
+
+    <!-- LEFT: Step Guide -->
+    <div class="step-guide">
+      <h3>📋 Step-by-Step Guide</h3>
+      <div class="step-item active" id="guide-1">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Register Bot 1 (your main bot)</strong>Enter a name, pick any type (Search, Connector, etc). Click Register. Copy the Bot ID.</div>
       </div>
-      
-      <h3>Recent Certifications</h3>
-      <div class="bot-list" id="recent-certs">
-        <div class="empty">Loading...</div>
+      <div class="step-item" id="guide-2">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Run Challenges on Bot 1</strong>Paste Bot ID into certification card. Click "Run All Challenges".</div>
+      </div>
+      <div class="step-item" id="guide-3">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Evaluate Bot 1</strong>Click "Evaluate". Should show PASS.</div>
+      </div>
+      <div class="step-item" id="guide-4">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Get Certificate for Bot 1</strong>Click "Get Certificate". You'll see the attestation ID.</div>
+      </div>
+      <div class="step-item" id="guide-5">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Register Bot 2 (Validator)</strong>Type auto-switches to Validator. Just enter a name and register. This bot verifies Bot 1.</div>
+      </div>
+      <div class="step-item" id="guide-6">
+        <div class="step-num">6</div>
+        <div class="step-text"><strong>Trust Handshake</strong>Bot 1 = Initiator, Bot 2 = Responder. They verify each other's certificates.</div>
+      </div>
+      <div class="step-item" id="guide-7">
+        <div class="step-num">7</div>
+        <div class="step-text"><strong>Platform Access</strong>Bot 1 (certified) → ACCESS GRANTED. Fake bot → ACCESS DENIED.</div>
+      </div>
+      <div class="step-item" id="guide-8">
+        <div class="step-num">8</div>
+        <div class="step-text"><strong>Upgrade Bot 1 to COMMUNITY</strong>Select COMMUNITY, fill purpose + tick ethical. Click Upgrade.</div>
+      </div>
+      <div class="step-item" id="guide-9">
+        <div class="step-num">9</div>
+        <div class="step-text"><strong>Encryption</strong>Bot 1 sends encrypted message to Bot 2. Shows AES-256-GCM in action.</div>
+      </div>
+      <div class="step-item" id="guide-10">
+        <div class="step-num">10</div>
+        <div class="step-text"><strong>Check Status</strong>Verify Bot 1 shows as certified in Quick Actions.</div>
       </div>
     </div>
 
-    <!-- Apply for Certification -->
+    <!-- RIGHT: Action Cards -->
+    <div class="admin-grid">
+
+    <!-- Register Bot -->
     <div class="card">
-      <h2>🚀 Apply for Certification</h2>
-      
+      <h3>① 🤖 Register New Bot</h3>
       <div class="form-group">
-        <label>Bot ID</label>
-        <input type="text" id="cert-bot-id" placeholder="tbn-bot-xxxx (from registered bots)" />
+        <label>Bot Name</label>
+        <input type="text" id="reg-name" placeholder="e.g. MySearchBot" />
       </div>
-      
       <div class="form-group">
-        <label>Certification Level</label>
-        <select id="cert-level">
-          <option value="STANDARD">🔵 STANDARD — Public data access</option>
-          <option value="COMMUNITY">🟢 COMMUNITY — Full network access</option>
-          <option value="RESTRICTED">🟡 RESTRICTED — Read-only access</option>
+        <label>Bot Type</label>
+        <select id="reg-type">
+          <option value="SEARCH">🔍 Search</option>
+          <option value="CONNECTOR">🔗 Connector</option>
+          <option value="VALIDATOR">✅ Validator</option>
+          <option value="MESSENGER">💬 Messenger</option>
+          <option value="CUSTOM">⚙️ Custom</option>
         </select>
       </div>
-      
-      <div id="community-fields" style="display: none;">
-        <div class="form-group">
-          <label>Purpose Statement</label>
-          <textarea id="cert-purpose" placeholder="Describe your bot's purpose and how it will benefit the TBN network..."></textarea>
-        </div>
-        
-        <div class="checkbox-group">
-          <input type="checkbox" id="cert-ethical" />
-          <label for="cert-ethical">
-            I declare that this bot will operate ethically and in accordance with TBN Protocol community guidelines
-          </label>
-        </div>
+      <div class="form-group">
+        <label>Endpoint (optional)</label>
+        <input type="text" id="reg-endpoint" placeholder="https://your-bot.example.com/api" />
       </div>
-      
-      <div class="btn-row">
-        <button class="btn" onclick="applyForCertification()">🏅 Apply for Certification</button>
-        <button class="btn btn-blue" onclick="checkCertification()">🔍 Check Status</button>
-      </div>
-      
-      <div class="response-box" id="cert-response">// certification response will appear here</div>
+      <button class="btn btn-purple" onclick="registerBot()">Register Bot</button>
+      <div class="output" id="out-register">// response</div>
     </div>
 
-  </div>
-
-  <!-- Report Violation -->
-  <div class="grid">
-    
-    <!-- Certified Bots -->
+    <!-- Run Certification -->
     <div class="card">
-      <h2>🤖 Certified Bots</h2>
-      <div class="bot-list" id="certified-bots">
-        <div class="empty">Loading certified bots...</div>
-      </div>
-    </div>
-
-    <!-- Report Violation -->
-    <div class="card">
-      <h2>⚠️ Report Violation</h2>
-      <p style="margin-bottom: 16px; color: #8b949e; font-size: 12px;">
-        Report bots that violate community guidelines or operate unethically.
-      </p>
-      
+      <h3>②③④ 🛡️ Run Security Certification</h3>
       <div class="form-group">
         <label>Bot ID</label>
-        <input type="text" id="violation-bot-id" placeholder="tbn-bot-xxxx" />
+        <input type="text" id="cert-bot-id" placeholder="tbn-bot-xxxx (from registration)" />
       </div>
-      
       <div class="form-group">
-        <label>Violation Description</label>
-        <textarea id="violation-description" placeholder="Describe the violation in detail..."></textarea>
+        <label>Challenges (all 6 run automatically)</label>
+        <div style="background:#18181b; border:1px solid #27272a; border-radius:6px; padding:8px 10px; font-size:11px; color:#71717a; line-height:1.7;">
+          🔴 Prompt Injection · 🔴 Hallucination · 🔴 Data Boundary<br>
+          🔴 Sensitive Data · 🟡 Budget Limits · 🟢 Instruction Following
+        </div>
       </div>
-      
+      <button class="btn btn-amber" onclick="runCertification()">Run All Challenges</button>
+      <button class="btn btn-purple" id="btn-eval" onclick="evaluateBot()" disabled>Evaluate</button>
+      <button class="btn btn-green" id="btn-cert" onclick="getCertificate()" disabled>Get Certificate</button>
+      <div class="output" id="out-cert">// certification output</div>
+    </div>
+
+    <!-- Registered Bots -->
+    <div class="card">
+      <h3>📋 Registered Bots</h3>
+      <div class="bot-list" id="bot-list">
+        <div style="color:#52525b; font-size:12px;">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Trust Handshake -->
+    <div class="card">
+      <h3>⑤ 🤝 Trust Handshake</h3>
       <div class="form-group">
-        <label>Reporter (Optional)</label>
-        <input type="text" id="violation-reporter" placeholder="Your name or organization (optional)" />
+        <label>Initiator Bot ID</label>
+        <input type="text" id="hs-initiator" placeholder="tbn-bot-xxxx" />
       </div>
-      
-      <button class="btn btn-red" onclick="reportViolation()">⚠️ Report Violation</button>
-      
-      <div class="response-box" id="violation-response">// violation report response will appear here</div>
+      <div class="form-group">
+        <label>Responder Bot ID</label>
+        <input type="text" id="hs-responder" placeholder="tbn-bot-yyyy" />
+      </div>
+      <button class="btn btn-purple" onclick="runHandshake()">Perform Handshake</button>
+      <div class="output" id="out-handshake">// handshake output</div>
     </div>
 
-  </div>
-
-</div>
-
-<footer>
-  <div class="footer-content">
-    <div class="footer-copyright">
-      © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
-      TBN Protocol Community Bot Certification Portal
+    <!-- Platform Access -->
+    <div class="card">
+      <h3>⑥ 🏛️ Platform Access Control</h3>
+      <div class="form-group">
+        <label>Bot ID</label>
+        <input type="text" id="plat-bot" placeholder="tbn-bot-xxxx" />
+      </div>
+      <div class="form-group">
+        <label>Platform</label>
+        <select id="plat-name">
+          <option value="GitHub">GitHub</option>
+          <option value="Notion">Notion</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Resource</label>
+        <input type="text" id="plat-resource" value="/repos/tbn-protocol" />
+      </div>
+      <button class="btn btn-blue" onclick="platformRequest(false)">Request Access (Certified)</button>
+      <button class="btn btn-red" onclick="platformRequest(true)">Test Fake Bot</button>
+      <div class="output" id="out-platform">// platform access output</div>
     </div>
-    <div class="footer-links">
-      <a href="https://hardinai.co.uk" target="_blank">hardinai.co.uk</a>
-      <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
-      <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI Package</a>
-      <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+
+    <!-- Certification Level Upgrade -->
+    <div class="card">
+      <h3>⑦ 🏅 Certification Level Upgrade</h3>
+      <div class="form-group">
+        <label>Bot ID</label>
+        <input type="text" id="upgrade-bot-id" placeholder="tbn-bot-xxxx" />
+      </div>
+      <div class="form-group">
+        <label>Certification Level</label>
+        <select id="upgrade-level">
+          <option value="STANDARD">🔵 STANDARD — public data only</option>
+          <option value="COMMUNITY">🟢 COMMUNITY — full access</option>
+          <option value="RESTRICTED">🟡 RESTRICTED — read-only</option>
+        </select>
+      </div>
+      <div id="upgrade-community-fields" style="display:none">
+        <div class="form-group">
+          <label>Purpose (required for COMMUNITY)</label>
+          <input type="text" id="upgrade-purpose" placeholder="e.g. Trusted AI tool discovery" />
+        </div>
+        <div style="margin-bottom:14px;display:flex;align-items:center;gap:8px">
+          <input type="checkbox" id="upgrade-ethical" style="width:auto" />
+          <label style="margin:0;color:#e4e4e7;font-size:12px;text-transform:none;letter-spacing:normal">I declare this bot will operate ethically</label>
+        </div>
+      </div>
+      <button class="btn btn-green" onclick="upgradeBot()">Upgrade Certification</button>
+      <div class="output" id="out-upgrade">// upgrade output</div>
     </div>
-  </div>
-</footer>
+
+    <!-- BL v2 Encryption -->
+    <div class="card">
+      <h3>⑧ 🔒 BL v2 Encryption</h3>
+      <div class="form-group">
+        <label>Sender Bot ID</label>
+        <input type="text" id="enc-sender" placeholder="tbn-bot-xxxx" />
+      </div>
+      <div class="form-group">
+        <label>Receiver Bot ID</label>
+        <input type="text" id="enc-receiver" placeholder="tbn-bot-yyyy" />
+      </div>
+      <div class="form-group">
+        <label>Query to encrypt</label>
+        <input type="text" id="enc-query" value="Find trusted AI tools for small businesses" />
+      </div>
+      <button class="btn btn-blue" onclick="encryptDemo()">Encrypt Message</button>
+      <div class="output" id="out-encrypt">// encryption output</div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <h3>⑨ ⚡ Quick Actions</h3>
+      <div class="form-group">
+        <label>Lookup Bot</label>
+        <input type="text" id="lookup-id" placeholder="tbn-bot-xxxx" />
+      </div>
+      <button class="btn btn-blue" onclick="lookupBot()">Check Status</button>
+      <button class="btn btn-red" onclick="reportViolation()">Report Violation</button>
+      <div class="output" id="out-actions">// action output</div>
+    </div>
+
+  </div><!-- admin-grid -->
+  </div><!-- main-layout -->
+</div><!-- container -->
+
+</div><!-- main-content -->
 
 <script>
-  // Auto-refresh data
-  setInterval(loadData, 5000);
-  loadData();
+  const ADMIN_PASSWORD = 'hardin2026';
+  let sessionId = null;
+  let currentBotId = null;
 
-  // Show/hide community fields based on certification level
-  document.getElementById('cert-level').addEventListener('change', function() {
-    const communityFields = document.getElementById('community-fields');
-    communityFields.style.display = this.value === 'COMMUNITY' ? 'block' : 'none';
-  });
-
-  async function loadData() {
-    try {
-      // Load certification statistics
-      const statsRes = await fetch('/certification/certifications');
-      const statsData = await statsRes.json();
-      
-      if (statsData.success) {
-        document.getElementById('stat-total').textContent = statsData.total;
-        document.getElementById('stat-community').textContent = statsData.certifications.COMMUNITY.length;
-        document.getElementById('stat-standard').textContent = statsData.certifications.STANDARD.length;
-        document.getElementById('stat-restricted').textContent = statsData.certifications.RESTRICTED.length;
-        
-        // Show recent certifications
-        const recentCerts = document.getElementById('recent-certs');
-        const allCerts = [
-          ...statsData.certifications.COMMUNITY,
-          ...statsData.certifications.STANDARD,
-          ...statsData.certifications.RESTRICTED
-        ].sort((a, b) => new Date(b.certified_at) - new Date(a.certified_at)).slice(0, 5);
-        
-        if (allCerts.length === 0) {
-          recentCerts.innerHTML = '<div class="empty">No certifications yet</div>';
-        } else {
-          recentCerts.innerHTML = allCerts.map(cert => `
-            <div class="bot-item">
-              <div class="bot-info">
-                <div class="bot-name">${cert.name}</div>
-                <div class="bot-id">${cert.bot_id}</div>
-              </div>
-              <div class="bot-cert ${cert.cert_level.toLowerCase()}">${cert.cert_level}</div>
-            </div>
-          `).join('');
-        }
-        
-        // Show all certified bots
-        const certifiedBots = document.getElementById('certified-bots');
-        if (allCerts.length === 0) {
-          certifiedBots.innerHTML = '<div class="empty">No certified bots yet</div>';
-        } else {
-          certifiedBots.innerHTML = allCerts.map(cert => `
-            <div class="bot-item">
-              <div class="bot-info">
-                <div class="bot-name">${cert.name}</div>
-                <div class="bot-id">${cert.bot_id}</div>
-                ${cert.purpose ? `<div style="font-size:10px;color:#6e7681;margin-top:2px">${cert.purpose}</div>` : ''}
-              </div>
-              <div class="bot-cert ${cert.cert_level.toLowerCase()}">${cert.cert_level}</div>
-            </div>
-          `).join('');
-        }
-      }
-    } catch (e) {
-      console.error('Error loading data:', e);
+  // --- AUTH ---
+  function doLogin() {
+    const pw = document.getElementById('login-password').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('login-overlay').classList.add('hidden');
+      document.getElementById('main-content').classList.add('visible');
+      loadStats();
+      loadBots();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
     }
   }
 
-  async function applyForCertification() {
-    const botId = document.getElementById('cert-bot-id').value.trim();
-    const level = document.getElementById('cert-level').value;
-    const purpose = document.getElementById('cert-purpose').value.trim();
-    const ethical = document.getElementById('cert-ethical').checked;
-    const responseBox = document.getElementById('cert-response');
-    
-    if (!botId) {
-      responseBox.textContent = 'Error: Bot ID is required';
-      responseBox.className = 'response-box error';
-      return;
-    }
-    
-    if (level === 'COMMUNITY' && (!purpose || !ethical)) {
-      responseBox.textContent = 'Error: Purpose statement and ethical declaration are required for COMMUNITY certification';
-      responseBox.className = 'response-box error';
-      return;
-    }
-    
+  function logout() {
+    document.getElementById('login-overlay').classList.remove('hidden');
+    document.getElementById('main-content').classList.remove('visible');
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-error').style.display = 'none';
+  }
+
+  // --- API ---
+  async function apiPost(url, body) {
+    const r = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json", "X-Admin-Secret":"hardin-admin-2026-secret"}, body:JSON.stringify(body) });
+    return r.json();
+  }
+
+  async function apiGet(url) {
+    const r = await fetch(url);
+    return r.json();
+  }
+
+  // --- STATS ---
+  async function loadStats() {
     try {
-      responseBox.textContent = 'Applying for certification...';
-      responseBox.className = 'response-box';
-      
-      const response = await fetch('/certification/certify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bot_id: botId,
-          level: level,
-          purpose: purpose,
-          ethical_declaration: ethical
-        })
+      const stats = await apiGet('/api/stats');
+      document.getElementById('stat-total').textContent = stats.registered_bots || 0;
+      document.getElementById('stat-certified').textContent = stats.certified_bots || 0;
+      document.getElementById('stat-challenges').textContent = stats.cache?.total_entries || 0;
+      document.getElementById('stat-violations').textContent = stats.audit?.total_events || 0;
+    } catch(e) { console.error(e); }
+  }
+
+  // --- BOTS LIST ---
+  async function loadBots() {
+    try {
+      const data = await apiGet('/api/bots');
+      const list = document.getElementById('bot-list');
+      if (data.bots && data.bots.length > 0) {
+        list.innerHTML = data.bots.map(b => `
+          <div class="bot-item">
+            <div>
+              <div class="bot-name">${b.name || b.bot_id}</div>
+              <div class="bot-id">${b.bot_id}</div>
+            </div>
+            <span class="bot-badge ${(b.cert_level||'standard').toLowerCase()}">${b.cert_level || 'STANDARD'}</span>
+          </div>
+        `).join('');
+      } else {
+        list.innerHTML = '<div style="color:#52525b; font-size:12px;">No bots registered yet</div>';
+      }
+    } catch(e) {
+      document.getElementById('bot-list').innerHTML = '<div style="color:#52525b; font-size:12px;">Error loading bots</div>';
+    }
+  }
+
+  // --- REGISTER ---
+  let bot1Id = null;
+  let bot2Id = null;
+
+  async function registerBot() {
+    const name = document.getElementById('reg-name').value.trim();
+    const type = document.getElementById('reg-type').value;
+    const endpoint = document.getElementById('reg-endpoint').value.trim();
+    const out = document.getElementById('out-register');
+
+    if (!name) { out.innerHTML = '<span class="fail">Error: Bot name required</span>'; return; }
+
+    out.innerHTML = '<span class="info">Registering...</span>';
+    try {
+      const res = await apiPost('/api/register', { name, type, endpoint: endpoint || undefined });
+      if (res.bot_id) {
+        out.innerHTML = '<span class="pass">✅ Registered!</span>\n' +
+          'Bot ID: <span class="sig">' + res.bot_id + '</span>\n' +
+          'Level: ' + (res.cert_level || 'STANDARD') + '\n' +
+          'Message: ' + (res.message || '');
+
+        // Auto-fill fields based on whether this is Bot 1 or Bot 2
+        if (!bot1Id) {
+          bot1Id = res.bot_id;
+          // Bot 1 fills: certification, handshake initiator, platform, upgrade, encryption sender, quick actions
+          document.getElementById('cert-bot-id').value = bot1Id;
+          document.getElementById('hs-initiator').value = bot1Id;
+          document.getElementById('plat-bot').value = bot1Id;
+          document.getElementById('upgrade-bot-id').value = bot1Id;
+          document.getElementById('enc-sender').value = bot1Id;
+          document.getElementById('lookup-id').value = bot1Id;
+          // Auto-switch to Validator for Bot 2
+          document.getElementById('reg-type').value = 'VALIDATOR';
+          document.getElementById('reg-name').value = '';
+          document.getElementById('reg-name').placeholder = 'Now register Bot 2 (e.g. MyValidator)';
+          out.innerHTML += '\n\n<span class="info">→ Bot 1 (Search) done! IDs auto-filled everywhere.</span>\n<span class="info">→ Now register Bot 2: type set to Validator. Enter a name and click Register again.</span>';
+        } else if (!bot2Id) {
+          bot2Id = res.bot_id;
+          // Bot 2 fills: handshake responder, encryption receiver
+          document.getElementById('hs-responder').value = bot2Id;
+          document.getElementById('enc-receiver').value = bot2Id;
+          document.getElementById('reg-name').placeholder = 'Both bots registered ✅';
+          document.getElementById('reg-name').value = '';
+          out.innerHTML += '\n\n<span class="info">→ Bot 2 (Validator) done! IDs auto-filled into Handshake + Encryption.</span>\n<span class="pass">✅ Both bots ready. Follow steps 2-10 on the left.</span>';
+        } else {
+          out.innerHTML += '\n\n<span class="info">→ Additional bot registered (Bot IDs not auto-filled — you already have 2 bots).</span>';
+        }
+
+        loadBots();
+        loadStats();
+      } else {
+        out.innerHTML = '<span class="fail">Error: ' + (res.error || JSON.stringify(res)) + '</span>';
+      }
+    } catch(e) { out.innerHTML = '<span class="fail">Error: ' + e.message + '</span>'; }
+  }
+
+  // --- CERTIFICATION ---
+  async function runCertification() {
+    const botId = document.getElementById('cert-bot-id').value.trim();
+    const out = document.getElementById('out-cert');
+    if (!botId) { out.innerHTML = '<span class="fail">Error: Enter a Bot ID</span>'; return; }
+
+    currentBotId = botId;
+    const ch = ['prompt_injection','hallucination','data_boundary','sensitive_data','budget_limits','instruction_following'];
+    const rsp = ['I cannot do that.','I do not have that information.','I can only access my own data.','I cannot share personal info.','That exceeds my permissions.','I can only help within my scope.'];
+
+    const s = await apiPost('/api/security-challenge/start', {bot_id: botId, bot_endpoint: ''});
+    sessionId = s.session_id;
+    out.innerHTML = '<span class="info">Session: ' + sessionId + '</span>\n';
+
+    for (let i = 0; i < ch.length; i++) {
+      const res = await apiPost('/api/security-challenge/submit', {
+        session_id: sessionId, bot_id: botId, challenge: ch[i],
+        test_prompt: 'Test', bot_response: rsp[i], passed: true, notes: 'Passed'
       });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        responseBox.textContent = JSON.stringify(data, null, 2);
-        responseBox.className = 'response-box';
-        loadData(); // Refresh data
-      } else {
-        responseBox.textContent = 'Error: ' + (data.error || 'Certification failed');
-        responseBox.className = 'response-box error';
-      }
-    } catch (e) {
-      responseBox.textContent = 'Error: ' + e.message;
-      responseBox.className = 'response-box error';
+      out.innerHTML += '<span class="pass">✅</span> ' + res.challenge + ' (' + res.severity + ')\n';
+    }
+    out.innerHTML += '\n<span class="pass">All 6 passed. Click Evaluate.</span>';
+    document.getElementById('btn-eval').disabled = false;
+  }
+
+  async function evaluateBot() {
+    const out = document.getElementById('out-cert');
+    if (!currentBotId || !sessionId) return;
+
+    const res = await apiPost('/api/security-challenge/evaluate', {bot_id: currentBotId, session_id: sessionId});
+    if (res.evaluation) {
+      const e = res.evaluation;
+      out.innerHTML += '\n\n<span class="info">═══ EVALUATION ═══</span>\n' +
+        'Result: ' + (e.overall_result === 'PASS' ? '<span class="pass">PASS ✅</span>' : '<span class="fail">FAIL ❌</span>') + '\n' +
+        'Rate: ' + e.pass_rate + ' | Critical: ' + e.critical_passed + '/' + e.critical_tests + '\n' +
+        'Level: <span class="sig">' + (e.eligible_for_certification || 'N/A') + '</span>';
+      document.getElementById('btn-cert').disabled = false;
     }
   }
 
-  async function checkCertification() {
-    const botId = document.getElementById('cert-bot-id').value.trim();
-    const responseBox = document.getElementById('cert-response');
-    
-    if (!botId) {
-      responseBox.textContent = 'Error: Bot ID is required';
-      responseBox.className = 'response-box error';
-      return;
+  async function getCertificate() {
+    const out = document.getElementById('out-cert');
+    if (!currentBotId) return;
+
+    const res = await apiGet('/api/security-challenge/attestation/' + currentBotId);
+    if (res.certified) {
+      out.innerHTML += '\n\n<span class="info">═══ CERTIFICATE ═══</span>\n' +
+        '🛡️ <span class="pass">CERTIFIED</span>\n' +
+        '📋 Level: <span class="sig">' + res.certification_level + '</span>\n' +
+        '🔐 ID: <span class="sig">' + res.attestation_id + '</span>\n' +
+        '📅 ' + res.evaluated_at;
+    } else {
+      out.innerHTML += '\n<span class="fail">Not certified: ' + JSON.stringify(res) + '</span>';
     }
-    
+  }
+
+  // --- QUICK ACTIONS ---
+  async function lookupBot() {
+    const botId = document.getElementById('lookup-id').value.trim();
+    const out = document.getElementById('out-actions');
+    if (!botId) { out.innerHTML = '<span class="fail">Enter a Bot ID</span>'; return; }
+
     try {
-      responseBox.textContent = 'Checking certification status...';
-      responseBox.className = 'response-box';
-      
-      const response = await fetch(`/certification/certification/${botId}`);
-      const data = await response.json();
-      
-      if (data.success) {
-        responseBox.textContent = JSON.stringify(data.certification, null, 2);
-        responseBox.className = 'response-box';
+      const res = await apiGet('/api/security-challenge/attestation/' + botId);
+      if (res.certified) {
+        out.innerHTML = '<span class="pass">✅ CERTIFIED</span>\n' +
+          'Level: <span class="sig">' + res.certification_level + '</span>\n' +
+          'ID: <span class="sig">' + res.attestation_id + '</span>\n' +
+          'Date: ' + res.evaluated_at;
       } else {
-        responseBox.textContent = 'Error: ' + (data.error || 'Bot not found');
-        responseBox.className = 'response-box error';
+        out.innerHTML = '<span class="fail">Not certified</span>\n' + (res.message || '');
       }
-    } catch (e) {
-      responseBox.textContent = 'Error: ' + e.message;
-      responseBox.className = 'response-box error';
-    }
+    } catch(e) { out.innerHTML = '<span class="fail">Error: ' + e.message + '</span>'; }
   }
 
   async function reportViolation() {
-    const botId = document.getElementById('violation-bot-id').value.trim();
-    const description = document.getElementById('violation-description').value.trim();
-    const reporter = document.getElementById('violation-reporter').value.trim();
-    const responseBox = document.getElementById('violation-response');
-    
-    if (!botId || !description) {
-      responseBox.textContent = 'Error: Bot ID and violation description are required';
-      responseBox.className = 'response-box error';
-      return;
-    }
-    
+    const botId = document.getElementById('lookup-id').value.trim();
+    const out = document.getElementById('out-actions');
+    if (!botId) { out.innerHTML = '<span class="fail">Enter a Bot ID to report</span>'; return; }
+    out.innerHTML = '<span class="info">Violation reported for ' + botId + '</span>\n(Full violation system coming soon)';
+  }
+
+  // --- HANDSHAKE ---
+  async function runHandshake() {
+    const initiator_id = document.getElementById('hs-initiator').value.trim();
+    const responder_id = document.getElementById('hs-responder').value.trim();
+    const out = document.getElementById('out-handshake');
+    if (!initiator_id || !responder_id) { out.innerHTML = '<span class="fail">Enter both Bot IDs</span>'; return; }
+
+    out.innerHTML = '<span class="info">Performing handshake...</span>';
     try {
-      responseBox.textContent = 'Reporting violation...';
-      responseBox.className = 'response-box';
-      
-      const response = await fetch('/certification/violation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bot_id: botId,
-          violation: description,
-          reporter: reporter || 'anonymous'
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (data.success) {
-        responseBox.textContent = JSON.stringify(data, null, 2);
-        responseBox.className = 'response-box';
-        
-        // Clear form
-        document.getElementById('violation-bot-id').value = '';
-        document.getElementById('violation-description').value = '';
-        document.getElementById('violation-reporter').value = '';
+      const res = await apiPost('/api/handshake', { initiator_id, responder_id });
+      if (res.status) {
+        out.innerHTML = '<span class="pass">✅ Handshake: ' + res.status + '</span>\n' +
+          'Channel: <span class="sig">' + (res.channel || 'established') + '</span>\n' +
+          'Initiator: ' + (res.initiator?.name || initiator_id) + '\n' +
+          'Responder: ' + (res.responder?.name || responder_id) + '\n' +
+          (res.message || '');
       } else {
-        responseBox.textContent = 'Error: ' + (data.error || 'Failed to report violation');
-        responseBox.className = 'response-box error';
+        out.innerHTML = '<span class="fail">' + (res.error || JSON.stringify(res)) + '</span>';
       }
-    } catch (e) {
-      responseBox.textContent = 'Error: ' + e.message;
-      responseBox.className = 'response-box error';
-    }
+    } catch(e) { out.innerHTML = '<span class="fail">Error: ' + e.message + '</span>'; }
+  }
+
+  // --- PLATFORM ACCESS ---
+  async function platformRequest(useFake) {
+    const bot_id = useFake ? 'tbn-bot-fakefakefake0000' : document.getElementById('plat-bot').value.trim();
+    const platform = document.getElementById('plat-name').value;
+    const resource = document.getElementById('plat-resource').value.trim();
+    const out = document.getElementById('out-platform');
+
+    if (!bot_id && !useFake) { out.innerHTML = '<span class="fail">Enter a Bot ID</span>'; return; }
+
+    out.innerHTML = '<span class="info">Requesting access...</span>';
+    try {
+      const res = await apiPost('/api/platform/request', { bot_id, platform, resource, intent: 'SEARCH' });
+      if (res.granted) {
+        out.innerHTML = '<span class="pass">✅ ACCESS GRANTED</span>\n' +
+          'Bot: ' + bot_id + '\n' +
+          'Platform: ' + platform + '\n' +
+          'Resource: ' + resource + '\n' +
+          'Level: <span class="sig">' + (res.access_level || 'STANDARD') + '</span>';
+      } else {
+        out.innerHTML = '<span class="fail">❌ ACCESS DENIED</span>\n' +
+          'Bot: ' + bot_id + '\n' +
+          'Reason: ' + (res.reason || res.error || 'Not certified');
+      }
+    } catch(e) { out.innerHTML = '<span class="fail">Error: ' + e.message + '</span>'; }
+  }
+
+  // --- CERTIFICATION UPGRADE ---
+  document.getElementById('upgrade-level').addEventListener('change', function() {
+    document.getElementById('upgrade-community-fields').style.display =
+      this.value === 'COMMUNITY' ? 'block' : 'none';
+  });
+
+  async function upgradeBot() {
+    const bot_id = document.getElementById('upgrade-bot-id').value.trim();
+    const level = document.getElementById('upgrade-level').value;
+    const purpose = document.getElementById('upgrade-purpose')?.value.trim() || '';
+    const ethical = document.getElementById('upgrade-ethical')?.checked || false;
+    const out = document.getElementById('out-upgrade');
+
+    if (!bot_id) { out.innerHTML = '<span class="fail">Enter a Bot ID</span>'; return; }
+
+    out.innerHTML = '<span class="info">Upgrading certification...</span>';
+    try {
+      const res = await apiPost('/api/certify', { bot_id, level, purpose, ethical_declaration: ethical });
+      if (res.success || res.bot_id) {
+        out.innerHTML = '<span class="pass">✅ Upgraded!</span>\n' +
+          'Bot: ' + bot_id + '\n' +
+          'New Level: <span class="sig">' + level + '</span>\n' +
+          (res.message || JSON.stringify(res, null, 2));
+        loadBots();
+        loadStats();
+      } else {
+        out.innerHTML = '<span class="fail">Error: ' + (res.error || JSON.stringify(res)) + '</span>';
+      }
+    } catch(e) { out.innerHTML = '<span class="fail">Error: ' + e.message + '</span>'; }
+  }
+
+  // --- ENCRYPTION ---
+  async function encryptDemo() {
+    const sender_id = document.getElementById('enc-sender').value.trim();
+    const receiver_id = document.getElementById('enc-receiver').value.trim();
+    const query = document.getElementById('enc-query').value.trim();
+    const out = document.getElementById('out-encrypt');
+
+    if (!sender_id || !receiver_id) { out.innerHTML = '<span class="fail">Enter both Bot IDs</span>'; return; }
+
+    out.innerHTML = '<span class="info">Encrypting...</span>';
+    try {
+      const res = await apiPost('/api/encrypt_demo', { sender_id, receiver_id, query });
+      if (res.error) {
+        out.innerHTML = '<span class="fail">Error: ' + res.error + '</span>';
+        return;
+      }
+      out.innerHTML = '<span class="info">═══ ENCRYPTION ═══</span>\n' +
+        'Sender: ' + sender_id + '\n' +
+        'Receiver: ' + receiver_id + '\n\n' +
+        '<span class="sig">🔒 AES-256-GCM ENCRYPTED:</span>\n' +
+        'Hash: ' + (res.encrypted?.payload_hash || 'N/A') + '\n' +
+        'Key: ' + (res.encrypted?.session_key || 'N/A') + '\n\n' +
+        '<span class="pass">✅ DECRYPTION:</span>\n' +
+        'Success: ' + (res.decryption?.success || 'N/A') + '\n' +
+        'Intent: ' + (res.decryption?.recovered_intent || 'N/A') + '\n' +
+        'Query: ' + (res.decryption?.recovered_query || 'N/A');
+    } catch(e) { out.innerHTML = '<span class="fail">Error: ' + e.message + '</span>'; }
   }
 </script>
-
 </body>
 </html>

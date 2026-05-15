@@ -430,6 +430,19 @@
 </head>
 <body>
 
+<!-- Login overlay -->
+<div id="admin-login" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0e1a;display:flex;align-items:center;justify-content:center;z-index:1000;">
+  <div style="background:#0d1117;border:1px solid #21262d;border-radius:12px;padding:40px;width:360px;text-align:center;">
+    <h2 style="font-size:20px;color:#c9d1d9;margin-bottom:8px;">🔒 Admin Access</h2>
+    <p style="font-size:13px;color:#6e7681;margin-bottom:24px;">TBN Protocol Network Dashboard</p>
+    <input type="password" id="admin-pw" placeholder="Enter admin password" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;color:#c9d1d9;font-size:14px;outline:none;margin-bottom:16px;" onkeypress="if(event.key==='Enter')adminLogin()" />
+    <button onclick="adminLogin()" style="width:100%;background:#238636;color:#fff;border:none;border-radius:6px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;">Login</button>
+    <div id="admin-login-error" style="color:#f85149;font-size:12px;margin-top:8px;display:none;">Incorrect password</div>
+  </div>
+</div>
+
+<div id="admin-content" style="display:none;">
+
 <!-- Tour overlay -->
 <div id="tour-overlay">
   <div id="tour-box">
@@ -466,6 +479,7 @@
       <div style="font-size:9px;color:#6e7681">pip install tbn-protocol</div>
     </div>
     <button class="tour-launch" onclick="startTour()">▶ Guided Tour</button>
+    <a href="/philosophy" style="background:#7c4dff;color:#fff;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:bold;text-decoration:none;font-family:'Courier New',monospace">🧠 Human AI</a>
     <a href="/register" style="background:#238636;color:#fff;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:bold;text-decoration:none;font-family:'Courier New',monospace">➕ Register Bot</a>
     <div>
       <span class="live-dot"></span>
@@ -475,6 +489,14 @@
 </header>
 
 <!-- Stats row -->
+<div style="background:linear-gradient(135deg,#1a2744,#0d1b2a);border:1px solid #1f6feb;border-radius:12px;padding:24px 32px;margin:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+  <div>
+    <div style="font-size:20px;font-weight:bold;color:#fff;margin-bottom:6px;">🛡️ TBN Protocol — Verifiable Enforcement for AI Agents</div>
+    <div style="font-size:14px;color:#8b949e;">Security challenges test bots before certification. Attestation proves what they did. Enforcement blocks what they shouldn't.</div>
+  </div>
+  <button onclick="startTour()" style="background:linear-gradient(135deg,#1f6feb,#238636);color:#fff;border:none;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;white-space:nowrap;font-family:'Courier New',monospace;">▶ Click Here — Guided Demo</button>
+</div>
+
 <div class="grid">
   <div class="card stat">
     <div class="num" id="stat-bots">0</div>
@@ -482,7 +504,7 @@
   </div>
   <div class="card stat">
     <div class="num" id="stat-certified">0</div>
-    <div class="label">BICA Certified</div>
+    <div class="label">Security Certified</div>
   </div>
   <div class="card stat">
     <div class="num" id="stat-cache">0%</div>
@@ -665,6 +687,54 @@
     </div>
   </div>
 
+</div>
+
+<!-- curl quickstart -->
+<div class="full-width">
+  <div class="card">
+    <h2>🛡️ Try It — Security Challenge (NEW)</h2>
+    <div class="try-it">
+      <div style="margin-bottom:12px;padding:12px;background:#1a2744;border:1px solid #1f6feb;border-radius:8px;">
+        <div style="font-size:13px;color:#58a6ff;font-weight:bold;margin-bottom:4px;">How it works</div>
+        <div style="font-size:12px;color:#8b949e;">Bots must pass 6 automated security tests before getting TBN certified. Tests cover prompt injection, hallucination, data boundaries, budget limits, sensitive data, and instruction following. All critical tests must pass.</div>
+      </div>
+      <div>
+        <label>Bot ID to test</label>
+        <input id="sec-bot-id" type="text" placeholder="tbn-bot-xxxx" />
+      </div>
+      <div>
+        <label>Challenge to run</label>
+        <select id="sec-challenge">
+          <option value="prompt_injection">🔴 Prompt Injection Resistance (critical)</option>
+          <option value="hallucination">🔴 Hallucination Detection (critical)</option>
+          <option value="data_boundary">🔴 Data Boundary Compliance (critical)</option>
+          <option value="sensitive_data">🔴 Sensitive Data Protection (critical)</option>
+          <option value="budget_limits">🟡 Budget & Permission Limits (high)</option>
+          <option value="instruction_following">🟢 Instruction Following (medium)</option>
+        </select>
+      </div>
+      <div>
+        <label>Simulated bot response (what the bot said when tested)</label>
+        <input id="sec-response" type="text" value="I cannot do that. I am a booking assistant." />
+      </div>
+      <div>
+        <label>Result</label>
+        <select id="sec-passed">
+          <option value="true">✅ PASS — Bot behaved correctly</option>
+          <option value="false">❌ FAIL — Bot failed the test</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn" style="background:#1f6feb" onclick="runSecurityChallenge()">🛡️ Run Challenge</button>
+        <button class="btn" style="background:#238636" onclick="evaluateBot()">📋 Evaluate All Results</button>
+        <button class="btn" style="background:#6e40c9" onclick="getAttestation()">🔐 Get Attestation</button>
+      </div>
+      <div class="response-box" id="sec-response-box">// Security challenge results will appear here
+// 1. Enter a bot ID and run challenges
+// 2. Click "Evaluate" to see if the bot passes
+// 3. Click "Get Attestation" to see the cryptographic proof</div>
+    </div>
+  </div>
 </div>
 
 <!-- curl quickstart -->
@@ -926,6 +996,116 @@ curl http://localhost:5000/api/bots</div>
 
     refresh();
   }
+
+  // ── Security Challenge Functions ─────────────────────────────────
+  let secSessionId = null;
+
+  async function runSecurityChallenge() {
+    const bot_id = document.getElementById("sec-bot-id").value.trim();
+    const challenge = document.getElementById("sec-challenge").value;
+    const bot_response = document.getElementById("sec-response").value.trim();
+    const passed = document.getElementById("sec-passed").value === "true";
+    const out = document.getElementById("sec-response-box");
+
+    if (!bot_id) { alert("Enter a bot ID"); return; }
+
+    // Start session if not started
+    if (!secSessionId) {
+      const session = await apiPost("/api/security-challenge/start", { bot_id, bot_endpoint: "" });
+      if (session.session_id) {
+        secSessionId = session.session_id;
+        out.textContent = "Session started: " + secSessionId + "\n\n";
+      } else {
+        out.textContent = "Error starting session: " + JSON.stringify(session);
+        return;
+      }
+    }
+
+    // Submit challenge result
+    const res = await apiPost("/api/security-challenge/submit", {
+      session_id: secSessionId,
+      bot_id: bot_id,
+      challenge: challenge,
+      test_prompt: "Automated test prompt for " + challenge,
+      bot_response: bot_response,
+      passed: passed,
+      notes: passed ? "Bot behaved correctly" : "Bot failed security test"
+    });
+
+    out.textContent += (passed ? "✅ PASS" : "❌ FAIL") + " — " + res.challenge + "\n";
+    out.textContent += "  Response: \"" + bot_response + "\"\n\n";
+  }
+
+  async function evaluateBot() {
+    const bot_id = document.getElementById("sec-bot-id").value.trim();
+    const out = document.getElementById("sec-response-box");
+
+    if (!bot_id || !secSessionId) { alert("Run at least one challenge first"); return; }
+
+    const res = await apiPost("/api/security-challenge/evaluate", {
+      bot_id: bot_id,
+      session_id: secSessionId
+    });
+
+    if (res.evaluation) {
+      const e = res.evaluation;
+      out.textContent =
+        "═══ SECURITY EVALUATION ═══\n\n" +
+        "Bot: " + e.bot_id + "\n" +
+        "Result: " + e.overall_result + "\n" +
+        "Pass Rate: " + e.pass_rate + " (" + e.passed + "/" + e.total_tests + ")\n" +
+        "Critical Tests: " + e.critical_passed + "/" + e.critical_tests + " passed\n" +
+        "Eligible for: " + (e.eligible_for_certification || "NOT ELIGIBLE") + "\n\n";
+
+      if (e.attestation) {
+        out.textContent +=
+          "═══ ATTESTATION ISSUED ═══\n\n" +
+          "ID: " + e.attestation.attestation_id + "\n" +
+          "Signature: " + e.attestation.signature + "\n" +
+          "Issued by: " + e.attestation.issued_by + "\n" +
+          "Issued at: " + e.attestation.issued_at + "\n";
+      }
+
+      if (e.failures && e.failures.length > 0) {
+        out.textContent += "\n═══ FAILURES ═══\n\n";
+        e.failures.forEach(function(f) {
+          out.textContent += "❌ " + f.challenge + " (" + f.severity + ")\n";
+          out.textContent += "   " + f.notes + "\n\n";
+        });
+      }
+    } else {
+      out.textContent = JSON.stringify(res, null, 2);
+    }
+  }
+
+  async function getAttestation() {
+    const bot_id = document.getElementById("sec-bot-id").value.trim();
+    const out = document.getElementById("sec-response-box");
+
+    if (!bot_id) { alert("Enter a bot ID"); return; }
+
+    const res = await fetch("/api/security-challenge/attestation/" + bot_id).then(r => r.json());
+
+    if (res.certified) {
+      out.textContent =
+        "═══ SECURITY ATTESTATION ═══\n\n" +
+        "🛡️ Bot: " + res.bot_id + "\n" +
+        "✅ Certified: YES\n" +
+        "📋 Level: " + res.certification_level + "\n" +
+        "🔐 Attestation ID: " + res.attestation_id + "\n" +
+        "📅 Evaluated: " + res.evaluated_at + "\n\n" +
+        "This bot has passed all TBN Security Challenges\n" +
+        "and is verified to operate within defined boundaries.";
+    } else {
+      out.textContent =
+        "═══ NO ATTESTATION ═══\n\n" +
+        "⚠️ Bot: " + bot_id + "\n" +
+        "❌ Not certified\n\n" +
+        "This bot has not passed TBN Security Challenges.\n" +
+        "It cannot be trusted to operate within safe boundaries.";
+    }
+  }
+
   const TOUR_STEPS = [
     {
       title: "STEP 1 — Register Two Bots",
@@ -1118,11 +1298,11 @@ curl http://localhost:5000/api/bots</div>
         document.getElementById("tour-description").textContent =
           "You've just seen the full TBN Protocol in action:\n\n" +
           "✅ Cryptographic bot identity (BICA)\n" +
+          "✅ Security challenge certification\n" +
           "✅ 3-step trust handshake\n" +
           "✅ Bot Language Compiler (NL → BL)\n" +
-          "✅ Seeded network cache\n" +
-          "✅ Platform access control + audit log\n\n" +
-          "This is the trust infrastructure the AI agent economy needs.";
+          "✅ Platform access control + attestation\n\n" +
+          "The cryptographically verifiable execution layer that prevents autonomous agents from exceeding operational boundaries.";
         btn.textContent = "✕ Close Tour";
         btn.disabled = false;
         btn.style.background = "#1f6feb";
@@ -1190,6 +1370,20 @@ curl http://localhost:5000/api/bots</div>
     </div>
   </div>
 </footer>
+
+</div><!-- admin-content -->
+
+<script>
+function adminLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === 'hardin2026') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-content').style.display = 'block';
+  } else {
+    document.getElementById('admin-login-error').style.display = 'block';
+  }
+}
+</script>
 
 </body>
 </html>
