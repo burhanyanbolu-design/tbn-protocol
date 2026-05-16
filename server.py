@@ -34,12 +34,20 @@ from flask import Flask, render_template
 from api.routes import api
 from api.certification import certification
 from api.governance import governance
+from api.billing import billing
+from api.governance_engine import governance_engine
+from api.security_challenge import security_challenge
+from api.budget_enforcement import budget_enforcement
 
 # ── App setup ────────────────────────────────────────
-app = Flask(__name__, template_folder="api/templates")
-app.register_blueprint(api, url_prefix="/api")
-app.register_blueprint(certification, url_prefix="/certification")
-app.register_blueprint(governance, url_prefix="/governance")
+app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
+app.register_blueprint(api,                url_prefix="/api")
+app.register_blueprint(certification,      url_prefix="/certification")
+app.register_blueprint(governance,         url_prefix="/governance")
+app.register_blueprint(billing,            url_prefix="/api/billing")
+app.register_blueprint(governance_engine,  url_prefix="/api/govern")
+app.register_blueprint(security_challenge, url_prefix="/api/security-challenge")
+app.register_blueprint(budget_enforcement, url_prefix="/api/budget")
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
@@ -55,7 +63,22 @@ else:
 # ── Routes ───────────────────────────────────────────
 @app.route("/")
 def dashboard():
+    return render_template("dashboard_new.html")
+
+
+@app.route("/demo")
+def demo_page():
+    return render_template("demo.html")
+
+
+@app.route("/admin")
+def admin_dashboard():
     return render_template("dashboard.html")
+
+
+@app.route("/pricing")
+def pricing():
+    return render_template("pricing.html")
 
 
 @app.route("/register")
@@ -76,6 +99,11 @@ def demo():
 @app.route("/demo/nhs")
 def demo_nhs():
     return render_template("demo_nhs.html")
+
+
+@app.route("/philosophy")
+def philosophy():
+    return render_template("philosophy_chat.html")
 
 
 @app.route("/health")
