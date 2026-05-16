@@ -16,6 +16,39 @@ pip install tbn-protocol
 ```python
 from tbn import TBNClient
 
+# One line to secure your agent — registers, fingerprints, and certifies
+client = TBNClient(bot_name="MyBot", bot_type="SEARCH")
+result = client.attach(
+    endpoint="https://mybot.com/api",
+    system_prompt="You are a helpful search assistant"
+)
+print(result["attestation_id"])  # ATT-XXXXXXXX — your bot is certified
+
+# Set budget limits (prevent runaway costs)
+client.set_budget(daily_limit=10.0, max_calls_per_day=500)
+
+# Track each API call
+allowed = client.track_cost(0.03, "gpt-4-call")
+if not allowed["allowed"]:
+    print("Budget exceeded — bot suspended")
+
+# Verify your bot still matches its certification
+verified = client.verify_attestation(
+    endpoint="https://mybot.com/api",
+    system_prompt="You are a helpful search assistant"
+)
+print(verified["verified"])  # True — bot matches certified state
+
+# Check health status
+health = client.health()
+print(health["status"])  # "healthy"
+```
+
+## Legacy Quick Start
+
+```python
+from tbn import TBNClient
+
 # Register your bot (one time)
 client = TBNClient(bot_name="MyBot", bot_type="SEARCH")
 client.register()
