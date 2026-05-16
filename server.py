@@ -30,7 +30,8 @@ Production (via gunicorn — started by systemd):
 
 import os
 import logging
-from flask import Flask, render_template
+from datetime import datetime, timezone
+from flask import Flask, render_template, request, jsonify
 from api.routes import api
 from api.certification import certification
 from api.governance import governance
@@ -73,6 +74,46 @@ def dashboard():
 @app.route("/demo")
 def demo_page():
     return render_template("demo.html")
+
+
+@app.route("/early-access")
+def early_access_page():
+    return render_template("early_access.html")
+
+
+@app.route("/api/early-access", methods=["POST"])
+def early_access_submit():
+    """Store early access signups."""
+    import json
+    data = request.get_json()
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip()
+    
+    if not name or not email:
+        return jsonify({"error": "Name and email required"}), 400
+    
+    signup = {
+        "name": name,
+        "email": email,
+        "company": data.get("company", ""),
+        "agents": data.get("agents", ""),
+        "concern": data.get("concern", ""),
+        "notes": data.get("notes", ""),
+        "submitted_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Save to file
+    signups_file = "data/early_access_signups.json"
+    signups = []
+    if os.path.exists(signups_file):
+        with open(signups_file, "r") as f:
+            signups = json.load(f)
+    signups.append(signup)
+    os.makedirs("data", exist_ok=True)
+    with open(signups_file, "w") as f:
+        json.dump(signups, f, indent=2)
+    
+    return jsonify({"success": True, "message": f"Welcome {name}! You're on the early access list."})
 
 
 @app.route("/admin")

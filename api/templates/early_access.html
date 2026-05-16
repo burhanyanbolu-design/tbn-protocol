@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBN Protocol — Request Early Access</title>
+  <meta name="description" content="Governance for the Agentic Era. Automated guardrails and cost-control for AI agents via a single line of code.">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #09090b; color: #e4e4e7; min-height: 100vh; }
+
+    /* Hero */
+    .hero {
+      max-width: 800px; margin: 0 auto; padding: 60px 24px 40px; text-align: center;
+    }
+    .logo-hex {
+      width: 64px; height: 64px; margin: 0 auto 24px;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 28px; color: #fff;
+    }
+    .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
+    .hero h1 span { color: #7c3aed; }
+    .hero .tagline { font-size: 18px; color: #a1a1aa; margin-bottom: 8px; line-height: 1.6; }
+    .hero .sub { font-size: 14px; color: #52525b; margin-bottom: 32px; }
+
+    /* Features */
+    .features {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+      max-width: 800px; margin: 0 auto 40px; padding: 0 24px;
+    }
+    .feature {
+      background: #0f0f12; border: 1px solid #27272a; border-radius: 10px;
+      padding: 20px; text-align: center;
+    }
+    .feature .icon { font-size: 28px; margin-bottom: 8px; }
+    .feature h3 { font-size: 13px; font-weight: 700; color: #e4e4e7; margin-bottom: 4px; }
+    .feature p { font-size: 11px; color: #71717a; line-height: 1.5; }
+
+    /* Form */
+    .form-section {
+      max-width: 520px; margin: 0 auto; padding: 0 24px 60px;
+    }
+    .form-card {
+      background: #0f0f12; border: 1px solid #27272a; border-radius: 16px;
+      padding: 32px;
+    }
+    .form-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; text-align: center; }
+    .form-card .form-sub { font-size: 13px; color: #71717a; margin-bottom: 24px; text-align: center; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #a1a1aa; margin-bottom: 4px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; background: #18181b; border: 1px solid #27272a; border-radius: 8px;
+      padding: 12px 14px; color: #e4e4e7; font-size: 14px; font-family: 'Inter', sans-serif; outline: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-group select { cursor: pointer; }
+
+    .submit-btn {
+      width: 100%; background: #7c3aed; color: #fff; border: none; border-radius: 8px;
+      padding: 14px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: #6d28d9; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .success-msg {
+      display: none; text-align: center; padding: 32px;
+    }
+    .success-msg.visible { display: block; }
+    .success-msg .check { font-size: 48px; margin-bottom: 12px; }
+    .success-msg h3 { font-size: 20px; font-weight: 700; color: #22c55e; margin-bottom: 8px; }
+    .success-msg p { font-size: 14px; color: #a1a1aa; line-height: 1.6; }
+
+    /* Social proof */
+    .proof {
+      max-width: 800px; margin: 0 auto; padding: 0 24px 40px;
+      display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+    }
+    .proof-item { text-align: center; }
+    .proof-item .num { font-size: 24px; font-weight: 800; color: #7c3aed; }
+    .proof-item .label { font-size: 11px; color: #52525b; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid #27272a; padding: 24px; text-align: center;
+      font-size: 11px; color: #52525b;
+    }
+    footer a { color: #7c3aed; text-decoration: none; }
+
+    /* Links */
+    .demo-link {
+      display: inline-block; margin-top: 16px; color: #7c3aed; font-size: 13px;
+      text-decoration: none; font-weight: 600;
+    }
+    .demo-link:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) { .features { grid-template-columns: 1fr; } .hero h1 { font-size: 28px; } }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo-hex">T</div>
+  <h1>Governance for the <span>Agentic Era</span></h1>
+  <p class="tagline">Automated guardrails and cost-control for your AI agents via a single line of code.</p>
+  <p class="sub">Stop hallucinations, runaway costs, and unauthorized actions before they become production outages.</p>
+</div>
+
+<div class="features">
+  <div class="feature">
+    <div class="icon">🛡️</div>
+    <h3>Security Certification</h3>
+    <p>6 automated challenges test every agent before it operates. Like an MOT for AI.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">💰</div>
+    <h3>Budget Enforcement</h3>
+    <p>Per-agent spend limits. Auto-suspend when exceeded. No more runaway LLM bills.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">📊</div>
+    <h3>Compliance Drift</h3>
+    <p>Real-time score showing policy vs actual behavior. The metric executives need.</p>
+  </div>
+</div>
+
+<div class="proof">
+  <div class="proof-item"><div class="num">14</div><div class="label">Governance Steps</div></div>
+  <div class="proof-item"><div class="num">6</div><div class="label">Security Challenges</div></div>
+  <div class="proof-item"><div class="num">AES-256</div><div class="label">Encryption</div></div>
+  <div class="proof-item"><div class="num">24hr</div><div class="label">Re-test Cycle</div></div>
+</div>
+
+<div class="form-section">
+  <div class="form-card">
+    <div id="form-content">
+      <h2>Request Early Access</h2>
+      <p class="form-sub">We're onboarding 5 design partners. Free access in exchange for feedback.</p>
+
+      <div class="form-group">
+        <label>Your Name *</label>
+        <input type="text" id="ea-name" placeholder="Jane Smith" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="ea-email" placeholder="jane@company.com" required />
+      </div>
+
+      <div class="form-group">
+        <label>Company</label>
+        <input type="text" id="ea-company" placeholder="Acme AI Ltd" />
+      </div>
+
+      <div class="form-group">
+        <label>How many AI agents are you running?</label>
+        <select id="ea-agents">
+          <option value="">Select...</option>
+          <option value="0">None yet — planning to</option>
+          <option value="1-5">1–5 agents</option>
+          <option value="6-20">6–20 agents</option>
+          <option value="20+">20+ agents</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>What's your primary concern?</label>
+        <select id="ea-concern">
+          <option value="">Select...</option>
+          <option value="cost">Runaway LLM costs / budget control</option>
+          <option value="security">Security / prompt injection / data leaks</option>
+          <option value="compliance">Compliance / audit / governance</option>
+          <option value="trust">Trust between agents / verification</option>
+          <option value="all">All of the above</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Anything else? (optional)</label>
+        <textarea id="ea-notes" placeholder="Tell us about your use case, tech stack, or what you'd want from TBN..."></textarea>
+      </div>
+
+      <button class="submit-btn" id="ea-submit" onclick="submitForm()">Request Early Access</button>
+    </div>
+
+    <div class="success-msg" id="success-msg">
+      <div class="check">✅</div>
+      <h3>You're on the list!</h3>
+      <p>We'll review your application and get back to you within 48 hours. In the meantime, try our interactive demo to see TBN in action.</p>
+      <a href="/demo" class="demo-link">→ Try the Interactive Demo</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
+  <a href="/">Home</a> · <a href="/demo">Demo</a> · <a href="https://github.com/burhanyanbolu-design/tbn-protocol">GitHub</a> · <a href="https://pypi.org/project/tbn-protocol/">PyPI</a> · <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+</footer>
+
+<script>
+  // Store submissions in a JSON file on the server
+  async function submitForm() {
+    const name = document.getElementById('ea-name').value.trim();
+    const email = document.getElementById('ea-email').value.trim();
+    const company = document.getElementById('ea-company').value.trim();
+    const agents = document.getElementById('ea-agents').value;
+    const concern = document.getElementById('ea-concern').value;
+    const notes = document.getElementById('ea-notes').value.trim();
+
+    if (!name || !email) {
+      alert('Please enter your name and email.');
+      return;
+    }
+
+    const btn = document.getElementById('ea-submit');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    try {
+      const res = await fetch('/api/early-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, company, agents, concern, notes })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('success-msg').classList.add('visible');
+      } else {
+        alert('Error: ' + (data.error || 'Something went wrong'));
+        btn.disabled = false;
+        btn.textContent = 'Request Early Access';
+      }
+    } catch(e) {
+      alert('Error: ' + e.message);
+      btn.disabled = false;
+      btn.textContent = 'Request Early Access';
+    }
+  }
+</script>
+</body>
+</html>
