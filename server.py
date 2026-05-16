@@ -38,6 +38,8 @@ from api.billing import billing
 from api.governance_engine import governance_engine
 from api.security_challenge import security_challenge
 from api.budget_enforcement import budget_enforcement
+from api.webhooks import webhooks
+from api.compliance_drift import compliance_drift
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
@@ -48,6 +50,8 @@ app.register_blueprint(billing,            url_prefix="/api/billing")
 app.register_blueprint(governance_engine,  url_prefix="/api/govern")
 app.register_blueprint(security_challenge, url_prefix="/api/security-challenge")
 app.register_blueprint(budget_enforcement, url_prefix="/api/budget")
+app.register_blueprint(webhooks, url_prefix="/api/webhooks")
+app.register_blueprint(compliance_drift, url_prefix="/api/compliance")
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
