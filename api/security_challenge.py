@@ -215,18 +215,47 @@ def _generate_attestation(bot_id, challenge_results, bot_fingerprint=None):
 def _generate_bot_fingerprint(bot_id, bot_endpoint="", system_prompt="", config=None):
     """
     Generate a unique fingerprint for a bot's current state.
-    This links the attestation to the exact bot configuration that was tested.
-    If the bot changes after certification, the fingerprint won't match.
+    
+    Split into two hashes:
+    - Identity Hash: WHO the bot is (bot_id, endpoint, system prompt core)
+      → Changes here require full re-certification
+    - Config Hash: HOW the bot behaves (timeout, model, temperature, etc.)
+      → Changes here trigger a warning but don't invalidate identity
+    
+    The combined fingerprint links the attestation to this exact bot state.
     """
-    fingerprint_data = {
-        "bot_id": bot_id,
-        "endpoint": bot_endpoint,
-        "system_prompt": system_prompt,
-        "config": config or {},
-        "version": "1.0"
+    # Canonicalization: sort keys, strip whitespace, filter to identity-critical fields
+    identity_data = {
+        "bot_id": bot_id.strip(),
+        "endpoint": bot_endpoint.strip().rstrip("/"),
+        "system_prompt": system_prompt.strip(),
     }
-    fingerprint_str = json.dumps(fingerprint_data, sort_keys=True)
-    return hashlib.sha256(fingerprint_str.encode()).hexdigest()
+    
+    # Config hash — non-critical behavioral settings
+    config_data = {}
+    if config:
+        # Sort and normalize config keys
+        for k in sorted(config.keys()):
+            v = config[k]
+            if isinstance(v, str):
+                v = v.strip()
+            config_data[k] = v
+    
+    # Generate separate hashes
+    identity_str = json.dumps(identity_data, sort_keys=True, separators=(',', ':'))
+    identity_hash = hashlib.sha256(identity_str.encode()).hexdigest()
+    
+    config_str = json.dumps(config_data, sort_keys=True, separators=(',', ':'))
+    config_hash = hashlib.sha256(config_str.encode()).hexdigest()
+    
+    # Combined fingerprint
+    combined = hashlib.sha256((identity_hash + config_hash).encode()).hexdigest()
+    
+    return {
+        "fingerprint": combined,
+        "identity_hash": identity_hash,
+        "config_hash": config_hash
+    }
 
 
 # Store bot fingerprints
@@ -297,11 +326,14 @@ def start_challenge():
         return jsonify({"error": "bot_id is required"}), 400
     
     # Generate bot fingerprint — links attestation to this exact bot state
-    fingerprint = _generate_bot_fingerprint(bot_id, bot_endpoint, system_prompt, bot_config)
+    fp = _generate_bot_fingerprint(bot_id, bot_endpoint, system_prompt, bot_config)
+    fingerprint = fp["fingerprint"]
     _save_fingerprint(bot_id, fingerprint, {
         "endpoint": bot_endpoint,
         "system_prompt_hash": hashlib.sha256(system_prompt.encode()).hexdigest()[:16] if system_prompt else "none",
-        "config_keys": list(bot_config.keys()) if bot_config else []
+        "config_keys": list(bot_config.keys()) if bot_config else [],
+        "identity_hash": fp["identity_hash"],
+        "config_hash": fp["config_hash"]
     })
     
     # Create challenge session
@@ -325,9 +357,11 @@ def start_challenge():
         "session_id": session_id,
         "bot_id": bot_id,
         "bot_fingerprint": fingerprint[:16] + "...",
+        "identity_hash": fp["identity_hash"][:16] + "...",
+        "config_hash": fp["config_hash"][:16] + "...",
         "challenges_to_run": len(selected_challenges),
         "challenge_names": [CHALLENGES[c]["name"] for c in selected_challenges if c in CHALLENGES],
-        "message": "Challenge session created. Bot fingerprint recorded. Submit test results via /api/security-challenge/submit"
+        "message": "Challenge session created. Bot fingerprint recorded (identity + config hashes split). Submit test results via /api/security-challenge/submit"
     })
 
 
@@ -579,7 +613,10 @@ def verify_attestation():
         return jsonify({"error": "bot_id is required"}), 400
     
     # Generate current fingerprint
-    current_fingerprint = _generate_bot_fingerprint(bot_id, bot_endpoint, system_prompt, bot_config)
+    fp = _generate_bot_fingerprint(bot_id, bot_endpoint, system_prompt, bot_config)
+    current_fingerprint = fp["fingerprint"]
+    current_identity = fp["identity_hash"]
+    current_config = fp["config_hash"]
     
     # Load stored fingerprint from certification
     fingerprints = _load_fingerprints()
@@ -595,9 +632,13 @@ def verify_attestation():
         })
     
     stored_fingerprint = stored["fingerprint"]
+    stored_identity = stored.get("metadata", {}).get("identity_hash", "")
+    stored_config = stored.get("metadata", {}).get("config_hash", "")
     
-    # Compare fingerprints
-    match = current_fingerprint == stored_fingerprint
+    # Compare fingerprints — split identity vs config
+    identity_match = current_identity == stored_identity if stored_identity else current_fingerprint == stored_fingerprint
+    config_match = current_config == stored_config if stored_config else True
+    full_match = current_fingerprint == stored_fingerprint
     
     # Check if bot has a passing attestation
     all_results = _load_results()
@@ -609,26 +650,45 @@ def verify_attestation():
     ]
     has_attestation = len(evaluations) > 0
     
-    if match and has_attestation:
-        return jsonify({
-            "success": True,
-            "bot_id": bot_id,
-            "verified": True,
-            "fingerprint_match": True,
-            "attestation_valid": True,
-            "certified_at": stored["created_at"],
-            "attestation_id": evaluations[-1].get("attestation_id"),
-            "message": "✅ VERIFIED — Bot matches its certified fingerprint. Safe to grant access."
-        })
-    elif not match:
+    if identity_match and has_attestation:
+        # Identity matches — bot is the same entity
+        if not config_match:
+            # Config changed but identity is same — warning, not blocking
+            return jsonify({
+                "success": True,
+                "bot_id": bot_id,
+                "verified": True,
+                "identity_match": True,
+                "config_match": False,
+                "attestation_valid": True,
+                "certified_at": stored["created_at"],
+                "attestation_id": evaluations[-1].get("attestation_id"),
+                "warning": "Config has changed since certification. Identity still valid.",
+                "message": "⚠️ VERIFIED (with warning) — Bot identity matches but config has changed. Consider re-certifying."
+            })
+        else:
+            # Full match
+            return jsonify({
+                "success": True,
+                "bot_id": bot_id,
+                "verified": True,
+                "identity_match": True,
+                "config_match": True,
+                "attestation_valid": True,
+                "certified_at": stored["created_at"],
+                "attestation_id": evaluations[-1].get("attestation_id"),
+                "message": "✅ VERIFIED — Bot matches its certified fingerprint. Safe to grant access."
+            })
+    elif not identity_match:
         return jsonify({
             "success": True,
             "bot_id": bot_id,
             "verified": False,
-            "fingerprint_match": False,
+            "identity_match": False,
+            "config_match": config_match,
             "attestation_valid": has_attestation,
-            "reason": "FINGERPRINT_MISMATCH",
-            "message": "❌ NOT VERIFIED — Bot has changed since certification. Must re-certify.",
+            "reason": "IDENTITY_MISMATCH",
+            "message": "❌ NOT VERIFIED — Bot identity has changed (endpoint or system prompt). Must re-certify.",
             "stored_fingerprint": stored_fingerprint[:16] + "...",
             "current_fingerprint": current_fingerprint[:16] + "..."
         })
@@ -637,7 +697,8 @@ def verify_attestation():
             "success": True,
             "bot_id": bot_id,
             "verified": False,
-            "fingerprint_match": True,
+            "identity_match": True,
+            "config_match": config_match,
             "attestation_valid": False,
             "reason": "NO_PASSING_ATTESTATION",
             "message": "❌ NOT VERIFIED — Bot fingerprint matches but has no passing security evaluation."
