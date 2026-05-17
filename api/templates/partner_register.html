@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBN Protocol — Integration Partner Registration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e1a;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: #58a6ff;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #8b949e;
+            font-size: 1rem;
+        }
+        .form-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .form-section h2 {
+            color: #58a6ff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #21262d;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            color: #c9d1d9;
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .form-group .hint {
+            color: #8b949e;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+        .terms-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 24px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+        .terms-box h3 {
+            color: #58a6ff;
+            margin: 16px 0 8px 0;
+            font-size: 0.95rem;
+        }
+        .terms-box h3:first-child {
+            margin-top: 0;
+        }
+        .terms-box ul {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+        .terms-box li {
+            margin-bottom: 4px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #58a6ff;
+        }
+        .checkbox-group label {
+            color: #c9d1d9;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #238636;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover {
+            background: #2ea043;
+        }
+        .submit-btn:disabled {
+            background: #21262d;
+            color: #484f58;
+            cursor: not-allowed;
+        }
+        .success-msg {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        .success-msg h2 {
+            color: #3fb950;
+            margin-bottom: 12px;
+        }
+        .success-msg p {
+            color: #8b949e;
+            line-height: 1.6;
+        }
+        .error-msg {
+            background: #3d1f1f;
+            border: 1px solid #f85149;
+            color: #f85149;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        .badge {
+            display: inline-block;
+            background: #1f6feb22;
+            color: #58a6ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #484f58;
+            font-size: 0.8rem;
+        }
+        .footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤝 Integration Partner Registration</h1>
+            <p>Apply for API access to integrate with the TBN Protocol trust network</p>
+        </div>
+
+        <div id="error-msg" class="error-msg"></div>
+
+        <form id="partner-form">
+            <!-- Company Details -->
+            <div class="form-section">
+                <h2>Company Details</h2>
+                <div class="form-group">
+                    <label>Company Name *</label>
+                    <input type="text" name="company_name" required placeholder="e.g. CLARIXO Ltd">
+                </div>
+                <div class="form-group">
+                    <label>Contact Name *</label>
+                    <input type="text" name="contact_name" required placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" name="email" required placeholder="you@company.com">
+                    <p class="hint">API key will be sent to this address once approved</p>
+                </div>
+                <div class="form-group">
+                    <label>Company Website</label>
+                    <input type="url" name="website" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" name="country" placeholder="e.g. United Kingdom">
+                </div>
+            </div>
+
+            <!-- Integration Details -->
+            <div class="form-section">
+                <h2>Integration Details</h2>
+                <div class="form-group">
+                    <label>Integration Purpose *</label>
+                    <textarea name="purpose" required placeholder="Describe how you plan to use the TBN verify endpoint. What system will call it and why?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Integration Type *</label>
+                    <select name="integration_type" required>
+                        <option value="">Select...</option>
+                        <option value="governance">Governance / Compliance System</option>
+                        <option value="orchestration">Agent Orchestration Platform</option>
+                        <option value="monitoring">Monitoring / Observability</option>
+                        <option value="marketplace">AI Marketplace / Registry</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Expected API Call Volume</label>
+                    <select name="volume">
+                        <option value="low">Low (< 100/day)</option>
+                        <option value="medium">Medium (100–1,000/day)</option>
+                        <option value="high">High (1,000–10,000/day)</option>
+                        <option value="enterprise">Enterprise (10,000+/day)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Endpoints Required</label>
+                    <select name="endpoints">
+                        <option value="verify_full">POST /api/verify/full (Trust State Verification)</option>
+                        <option value="verify_basic">POST /api/verify (Basic Certification Check)</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="form-section">
+                <h2>Terms & Conditions</h2>
+                <div class="terms-box">
+                    <h3>TBN Protocol — Integration Partner API Terms</h3>
+                    <p><strong>Effective Date:</strong> May 2026<br>
+                    <strong>Provider:</strong> Hardin Enterprises Ltd (trading as Hardin AI Solutions)<br>
+                    <strong>Contact:</strong> burhan@hardinai.co.uk</p>
+
+                    <h3>1. Definitions</h3>
+                    <ul>
+                        <li><strong>"TBN"</strong> means the Trusted Bot Network Protocol operated by Hardin Enterprises Ltd.</li>
+                        <li><strong>"Partner"</strong> means the company or individual granted API access under these terms.</li>
+                        <li><strong>"API Key"</strong> means the unique credential issued to the Partner for authentication.</li>
+                        <li><strong>"Verification Data"</strong> means the trust-state information returned by TBN endpoints.</li>
+                    </ul>
+
+                    <h3>2. Grant of Access</h3>
+                    <ul>
+                        <li>Hardin Enterprises Ltd grants the Partner a non-exclusive, revocable, non-transferable licence to access the TBN API for the stated integration purpose.</li>
+                        <li>Access is limited to the endpoints and call volumes agreed upon registration.</li>
+                        <li>This licence does not grant ownership of, or rights to, the TBN Protocol, its source code, or its data.</li>
+                    </ul>
+
+                    <h3>3. API Key Security</h3>
+                    <ul>
+                        <li>The Partner must keep their API key confidential and secure.</li>
+                        <li>The Partner must not share, publish, or embed the API key in client-side code.</li>
+                        <li>The Partner must notify Hardin immediately if a key is compromised.</li>
+                        <li>Hardin may revoke and reissue keys at any time for security reasons.</li>
+                    </ul>
+
+                    <h3>4. Permitted Use</h3>
+                    <ul>
+                        <li>The Partner may use Verification Data as contextual evidence within their own system.</li>
+                        <li>The Partner may cache Verification Data for up to 60 seconds.</li>
+                        <li>The Partner may display TBN certification status to their end users with proper attribution.</li>
+                    </ul>
+
+                    <h3>5. Prohibited Use</h3>
+                    <ul>
+                        <li>The Partner must not resell, sublicence, or redistribute API access to third parties.</li>
+                        <li>The Partner must not reverse engineer, scrape, or attempt to replicate the TBN Protocol.</li>
+                        <li>The Partner must not present TBN Verification Data as their own certification or endorsement.</li>
+                        <li>The Partner must not use the API to modify, create, or delete TBN certifications.</li>
+                        <li>The Partner must not claim TBN endorsement or partnership without written consent.</li>
+                        <li>The Partner must not use the API for any unlawful purpose.</li>
+                    </ul>
+
+                    <h3>6. Attribution</h3>
+                    <ul>
+                        <li>When displaying TBN trust data to end users, the Partner must include: "Agent certification provided by TBN Protocol (Hardin AI Solutions)".</li>
+                        <li>The Partner must not alter or misrepresent the meaning of Verification Data.</li>
+                    </ul>
+
+                    <h3>7. Data & Privacy</h3>
+                    <ul>
+                        <li>TBN does not share personal data through the API. Verification Data relates to AI agents, not individuals.</li>
+                        <li>The Partner's use of the API must comply with applicable data protection laws (UK GDPR, EU GDPR).</li>
+                        <li>Hardin logs API calls (timestamp, key hash, endpoint, agent_id queried) for security and billing purposes.</li>
+                    </ul>
+
+                    <h3>8. Liability & Boundaries</h3>
+                    <ul>
+                        <li>TBN provides agent-level trust state only. It does not determine or attribute responsibility for agent behaviour.</li>
+                        <li>Verification Data is provided "as is". Hardin does not guarantee that a certified agent will behave correctly.</li>
+                        <li>The Partner is solely responsible for how they interpret and act on Verification Data.</li>
+                        <li>Hardin's total liability is limited to the fees paid by the Partner in the preceding 12 months.</li>
+                    </ul>
+
+                    <h3>9. Termination</h3>
+                    <ul>
+                        <li>Either party may terminate this agreement with 30 days written notice.</li>
+                        <li>Hardin may terminate immediately if the Partner breaches these terms.</li>
+                        <li>On termination, the Partner must stop using the API and delete any cached Verification Data.</li>
+                    </ul>
+
+                    <h3>10. Governing Law</h3>
+                    <ul>
+                        <li>These terms are governed by the laws of England and Wales.</li>
+                        <li>Disputes shall be resolved in the courts of England and Wales.</li>
+                    </ul>
+
+                    <h3>11. Changes</h3>
+                    <ul>
+                        <li>Hardin may update these terms with 30 days notice to the Partner's registered email.</li>
+                        <li>Continued use of the API after notice constitutes acceptance of updated terms.</li>
+                    </ul>
+
+                    <h3>12. Open Source</h3>
+                    <ul>
+                        <li>The TBN Protocol is licensed under AGPL-3.0. Commercial use of the protocol itself (beyond API access) requires a separate commercial licence from Hardin Enterprises Ltd.</li>
+                    </ul>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="accept-terms" name="accept_terms" required>
+                    <label for="accept-terms">I have read and accept the TBN Protocol Integration Partner API Terms on behalf of my company. I confirm I have authority to enter into this agreement.</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="accept-data" name="accept_data" required>
+                    <label for="accept-data">I understand that TBN provides agent-level trust state only, and does not determine responsibility for agent behaviour.</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="accept-security" name="accept_security" required>
+                    <label for="accept-security">I agree to keep the API key confidential and notify Hardin immediately if it is compromised.</label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Submit Partner Application</button>
+        </form>
+
+        <div id="success-msg" class="success-msg">
+            <h2>✅ Application Submitted</h2>
+            <p>Thank you. Your integration partner application has been received.<br><br>
+            We will review your application and, once approved, send your API key to the email address you provided.<br><br>
+            This typically takes 1–2 business days.<br><br>
+            If you have questions, contact <a href="mailto:burhan@hardinai.co.uk">burhan@hardinai.co.uk</a></p>
+        </div>
+
+        <div class="footer">
+            <p>TBN Protocol — Hardin Enterprises Ltd &copy; 2026<br>
+            <a href="https://tbn.hardinai.co.uk">Dashboard</a> · <a href="https://github.com/burhanyanbolu-design/tbn-protocol">GitHub</a> · <a href="mailto:burhan@hardinai.co.uk">Contact</a></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('partner-form');
+        const errorMsg = document.getElementById('error-msg');
+        const successMsg = document.getElementById('success-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // Validate checkboxes
+            if (!data.accept_terms || !data.accept_data || !data.accept_security) {
+                errorMsg.textContent = 'You must accept all terms and conditions to proceed.';
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Partner Application';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/partners/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        company_name: data.company_name,
+                        contact_name: data.contact_name,
+                        email: data.email,
+                        website: data.website || '',
+                        country: data.country || '',
+                        purpose: data.purpose,
+                        integration_type: data.integration_type,
+                        volume: data.volume || 'low',
+                        endpoints: data.endpoints || 'verify_full',
+                        accepted_terms: true,
+                        accepted_at: new Date().toISOString()
+                    })
+                });
+
+                const result = await res.json();
+
+                if (res.ok && result.success) {
+                    form.style.display = 'none';
+                    successMsg.style.display = 'block';
+                } else {
+                    errorMsg.textContent = result.error || 'Something went wrong. Please try again.';
+                    errorMsg.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Partner Application';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Network error. Please try again.';
+                errorMsg.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Partner Application';
+            }
+        });
+    </script>
+</body>
+</html>
