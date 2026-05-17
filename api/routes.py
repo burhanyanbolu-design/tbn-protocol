@@ -98,7 +98,8 @@ def _db_log(table: str, **kwargs):
             user="hardin_admin",
             password="hardin2026",
             host="localhost",
-            port=5433
+            port=5433,
+            connect_timeout=5
         )
         cur  = conn.cursor()
         cols = ", ".join(kwargs.keys())
@@ -1226,3 +1227,294 @@ def boomi_health():
 
 
 # ── End of Boomi Integration ─────────────────────────────────────────
+
+
+# ── POST /api/verify/full — Full Trust State Verification ────────────
+#
+# Integration endpoint for external governance systems (e.g. CLARIXO).
+# Returns a complete trust snapshot for an agent at a point in time.
+# READ-ONLY — no state is modified. API key required.
+#
+# Boundary: TBN verifies agent-level trust state.
+#           External systems handle behavior-level responsibility.
+# ─────────────────────────────────────────────────────────────────────
+
+@api.route("/verify/full", methods=["POST"])
+@require_api_key
+def verify_full():
+    """
+    Full agent trust-state verification.
+    Returns certification, attestation, budget, policy, and bounds status
+    for a given agent at the current moment.
+
+    Request:
+        {
+            "agent_id": "tbn-bot-xxxx",
+            "endpoint": "https://...",        (optional)
+            "fingerprint": "sha256:...",      (optional)
+            "timestamp": "ISO8601"            (optional — defaults to now)
+        }
+
+    Response:
+        {
+            "agent_id": "...",
+            "certification_status": "VALID|EXPIRED|REVOKED|UNKNOWN",
+            "attestation_status": "MATCHED|MISMATCH|NO_RECORD",
+            "within_bounds": true/false,
+            "policy_status": "COMPLIANT|DRIFTED|VIOLATED",
+            "budget_status": "WITHIN_LIMITS|EXCEEDED|SUSPENDED|NO_BUDGET",
+            "cert_level": "COMMUNITY|STANDARD|RESTRICTED|NONE",
+            "violations": 0,
+            "last_tested": "ISO8601 or null",
+            "verification_time": "ISO8601"
+        }
+    """
+    import json as _json
+    import hashlib as _hashlib
+    import uuid as _uuid
+
+    body = request.get_json() or {}
+    agent_id = body.get("agent_id", "").strip()
+    fingerprint = body.get("fingerprint", "").strip()
+
+    if not agent_id:
+        return jsonify({"error": "agent_id is required"}), 400
+
+    now = datetime.now(timezone.utc)
+    verification_id = f"tbn_vrf_{_uuid.uuid4().hex[:16]}"
+
+    # ── 1. Certification Status ───────────────────────────────────────
+    cert = ca.get_cert(agent_id)
+    if not cert:
+        certification_status = "UNKNOWN"
+        cert_level = "NONE"
+        violations = 0
+    elif not cert.valid:
+        certification_status = "REVOKED"
+        cert_level = cert.level.value if cert.level else "NONE"
+        violations = cert.violation_count
+    else:
+        certification_status = "VALID"
+        cert_level = cert.level.value
+        violations = cert.violation_count
+
+    # ── 2. Attestation Status (fingerprint match) ─────────────────────
+    attestation_status = "NO_RECORD"
+    last_tested = None
+
+    try:
+        monitoring_file = "data/bot_monitoring.json"
+        if os.path.exists(monitoring_file):
+            with open(monitoring_file, "r") as f:
+                monitoring = _json.load(f)
+            bot_monitor = monitoring.get(agent_id, {})
+            last_tested = bot_monitor.get("last_tested")
+
+            if fingerprint and bot_monitor.get("fingerprint"):
+                if bot_monitor["fingerprint"] == fingerprint:
+                    attestation_status = "MATCHED"
+                else:
+                    attestation_status = "MISMATCH"
+            elif bot_monitor.get("fingerprint"):
+                # We have a fingerprint on record but caller didn't send one
+                attestation_status = "NO_RECORD"
+    except Exception:
+        pass
+
+    # ── 3. Budget Status ──────────────────────────────────────────────
+    budget_status = "NO_BUDGET"
+
+    try:
+        budgets_file = "data/bot_budgets.json"
+        if os.path.exists(budgets_file):
+            with open(budgets_file, "r") as f:
+                budgets = _json.load(f)
+            bot_budget = budgets.get(agent_id)
+            if bot_budget:
+                status = bot_budget.get("status", "active")
+                if status == "suspended":
+                    budget_status = "SUSPENDED"
+                elif status == "exceeded":
+                    budget_status = "EXCEEDED"
+                else:
+                    budget_status = "WITHIN_LIMITS"
+    except Exception:
+        pass
+
+    # ── 4. Policy / Drift Status ──────────────────────────────────────
+    policy_status = "COMPLIANT"
+
+    try:
+        drift_file = "data/compliance_drift.json"
+        if os.path.exists(drift_file):
+            with open(drift_file, "r") as f:
+                drift_data = _json.load(f)
+            bot_drift = drift_data.get(agent_id, {})
+            score = bot_drift.get("score", 100)
+
+            if score >= 80:
+                policy_status = "COMPLIANT"
+            elif score >= 40:
+                policy_status = "DRIFTED"
+            else:
+                policy_status = "VIOLATED"
+    except Exception:
+        pass
+
+    # ── 5. Within Bounds (composite check) ────────────────────────────
+    within_bounds = (
+        certification_status == "VALID"
+        and budget_status in ("WITHIN_LIMITS", "NO_BUDGET")
+        and policy_status == "COMPLIANT"
+        and attestation_status != "MISMATCH"
+    )
+
+    # ── Log this verification ─────────────────────────────────────────
+    state.log_activity(
+        "verify",
+        f"🔍 Full verification: {agent_id[:20]}... → {'✅ TRUSTED' if within_bounds else '⚠️ ISSUES'}",
+        {"agent_id": agent_id, "within_bounds": within_bounds, "source": "external_governance"},
+    )
+
+    # ── Build response ────────────────────────────────────────────────
+    response_data = {
+        "verification_id":      verification_id,
+        "agent_id":             agent_id,
+        "certification_status": certification_status,
+        "attestation_status":   attestation_status,
+        "within_bounds":        within_bounds,
+        "policy_status":        policy_status,
+        "budget_status":        budget_status,
+        "cert_level":           cert_level,
+        "violations":           violations,
+        "last_tested":          last_tested,
+        "verification_time":    now.isoformat(),
+    }
+
+    # ── Response hash (tamper-evident snapshot) ───────────────────────
+    # SHA-256 of the canonical JSON response — allows CLARIXO (or any
+    # consumer) to prove the verification result hasn't been altered.
+    hash_input = _json.dumps(response_data, sort_keys=True, separators=(",", ":"))
+    response_data["response_hash"] = _hashlib.sha256(hash_input.encode()).hexdigest()
+
+    return jsonify(response_data)
+
+
+# ── POST /api/partners/register — Partner Application ────────────────
+#
+# Public endpoint — no API key needed (they're applying for one).
+# Stores the application and notifies admin.
+# ─────────────────────────────────────────────────────────────────────
+
+@api.route("/partners/register", methods=["POST"])
+def partner_register():
+    """
+    Store an integration partner application.
+    Admin reviews and issues API key manually.
+    """
+    import json as _json
+
+    body = request.get_json() or {}
+
+    # Required fields
+    company_name = body.get("company_name", "").strip()
+    contact_name = body.get("contact_name", "").strip()
+    email = body.get("email", "").strip()
+    purpose = body.get("purpose", "").strip()
+    integration_type = body.get("integration_type", "").strip()
+    accepted_terms = body.get("accepted_terms", False)
+
+    if not company_name:
+        return jsonify({"error": "Company name is required"}), 400
+    if not contact_name:
+        return jsonify({"error": "Contact name is required"}), 400
+    if not email or "@" not in email:
+        return jsonify({"error": "Valid email is required"}), 400
+    if not purpose:
+        return jsonify({"error": "Integration purpose is required"}), 400
+    if not accepted_terms:
+        return jsonify({"error": "You must accept the terms and conditions"}), 400
+
+    # Build application record
+    application = {
+        "company_name": company_name,
+        "contact_name": contact_name,
+        "email": email,
+        "website": body.get("website", ""),
+        "country": body.get("country", ""),
+        "purpose": purpose,
+        "integration_type": integration_type,
+        "volume": body.get("volume", "low"),
+        "endpoints": body.get("endpoints", "verify_full"),
+        "accepted_terms": True,
+        "accepted_at": body.get("accepted_at", datetime.now(timezone.utc).isoformat()),
+        "submitted_at": datetime.now(timezone.utc).isoformat(),
+        "status": "pending",  # pending | approved | rejected
+        "api_key_issued": False,
+        "ip_address": request.remote_addr or "unknown",
+    }
+
+    # Save to file
+    partners_file = "data/partner_applications.json"
+    applications = []
+    if os.path.exists(partners_file):
+        try:
+            with open(partners_file, "r") as f:
+                applications = _json.load(f)
+        except Exception:
+            applications = []
+
+    applications.append(application)
+    os.makedirs("data", exist_ok=True)
+    with open(partners_file, "w") as f:
+        _json.dump(applications, f, indent=2)
+
+    # Log activity
+    state.log_activity(
+        "register",
+        f"🤝 New partner application: {company_name} ({email})",
+        {"company": company_name, "type": integration_type},
+    )
+
+    # Send notification email to admin
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+
+        smtp_host = os.environ.get("TBN_SMTP_HOST", "")
+        smtp_user = os.environ.get("TBN_SMTP_USER", "")
+        smtp_pass = os.environ.get("TBN_SMTP_PASS", "")
+
+        if smtp_host and smtp_user:
+            msg = MIMEText(
+                f"New TBN Integration Partner Application\n"
+                f"{'=' * 40}\n\n"
+                f"Company: {company_name}\n"
+                f"Contact: {contact_name}\n"
+                f"Email: {email}\n"
+                f"Website: {body.get('website', 'N/A')}\n"
+                f"Country: {body.get('country', 'N/A')}\n"
+                f"Type: {integration_type}\n"
+                f"Volume: {body.get('volume', 'low')}\n"
+                f"Purpose: {purpose}\n\n"
+                f"Terms accepted: Yes\n"
+                f"Submitted: {application['submitted_at']}\n\n"
+                f"Action required: Review and issue API key if approved."
+            )
+            msg["Subject"] = f"[TBN] New Partner Application: {company_name}"
+            msg["From"] = smtp_user
+            msg["To"] = "burhan@hardinai.co.uk"
+
+            with smtplib.SMTP(smtp_host, 587) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+    except Exception as e:
+        # Email notification is best-effort — don't fail the application
+        print(f"[PARTNER] Email notification failed: {e}")
+
+    return jsonify({
+        "success": True,
+        "message": f"Application received for {company_name}. We will review and send your API key to {email} once approved.",
+        "status": "pending",
+    }), 201

@@ -136,8 +136,8 @@ def violations_dashboard():
     return render_template("violations_dashboard.html")
 
 
-@app.route("/demo")
-def demo():
+@app.route("/demo/live")
+def demo_live():
     return render_template("demo.html")
 
 
@@ -149,6 +149,11 @@ def demo_nhs():
 @app.route("/philosophy")
 def philosophy():
     return render_template("philosophy_chat.html")
+
+
+@app.route("/partners")
+def partners_page():
+    return render_template("partner_register.html")
 
 
 @app.route("/health")
