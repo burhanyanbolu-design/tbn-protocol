@@ -156,6 +156,21 @@ def partners_page():
     return render_template("partner_register.html")
 
 
+@app.route("/verify")
+def verify_page():
+    return render_template("verify_public.html")
+
+
+@app.route("/admin/partners")
+def partner_monitor_page():
+    # Require admin secret via query param: /admin/partners?key=hardin-admin-2026-secret
+    admin_key = request.args.get("key", "")
+    expected = os.environ.get("TBN_ADMIN_SECRET", "")
+    if not expected or admin_key != expected:
+        return "Not Found", 404
+    return render_template("partner_monitor.html")
+
+
 @app.route("/health")
 def health():
     return {"status": "ok", "service": "tbn-protocol"}

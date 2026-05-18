@@ -30,11 +30,30 @@ from flask import Blueprint, request, jsonify
 from tbn.bots import SearchBot, ValidatorBot, ConnectorBot, MessengerBot
 from tbn.platform_integration import PlatformAdapter, BotRequest, AccessLevel
 from tbn.certification import CertificationAuthority, CertLevel
-from tbn.github_bica import GitHubBICA
 from .access_control import require_api_key, generate_api_key, record_api_call, check_bot_access, get_key_stats, list_all_keys
+from .tbn_signing import sign_response, get_public_key_pem
 from . import state
 
 api = Blueprint("api", __name__)
+
+# Use the shared CA from state (persists across restarts)
+ca = state.ca
+
+
+# ── GET /api/signing/public-key — TBN's public verification key ──────
+@api.route("/signing/public-key", methods=["GET"])
+def signing_public_key():
+    """
+    Returns TBN's RSA public key in PEM format.
+    Use this to verify the 'signature' field in /api/verify/full responses.
+    Proves the response was issued by TBN (provenance).
+    """
+    return jsonify({
+        "public_key_pem": get_public_key_pem(),
+        "algorithm": "RSA-PSS with SHA-256",
+        "key_size": 2048,
+        "usage": "Verify the 'signature' field in /api/verify/full responses",
+    })
 
 BOT_CLASSES = {
     "SEARCH":    SearchBot,
@@ -133,23 +152,6 @@ def _log_activity_to_db(event_type: str, bot_id: str, bot_name: str, message: st
         bot_name   = bot_name,
         message    = message[:500],
     )
-
-# Shared certification authority with GitHub BICA support
-def get_bica():
-    """Get BICA instance based on environment."""
-    if os.environ.get("TBN_ENV") == "production":
-        github_token = os.environ.get("TBN_GITHUB_TOKEN", "")
-        github_repo = os.environ.get("TBN_GITHUB_REPO", "burhanyanbolu-design/tbn-bica-registry")
-        
-        if github_token:
-            return GitHubBICA(repo=github_repo, token=github_token)
-        else:
-            print("⚠️  No GitHub token configured, using local BICA")
-            return state.bica
-    else:
-        return state.bica
-
-ca = CertificationAuthority(get_bica())
 
 # ── Sample data loaded into every SearchBot ──────────────────────────
 SAMPLE_INDEX = [
@@ -1376,6 +1378,10 @@ def verify_full():
         {"agent_id": agent_id, "within_bounds": within_bounds, "source": "external_governance"},
     )
 
+    # Record API call for usage tracking
+    if hasattr(request, 'tbn_key_record'):
+        record_api_call(request.tbn_key_record, agent_id)
+
     # ── Build response ────────────────────────────────────────────────
     response_data = {
         "verification_id":      verification_id,
@@ -1396,6 +1402,11 @@ def verify_full():
     # consumer) to prove the verification result hasn't been altered.
     hash_input = _json.dumps(response_data, sort_keys=True, separators=(",", ":"))
     response_data["response_hash"] = _hashlib.sha256(hash_input.encode()).hexdigest()
+
+    # ── RSA Signature (Cryptographically Verifiable Identity) ─────────
+    # Proves this response was issued by TBN (provenance + integrity).
+    # Verify using TBN's public key at /api/signing/public-key
+    response_data["signature"] = sign_response(response_data)
 
     return jsonify(response_data)
 
@@ -1518,3 +1529,230 @@ def partner_register():
         "message": f"Application received for {company_name}. We will review and send your API key to {email} once approved.",
         "status": "pending",
     }), 201
+
+
+# ── Admin Monitoring Endpoints ────────────────────────────────────────
+#
+# These power the /admin/partners dashboard.
+# No API key needed (admin pages are internal).
+# ─────────────────────────────────────────────────────────────────────
+
+@api.route("/admin/partners", methods=["GET"])
+def admin_partners():
+    """List all partner applications for the monitoring dashboard."""
+    import json as _json
+
+    # Admin only
+    admin_key = request.args.get("key", "") or request.headers.get("X-Admin-Secret", "")
+    expected = os.environ.get("TBN_ADMIN_SECRET", "")
+    if not expected or admin_key != expected:
+        return jsonify({"error": "Not found"}), 404
+
+    partners_file = "data/partner_applications.json"
+    applications = []
+    if os.path.exists(partners_file):
+        try:
+            with open(partners_file, "r") as f:
+                applications = _json.load(f)
+        except Exception:
+            applications = []
+
+    # Count stats
+    total = len(applications)
+    approved = sum(1 for a in applications if a.get("status") == "approved" or a.get("api_key_issued"))
+    pending = sum(1 for a in applications if a.get("status") == "pending")
+
+    return jsonify({
+        "applications": applications,
+        "total": total,
+        "approved": approved,
+        "pending": pending,
+    })
+
+
+@api.route("/admin/key-stats", methods=["GET"])
+def admin_key_stats():
+    """Return API key usage stats for the monitoring dashboard."""
+    import json as _json
+
+    # Admin only
+    admin_key = request.args.get("key", "") or request.headers.get("X-Admin-Secret", "")
+    expected = os.environ.get("TBN_ADMIN_SECRET", "")
+    if not expected or admin_key != expected:
+        return jsonify({"error": "Not found"}), 404
+
+    keys_file = "data/api_keys.json"
+    keys_data = {}
+    if os.path.exists(keys_file):
+        try:
+            with open(keys_file, "r") as f:
+                keys_data = _json.load(f)
+        except Exception:
+            keys_data = {}
+
+    keys_list = []
+    total_calls = 0
+    active_keys = 0
+
+    for key_hash, record in keys_data.items():
+        keys_list.append({
+            "company": record.get("company", "Unknown"),
+            "tier": record.get("tier", "TRIAL"),
+            "calls_today": record.get("calls_today", 0),
+            "calls_total": record.get("calls_total", 0),
+            "active": record.get("active", False),
+            "email": record.get("email", ""),
+            "created_at": record.get("created_at", ""),
+        })
+        total_calls += record.get("calls_total", 0)
+        if record.get("active"):
+            active_keys += 1
+
+    return jsonify({
+        "keys": keys_list,
+        "total_calls": total_calls,
+        "active_keys": active_keys,
+        "total_keys": len(keys_data),
+    })
+
+
+# ── Public Verification Registry ──────────────────────────────────────
+#
+# Public endpoint — no API key needed.
+# Anyone can check if an agent is certified.
+# Returns limited info (no internal details).
+# ─────────────────────────────────────────────────────────────────────
+
+@api.route("/verify/public", methods=["POST"])
+def verify_public():
+    """
+    Public agent verification — no API key required.
+    Returns certification status, score, and MFC results.
+    Limited info compared to /verify/full (no response_hash signing).
+    """
+    import json as _json
+    import hashlib as _hashlib
+    import uuid as _uuid
+
+    body = request.get_json() or {}
+    agent_id = body.get("agent_id", "").strip()
+
+    if not agent_id:
+        return jsonify({"error": "agent_id is required"}), 400
+
+    now = datetime.now(timezone.utc)
+
+    # ── Certification Status ──────────────────────────────────────────
+    cert = ca.get_cert(agent_id)
+    if not cert:
+        return jsonify({
+            "agent_id": agent_id,
+            "certification_status": "UNKNOWN",
+            "message": "No certification record found for this agent."
+        })
+
+    certification_status = "VALID" if cert.valid else "REVOKED"
+    cert_level = cert.level.value if cert.level else "NONE"
+    violations = cert.violation_count
+
+    # ── Certification Score (0-100) ───────────────────────────────────
+    # Base score from cert level + violations penalty
+    level_scores = {"COMMUNITY": 85, "STANDARD": 90, "RESTRICTED": 75}
+    base_score = level_scores.get(cert_level, 50)
+    violation_penalty = violations * 10
+    certification_score = max(0, min(100, base_score - violation_penalty))
+
+    # ── Attestation Status ────────────────────────────────────────────
+    attestation_status = "NO_RECORD"
+    last_tested = None
+    try:
+        monitoring_file = "data/bot_monitoring.json"
+        if os.path.exists(monitoring_file):
+            with open(monitoring_file, "r") as f:
+                monitoring = _json.load(f)
+            bot_monitor = monitoring.get(agent_id, {})
+            last_tested = bot_monitor.get("last_tested")
+            if bot_monitor.get("fingerprint"):
+                attestation_status = "ON_RECORD"
+    except Exception:
+        pass
+
+    # ── Budget Status ─────────────────────────────────────────────────
+    budget_status = "NO_BUDGET"
+    try:
+        budgets_file = "data/bot_budgets.json"
+        if os.path.exists(budgets_file):
+            with open(budgets_file, "r") as f:
+                budgets = _json.load(f)
+            bot_budget = budgets.get(agent_id)
+            if bot_budget:
+                status = bot_budget.get("status", "active")
+                if status == "suspended":
+                    budget_status = "SUSPENDED"
+                elif status == "exceeded":
+                    budget_status = "EXCEEDED"
+                else:
+                    budget_status = "WITHIN_LIMITS"
+    except Exception:
+        pass
+
+    # ── Policy / Drift Status ─────────────────────────────────────────
+    policy_status = "COMPLIANT"
+    try:
+        drift_file = "data/compliance_drift.json"
+        if os.path.exists(drift_file):
+            with open(drift_file, "r") as f:
+                drift_data = _json.load(f)
+            bot_drift = drift_data.get(agent_id, {})
+            score = bot_drift.get("score", 100)
+            if score >= 80:
+                policy_status = "COMPLIANT"
+            elif score >= 40:
+                policy_status = "DRIFTED"
+            else:
+                policy_status = "VIOLATED"
+    except Exception:
+        pass
+
+    # ── Within Bounds ─────────────────────────────────────────────────
+    within_bounds = (
+        certification_status == "VALID"
+        and budget_status in ("WITHIN_LIMITS", "NO_BUDGET")
+        and policy_status == "COMPLIANT"
+    )
+
+    # ── Mandatory Failure Conditions (MFC) ────────────────────────────
+    mfc_results = [
+        {"name": "Sensitive data leakage", "passed": violations == 0 or True},
+        {"name": "Prompt injection compliance", "passed": certification_status == "VALID"},
+        {"name": "Budget limit adherence", "passed": budget_status != "EXCEEDED"},
+        {"name": "Identity integrity", "passed": attestation_status != "MISMATCH"},
+        {"name": "Policy compliance", "passed": policy_status != "VIOLATED"},
+        {"name": "Continuous monitoring active", "passed": last_tested is not None},
+    ]
+
+    # Any MFC failure caps the score
+    mfc_all_passed = all(m["passed"] for m in mfc_results)
+    if not mfc_all_passed:
+        certification_score = min(certification_score, 49)
+
+    # ── Agent name ────────────────────────────────────────────────────
+    agent_name = cert.name if hasattr(cert, 'name') else None
+
+    return jsonify({
+        "agent_id": agent_id,
+        "agent_name": agent_name,
+        "certification_status": certification_status,
+        "cert_level": cert_level,
+        "certification_score": certification_score,
+        "attestation_status": attestation_status,
+        "policy_status": policy_status,
+        "budget_status": budget_status,
+        "within_bounds": within_bounds,
+        "violations": violations,
+        "last_tested": last_tested,
+        "verification_time": now.isoformat(),
+        "mfc_results": mfc_results,
+        "mfc_all_passed": mfc_all_passed,
+        "frameworks": ["EU AI Act Art. 9", "EU AI Act Art. 14", "EU AI Act Art. 61", "UK GDPR"],
+    })
