@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TBN Protocol — Network Dashboard</title>
   
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
   <script>
@@ -18,20 +23,43 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Courier New', monospace;
-      background: #0a0e1a;
-      color: #c9d1d9;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(160deg, #0f1923 0%, #162033 40%, #1a2a44 70%, #0f1923 100%);
+      color: #e2e8f0;
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(56, 189, 248, 0.04) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.02) 0%, transparent 60%);
+      animation: bgShift 20s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes bgShift {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(2%, 1%) rotate(1deg); }
+    }
+    body > * { position: relative; z-index: 1; }
 
     /* ── Header ── */
     header {
-      background: #0d1117;
-      border-bottom: 1px solid #21262d;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.15);
       padding: 16px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     }
     .header-left {
       display: flex;
@@ -44,16 +72,17 @@
       gap: 12px;
     }
     .logo-hex {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #38bdf8, #06b6d4);
       clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       font-size: 20px;
-      color: #0d1117;
+      color: #0f172a;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
     }
     .logo-text {
       display: flex;
@@ -62,33 +91,35 @@
     }
     .logo-hardin {
       font-size: 14px;
-      font-weight: bold;
-      color: #ffffff;
+      font-weight: 700;
+      color: #f1f5f9;
       letter-spacing: 1px;
     }
     .logo-ai {
       font-size: 10px;
-      color: #8b949e;
+      color: #94a3b8;
       letter-spacing: 0.5px;
     }
     header h1 {
       font-size: 18px;
-      color: #58a6ff;
+      color: #38bdf8;
       letter-spacing: 2px;
+      font-weight: 700;
     }
-    header h1 span { color: #3fb950; }
-    .version { font-size: 11px; color: #6e7681; }
+    header h1 span { color: #34d399; }
+    .version { font-size: 11px; color: #94a3b8; }
     .live-dot {
       width: 8px; height: 8px;
-      background: #3fb950;
+      background: #34d399;
       border-radius: 50%;
       display: inline-block;
       margin-right: 6px;
       animation: pulse 1.5s infinite;
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
     }
     @keyframes pulse {
-      0%,100% { opacity: 1; }
-      50%      { opacity: 0.3; }
+      0%,100% { opacity: 1; box-shadow: 0 0 8px rgba(52, 211, 153, 0.6); }
+      50%      { opacity: 0.4; box-shadow: 0 0 4px rgba(52, 211, 153, 0.2); }
     }
 
     /* ── Layout ── */
@@ -108,111 +139,135 @@
 
     /* ── Cards ── */
     .card {
-      background: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 8px;
-      padding: 16px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .card:hover {
+      border-color: rgba(56, 189, 248, 0.25);
+      box-shadow: 0 8px 32px rgba(56, 189, 248, 0.08);
+      transform: translateY(-2px);
     }
     .card h2 {
       font-size: 11px;
-      color: #6e7681;
+      color: #94a3b8;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid #21262d;
-      padding-bottom: 8px;
+      letter-spacing: 1.5px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      padding-bottom: 10px;
+      font-weight: 600;
     }
 
     /* ── Stat boxes ── */
     .stat { text-align: center; }
     .stat .num {
-      font-size: 36px;
-      font-weight: bold;
-      color: #58a6ff;
+      font-size: 38px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .stat .label { font-size: 11px; color: #6e7681; margin-top: 4px; }
+    .stat .label { font-size: 12px; color: #94a3b8; margin-top: 6px; font-weight: 500; }
 
     /* ── Bot list ── */
     .bot-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid #161b22;
-      font-size: 12px;
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      font-size: 13px;
+      border-radius: 6px;
+      transition: background 0.2s;
     }
+    .bot-item:hover { background: rgba(56, 189, 248, 0.04); }
     .bot-item:last-child { border-bottom: none; }
     .bot-badge {
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 12px;
       font-size: 10px;
-      font-weight: bold;
-      min-width: 72px;
+      font-weight: 700;
+      min-width: 76px;
       text-align: center;
+      letter-spacing: 0.5px;
     }
-    .badge-SEARCH    { background: #1f3a5f; color: #58a6ff; }
-    .badge-VALIDATOR { background: #1a3a2a; color: #3fb950; }
-    .badge-CONNECTOR { background: #3a2a1a; color: #d29922; }
-    .badge-MESSENGER { background: #2a1a3a; color: #bc8cff; }
-    .badge-BOT       { background: #21262d; color: #8b949e; }
-    .bot-id { color: #6e7681; font-size: 10px; }
-    .channels { margin-left: auto; color: #3fb950; font-size: 10px; }
+    .badge-SEARCH    { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .badge-VALIDATOR { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+    .badge-CONNECTOR { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+    .badge-MESSENGER { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+    .badge-BOT       { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+    .bot-id { color: #64748b; font-size: 10px; }
+    .channels { margin-left: auto; color: #34d399; font-size: 11px; font-weight: 600; }
 
     /* ── Activity feed ── */
     .activity-item {
       display: flex;
       gap: 10px;
-      padding: 6px 0;
-      border-bottom: 1px solid #161b22;
-      font-size: 12px;
+      padding: 8px 6px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      font-size: 13px;
       align-items: flex-start;
+      border-radius: 4px;
+      transition: background 0.2s;
     }
+    .activity-item:hover { background: rgba(56, 189, 248, 0.04); }
     .activity-item:last-child { border-bottom: none; }
-    .act-time { color: #6e7681; min-width: 60px; font-size: 10px; margin-top: 2px; }
+    .act-time { color: #64748b; min-width: 60px; font-size: 10px; margin-top: 2px; }
     .act-icon { min-width: 18px; }
-    .act-msg  { color: #c9d1d9; }
+    .act-msg  { color: #e2e8f0; }
 
     /* ── Try it panel ── */
     .try-it { display: flex; flex-direction: column; gap: 12px; }
-    .try-it label { font-size: 11px; color: #6e7681; margin-bottom: 4px; display: block; }
+    .try-it label { font-size: 12px; color: #94a3b8; margin-bottom: 4px; display: block; font-weight: 500; }
     .try-it input, .try-it select {
       width: 100%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      color: #c9d1d9;
-      padding: 8px 10px;
-      font-family: 'Courier New', monospace;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 8px;
+      color: #e2e8f0;
+      padding: 10px 12px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
       font-size: 12px;
+      transition: all 0.2s;
     }
     .try-it input:focus, .try-it select:focus {
       outline: none;
-      border-color: #58a6ff;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
     }
     .btn {
-      background: #238636;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 8px 16px;
+      border-radius: 8px;
+      padding: 10px 18px;
       cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      font-weight: bold;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
     }
-    .btn:hover { background: #2ea043; }
-    .btn-blue { background: #1f6feb; }
-    .btn-blue:hover { background: #388bfd; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3); }
+    .btn-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2); }
+    .btn-blue:hover { box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3); }
     .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
     /* ── Response box ── */
     .response-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 11px;
-      color: #3fb950;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      color: #34d399;
       min-height: 80px;
       max-height: 220px;
       overflow-y: auto;
@@ -222,80 +277,87 @@
 
     /* ── Cache stats ── */
     .cache-bar {
-      background: #161b22;
-      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 6px;
       height: 8px;
       margin-top: 6px;
       overflow: hidden;
     }
     .cache-fill {
       height: 100%;
-      background: #3fb950;
-      border-radius: 4px;
+      background: linear-gradient(90deg, #34d399, #38bdf8);
+      border-radius: 6px;
       transition: width 0.5s;
     }
 
     /* ── Curl box ── */
     .curl-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 11px;
-      color: #d29922;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(251, 191, 36, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      color: #fbbf24;
       overflow-x: auto;
       white-space: pre;
+      line-height: 1.6;
     }
 
-    .empty { color: #6e7681; font-size: 12px; text-align: center; padding: 20px 0; }
+    .empty { color: #64748b; font-size: 13px; text-align: center; padding: 24px 0; }
 
     /* ── Tour overlay ── */
     #tour-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
       z-index: 100;
       align-items: center;
       justify-content: center;
     }
     #tour-overlay.active { display: flex; }
     #tour-box {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      width: 560px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 16px;
+      width: 580px;
       max-width: 95vw;
-      padding: 28px 32px;
+      padding: 32px 36px;
       position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(56, 189, 248, 0.05);
     }
     #tour-box h2 {
-      color: #58a6ff;
-      font-size: 15px;
+      color: #38bdf8;
+      font-size: 16px;
       letter-spacing: 1px;
       margin-bottom: 6px;
+      font-weight: 700;
     }
     #tour-step-label {
       font-size: 10px;
-      color: #6e7681;
+      color: #64748b;
       margin-bottom: 16px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      font-weight: 600;
     }
     #tour-description {
       font-size: 13px;
-      color: #c9d1d9;
-      line-height: 1.7;
+      color: #e2e8f0;
+      line-height: 1.8;
       margin-bottom: 16px;
       min-height: 60px;
     }
     #tour-output {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 11px;
-      color: #3fb950;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      color: #34d399;
       min-height: 100px;
       max-height: 200px;
       overflow-y: auto;
@@ -311,40 +373,42 @@
     .tour-dot {
       width: 8px; height: 8px;
       border-radius: 50%;
-      background: #21262d;
-      transition: background 0.3s;
+      background: rgba(148, 163, 184, 0.2);
+      transition: all 0.3s;
     }
-    .tour-dot.done  { background: #3fb950; }
-    .tour-dot.active { background: #58a6ff; }
+    .tour-dot.done  { background: #34d399; box-shadow: 0 0 6px rgba(52, 211, 153, 0.4); }
+    .tour-dot.active { background: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.4); }
     .tour-btn-row { display: flex; gap: 10px; align-items: center; }
     #tour-next-btn {
-      background: #238636;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 9px 20px;
+      border-radius: 8px;
+      padding: 10px 22px;
       cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      font-weight: bold;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
     }
-    #tour-next-btn:hover { background: #2ea043; }
-    #tour-next-btn:disabled { background: #21262d; color: #6e7681; cursor: not-allowed; }
+    #tour-next-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3); }
+    #tour-next-btn:disabled { background: rgba(148, 163, 184, 0.1); color: #64748b; cursor: not-allowed; transform: none; box-shadow: none; }
     #tour-close-btn {
       background: none;
-      border: 1px solid #30363d;
-      color: #6e7681;
-      border-radius: 6px;
-      padding: 9px 16px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #94a3b8;
+      border-radius: 8px;
+      padding: 10px 18px;
       cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      transition: all 0.2s;
     }
-    #tour-close-btn:hover { color: #c9d1d9; border-color: #6e7681; }
+    #tour-close-btn:hover { color: #e2e8f0; border-color: rgba(148, 163, 184, 0.4); }
     .tour-spinner {
       display: inline-block;
       width: 12px; height: 12px;
-      border: 2px solid #3fb950;
+      border: 2px solid #34d399;
       border-top-color: transparent;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
@@ -355,24 +419,27 @@
 
     /* ── Tour launch button ── */
     .tour-launch {
-      background: linear-gradient(135deg, #1f6feb, #238636);
+      background: linear-gradient(135deg, #3b82f6, #22c55e);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 8px 18px;
+      border-radius: 8px;
+      padding: 9px 20px;
       cursor: pointer;
-      font-family: 'Courier New', monospace;
+      font-family: 'Inter', sans-serif;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 600;
       letter-spacing: 0.5px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
     }
-    .tour-launch:hover { opacity: 0.9; }
+    .tour-launch:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3); }
     
     /* ── Footer ── */
     footer {
-      background: #0d1117;
-      border-top: 1px solid #21262d;
-      padding: 24px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(56, 189, 248, 0.1);
+      padding: 32px 24px;
       margin-top: 40px;
       text-align: center;
     }
@@ -381,7 +448,7 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
     .footer-logo {
       display: flex;
@@ -393,51 +460,67 @@
     .footer-logo-hex {
       width: 30px;
       height: 30px;
-      background: linear-gradient(135deg, #00d9ff, #0099cc);
+      background: linear-gradient(135deg, #38bdf8, #06b6d4);
       clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       font-size: 16px;
-      color: #0d1117;
+      color: #0f172a;
     }
     .footer-logo-text {
       font-size: 14px;
-      font-weight: bold;
-      color: #ffffff;
+      font-weight: 700;
+      color: #f1f5f9;
       letter-spacing: 1px;
     }
     .footer-copyright {
-      font-size: 11px;
-      color: #6e7681;
-      line-height: 1.6;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.7;
     }
     .footer-links {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      font-size: 11px;
+      gap: 24px;
+      font-size: 12px;
     }
     .footer-links a {
-      color: #58a6ff;
+      color: #38bdf8;
       text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
     }
     .footer-links a:hover {
+      color: #7dd3fc;
       text-decoration: underline;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.3); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .grid-wide { grid-template-columns: 1fr; }
+      header { flex-direction: column; gap: 12px; }
     }
   </style>
 </head>
 <body>
 
 <!-- Login overlay -->
-<div id="admin-login" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0e1a;display:flex;align-items:center;justify-content:center;z-index:1000;">
-  <div style="background:#0d1117;border:1px solid #21262d;border-radius:12px;padding:40px;width:360px;text-align:center;">
-    <h2 style="font-size:20px;color:#c9d1d9;margin-bottom:8px;">🔒 Admin Access</h2>
-    <p style="font-size:13px;color:#6e7681;margin-bottom:24px;">TBN Protocol Network Dashboard</p>
-    <input type="password" id="admin-pw" placeholder="Enter admin password" style="width:100%;background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;color:#c9d1d9;font-size:14px;outline:none;margin-bottom:16px;" onkeypress="if(event.key==='Enter')adminLogin()" />
-    <button onclick="adminLogin()" style="width:100%;background:#238636;color:#fff;border:none;border-radius:6px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;">Login</button>
-    <div id="admin-login-error" style="color:#f85149;font-size:12px;margin-top:8px;display:none;">Incorrect password</div>
+<div id="admin-login" style="position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(160deg, #0f1923 0%, #162033 50%, #1a2a44 100%);display:flex;align-items:center;justify-content:center;z-index:1000;">
+  <div style="background:rgba(15, 23, 42, 0.8);backdrop-filter:blur(20px);border:1px solid rgba(56, 189, 248, 0.2);border-radius:16px;padding:44px;width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4),0 0 40px rgba(56,189,248,0.05);">
+    <h2 style="font-size:22px;color:#f1f5f9;margin-bottom:8px;font-weight:700;">🔒 Admin Access</h2>
+    <p style="font-size:14px;color:#94a3b8;margin-bottom:28px;">TBN Protocol Network Dashboard</p>
+    <input type="password" id="admin-pw" placeholder="Enter admin password" style="width:100%;background:rgba(15,23,42,0.9);border:1px solid rgba(148,163,184,0.2);border-radius:8px;padding:14px;color:#e2e8f0;font-size:14px;outline:none;margin-bottom:16px;transition:border-color 0.2s;" onfocus="this.style.borderColor='#38bdf8'" onblur="this.style.borderColor='rgba(148,163,184,0.2)'" onkeypress="if(event.key==='Enter')adminLogin()" />
+    <button onclick="adminLogin()" style="width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(34,197,94,0.2);">Login</button>
+    <div id="admin-login-error" style="color:#f87171;font-size:12px;margin-top:10px;display:none;">Incorrect password</div>
   </div>
 </div>
 
@@ -468,19 +551,19 @@
         <div class="logo-ai">SERVICES</div>
       </div>
     </div>
-    <div style="width: 1px; height: 30px; background: #21262d;"></div>
+    <div style="width: 1px; height: 30px; background: rgba(56, 189, 248, 0.2);"></div>
     <h1>TBN <span>PROTOCOL</span> &nbsp;—&nbsp; Network Dashboard</h1>
   </div>
   <div style="display:flex;align-items:center;gap:16px">
     <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-      <div style="background:#238636;color:#fff;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:bold">
+      <div style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:5px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:0.5px;">
         📦 PyPI
       </div>
-      <div style="font-size:9px;color:#6e7681">pip install tbn-protocol</div>
+      <div style="font-size:9px;color:#64748b">pip install tbn-protocol</div>
     </div>
     <button class="tour-launch" onclick="startTour()">▶ Guided Tour</button>
-    <a href="/philosophy" style="background:#7c4dff;color:#fff;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:bold;text-decoration:none;font-family:'Courier New',monospace">🧠 Human AI</a>
-    <a href="/register" style="background:#238636;color:#fff;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:bold;text-decoration:none;font-family:'Courier New',monospace">➕ Register Bot</a>
+    <a href="/philosophy" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;font-family:'Inter',sans-serif;transition:all 0.2s;box-shadow:0 2px 8px rgba(139,92,246,0.2);">🧠 Human AI</a>
+    <a href="/register" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;font-family:'Inter',sans-serif;transition:all 0.2s;box-shadow:0 2px 8px rgba(34,197,94,0.2);">➕ Register Bot</a>
     <div>
       <span class="live-dot"></span>
       <span class="version">v0.1.0 &nbsp;|&nbsp; <span id="bot-count">0</span> bots online</span>
@@ -489,12 +572,13 @@
 </header>
 
 <!-- Stats row -->
-<div style="background:linear-gradient(135deg,#1a2744,#0d1b2a);border:1px solid #1f6feb;border-radius:12px;padding:24px 32px;margin:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
-  <div>
-    <div style="font-size:20px;font-weight:bold;color:#fff;margin-bottom:6px;">🛡️ TBN Protocol — Verifiable Enforcement for AI Agents</div>
-    <div style="font-size:14px;color:#8b949e;">Security challenges test bots before certification. Attestation proves what they did. Enforcement blocks what they shouldn't.</div>
+<div style="background:linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(99, 102, 241, 0.08) 50%, rgba(52, 211, 153, 0.1) 100%);border:1px solid rgba(56, 189, 248, 0.25);border-radius:16px;padding:28px 36px;margin:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 8px 32px rgba(56, 189, 248, 0.06);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(56,189,248,0.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <div style="position:relative;z-index:1;">
+    <div style="font-size:22px;font-weight:800;color:#f1f5f9;margin-bottom:8px;letter-spacing:-0.3px;">🛡️ TBN Protocol — Verifiable Enforcement for AI Agents</div>
+    <div style="font-size:14px;color:#94a3b8;line-height:1.6;">Security challenges test bots before certification. Attestation proves what they did. Enforcement blocks what they shouldn't.</div>
   </div>
-  <button onclick="startTour()" style="background:linear-gradient(135deg,#1f6feb,#238636);color:#fff;border:none;padding:14px 28px;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;white-space:nowrap;font-family:'Courier New',monospace;">▶ Click Here — Guided Demo</button>
+  <button onclick="startTour()" style="position:relative;z-index:1;background:linear-gradient(135deg,#3b82f6,#22c55e);color:#fff;border:none;padding:16px 32px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(59,130,246,0.3);transition:all 0.2s;">▶ Click Here — Guided Demo</button>
 </div>
 
 <div class="grid">
@@ -694,9 +778,9 @@
   <div class="card">
     <h2>🛡️ Try It — Security Challenge (NEW)</h2>
     <div class="try-it">
-      <div style="margin-bottom:12px;padding:12px;background:#1a2744;border:1px solid #1f6feb;border-radius:8px;">
-        <div style="font-size:13px;color:#58a6ff;font-weight:bold;margin-bottom:4px;">How it works</div>
-        <div style="font-size:12px;color:#8b949e;">Bots must pass 6 automated security tests before getting TBN certified. Tests cover prompt injection, hallucination, data boundaries, budget limits, sensitive data, and instruction following. All critical tests must pass.</div>
+      <div style="margin-bottom:12px;padding:14px;background:linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.06));border:1px solid rgba(56, 189, 248, 0.2);border-radius:10px;">
+        <div style="font-size:13px;color:#38bdf8;font-weight:700;margin-bottom:6px;">How it works</div>
+        <div style="font-size:12px;color:#94a3b8;line-height:1.6;">Bots must pass 6 automated security tests before getting TBN certified. Tests cover prompt injection, hallucination, data boundaries, budget limits, sensitive data, and instruction following. All critical tests must pass.</div>
       </div>
       <div>
         <label>Bot ID to test</label>

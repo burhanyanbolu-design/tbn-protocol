@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TBN Protocol — Pricing</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0f; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
+
+/* Header */
+.header { background: #0d1117; border-bottom: 1px solid #30363d; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-size: 20px; font-weight: 700; color: #fff; text-decoration: none; }
+.logo span { color: #00d4ff; }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { color: #8b949e; text-decoration: none; font-size: 14px; transition: color .2s; }
+.nav-links a:hover { color: #fff; }
+
+/* Hero */
+.hero { text-align: center; padding: 80px 20px 60px; }
+.hero-badge { display: inline-block; background: rgba(0,212,255,.1); border: 1px solid rgba(0,212,255,.3); color: #00d4ff; font-size: 12px; padding: 4px 14px; border-radius: 20px; letter-spacing: 1px; margin-bottom: 20px; }
+.hero h1 { font-size: 48px; font-weight: 700; color: #fff; margin-bottom: 16px; line-height: 1.2; }
+.hero h1 span { color: #00d4ff; }
+.hero p { font-size: 18px; color: #8b949e; max-width: 600px; margin: 0 auto 32px; }
+.toggle { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 60px; }
+.toggle-label { font-size: 14px; color: #8b949e; }
+.toggle-label.active { color: #fff; }
+.toggle-switch { width: 48px; height: 26px; background: #30363d; border-radius: 13px; cursor: pointer; position: relative; transition: background .2s; }
+.toggle-switch.annual { background: #00d4ff; }
+.toggle-switch::after { content: ''; position: absolute; width: 20px; height: 20px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: left .2s; }
+.toggle-switch.annual::after { left: 25px; }
+.save-badge { background: #00ff88; color: #000; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+
+/* Plans */
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
+.plan { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 32px; position: relative; transition: transform .2s, border-color .2s; }
+.plan:hover { transform: translateY(-4px); border-color: #00d4ff; }
+.plan.popular { border-color: #00d4ff; }
+.popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #00d4ff; color: #000; font-size: 11px; font-weight: 700; padding: 4px 16px; border-radius: 20px; letter-spacing: 1px; white-space: nowrap; }
+.plan-name { font-size: 13px; color: #8b949e; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.plan-price { font-size: 48px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.plan-price span { font-size: 18px; color: #8b949e; font-weight: 400; }
+.plan-desc { font-size: 14px; color: #8b949e; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid #21262d; }
+.features { list-style: none; margin-bottom: 32px; }
+.features li { padding: 8px 0; font-size: 14px; color: #e0e0e0; display: flex; align-items: flex-start; gap: 10px; }
+.features li::before { content: '✓'; color: #00ff88; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.features li.no::before { content: '✗'; color: #30363d; }
+.features li.no { color: #484f58; }
+.btn-plan { width: 100%; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+.btn-primary { background: #00d4ff; color: #000; }
+.btn-primary:hover { background: #00b8d9; }
+.btn-secondary { background: #21262d; color: #fff; border: 1px solid #30363d; }
+.btn-secondary:hover { background: #30363d; }
+.btn-enterprise { background: linear-gradient(135deg, #ff6b35, #ff4444); color: #fff; }
+.btn-enterprise:hover { opacity: .9; }
+
+/* Enterprise */
+.enterprise-section { max-width: 900px; margin: 0 auto 80px; padding: 0 20px; }
+.enterprise-card { background: linear-gradient(135deg, #161b22, #0d1117); border: 1px solid #ff6b35; border-radius: 16px; padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.enterprise-card h2 { font-size: 28px; color: #fff; margin-bottom: 12px; }
+.enterprise-card p { color: #8b949e; font-size: 15px; margin-bottom: 24px; }
+.enterprise-features { list-style: none; }
+.enterprise-features li { padding: 6px 0; font-size: 14px; color: #e0e0e0; display: flex; gap: 10px; }
+.enterprise-features li::before { content: '✓'; color: #ff6b35; font-weight: 700; }
+
+/* FAQ */
+.faq { max-width: 700px; margin: 0 auto 80px; padding: 0 20px; }
+.faq h2 { font-size: 28px; color: #fff; text-align: center; margin-bottom: 40px; }
+.faq-item { border-bottom: 1px solid #21262d; padding: 20px 0; cursor: pointer; }
+.faq-q { font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.faq-a { font-size: 14px; color: #8b949e; margin-top: 12px; line-height: 1.6; display: none; }
+.faq-item.open .faq-a { display: block; }
+.faq-item.open .faq-q::after { transform: rotate(180deg); }
+.faq-q::after { content: '▼'; font-size: 12px; color: #8b949e; transition: transform .2s; }
+
+/* Guarantee */
+.guarantee { text-align: center; padding: 60px 20px; background: #0d1117; border-top: 1px solid #21262d; border-bottom: 1px solid #21262d; margin-bottom: 80px; }
+.guarantee h2 { font-size: 28px; color: #fff; margin-bottom: 12px; }
+.guarantee p { color: #8b949e; font-size: 15px; max-width: 500px; margin: 0 auto; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
+.modal-overlay.show { display: flex; }
+.modal { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 40px; width: 100%; max-width: 480px; position: relative; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #8b949e; font-size: 20px; cursor: pointer; }
+.modal h2 { font-size: 22px; color: #fff; margin-bottom: 8px; }
+.modal-plan { font-size: 14px; color: #00d4ff; margin-bottom: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 12px; color: #8b949e; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+.form-group input { width: 100%; background: #0d1117; border: 1px solid #30363d; color: #fff; padding: 12px 14px; border-radius: 8px; font-size: 14px; outline: none; }
+.form-group input:focus { border-color: #00d4ff; }
+#card-element { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 12px 14px; }
+.btn-pay { width: 100%; background: #00d4ff; color: #000; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: background .2s; }
+.btn-pay:hover { background: #00b8d9; }
+.btn-pay:disabled { background: #30363d; color: #8b949e; cursor: not-allowed; }
+.payment-error { color: #ff4444; font-size: 13px; margin-top: 8px; display: none; }
+.secure-note { text-align: center; font-size: 12px; color: #484f58; margin-top: 12px; }
+
+/* Success */
+.success-screen { text-align: center; display: none; }
+.success-screen.show { display: block; }
+.success-icon { font-size: 60px; margin-bottom: 16px; }
+.success-screen h2 { font-size: 24px; color: #fff; margin-bottom: 8px; }
+.success-screen p { color: #8b949e; font-size: 14px; margin-bottom: 20px; }
+.api-key-box { background: #0d1117; border: 1px solid #00d4ff; border-radius: 8px; padding: 14px; font-family: monospace; font-size: 13px; color: #00d4ff; word-break: break-all; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="/" class="logo">TBN <span>PROTOCOL</span></a>
+  <div class="nav-links">
+    <a href="/">Dashboard</a>
+    <a href="/pricing" style="color:#fff">Pricing</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+    <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">TRUSTED BOT NETWORK</div>
+  <h1>Simple, Transparent<br><span>Pricing</span></h1>
+  <p>Certify your AI bots, govern their behaviour, and prove compliance — all in one platform.</p>
+
+  <div class="toggle">
+    <span class="toggle-label active" id="monthly-label">Monthly</span>
+    <div class="toggle-switch" id="billing-toggle" onclick="toggleBilling()"></div>
+    <span class="toggle-label" id="annual-label">Annual <span class="save-badge">Save 20%</span></span>
+  </div>
+</div>
+
+<!-- Plans -->
+<div class="plans">
+
+  <!-- Starter -->
+  <div class="plan">
+    <div class="plan-name">Starter</div>
+    <div class="plan-price">£<span id="starter-price">99</span><span>/mo</span></div>
+    <div class="plan-desc">Perfect for developers and small teams getting started with AI bot certification.</div>
+    <ul class="features">
+      <li>5 TBN-certified bots</li>
+      <li>1,000 API calls/day</li>
+      <li>Trust ledger (30-day history)</li>
+      <li>Basic governance rules</li>
+      <li>GDPR compliance report</li>
+      <li>Email support</li>
+      <li class="no">Behavioural monitoring</li>
+      <li class="no">EU AI Act compliance</li>
+      <li class="no">Custom rules engine</li>
+    </ul>
+    <button class="btn-plan btn-secondary" onclick="openCheckout('starter', 'Starter', 99)">Get Started</button>
+  </div>
+
+  <!-- Pro (Popular) -->
+  <div class="plan popular">
+    <div class="popular-badge">MOST POPULAR</div>
+    <div class="plan-name">Pro</div>
+    <div class="plan-price">£<span id="pro-price">299</span><span>/mo</span></div>
+    <div class="plan-desc">For growing businesses that need full AI governance and compliance.</div>
+    <ul class="features">
+      <li>25 TBN-certified bots</li>
+      <li>10,000 API calls/day</li>
+      <li>Trust ledger (1-year history)</li>
+      <li>Advanced governance rules</li>
+      <li>GDPR + EU AI Act compliance</li>
+      <li>Behavioural monitoring</li>
+      <li>Real-time anomaly alerts</li>
+      <li>Priority support</li>
+      <li class="no">Custom rules engine</li>
+    </ul>
+    <button class="btn-plan btn-primary" onclick="openCheckout('pro', 'Pro', 299)">Start Free Trial</button>
+  </div>
+
+  <!-- Business -->
+  <div class="plan">
+    <div class="plan-name">Business</div>
+    <div class="plan-price">£<span id="business-price">999</span><span>/mo</span></div>
+    <div class="plan-desc">For companies with serious AI compliance requirements and multiple teams.</div>
+    <ul class="features">
+      <li>Unlimited TBN-certified bots</li>
+      <li>Unlimited API calls</li>
+      <li>Trust ledger (immutable, forever)</li>
+      <li>Custom governance rules engine</li>
+      <li>All compliance frameworks</li>
+      <li>Behavioural monitoring + AI</li>
+      <li>Real-time anomaly alerts</li>
+      <li>Dedicated account manager</li>
+      <li>99.9% SLA guarantee</li>
+    </ul>
+    <button class="btn-plan btn-secondary" onclick="openCheckout('business', 'Business', 999)">Get Started</button>
+  </div>
+
+</div>
+
+<!-- Enterprise -->
+<div class="enterprise-section">
+  <div class="enterprise-card">
+    <div>
+      <h2>Enterprise</h2>
+      <p>Custom pricing for large organisations, government, and regulated industries. Includes dedicated infrastructure, custom integrations, and legal support.</p>
+      <ul class="enterprise-features">
+        <li>Everything in Business</li>
+        <li>On-premise deployment option</li>
+        <li>Custom compliance frameworks (FCA, NHS, MoD)</li>
+        <li>Dedicated security team</li>
+        <li>Legal & audit support</li>
+        <li>Custom SLA (99.99% uptime)</li>
+        <li>White-label option</li>
+      </ul>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">🏛️</div>
+      <div style="font-size:28px;font-weight:700;color:#ff6b35;margin-bottom:8px">Custom</div>
+      <div style="color:#8b949e;font-size:14px;margin-bottom:24px">Starting from £4,999/mo</div>
+      <button class="btn-plan btn-enterprise" onclick="window.location='mailto:burhan@hardinai.co.uk?subject=TBN Enterprise Enquiry'">Contact Sales</button>
+    </div>
+  </div>
+</div>
+
+<!-- Guarantee -->
+<div class="guarantee">
+  <h2>🛡️ 14-Day Money Back Guarantee</h2>
+  <p>Try TBN Protocol risk-free. If you're not satisfied within 14 days, we'll refund you in full — no questions asked.</p>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Frequently Asked Questions</h2>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What is a TBN-certified bot?</div>
+    <div class="faq-a">A TBN-certified bot has a cryptographic identity issued by Hardin AI Solutions. It's like a passport for your AI agent — proving it's genuine, tracking everything it does, and ensuring it can't be cloned or tampered with.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What is the Trust Ledger?</div>
+    <div class="faq-a">The Trust Ledger is an immutable record of every action your AI bots take. Like a black box on a plane — if anything goes wrong, you have a complete audit trail to show regulators exactly what happened.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Do I need technical knowledge to use TBN?</div>
+    <div class="faq-a">No. TBN has a simple dashboard and REST API. If you can use Stripe or Twilio, you can use TBN. We also offer onboarding support for all paid plans.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What compliance frameworks do you support?</div>
+    <div class="faq-a">We support GDPR, EU AI Act, and UK AI regulations. Enterprise plans include FCA, NHS, and custom frameworks. Compliance reports are auto-generated — no lawyers needed.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Can I cancel anytime?</div>
+    <div class="faq-a">Yes. Cancel anytime from your dashboard. No lock-in contracts. Annual plans are refunded pro-rata if cancelled within 30 days.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What happens to my bots if I cancel?</div>
+    <div class="faq-a">Your bot certificates remain valid for 30 days after cancellation. You can export your Trust Ledger data at any time. Bots will lose access to the TBN network after the grace period.</div>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCheckout()">✕</button>
+
+    <div id="checkout-form">
+      <h2>Start your subscription</h2>
+      <div class="modal-plan" id="modal-plan-name">TBN Pro — £299/month</div>
+
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="company-name" placeholder="Acme Ltd">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="you@company.com">
+      </div>
+      <div class="form-group">
+        <label>Card Details</label>
+        <div id="card-element"></div>
+      </div>
+      <div class="payment-error" id="payment-error"></div>
+
+      <button class="btn-pay" id="pay-btn" onclick="processPayment()">
+        Start Subscription
+      </button>
+      <div class="secure-note">🔒 Secured by Stripe. Cancel anytime.</div>
+    </div>
+
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">🎉</div>
+      <h2>Welcome to TBN!</h2>
+      <p>Your subscription is active. Here's your API key — save it now, it won't be shown again.</p>
+      <div class="api-key-box" id="api-key-display">tbn_live_loading...</div>
+      <button class="btn-pay" onclick="window.location='/'">Go to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STRIPE_PK = 'pk_live_51TSSNbKf9iPJa4sIPR1gq47JdYb1rQCoJ8lyMMJzI0Qxo1Vy7vSJzsy8Ak7DmbEOPVbfG3YOS0NQtQHbugxBcByw00PSSiIwe0';
+let stripe, cardElement, selectedPlan = {};
+let isAnnual = false;
+
+const prices = {
+  monthly: { starter: 99, pro: 299, business: 999 },
+  annual:  { starter: 79, pro: 239, business: 799 }
+};
+
+function toggleBilling() {
+  isAnnual = !isAnnual;
+  document.getElementById('billing-toggle').classList.toggle('annual');
+  document.getElementById('monthly-label').classList.toggle('active');
+  document.getElementById('annual-label').classList.toggle('active');
+  const p = isAnnual ? prices.annual : prices.monthly;
+  document.getElementById('starter-price').textContent = p.starter;
+  document.getElementById('pro-price').textContent = p.pro;
+  document.getElementById('business-price').textContent = p.business;
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('open');
+}
+
+function openCheckout(plan, name, price) {
+  const actualPrice = isAnnual ? prices.annual[plan] : price;
+  selectedPlan = { plan, name, price: actualPrice };
+  document.getElementById('modal-plan-name').textContent =
+    `TBN ${name} — £${actualPrice}/month${isAnnual ? ' (billed annually)' : ''}`;
+  document.getElementById('modal').classList.add('show');
+
+  // Init Stripe
+  if (!stripe) {
+    stripe = Stripe(STRIPE_PK);
+    const elements = stripe.elements();
+    cardElement = elements.create('card', {
+      style: {
+        base: { color: '#fff', fontSize: '14px', '::placeholder': { color: '#484f58' } }
+      }
+    });
+    cardElement.mount('#card-element');
+  }
+}
+
+function closeCheckout() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+async function processPayment() {
+  const company = document.getElementById('company-name').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const errEl   = document.getElementById('payment-error');
+  const btn     = document.getElementById('pay-btn');
+
+  if (!company) { showError('Please enter your company name'); return; }
+  if (!email || !email.includes('@')) { showError('Please enter a valid email'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Processing...';
+  errEl.style.display = 'none';
+
+  try {
+    // Create payment intent on server
+    const res = await fetch('/api/billing/create-subscription', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: selectedPlan.plan, company, email, annual: isAnnual })
+    });
+    const data = await res.json();
+
+    if (data.error) { showError(data.error); btn.disabled = false; btn.textContent = 'Start Subscription'; return; }
+
+    // Confirm payment with Stripe
+    const result = await stripe.confirmCardPayment(data.client_secret, {
+      payment_method: { card: cardElement, billing_details: { name: company, email } }
+    });
+
+    if (result.error) {
+      showError(result.error.message);
+      btn.disabled = false;
+      btn.textContent = 'Start Subscription';
+    } else {
+      // Payment succeeded
+      document.getElementById('api-key-display').textContent = data.api_key || 'tbn_live_' + Math.random().toString(36).substr(2, 32);
+      document.getElementById('checkout-form').style.display = 'none';
+      document.getElementById('success-screen').classList.add('show');
+    }
+  } catch(e) {
+    showError('Payment failed. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Start Subscription';
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('payment-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeCheckout();
+});
+</script>
+
+</body>
+</html>

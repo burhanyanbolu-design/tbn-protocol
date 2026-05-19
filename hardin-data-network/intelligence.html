@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hardin Intelligence Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e0e0e0;font-family:Segoe UI,sans-serif;min-height:100vh}
+.header{background:linear-gradient(135deg,#0d1117,#161b22);border-bottom:1px solid #30363d;padding:18px 40px;display:flex;align-items:center;gap:14px}
+.logo{font-size:20px;font-weight:700;color:#fff}.logo span{color:#ff6b35}
+.badge{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3);color:#ff6b35;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:1px}
+.stats{background:#161b22;border-bottom:1px solid #21262d;padding:8px 40px;display:flex;gap:24px;font-size:12px;color:#8b949e}
+.stats span{color:#ff6b35}
+.tabs{display:flex;gap:0;border-bottom:1px solid #30363d;background:#0d1117;padding:0 40px;overflow-x:auto}
+.tab{padding:14px 20px;cursor:pointer;font-size:13px;color:#8b949e;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab:hover{color:#fff}.tab.active{color:#ff6b35;border-bottom-color:#ff6b35}
+.content{max-width:900px;margin:0 auto;padding:30px 20px}
+.panel{display:none}.panel.active{display:block}
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;margin-bottom:20px}
+.card-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:16px;letter-spacing:.5px}
+.form-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.form-group{flex:1;min-width:150px}
+label{display:block;font-size:11px;color:#8b949e;margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+select,input{width:100%;background:#0d1117;border:1px solid #30363d;color:#fff;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;transition:border .2s}
+select:focus,input:focus{border-color:#ff6b35}
+.btn{background:#ff6b35;color:#fff;border:none;border-radius:8px;padding:11px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s}
+.btn:hover{background:#e55a25}.btn:disabled{background:#30363d;color:#8b949e;cursor:not-allowed}
+.result{background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:20px;margin-top:16px;display:none}
+.result.show{display:block}
+.result-title{font-size:12px;color:#8b949e;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+.metric{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px}
+.metric-label{font-size:11px;color:#8b949e;margin-bottom:4px}
+.metric-value{font-size:20px;font-weight:700;color:#fff}
+.metric-sub{font-size:11px;color:#8b949e;margin-top:2px}
+.up{color:#00ff88}.down{color:#ff4444}.neutral{color:#ffaa00}
+.signal-box{border-radius:8px;padding:14px 18px;margin-bottom:14px;font-weight:600;font-size:14px}
+.signal-buy{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);color:#00ff88}
+.signal-sell{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);color:#ff4444}
+.signal-hold{background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.3);color:#ffaa00}
+.number-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.num-hot{background:#ff6b35;color:#fff}
+.num-cold{background:#30363d;color:#8b949e}
+.num-due{background:#00d4ff;color:#000}
+.num-bonus{background:#9b59b6;color:#fff}
+.suggestion{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px;margin-bottom:10px}
+.sug-name{font-size:12px;color:#ff6b35;font-weight:600;margin-bottom:8px}
+.sug-strategy{font-size:11px;color:#8b949e;margin-top:6px}
+.forecast-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #21262d;font-size:13px}
+.forecast-row:last-child{border:none}
+.prob-bar{height:8px;border-radius:4px;background:#21262d;margin-top:4px;overflow:hidden}
+.prob-fill{height:100%;border-radius:4px;transition:width .5s}
+.h2h-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #21262d;font-size:12px;color:#8b949e}
+.spinner{width:24px;height:24px;border:3px solid #30363d;border-top-color:#ff6b35;border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:#8b949e;font-size:13px}
+.insight{font-size:11px;color:#484f58;margin-top:12px;font-style:italic}
+.risk-list{list-style:none;margin-top:8px}
+.risk-list li{padding:4px 0;font-size:13px;color:#8b949e}
+.risk-list li::before{content:"• ";color:#ff4444}
+.pos-list li::before{content:"• ";color:#00ff88}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">HARDIN <span>INTELLIGENCE</span></div>
+  <div class="badge">PALANTIR-STYLE</div>
+  <div class="badge">TBN POWERED</div>
+</div>
+<div class="stats">
+  <div>&#129504; <span>6</span> Prediction Engines</div>
+  <div>&#128202; <span>31,803</span> Data Points</div>
+  <div>&#128272; All predictions from TBN-certified data</div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="showTab(this,'lottery')">&#127922; Lottery</div>
+  <div class="tab" onclick="showTab(this,'football')">&#9917; Football</div>
+  <div class="tab" onclick="showTab(this,'currency')">&#128178; Currency</div>
+  <div class="tab" onclick="showTab(this,'commodity')">&#129351; Commodities</div>
+  <div class="tab" onclick="showTab(this,'economy')">&#128202; Economy</div>
+  <div class="tab" onclick="showTab(this,'horse')">&#127943; Horse Racing</div>
+</div>
+
+<div class="panel active" id="panel-lottery">
+<div class="content">
+  <div class="card">
+    <div class="card-title">LOTTERY NUMBER INTELLIGENCE</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Lottery</label>
+        <select id="lotteryName">
+          <option>EuroMillions</option>
+          <option>UK Lotto</option>
+          <option>Thunderball</option>
+          <option>Set For Life</option>
+          <option>HotPicks</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <button class="btn" onclick="runLottery()">Analyse Numbers</button>
+      </div>
+    </div>
+    <div class="result" id="lottery-result">
+      <div class="result-title">Analysis Results</div>
+      <div id="lottery-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="panel" id="panel-football">
+<div class="content">
+  <div class="card">
+    <div class="card-title">FOOTBALL MATCH PREDICTOR</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Home Team</label>
+        <select id="homeTeam">
+          <option>Arsenal</option><option>Chelsea</option><option>Liverpool</option>
+          <option>Man United</option><option>Man City</option><option>Tottenham</option>
+          <option>Newcastle</option><option>West Ham</option><option>Aston Villa</option>
+          <option>Brighton</option><option>Everton</option><option>Fulham</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Away Team</label>
+        <select id="awayTeam">
+          <option>Chelsea</option><option>Arsenal</option><option>Liverpool</option>
+          <option>Man United</option><option>Man City</option><option>Tottenham</option>
+          <option>Newcastle</option><option>West Ham</option><option>Aston Villa</option>
+          <option>Brighton</option><option>Everton</option><option>Fulham</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <button class="btn" onclick="runFootball()">Predict Match</button>
+      </div>
+    </div>
+    <div class="result" id="football-result">
+      <div class="result-title">Prediction</div>
+      <div id="football-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="panel" id="panel-currency">
+<div class="content">
+  <div class="card">
+    <div class="card-title">CURRENCY PREDICTOR</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Currency (vs GBP)</label>
+        <select id="currencyCode">
+          <option>USD</option><option>EUR</option><option>JPY</option>
+          <option>CHF</option><option>AUD</option><option>CAD</option>
+          <option>CNY</option><option>INR</option><option>BRL</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <button class="btn" onclick="runCurrency()">Predict Rate</button>
+      </div>
+    </div>
+    <div class="result" id="currency-result">
+      <div class="result-title">Forecast</div>
+      <div id="currency-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="panel" id="panel-commodity">
+<div class="content">
+  <div class="card">
+    <div class="card-title">COMMODITY PREDICTOR</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Commodity</label>
+        <select id="commodityName">
+          <option>Gold</option><option>Silver</option><option>Crude Oil</option>
+          <option>Copper</option><option>Natural Gas</option><option>Platinum</option>
+          <option>Coffee</option><option>Corn</option><option>Wheat</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <button class="btn" onclick="runCommodity()">Predict Price</button>
+      </div>
+    </div>
+    <div class="result" id="commodity-result">
+      <div class="result-title">Price Forecast</div>
+      <div id="commodity-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="panel" id="panel-economy">
+<div class="content">
+  <div class="card">
+    <div class="card-title">UK ECONOMY PREDICTOR</div>
+    <button class="btn" onclick="runEconomy()">Analyse UK Economy</button>
+    <div class="result" id="economy-result">
+      <div class="result-title">Economic Forecast</div>
+      <div id="economy-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="panel" id="panel-horse">
+<div class="content">
+  <div class="card">
+    <div class="card-title">HORSE RACING INTELLIGENCE</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Course (optional)</label>
+        <select id="horseCourse">
+          <option value="">All Courses</option>
+          <option>Ascot</option><option>Cheltenham</option><option>Epsom</option>
+          <option>Aintree</option><option>Newmarket</option><option>Epsom Downs</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end">
+        <button class="btn" onclick="runHorse()">Analyse Racing</button>
+      </div>
+    </div>
+    <div class="result" id="horse-result">
+      <div class="result-title">Racing Intelligence</div>
+      <div id="horse-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function showTab(el,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('panel-'+id).classList.add('active');}
+function loading(id){document.getElementById(id+'-result').classList.add('show');document.getElementById(id+'-content').innerHTML='<span class="spinner"></span><span class="loading-text">Analysing data...</span>';}
+async function post(url,data){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return r.json();}
+
+async function runLottery(){
+  loading('lottery');
+  const d=await post('/predict/lottery',{lottery:document.getElementById('lotteryName').value});
+  const c=document.getElementById('lottery-content');
+  if(d.error){c.innerHTML='<p style="color:#ff4444">'+d.error+'</p>';return;}
+  c.innerHTML=`
+    <div class="result-title">HOT NUMBERS (Most Drawn)</div>
+    <div class="number-grid">${d.hot_numbers.map(n=>'<div class="num num-hot">'+n+'</div>').join('')}</div>
+    <div class="result-title" style="margin-top:12px">COLD NUMBERS (Least Drawn)</div>
+    <div class="number-grid">${d.cold_numbers.map(n=>'<div class="num num-cold">'+n+'</div>').join('')}</div>
+    <div class="result-title" style="margin-top:12px">DUE NUMBERS (Overdue)</div>
+    <div class="number-grid">${d.due_numbers.map(n=>'<div class="num num-due">'+n+'</div>').join('')}</div>
+    <div class="result-title" style="margin-top:12px">HOT BONUS NUMBERS</div>
+    <div class="number-grid">${d.hot_bonus.map(n=>'<div class="num num-bonus">'+n+'</div>').join('')}</div>
+    <div class="result-title" style="margin-top:16px">SUGGESTED COMBINATIONS</div>
+    ${d.suggestions.map(s=>'<div class="suggestion"><div class="sug-name">'+s.name+'</div><div class="number-grid">'+s.numbers.map(n=>'<div class="num num-hot">'+n+'</div>').join('')+'<span style="color:#8b949e;padding:0 8px;line-height:40px">+</span>'+s.bonus.map(n=>'<div class="num num-bonus">'+n+'</div>').join('')+'</div><div class="sug-strategy">Strategy: '+s.strategy+'</div></div>').join('')}
+    <div class="insight">Based on ${d.draws_analysed} draws from TBN lottery database</div>`;
+}
+
+async function runFootball(){
+  loading('football');
+  const home=document.getElementById('homeTeam').value;
+  const away=document.getElementById('awayTeam').value;
+  const d=await post('/predict/football',{home,away});
+  const c=document.getElementById('football-content');
+  if(d.error){c.innerHTML='<p style="color:#ff4444">'+d.error+'</p>';return;}
+  const p=d.prediction;
+  const cc=p.confidence==='HIGH'?'#00ff88':p.confidence==='MEDIUM'?'#ffaa00':'#ff6b35';
+  const hs=d.home_stats||{};const as_=d.away_stats||{};
+  c.innerHTML=`
+    <div class="signal-box ${p.winner.includes('Draw')?'signal-hold':'signal-buy'}">
+      PREDICTED WINNER: ${p.winner} &nbsp;|&nbsp; Score: ${p.predicted_score} &nbsp;|&nbsp; <span style="color:${cc}">Confidence: ${p.confidence}</span>
+    </div>
+    <div class="grid">
+      <div class="metric"><div class="metric-label">Home Win %</div><div class="metric-value up">${p.probabilities.home_win}%</div><div class="prob-bar"><div class="prob-fill" style="width:${p.probabilities.home_win}%;background:#00ff88"></div></div></div>
+      <div class="metric"><div class="metric-label">Draw %</div><div class="metric-value neutral">${p.probabilities.draw}%</div><div class="prob-bar"><div class="prob-fill" style="width:${p.probabilities.draw}%;background:#ffaa00"></div></div></div>
+      <div class="metric"><div class="metric-label">Away Win %</div><div class="metric-value down">${p.probabilities.away_win}%</div><div class="prob-bar"><div class="prob-fill" style="width:${p.probabilities.away_win}%;background:#ff4444"></div></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+      <div class="metric"><div class="metric-label">${home} Form</div><div class="metric-value">${hs.wins||0}W ${hs.draws||0}D ${hs.losses||0}L</div><div class="metric-sub">Win rate: ${hs.win_rate||0}% | Avg goals: ${hs.avg_scored||0}</div></div>
+      <div class="metric"><div class="metric-label">${away} Form</div><div class="metric-value">${as_.wins||0}W ${as_.draws||0}D ${as_.losses||0}L</div><div class="metric-sub">Win rate: ${as_.win_rate||0}% | Avg goals: ${as_.avg_scored||0}</div></div>
+    </div>
+    ${d.head_to_head.recent.length?'<div class="result-title">HEAD TO HEAD</div>'+d.head_to_head.recent.map(r=>'<div class="h2h-row"><span>'+r.date+'</span><span>'+r.home+' <b style="color:#fff">'+r.score+'</b> '+r.away+'</span></div>').join(''):''}
+    <div class="insight">${d.insight}</div>`;
+}
+
+async function runCurrency(){
+  loading('currency');
+  const d=await post('/predict/currency',{currency:document.getElementById('currencyCode').value});
+  const c=document.getElementById('currency-content');
+  if(d.error){c.innerHTML='<p style="color:#ff4444">'+d.error+'</p>';return;}
+  const sig=d.signal.includes('BUY')?'signal-buy':d.signal.includes('SELL')?'signal-sell':'signal-hold';
+  const mc=d.trend.momentum==='BULLISH'?'#00ff88':d.trend.momentum==='BEARISH'?'#ff4444':'#ffaa00';
+  c.innerHTML=`
+    <div class="signal-box ${sig}">${d.signal}</div>
+    <div class="grid">
+      <div class="metric"><div class="metric-label">Current Rate</div><div class="metric-value">${d.current_rate}</div><div class="metric-sub">1 GBP = ${d.current_rate} ${d.pair.split('/')[1]}</div></div>
+      <div class="metric"><div class="metric-label">7-Day Avg</div><div class="metric-value">${d.averages['7_day']}</div></div>
+      <div class="metric"><div class="metric-label">30-Day Avg</div><div class="metric-value">${d.averages['30_day']}</div></div>
+      <div class="metric"><div class="metric-label">Momentum</div><div class="metric-value" style="color:${mc}">${d.trend.momentum}</div></div>
+      <div class="metric"><div class="metric-label">Support</div><div class="metric-value up">${d.levels.support}</div></div>
+      <div class="metric"><div class="metric-label">Resistance</div><div class="metric-value down">${d.levels.resistance}</div></div>
+    </div>
+    <div class="result-title">7-DAY FORECAST</div>
+    ${d['7_day_forecast'].map(f=>'<div class="forecast-row"><span>'+f.date+'</span><span style="color:'+(f.direction==='up'?'#00ff88':'#ff4444')+'">'+(f.direction==='up'?'&#8593;':'&#8595;')+' '+f.predicted_rate+'</span></div>').join('')}
+    <div class="insight">${d.insight}</div>`;
+}
+
+async function runCommodity(){
+  loading('commodity');
+  const d=await post('/predict/commodity',{commodity:document.getElementById('commodityName').value});
+  const c=document.getElementById('commodity-content');
+  if(d.error){c.innerHTML='<p style="color:#ff4444">'+d.error+'</p>';return;}
+  const sig=d.signal.includes('BUY')?'signal-buy':d.signal.includes('SELL')||d.signal.includes('CAUTION')?'signal-sell':'signal-hold';
+  const rc=d.rsi<30?'#00ff88':d.rsi>70?'#ff4444':'#ffaa00';
+  c.innerHTML=`
+    <div class="signal-box ${sig}">${d.signal}</div>
+    <div class="grid">
+      <div class="metric"><div class="metric-label">Current Price</div><div class="metric-value">$${d.current_price}</div></div>
+      <div class="metric"><div class="metric-label">RSI</div><div class="metric-value" style="color:${rc}">${d.rsi}</div><div class="metric-sub">${d.rsi<30?'Oversold':d.rsi>70?'Overbought':'Normal'}</div></div>
+      <div class="metric"><div class="metric-label">7-Day Avg</div><div class="metric-value">$${d.averages['7_day']}</div></div>
+      <div class="metric"><div class="metric-label">30-Day Avg</div><div class="metric-value">$${d.averages['30_day']}</div></div>
+      <div class="metric"><div class="metric-label">Volatility</div><div class="metric-value">$${d.volatility}</div></div>
+      <div class="metric"><div class="metric-label">Momentum</div><div class="metric-value" style="color:${d.trend.momentum==='BULLISH'?'#00ff88':d.trend.momentum==='BEARISH'?'#ff4444':'#ffaa00'}">${d.trend.momentum}</div></div>
+    </div>
+    <div class="result-title">7-DAY PRICE FORECAST</div>
+    ${d['7_day_forecast'].map(f=>'<div class="forecast-row"><span>'+f.date+'</span><span style="color:'+(f.direction==='up'?'#00ff88':'#ff4444')+'">'+(f.direction==='up'?'&#8593;':'&#8595;')+' $'+f.predicted_price+'</span></div>').join('')}
+    <div class="insight">${d.insight}</div>`;
+}
+
+async function runEconomy(){
+  loading('economy');
+  const d=await post('/predict/economy',{});
+  const c=document.getElementById('economy-content');
+  const oc=d.overall_outlook.includes('POSITIVE')?'#00ff88':d.overall_outlook.includes('CAUTIOUS')?'#ff4444':'#ffaa00';
+  const inds=d.indicators||{};
+  c.innerHTML=`
+    <div class="signal-box signal-hold" style="color:${oc}">${d.overall_outlook}</div>
+    <div class="grid">
+      ${Object.entries(inds).slice(0,8).map(([k,v])=>'<div class="metric"><div class="metric-label">'+k+'</div><div class="metric-value">'+(v.current||0)+' <small style="font-size:12px;color:#8b949e">'+v.unit+'</small></div><div class="metric-sub" style="color:'+(v.direction==='Rising'?'#00ff88':v.direction==='Falling'?'#ff4444':'#8b949e')+'">'+v.direction+' Next: '+(v.next_quarter_forecast||'N/A')+'</div></div>').join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><div class="result-title" style="color:#ff4444">KEY RISKS</div><ul class="risk-list">${(d.key_risks||[]).map(r=>'<li>'+r+'</li>').join('')}</ul></div>
+      <div><div class="result-title" style="color:#00ff88">POSITIVES</div><ul class="risk-list pos-list">${(d.key_positives||[]).map(r=>'<li>'+r+'</li>').join('')}</ul></div>
+    </div>
+    <div class="insight">${d.insight}</div>`;
+}
+
+async function runHorse(){
+  loading('horse');
+  const course=document.getElementById('horseCourse').value;
+  const d=await post('/predict/horse',{course:course||null});
+  const c=document.getElementById('horse-content');
+  if(d.error){c.innerHTML='<p style="color:#ff4444">'+d.error+'</p>';return;}
+  c.innerHTML=`
+    <div class="signal-box signal-buy">${d.tip}</div>
+    <div class="grid">
+      <div class="metric"><div class="metric-label">Races Analysed</div><div class="metric-value">${d.races_analysed}</div></div>
+      ${d.top_jockeys.slice(0,3).map(j=>'<div class="metric"><div class="metric-label">Top Jockey</div><div class="metric-value">${j.jockey}</div><div class="metric-sub">${j.wins} wins</div></div>').join('')}
+    </div>
+    <div class="result-title">RECENT WINNERS</div>
+    ${d.recent_winners.map(r=>'<div class="h2h-row"><span>'+r.date+' - '+r.course+'</span><span><b style="color:#fff">'+r.winner+'</b> ('+r.jockey+') @ '+r.odds+'</span></div>').join('')}
+    <div class="insight">${d.insight}</div>`;
+}
+</script>
+</body>
+</html>

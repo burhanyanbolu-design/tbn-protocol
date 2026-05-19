@@ -1,0 +1,17 @@
+{
+  "root": {
+    "process_type": "string",
+    "data": {
+      "bot_name": "string",
+      "bot_type": "string",
+      "company": "string",
+      "email": "string",
+      "description": "string"
+    },
+    "metadata": {
+      "boomi_process_id": "string",
+      "timestamp": "string",
+      "source": "string"
+    }
+  }
+}

@@ -9,6 +9,8 @@ Drift Types:
 - Budget Drift: Bot spending pattern deviates from budget
 - Behavior Drift: Bot responses changing over time
 - Certification Drift: Bot overdue for re-test
+
+(c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Trace: HRD-CD-1b7f4e8a
 """
 
 from flask import Blueprint, request, jsonify

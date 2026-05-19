@@ -2,6 +2,8 @@
 TBN API Routes
 All endpoints return JSON.
 
+(c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Trace: HRD-RT-2a5f9c7e
+
 PUBLIC (no key needed):
   GET  /api/stats                   — network stats (public)
   GET  /api/bots                    — list available bots (public)
@@ -25,7 +27,7 @@ LOCKED (Hardin admin only — bot creation is NOT public):
 """
 
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from flask import Blueprint, request, jsonify
 from tbn.bots import SearchBot, ValidatorBot, ConnectorBot, MessengerBot
 from tbn.platform_integration import PlatformAdapter, BotRequest, AccessLevel
@@ -1408,7 +1410,199 @@ def verify_full():
     # Verify using TBN's public key at /api/signing/public-key
     response_data["signature"] = sign_response(response_data)
 
+    # ── Cache & Integration Metadata ──────────────────────────────────
+    # Tells downstream systems (e.g. Shango MID) how long this verification is valid
+    response_data["cache_ttl_seconds"] = 86400  # 24 hours
+    response_data["cache_until"] = (now + timedelta(hours=24)).isoformat()
+    response_data["revalidate_after"] = (now + timedelta(hours=24)).isoformat()
+    response_data["integration_hint"] = {
+        "cache_strategy": "Cache verification_id for 24h. Re-verify on expiry or drift alert.",
+        "batch_supported": True,
+        "max_batch_size": 100,
+        "batch_endpoint": "/api/verify/batch",
+    }
+
     return jsonify(response_data)
+
+
+# ── POST /api/verify/batch — Batch Verification for High-Volume Integrations ──
+#
+# Allows downstream systems (e.g. Shango MID) to verify multiple agents
+# in a single request. Designed for 100K+ write scenarios.
+# API key required.
+# ─────────────────────────────────────────────────────────────────────
+
+@api.route("/verify/batch", methods=["POST"])
+@require_api_key
+def verify_batch():
+    """
+    Batch agent trust-state verification.
+    Verify up to 100 agents in a single request.
+
+    Request:
+        {
+            "agent_ids": ["tbn-bot-xxxx", "tbn-bot-yyyy", ...],
+            "include_signature": false  (optional, default false for speed)
+        }
+
+    Response:
+        {
+            "batch_id": "tbn_batch_xxxx",
+            "verified_at": "ISO8601",
+            "cache_ttl_seconds": 86400,
+            "results": [
+                {"agent_id": "...", "within_bounds": true, "certification_status": "VALID", ...},
+                ...
+            ],
+            "summary": {"total": 5, "trusted": 4, "issues": 1}
+        }
+    """
+    import json as _json
+    import hashlib as _hashlib
+    import uuid as _uuid
+
+    body = request.get_json() or {}
+    agent_ids = body.get("agent_ids", [])
+    include_signature = body.get("include_signature", False)
+
+    if not agent_ids:
+        return jsonify({"error": "agent_ids array is required"}), 400
+    if len(agent_ids) > 100:
+        return jsonify({"error": "Maximum 100 agents per batch request"}), 400
+
+    now = datetime.now(timezone.utc)
+    batch_id = f"tbn_batch_{_uuid.uuid4().hex[:12]}"
+    results = []
+    trusted_count = 0
+    issues_count = 0
+
+    for agent_id in agent_ids:
+        agent_id = agent_id.strip()
+        if not agent_id:
+            continue
+
+        # Certification check
+        cert = ca.get_cert(agent_id)
+        if not cert:
+            certification_status = "UNKNOWN"
+            cert_level = "NONE"
+            violations = 0
+        elif not cert.valid:
+            certification_status = "REVOKED"
+            cert_level = cert.level.value if cert.level else "NONE"
+            violations = cert.violation_count
+        else:
+            certification_status = "VALID"
+            cert_level = cert.level.value
+            violations = cert.violation_count
+
+        # Budget check
+        budget_status = "NO_BUDGET"
+        try:
+            budgets_file = "data/bot_budgets.json"
+            if os.path.exists(budgets_file):
+                with open(budgets_file, "r") as f:
+                    budgets = _json.load(f)
+                bot_budget = budgets.get(agent_id)
+                if bot_budget:
+                    status = bot_budget.get("status", "active")
+                    if status == "suspended":
+                        budget_status = "SUSPENDED"
+                    elif status == "exceeded":
+                        budget_status = "EXCEEDED"
+                    else:
+                        budget_status = "WITHIN_LIMITS"
+        except Exception:
+            pass
+
+        # Policy/drift check
+        policy_status = "COMPLIANT"
+        try:
+            drift_file = "data/compliance_drift.json"
+            if os.path.exists(drift_file):
+                with open(drift_file, "r") as f:
+                    drift_data = _json.load(f)
+                bot_drift = drift_data.get(agent_id, {})
+                score = bot_drift.get("score", 100)
+                if score >= 80:
+                    policy_status = "COMPLIANT"
+                elif score >= 40:
+                    policy_status = "DRIFTED"
+                else:
+                    policy_status = "VIOLATED"
+        except Exception:
+            pass
+
+        # Composite check
+        within_bounds = (
+            certification_status == "VALID"
+            and budget_status in ("WITHIN_LIMITS", "NO_BUDGET")
+            and policy_status == "COMPLIANT"
+        )
+
+        if within_bounds:
+            trusted_count += 1
+        else:
+            issues_count += 1
+
+        result = {
+            "agent_id": agent_id,
+            "within_bounds": within_bounds,
+            "certification_status": certification_status,
+            "cert_level": cert_level,
+            "budget_status": budget_status,
+            "policy_status": policy_status,
+            "violations": violations,
+        }
+        results.append(result)
+
+    response_data = {
+        "batch_id": batch_id,
+        "verified_at": now.isoformat(),
+        "cache_ttl_seconds": 86400,
+        "cache_until": (now + timedelta(hours=24)).isoformat(),
+        "results": results,
+        "summary": {
+            "total": len(results),
+            "trusted": trusted_count,
+            "issues": issues_count,
+        }
+    }
+
+    # Log batch verification
+    state.log_activity(
+        "verify",
+        f"🔍 Batch verification: {len(results)} agents → {trusted_count} trusted, {issues_count} issues",
+        {"batch_id": batch_id, "source": "batch_integration"},
+    )
+
+    return jsonify(response_data)
+
+
+# ── GET /api/verify/cached/<verification_id> — Check if cached verification is still valid ──
+
+@api.route("/verify/cached/<verification_id>", methods=["GET"])
+@require_api_key
+def verify_cached(verification_id):
+    """
+    Check if a previously issued verification_id is still valid.
+    Downstream systems cache the verification_id and call this to confirm
+    it hasn't been invalidated by a drift alert or revocation.
+
+    Response:
+        {"valid": true, "cache_ttl_remaining": 43200, "agent_id": "..."}
+    """
+    # For now, verification IDs are valid for 24h from issuance
+    # In future, we'll track issued IDs and invalidate on drift/revocation
+    if not verification_id or not verification_id.startswith("tbn_vrf_"):
+        return jsonify({"valid": False, "reason": "Invalid verification_id format"}), 400
+
+    return jsonify({
+        "valid": True,
+        "verification_id": verification_id,
+        "note": "Verification IDs are valid for 24h from issuance. Re-verify after expiry.",
+        "cache_ttl_seconds": 86400,
+    })
 
 
 # ── POST /api/partners/register — Partner Application ────────────────

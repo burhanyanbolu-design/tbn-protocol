@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBN — LinkedIn Prospect Finder</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #fdf6e3; color: #2d2a24; min-height: 100vh; padding: 32px; }
+    
+    .container { max-width: 1400px; margin: 0 auto; }
+    
+    h1 { font-size: 36px; font-weight: 700; margin-bottom: 10px; color: #1a1a1a; }
+    .subtitle { font-size: 16px; color: #6b5c3e; margin-bottom: 36px; }
+    
+    /* Search Section */
+    .search-section { background: #fff9e6; border: 1px solid #e6d9a8; border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+    .search-section h2 { font-size: 20px; font-weight: 600; margin-bottom: 18px; color: #7c5c00; }
+    
+    .search-row { display: flex; gap: 14px; margin-bottom: 18px; }
+    .search-input { flex: 1; background: #fffef7; border: 1px solid #d4c48a; border-radius: 10px; padding: 14px 18px; color: #2d2a24; font-size: 16px; outline: none; }
+    .search-input:focus { border-color: #b8860b; box-shadow: 0 0 0 3px rgba(184,134,11,0.15); }
+    .search-btn { background: linear-gradient(135deg, #b8860b, #d4a017); color: #fff; border: none; border-radius: 10px; padding: 14px 28px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .search-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(184,134,11,0.3); }
+    .search-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    
+    /* Quick Keywords */
+    .keywords-section { margin-bottom: 18px; }
+    .keywords-label { font-size: 13px; color: #8b7355; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .keyword-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .keyword-tag { background: rgba(184,134,11,0.08); border: 1px solid #d4c48a; border-radius: 20px; padding: 8px 16px; font-size: 16px; color: #0066cc; cursor: pointer; transition: all 0.2s; font-weight: 700; }
+    .keyword-tag:hover { background: rgba(0,102,204,0.1); border-color: #0066cc; }
+    .keyword-tag.active { background: #0066cc; color: #fff; border-color: #0066cc; }
+    
+    /* Results */
+    .results-section { background: #fffef7; border: 1px solid #e6d9a8; border-radius: 14px; padding: 28px; }
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .results-header h2 { font-size: 20px; font-weight: 600; color: #7c5c00; }
+    .results-count { font-size: 15px; color: #8b7355; }
+    
+    .result-item { display: flex; gap: 14px; padding: 18px; border: 1px solid #e6d9a8; border-radius: 12px; margin-bottom: 12px; transition: all 0.2s; background: #fff; }
+    .result-item:hover { border-color: #b8860b; background: #fffdf0; box-shadow: 0 2px 8px rgba(184,134,11,0.08); }
+    
+    .result-badge { min-width: 80px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-ARTICLE { background: #e0f4ff; color: #0369a1; }
+    .badge-POST { background: #dcfce7; color: #166534; }
+    .badge-PERSON { background: #fef3c7; color: #92400e; }
+    .badge-COMPANY { background: #ede9fe; color: #5b21b6; }
+    .badge-OTHER { background: #f1f5f9; color: #475569; }
+    
+    .result-content { flex: 1; }
+    .result-url { font-size: 15px; color: #7c5c00; text-decoration: none; word-break: break-all; }
+    .result-url:hover { text-decoration: underline; color: #b8860b; }
+    .result-keyword { font-size: 13px; color: #8b7355; margin-top: 5px; }
+    .result-date { font-size: 13px; color: #a0926e; margin-top: 3px; }
+    
+    .result-actions { display: flex; gap: 10px; align-items: center; }
+    .action-btn { background: none; border: 1px solid #d4c48a; border-radius: 8px; padding: 8px 14px; font-size: 13px; color: #6b5c3e; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .action-btn:hover { border-color: #b8860b; color: #7c5c00; background: #fff9e6; }
+    .action-btn.engaged { background: #dcfce7; border-color: #22c55e; color: #166534; }
+    
+    /* Status */
+    .status-bar { background: #fffef7; border: 1px solid #e6d9a8; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; font-size: 15px; color: #6b5c3e; display: none; }
+    .status-bar.active { display: block; }
+    .status-bar.searching { color: #7c5c00; }
+    .status-bar.success { color: #166534; }
+    .status-bar.error { color: #dc2626; }
+    
+    /* Empty state */
+    .empty { text-align: center; padding: 48px; color: #8b7355; font-size: 16px; }
+    
+    /* Spinner */
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #b8860b; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 LinkedIn Prospect Finder</h1>
+    <p class="subtitle">Find people and posts in the AI governance space. Search by keyword, engage with prospects.</p>
+    
+    <!-- Search -->
+    <div class="search-section">
+      <h2>Search LinkedIn</h2>
+      <div class="search-row">
+        <input type="text" class="search-input" id="search-input" placeholder="Enter keyword... e.g. AI agent governance, EU AI Act, AI compliance" onkeypress="if(event.key==='Enter')runSearch()">
+        <button class="search-btn" id="search-btn" onclick="runSearch()">🔍 Search</button>
+      </div>
+      
+      <div class="keywords-section">
+        <div class="keywords-label">Quick Keywords (click to search)</div>
+        <div class="keyword-tags" id="keyword-tags"></div>
+      </div>
+    </div>
+    
+    <!-- Status -->
+    <div class="status-bar" id="status-bar"></div>
+    
+    <!-- Results -->
+    <div class="results-section">
+      <div class="results-header">
+        <h2>Prospects</h2>
+        <span class="results-count" id="results-count">0 results</span>
+      </div>
+      <div id="results-list">
+        <div class="empty">No prospects yet. Search for keywords above to find LinkedIn posts and people in the AI governance space.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Quick keyword suggestions
+  const QUICK_KEYWORDS = [
+    "AI agent governance",
+    "EU AI Act compliance",
+    "AI agent certification",
+    "AI runtime governance",
+    "AI agent attestation",
+    "AI agents Salesforce",
+    "AI write governance",
+    "sovereign AI governance",
+    "AI compliance infrastructure",
+    "AI governance startup",
+    "LLM governance",
+    "AI agent monitoring",
+    "AI guardrails",
+    "AI agent enforcement",
+    "AI agent trust",
+    "responsible AI enterprise",
+    "AI Act Article 14",
+    "AI agent security",
+    "autonomous agent compliance",
+    "AI governance platform",
+  ];
+
+  // Render keyword tags
+  const tagsContainer = document.getElementById('keyword-tags');
+  QUICK_KEYWORDS.forEach(kw => {
+    const tag = document.createElement('span');
+    tag.className = 'keyword-tag';
+    tag.textContent = kw;
+    tag.onclick = () => {
+      document.getElementById('search-input').value = kw;
+      runSearch();
+    };
+    tagsContainer.appendChild(tag);
+  });
+
+  // All prospects stored locally
+  let allProspects = [];
+
+  // Load existing prospects on page load
+  loadProspects();
+
+  async function loadProspects() {
+    try {
+      const resp = await fetch('/api/prospects');
+      const data = await resp.json();
+      allProspects = data.prospects || [];
+      renderResults();
+    } catch(e) {
+      // No existing prospects
+    }
+  }
+
+  async function runSearch() {
+    const keyword = document.getElementById('search-input').value.trim();
+    if (!keyword) { alert('Enter a keyword'); return; }
+
+    const btn = document.getElementById('search-btn');
+    const status = document.getElementById('status-bar');
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ Searching...';
+    status.className = 'status-bar active searching';
+    status.innerHTML = '<span class="spinner"></span> Searching LinkedIn for "' + keyword + '"...';
+
+    try {
+      const resp = await fetch('/api/prospects/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword })
+      });
+      const data = await resp.json();
+
+      if (data.results && data.results.length > 0) {
+        // Add new results to our list (avoid duplicates)
+        const existingUrls = new Set(allProspects.map(p => p.url));
+        let newCount = 0;
+        data.results.forEach(r => {
+          if (!existingUrls.has(r.url)) {
+            allProspects.unshift(r);
+            existingUrls.add(r.url);
+            newCount++;
+          }
+        });
+        status.className = 'status-bar active success';
+        status.textContent = '✅ Found ' + newCount + ' new prospect(s) for "' + keyword + '"';
+      } else {
+        status.className = 'status-bar active error';
+        status.textContent = '⚠️ No results for "' + keyword + '". Try a different keyword or wait a minute (rate limiting).';
+      }
+
+      renderResults();
+    } catch(e) {
+      status.className = 'status-bar active error';
+      status.textContent = '❌ Error: ' + e.message;
+    }
+
+    btn.disabled = false;
+    btn.textContent = '🔍 Search';
+  }
+
+  function renderResults() {
+    const container = document.getElementById('results-list');
+    const count = document.getElementById('results-count');
+    
+    count.textContent = allProspects.length + ' results';
+
+    if (allProspects.length === 0) {
+      container.innerHTML = '<div class="empty">No prospects yet. Search for keywords above.</div>';
+      return;
+    }
+
+    container.innerHTML = allProspects.map((p, i) => {
+      const category = p.category || 'OTHER';
+      const engaged = p.engaged ? 'engaged' : '';
+      const shortUrl = p.url.replace('https://www.linkedin.com/', '').substring(0, 80);
+      return `
+        <div class="result-item">
+          <span class="result-badge badge-${category}">${category}</span>
+          <div class="result-content">
+            <a href="${p.url}" target="_blank" class="result-url">${shortUrl}...</a>
+            ${p.title ? '<div style="font-size:12px;color:#a1a1aa;margin-top:3px;">' + p.title.substring(0,100) + '</div>' : ''}
+            <div class="result-keyword">🔑 ${p.keyword}</div>
+            <div class="result-date">📅 ${p.found_at ? p.found_at.split('T')[0] : 'today'}</div>
+          </div>
+          <div class="result-actions">
+            <a href="${p.url}" target="_blank" class="action-btn">Open ↗</a>
+            <button class="action-btn ${engaged}" onclick="toggleEngaged(${i})">
+              ${p.engaged ? '✅ Done' : '📌 Mark'}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleEngaged(index) {
+    allProspects[index].engaged = !allProspects[index].engaged;
+    renderResults();
+    // Save to server
+    fetch('/api/prospects/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prospects: allProspects })
+    });
+  }
+</script>
+</body>
+</html>

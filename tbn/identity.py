@@ -18,8 +18,9 @@ class BotIdentity:
     Every bot on the TBN network has one of these.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, icon_url: str = None):
         self.name = name
+        self.icon_url = icon_url  # URL to bot's brand icon (SVG/PNG)
         self.created_at = datetime.now(timezone.utc).isoformat()
 
         # Generate RSA key pair
@@ -83,14 +84,17 @@ class BotIdentity:
         """
         Returns a shareable certificate (no private key).
         This is what gets exchanged during the trust handshake.
+        Includes icon_url for visual branding in dashboards/logs.
         """
-        return {
+        cert = {
             "bot_id": self.full_id,
             "name": self.name,
+            "icon_url": self.icon_url,
             "public_key_pem": self.public_key_pem().decode(),
             "created_at": self.created_at,
             "tbn_version": "0.1.0",
         }
+        return cert
 
     def __repr__(self):
         return f"<BotIdentity name={self.name!r} id={self.full_id}>"

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 36" width="220" height="36">
+  <!-- Background -->
+  <rect width="220" height="36" rx="6" fill="#0a0e1a" stroke="#30363d" stroke-width="1"/>
+  
+  <!-- Shield mini -->
+  <g transform="translate(8, 6)">
+    <path d="M12 2 L22 6 L22 14 C22 20 17 24 12 26 C7 24 2 20 2 14 L2 6 Z" 
+          fill="#58a6ff" fill-opacity="0.2" stroke="#58a6ff" stroke-width="1"/>
+    <text x="12" y="16" text-anchor="middle" font-size="10" fill="#3fb950">✓</text>
+  </g>
+  
+  <!-- Text -->
+  <text x="36" y="16" font-family="-apple-system, sans-serif" font-size="8" fill="#8b949e">Agent trust verified by</text>
+  <text x="36" y="28" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" fill="#58a6ff">TBN Protocol</text>
+  
+  <!-- Live dot -->
+  <circle cx="205" cy="18" r="4" fill="#3fb950" opacity="0.8"/>
+</svg>

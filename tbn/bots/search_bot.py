@@ -17,8 +17,8 @@ class SearchBot(Bot):
 
     BOT_TYPE = "SEARCH"
 
-    def __init__(self, name: str, bica: BICA, index: list[dict] = None, ca=None):
-        super().__init__(name, bica, ca=ca)
+    def __init__(self, name: str, bica: BICA, index: list[dict] = None, ca=None, **kwargs):
+        super().__init__(name, bica, ca=ca, **kwargs)
         # Local knowledge index — list of records
         self._index: list[dict] = index or []
 

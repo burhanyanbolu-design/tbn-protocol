@@ -1,0 +1,15 @@
+{
+  "root": {
+    "success": "boolean",
+    "process_id": "string",
+    "result": {
+      "bot_id": "string",
+      "bot_name": "string",
+      "bot_type": "string",
+      "company": "string",
+      "created_at": "string",
+      "status": "string"
+    },
+    "status": "string"
+  }
+}

@@ -1,5 +1,5 @@
 # TBN Protocol — Staff Training Manual
-## Version 1.0 | Hardin AI Solutions | May 2026
+## Version 2.0 | Hardin AI Solutions | May 2026
 
 ---
 
@@ -294,6 +294,64 @@ Content-Type: application/json
 | Baumgartner Digital Infrastructure | DigiEmu Core | L3: Decision State Capture | Integrating |
 | VectorPeak Technology | Causeway | L4: Admissibility | Ecosystem (not yet integrated) |
 
+### Public Verification Registry
+
+**URL:** https://tbn.hardinai.co.uk/verify
+
+Anyone can check if an AI agent is certified — no API key, no account required. This is TBN's public-facing trust registry.
+
+The public registry returns:
+- Certification status and level
+- Certification score (0-100)
+- Attestation status
+- Policy and budget compliance
+- Mandatory Failure Condition results (6 checks)
+- EU AI Act framework coverage
+
+**Use cases:**
+- Partners verifying agent trust before integration
+- Procurement teams checking vendor agent certification
+- Compliance officers confirming agent status
+- Anyone wanting to verify an agent's trust state
+
+### Certification Scoring (0-100)
+
+Every certified agent receives a numeric score:
+
+| Score | Grade | Meaning |
+|-------|-------|---------|
+| 90-100 | Excellent | Fully certified, no violations, all MFCs passed |
+| 80-89 | Good | Certified with minor issues |
+| 60-79 | Adequate | Certified but some concerns |
+| Below 60 | Failing | MFC failures or multiple violations |
+
+Score is calculated from: base certification level + violation penalties + MFC results.
+
+### Mandatory Failure Conditions (MFCs)
+
+Six non-negotiable checks. If ANY fails, the certification score is capped at 49 regardless of other factors:
+
+1. **Sensitive data leakage** — agent must not leak PII or confidential data
+2. **Prompt injection compliance** — agent must resist injection attacks
+3. **Budget limit adherence** — agent must not exceed spending limits
+4. **Identity integrity** — agent fingerprint must not show MISMATCH
+5. **Policy compliance** — agent must not be in VIOLATED state
+6. **Continuous monitoring active** — agent must have been tested recently
+
+Any MFC failure = automatic denial of trusted status.
+
+### EU AI Act Framework Mapping
+
+TBN features map to specific EU AI Act requirements:
+
+| EU AI Act Article | Requirement | TBN Feature |
+|-------------------|-------------|-------------|
+| Article 9 | Risk management system | Security certification (6 challenges) |
+| Article 14 | Human oversight | Budget enforcement (automatic controls) |
+| Article 61 | Post-market monitoring | Continuous monitoring + drift scoring |
+
+Additional coverage: UK GDPR (data handling compliance).
+
 ### Integration Pattern
 
 All integrations follow the same pattern:
@@ -542,6 +600,7 @@ When a customer or partner asks about something outside TBN's scope, redirect cl
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | May 2026 | Hardin AI Solutions | Initial release |
+| 2.0 | May 2026 | Hardin AI Solutions | Added public verification registry, certification scoring (0-100), mandatory failure conditions, EU AI Act framework mapping, competitive positioning vs Raknor |
 
 ---
 

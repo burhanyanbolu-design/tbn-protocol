@@ -1,0 +1,118 @@
+{
+  "domains": {
+    "Philosophy": [
+      {
+        "knowledge": {
+          "concept": "Personal Legend",
+          "principle": "Each person has a unique destiny they must pursue"
+        },
+        "source": "The Alchemist",
+        "added": "2026-05-10T20:12:47.338328",
+        "ethical_score": 1.0,
+        "validated": true,
+        "entry_id": "61228698c78f"
+      },
+      {
+        "knowledge": {
+          "title": "The Alchemist",
+          "author": "Unknown",
+          "summary": "The Alchemist About the Publisher Australia HarperCollins Publishers (Australia) Pty. Ltd. 25 Ryde Road (PO Box 321) Pymble, NSW 2073, Australia http://www.harpercollinsebooks.com.au Canada HarperCollins Publishers Ltd. 55 Avenue Road, Suite 2900 Toronto, ON, M5R, 3L2, Canada http://www.harpercollinsebooks.ca New Zealand HarperCollinsPublishers (New Zealand) Limited P.O. Box 1 Auckland, New Zealand http://www.harpercollinsebooks.co.nz United Kingdom HarperCollins Publishers Ltd. 77-85 Fulham Palace Road London, W6 8JB, UK http://www.harpercollinsebooks.co.uk United States HarperCollins Publishers Inc. 10 East 53rd Street New York, NY 10022 http://www.harpercollinsebooks.com\nThe Alchemist-ALSO BY PAULO COELHO ALSO BY PAULO COELHO The Pilgrimage: A Contemporary Quest for Ancient Wisdom The Valkyries: An Encounter with Angels By the River Piedra I Sat Down and Wept The Fifth Mountain The Illustrated Alchemist Veronika Decides to Die\nThe Alchemist-EPILOGUE EPILOGUE THE BOY REACHED THE SMAL",
+          "topics": [
+            "The Alchemist About",
+            "Specifically",
+            "The Pilgrimage",
+            "Tarifa",
+            "Publishers Inc",
+            "Half",
+            "There",
+            "He",
+            "His",
+            "In",
+            "France",
+            "God",
+            "The Alchemist",
+            "You",
+            "Then"
+          ],
+          "chunks": 510,
+          "pages": 1
+        },
+        "source": "Book: The Alchemist",
+        "added": "2026-05-10T23:36:42.362000",
+        "ethical_score": 1.0,
+        "validated": true,
+        "entry_id": "fcc15311a076"
+      }
+    ],
+    "Education": [
+      {
+        "knowledge": {
+          "title": "",
+          "author": "",
+          "summary": "n a t i o n a l  a c a d e m y  o f  s c i e n c e s\nAny opinions expressed in this memoir are those of the author(s)\nand do not necessarily reflect the views of the \nNational Academy of Sciences.\nA l b e r t  E i n s t e i n\n1879—1955\nA Biographical Memoir by\nj o h n  a r c h i b a l d  w h e e l e r\n Biographical Memoir\nCopyright  1980\nnational academy of sciences\nwashington d.c.\nALBERT EINSTEIN\nMarch 14, 1879—April 18, 1955\nBY JOHN ARCHIBALD WHEELER*\nALBERT EINSTEIN was born in Ulm, Germany on March\n-**- 14, 1879. After education in Germany, Italy, and Swit-\nzerland, and professorships in Bern, Zurich, and Prague, he\nwas appointed Director of Kaiser Wilhelm Institute for Phy-\nsics in Berlin in 1914. He became a professor in the School of\nMathematics at the Institute for Advanced Study in Princeton\nbeginning the fall of 1933, became an American citizen in the\nsummer of 1936, and died in Princeton, New Jersey on April\n18, 1955. In the Berlin where in 1900 Max Planck discovered\nthe qua",
+          "topics": [
+            "Einstein",
+            "What Einstein",
+            "Zurich",
+            "Ulm",
+            "What",
+            "Our",
+            "Who",
+            "School",
+            "There",
+            "He",
+            "Sciences",
+            "His",
+            "Where",
+            "One",
+            "How"
+          ],
+          "chunks": 96,
+          "pages": 23
+        },
+        "source": "Book: ",
+        "added": "2026-05-10T23:40:20.853191",
+        "ethical_score": 1.0,
+        "validated": true,
+        "entry_id": "e5d8a9494049"
+      }
+    ],
+    "Philosoby": [
+      {
+        "knowledge": {
+          "title": "The Project Gutenberg eBook of The Meditatios of the Emperor Marcus Aurelius Antoninus",
+          "author": "Unknown",
+          "summary": "The Project Gutenberg eBook of The Meditatios of the Emperor Marcus Aurelius Antoninus The Project Gutenberg eBook of The Meditations of the Emperor Marcus Aurelius Antoninus This eBook is for the use of anyone anywhere in the United States and most other parts of the world at no cost and with almost no restrictions whatsoever. You may copy it, give it away or re-use it under the terms of the Project Gutenberg License included with this eBook or online at www.gutenberg.org . If you are not located in the United States, you will have to check the laws of the country where you are located before using this eBook. Title : The Meditations of the Emperor Marcus Aurelius Antoninus Author : Emperor of Rome Marcus Aurelius Translator : George W. Chrystal Release date : August 9, 2017 [eBook #55317] Most recently updated: October 23, 2024 Language : English Other information and formats : www.gutenberg.org/ebooks/55317 Credits : E.H.N. *** START OF THE PROJECT GUTENBERG EBOOK THE MEDITATIONS OF",
+          "topics": [
+            "His",
+            "Of",
+            "Commonwealth",
+            "Fronto",
+            "Epictetus",
+            "My",
+            "Verus",
+            "Athenodorus",
+            "Title",
+            "The Meditatios",
+            "To Rusticus",
+            "All",
+            "Sextus",
+            "Emperor Marcus Aurelius Antoninus",
+            "He"
+          ],
+          "chunks": 583,
+          "pages": 1
+        },
+        "source": "Book: The Project Gutenberg eBook of The Meditatios of the Emperor Marcus Aurelius Antoninus",
+        "added": "2026-05-10T23:48:51.728962",
+        "ethical_score": 1.0,
+        "validated": true,
+        "entry_id": "7f3eb4d823b2"
+      }
+    ]
+  },
+  "metadata": {
+    "created": "2026-05-10T20:12:47.337125",
+    "version": "1.0"
+  }
+}

@@ -148,6 +148,11 @@ def demo_nhs():
     return render_template("demo_nhs.html")
 
 
+@app.route("/demo/langchain")
+def demo_langchain():
+    return render_template("demo_langchain.html")
+
+
 @app.route("/philosophy")
 def philosophy():
     return render_template("philosophy_chat.html")

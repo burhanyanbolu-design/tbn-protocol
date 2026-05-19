@@ -1,0 +1,40 @@
+{
+  "bots": {
+    "tbn-bot-santiago-001": {
+      "bot_id": "tbn-bot-santiago-001",
+      "bot_name": "Santiago",
+      "book_title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "philosophy_core_path": "data/santiago_philosophy_core.json",
+      "bot_identity_path": "data/santiago_bot_identity.json",
+      "registered_at": "2026-05-10T01:01:40.121268+00:00",
+      "philosophy_verified": true,
+      "verified_at": "2026-05-10T02:06:16.631668"
+    },
+    "tbn-bot-marsuc-001": {
+      "bot_id": "tbn-bot-marsuc-001",
+      "bot_name": "marsuc",
+      "book_title": "meditations",
+      "author": "marcus",
+      "philosophy_hash": "2753879850328d6da31bb681b16c356b1c50d3a9fb5034cc86203a32a05d6789",
+      "philosophy_core_path": "data/marsuc_philosophy_core.json",
+      "bot_identity_path": "data/marsuc_bot_identity.json",
+      "registered_at": "2026-05-10T02:46:44.651386",
+      "philosophy_verified": true,
+      "verified_at": "2026-05-10T02:46:44.660622"
+    },
+    "tbn-bot-albert-001": {
+      "bot_id": "tbn-bot-albert-001",
+      "bot_name": "albert",
+      "book_title": "sjsj",
+      "author": "ksks",
+      "philosophy_hash": "744c2bf873b32075e4e003e6009aceccb9b788b37c6c34fa0ff1bdcf1edd1091",
+      "philosophy_core_path": "data/albert_philosophy_core.json",
+      "bot_identity_path": "data/albert_bot_identity.json",
+      "registered_at": "2026-05-10T02:49:28.949164",
+      "philosophy_verified": true,
+      "verified_at": "2026-05-10T02:49:28.957519"
+    }
+  },
+  "created_at": "2026-05-10T01:01:40.120823+00:00"
+}

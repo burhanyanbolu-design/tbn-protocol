@@ -1,0 +1,188 @@
+<html><head><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}h1{color:#1a1a2e}h2{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:5px}h3{color:#0f3460}code{background:#f0f0f0;padding:2px 6px;border-radius:3px}pre{background:#f5f5f5;padding:15px;border-radius:5px;overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f0f0f0}</style></head><body><h1>TBN Protocol — Boomi Integration Architecture</h1>
+<p><strong>Company:</strong> Hardin Enterprises Ltd<br />
+<strong>Product:</strong> TBN Protocol<br />
+<strong>Version:</strong> 1.0.0<br />
+<strong>Date:</strong> May 2026<br />
+<strong>Contact:</strong> burhan@hardinai.co.uk</p>
+<hr />
+<h2>Overview</h2>
+<p>TBN Protocol is a trust infrastructure for AI agents. It provides a standardised REST API for enterprises to register, certify, and govern AI bots operating within their systems.</p>
+<p>The Boomi integration enables users to verify bot certifications, register new AI agents, and enforce governance policies directly within their Boomi integration workflows.</p>
+<hr />
+<h2>Architecture Diagram</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    BOOMI PLATFORM                            │
+│                                                             │
+│  ┌─────────────┐    ┌──────────────┐    ┌──────────────┐  │
+│  │ Source App  │───▶│ Boomi Process │───▶│ Target App   │  │
+│  └─────────────┘    └──────┬───────┘    └──────────────┘  │
+│                            │                                │
+│                            │ HTTP Client Connector          │
+│                            ▼                                │
+└────────────────────────────┼────────────────────────────────┘
+                             │
+                             │ HTTPS (REST API)
+                             │ Header: X-API-Key
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│                TBN PROTOCOL SERVER                           │
+│                https://tbn.hardinai.co.uk                    │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  API Gateway (Flask/Gunicorn)                       │   │
+│  │  ├─ /api/boomi/bot_registration                     │   │
+│  │  ├─ /api/boomi/certification_check                  │   │
+│  │  └─ /api/boomi/governance_query                     │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                            │                                │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  TBN Core Engine                                    │   │
+│  │  ├─ Bot Registry (BICA)                             │   │
+│  │  ├─ Certification Authority                         │   │
+│  │  ├─ Governance Engine                               │   │
+│  │  └─ Audit Logger                                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  Database                                           │   │
+│  │  ├─ Bot registrations                               │   │
+│  │  ├─ Certifications                                  │   │
+│  │  ├─ Governance policies                             │   │
+│  │  └─ Audit logs                                      │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2>API Endpoints</h2>
+<h3>1. Bot Registration</h3>
+<p><strong>POST</strong> <code>/api/boomi/bot_registration</code></p>
+<p>Registers a new AI agent with the TBN Protocol.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;bot_name&quot;: &quot;CustomerServiceBot&quot;,
+  &quot;bot_type&quot;: &quot;search&quot;,
+  &quot;capabilities&quot;: [&quot;text_generation&quot;, &quot;data_retrieval&quot;],
+  &quot;owner&quot;: &quot;Acme Corp&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;bot_id&quot;: &quot;tbn_bot_abc123&quot;,
+  &quot;registration_status&quot;: &quot;registered&quot;,
+  &quot;certificate&quot;: &quot;CERT-2026-001&quot;,
+  &quot;created_at&quot;: &quot;2026-05-13T10:00:00Z&quot;
+}
+</code></pre>
+<h3>2. Certification Check</h3>
+<p><strong>POST</strong> <code>/api/boomi/certification_check</code></p>
+<p>Verifies if an AI bot is certified and trusted.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;bot_id&quot;: &quot;tbn_bot_abc123&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;bot_id&quot;: &quot;tbn_bot_abc123&quot;,
+  &quot;certification_status&quot;: &quot;certified&quot;,
+  &quot;trust_level&quot;: &quot;high&quot;,
+  &quot;expiry_date&quot;: &quot;2027-05-13&quot;,
+  &quot;issuer&quot;: &quot;TBN Certification Authority&quot;
+}
+</code></pre>
+<h3>3. Governance Query</h3>
+<p><strong>POST</strong> <code>/api/boomi/governance_query</code></p>
+<p>Queries governance policies and compliance rules.</p>
+<p><strong>Request:</strong></p>
+<pre><code class="language-json">{
+  &quot;query_type&quot;: &quot;compliance_check&quot;,
+  &quot;bot_id&quot;: &quot;tbn_bot_abc123&quot;
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;bot_id&quot;: &quot;tbn_bot_abc123&quot;,
+  &quot;compliance_status&quot;: &quot;compliant&quot;,
+  &quot;policies_applied&quot;: [&quot;data_privacy&quot;, &quot;rate_limiting&quot;, &quot;audit_logging&quot;],
+  &quot;violations&quot;: []
+}
+</code></pre>
+<hr />
+<h2>Authentication</h2>
+<p>All API requests require an API key passed in the <code>X-API-Key</code> header.</p>
+<pre><code>X-API-Key: tbn_live_rHwyKxafnTomRS70ZjSKcYbI6IyGWyKR
+</code></pre>
+<p>API keys are issued per organisation and can be requested at info@hardinai.co.uk.</p>
+<hr />
+<h2>Boomi Connection Setup</h2>
+<ol>
+<li>Create a new <strong>HTTP Client</strong> connection</li>
+<li>Set URL: <code>https://tbn.hardinai.co.uk/api/boomi</code></li>
+<li>Add Request Header: <code>X-API-Key</code> = your API key</li>
+<li>Content-Type: <code>application/json</code></li>
+<li>Create operations for each endpoint (POST)</li>
+<li>Map JSON request/response profiles</li>
+</ol>
+<hr />
+<h2>Security</h2>
+<ul>
+<li>HTTPS/TLS 1.3 encryption in transit</li>
+<li>API key authentication</li>
+<li>Rate limiting (100 requests/day on trial tier)</li>
+<li>IP allowlisting available on enterprise tier</li>
+<li>Full audit logging of all API calls</li>
+</ul>
+<hr />
+<h2>Infrastructure</h2>
+<ul>
+<li><strong>Hosting:</strong> AWS Lightsail (London region)</li>
+<li><strong>Server:</strong> Ubuntu 22.04 LTS</li>
+<li><strong>Application:</strong> Python Flask + Gunicorn</li>
+<li><strong>Database:</strong> SQLite (production: PostgreSQL)</li>
+<li><strong>Uptime SLA:</strong> 99.5%</li>
+<li><strong>Response Time:</strong> &lt; 500ms average</li>
+</ul>
+<hr />
+<h2>Support</h2>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Provider</th>
+<th>Contact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>Boomi</td>
+<td>Boomi Support</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>Hardin Enterprises</td>
+<td>burhan@hardinai.co.uk</td>
+</tr>
+<tr>
+<td>Escalation</td>
+<td>CEO</td>
+<td>+447740304061</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Support Hours:</strong> 09:00–18:00 GMT, Monday–Friday<br />
+<strong>Response SLA:</strong> 24 hours (business days)</p>
+<hr />
+<h2>Links</h2>
+<ul>
+<li>Live Platform: https://tbn.hardinai.co.uk</li>
+<li>GitHub: https://github.com/burhanyanbolu-design/tbn-protocol</li>
+<li>PyPI Package: https://pypi.org/project/tbn-protocol/</li>
+<li>Company: https://hardinai.co.uk</li>
+</ul>
+<hr />
+<p><em>Document Version 1.0 — May 2026</em><br />
+<em>Hardin Enterprises Ltd — Company No. registered in England and Wales</em></p></body></html>

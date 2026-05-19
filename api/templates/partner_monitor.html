@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TBN Protocol — Partner & System Monitor</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e1a;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #21262d;
+        }
+        .header h1 { color: #58a6ff; font-size: 1.5rem; }
+        .header .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        .status-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #3fb950;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .card h3 {
+            color: #8b949e;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #58a6ff;
+        }
+        .card .sub { color: #8b949e; font-size: 0.8rem; margin-top: 4px; }
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .section h2 {
+            color: #58a6ff;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #21262d;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th {
+            text-align: left;
+            color: #8b949e;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-bottom: 1px solid #21262d;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #161b22;
+            color: #c9d1d9;
+        }
+        tr:hover td { background: #1c2128; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-green { background: #23863622; color: #3fb950; }
+        .badge-blue { background: #1f6feb22; color: #58a6ff; }
+        .badge-yellow { background: #9e6a0322; color: #d29922; }
+        .badge-red { background: #f8514922; color: #f85149; }
+        .badge-gray { background: #30363d; color: #8b949e; }
+        .log-entry {
+            padding: 8px 12px;
+            border-left: 3px solid #30363d;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-family: 'SF Mono', monospace;
+        }
+        .log-entry.verify { border-color: #58a6ff; }
+        .log-entry.partner { border-color: #3fb950; }
+        .log-entry.error { border-color: #f85149; }
+        .log-time { color: #484f58; margin-right: 8px; }
+        .log-method { color: #d2a8ff; font-weight: 600; }
+        .log-path { color: #79c0ff; }
+        .log-status-2xx { color: #3fb950; }
+        .log-status-4xx { color: #d29922; }
+        .log-status-5xx { color: #f85149; }
+        .refresh-btn {
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .refresh-btn:hover { background: #30363d; }
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #484f58;
+        }
+        .connection-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #0d1117;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .connection-arrow { color: #3fb950; font-size: 1.2rem; }
+        .connection-system {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .connection-status { margin-left: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📡 Partner & System Monitor</h1>
+            <div style="display:flex;gap:16px;align-items:center;">
+                <div class="auto-refresh">
+                    <input type="checkbox" id="auto-refresh" checked>
+                    <label for="auto-refresh">Auto-refresh (30s)</label>
+                </div>
+                <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid">
+            <div class="card">
+                <h3>Active Partners</h3>
+                <div class="value" id="stat-partners">-</div>
+                <div class="sub" id="stat-partners-sub">Loading...</div>
+            </div>
+            <div class="card">
+                <h3>API Calls Today</h3>
+                <div class="value" id="stat-calls">-</div>
+                <div class="sub" id="stat-calls-sub">Loading...</div>
+            </div>
+            <div class="card">
+                <h3>Verify/Full Calls</h3>
+                <div class="value" id="stat-verify">-</div>
+                <div class="sub" id="stat-verify-sub">Integration endpoint</div>
+            </div>
+            <div class="card">
+                <h3>System Status</h3>
+                <div class="value" style="display:flex;align-items:center;gap:8px;">
+                    <span class="status-dot"></span>
+                    <span id="stat-status" style="font-size:1.2rem;">Online</span>
+                </div>
+                <div class="sub" id="stat-uptime">Checking...</div>
+            </div>
+        </div>
+
+        <!-- Connected Systems -->
+        <div class="section">
+            <h2>🔗 Connected Systems</h2>
+            <div id="connections-list">
+                <div class="empty-state">No partner connections yet</div>
+            </div>
+        </div>
+
+        <!-- Partner Applications -->
+        <div class="section">
+            <h2>🤝 Partner Applications</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Contact</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+                <tbody id="partners-table">
+                    <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recent API Activity -->
+        <div class="section">
+            <h2>📊 Recent API Activity</h2>
+            <div id="activity-log">
+                <div class="empty-state">Loading...</div>
+            </div>
+        </div>
+
+        <!-- API Key Usage -->
+        <div class="section">
+            <h2>🔑 API Key Usage</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Tier</th>
+                        <th>Calls Today</th>
+                        <th>Total Calls</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="keys-table">
+                    <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let refreshInterval;
+
+        async function loadAll() {
+            await Promise.all([
+                loadPartners(),
+                loadKeyStats(),
+                loadActivity(),
+                loadHealth()
+            ]);
+        }
+
+        async function loadPartners() {
+            try {
+                const key = new URLSearchParams(window.location.search).get('key');
+                const res = await fetch('/api/admin/partners?key=' + key);
+                const data = await res.json();
+                
+                // Update stats
+                document.getElementById('stat-partners').textContent = data.total || 0;
+                document.getElementById('stat-partners-sub').textContent = 
+                    `${data.approved || 0} approved, ${data.pending || 0} pending`;
+
+                // Update table
+                const tbody = document.getElementById('partners-table');
+                if (!data.applications || data.applications.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No applications yet</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.applications.map(app => `
+                    <tr>
+                        <td><strong>${app.company_name}</strong><br><span style="color:#8b949e;font-size:0.8rem;">${app.email}</span></td>
+                        <td>${app.contact_name}</td>
+                        <td><span class="badge badge-blue">${app.integration_type}</span></td>
+                        <td><span class="badge ${app.status === 'approved' ? 'badge-green' : app.status === 'pending' ? 'badge-yellow' : 'badge-red'}">${app.status}</span></td>
+                        <td style="color:#8b949e;font-size:0.8rem;">${new Date(app.submitted_at).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+
+                // Update connections
+                const approved = data.applications.filter(a => a.api_key_issued || a.status === 'approved');
+                const connList = document.getElementById('connections-list');
+                
+                if (approved.length === 0 && data.applications.length > 0) {
+                    // Show pending connections
+                    connList.innerHTML = data.applications.map(app => `
+                        <div class="connection-line">
+                            <span class="connection-system">${app.company_name}</span>
+                            <span class="connection-arrow">→</span>
+                            <span class="connection-system">TBN Protocol</span>
+                            <span class="connection-status">
+                                <span class="badge ${app.api_key_issued ? 'badge-green' : 'badge-yellow'}">
+                                    ${app.api_key_issued ? '● Connected' : '○ Key Issued — Awaiting First Call'}
+                                </span>
+                            </span>
+                        </div>
+                    `).join('');
+                } else if (approved.length > 0) {
+                    connList.innerHTML = approved.map(app => `
+                        <div class="connection-line">
+                            <span class="connection-system">${app.company_name}</span>
+                            <span class="connection-arrow">⇄</span>
+                            <span class="connection-system">TBN /api/verify/full</span>
+                            <span class="connection-status">
+                                <span class="badge badge-green">● Connected</span>
+                            </span>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error('Failed to load partners:', e);
+            }
+        }
+
+        async function loadKeyStats() {
+            try {
+                const key = new URLSearchParams(window.location.search).get('key');
+                const res = await fetch('/api/admin/key-stats?key=' + key);
+                const data = await res.json();
+                
+                document.getElementById('stat-calls').textContent = data.total_calls || 0;
+                document.getElementById('stat-calls-sub').textContent = 
+                    `${data.active_keys || 0} active keys`;
+
+                const tbody = document.getElementById('keys-table');
+                if (!data.keys || data.keys.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No API keys issued</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.keys.map(key => `
+                    <tr>
+                        <td>${key.company}</td>
+                        <td><span class="badge badge-blue">${key.tier}</span></td>
+                        <td>${key.calls_today}</td>
+                        <td>${key.calls_total}</td>
+                        <td><span class="badge ${key.active ? 'badge-green' : 'badge-red'}">${key.active ? 'Active' : 'Revoked'}</span></td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error('Failed to load key stats:', e);
+            }
+        }
+
+        async function loadActivity() {
+            try {
+                const res = await fetch('/api/activity');
+                const data = await res.json();
+                
+                const verifyCount = (data.activity || []).filter(a => 
+                    a.message && a.message.includes('Full verification')).length;
+                document.getElementById('stat-verify').textContent = verifyCount;
+
+                const logDiv = document.getElementById('activity-log');
+                if (!data.activity || data.activity.length === 0) {
+                    logDiv.innerHTML = '<div class="empty-state">No activity yet</div>';
+                    return;
+                }
+
+                logDiv.innerHTML = data.activity.slice(0, 20).map(entry => {
+                    let cls = 'log-entry';
+                    if (entry.message && entry.message.includes('verification')) cls += ' verify';
+                    else if (entry.message && entry.message.includes('partner')) cls += ' partner';
+                    else if (entry.type === 'error') cls += ' error';
+
+                    return `<div class="${cls}">
+                        <span class="log-time">${entry.time}</span>
+                        <span class="badge ${entry.type === 'error' ? 'badge-red' : entry.type === 'verify' ? 'badge-blue' : 'badge-green'}">${entry.type}</span>
+                        ${entry.message}
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                console.error('Failed to load activity:', e);
+            }
+        }
+
+        async function loadHealth() {
+            try {
+                const res = await fetch('/health');
+                const data = await res.json();
+                document.getElementById('stat-status').textContent = 
+                    data.status === 'ok' ? 'Online' : 'Issues';
+                document.getElementById('stat-uptime').textContent = 
+                    `Service: ${data.service}`;
+            } catch (e) {
+                document.getElementById('stat-status').textContent = 'Offline';
+                document.getElementById('stat-status').style.color = '#f85149';
+            }
+        }
+
+        // Auto-refresh
+        function startAutoRefresh() {
+            refreshInterval = setInterval(loadAll, 30000);
+        }
+
+        document.getElementById('auto-refresh').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                startAutoRefresh();
+            } else {
+                clearInterval(refreshInterval);
+            }
+        });
+
+        // Initial load
+        loadAll();
+        startAutoRefresh();
+    </script>
+</body>
+</html>

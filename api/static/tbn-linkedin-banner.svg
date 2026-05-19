@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 628" width="1200" height="628">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e1a"/>
+      <stop offset="100%" style="stop-color:#0d1b2a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#58a6ff"/>
+      <stop offset="100%" style="stop-color:#3fb950"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="628" fill="url(#bg)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.05">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="628" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="400" y1="0" x2="400" y2="628" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="628" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="628" stroke="#58a6ff" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="628" stroke="#58a6ff" stroke-width="1"/>
+  </g>
+  
+  <!-- Accent line top -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+  
+  <!-- Shield icon -->
+  <g transform="translate(100, 180)">
+    <path d="M60 10 L110 30 L110 70 C110 110 85 140 60 155 C35 140 10 110 10 70 L10 30 Z" 
+          fill="none" stroke="#58a6ff" stroke-width="3" opacity="0.9"/>
+    <path d="M60 30 L95 45 L95 72 C95 100 78 120 60 132 C42 120 25 100 25 72 L25 45 Z" 
+          fill="#58a6ff" fill-opacity="0.1" stroke="#58a6ff" stroke-width="1.5"/>
+    <text x="60" y="85" text-anchor="middle" font-family="monospace" font-size="24" font-weight="bold" fill="#3fb950">✓</text>
+  </g>
+  
+  <!-- Main text -->
+  <text x="240" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#ffffff">TBN Protocol</text>
+  <text x="240" y="295" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" fill="#8b949e">Trust Infrastructure for AI Agents</text>
+  
+  <!-- Feature pills -->
+  <g transform="translate(240, 330)">
+    <rect x="0" y="0" width="180" height="36" rx="18" fill="#58a6ff" fill-opacity="0.15" stroke="#58a6ff" stroke-width="1"/>
+    <text x="90" y="23" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#58a6ff">🔐 Certification</text>
+    
+    <rect x="195" y="0" width="180" height="36" rx="18" fill="#3fb950" fill-opacity="0.15" stroke="#3fb950" stroke-width="1"/>
+    <text x="285" y="23" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#3fb950">🛡️ Attestation</text>
+    
+    <rect x="390" y="0" width="180" height="36" rx="18" fill="#d29922" fill-opacity="0.15" stroke="#d29922" stroke-width="1"/>
+    <text x="480" y="23" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#d29922">📊 Compliance</text>
+    
+    <rect x="585" y="0" width="180" height="36" rx="18" fill="#f85149" fill-opacity="0.15" stroke="#f85149" stroke-width="1"/>
+    <text x="675" y="23" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#f85149">💰 Budget Control</text>
+  </g>
+  
+  <!-- Connection diagram -->
+  <g transform="translate(240, 410)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+    <text x="70" y="30" text-anchor="middle" font-family="monospace" font-size="12" fill="#c9d1d9">AI Agent</text>
+    
+    <line x1="155" y1="25" x2="225" y2="25" stroke="#3fb950" stroke-width="2" stroke-dasharray="4,4"/>
+    <polygon points="220,20 230,25 220,30" fill="#3fb950"/>
+    
+    <rect x="235" y="0" width="140" height="50" rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+    <text x="305" y="30" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#58a6ff">TBN Verify</text>
+    
+    <line x1="390" y1="25" x2="460" y2="25" stroke="#3fb950" stroke-width="2" stroke-dasharray="4,4"/>
+    <polygon points="455,20 465,25 455,30" fill="#3fb950"/>
+    
+    <rect x="470" y="0" width="180" height="50" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+    <text x="560" y="30" text-anchor="middle" font-family="monospace" font-size="12" fill="#c9d1d9">Governance System</text>
+  </g>
+  
+  <!-- Bottom bar -->
+  <rect x="0" y="540" width="1200" height="88" fill="#0d1117" opacity="0.8"/>
+  <text x="100" y="580" font-family="monospace" font-size="14" fill="#8b949e">tbn.hardinai.co.uk</text>
+  <text x="100" y="605" font-family="monospace" font-size="12" fill="#484f58">Hardin AI Solutions — Hardin Enterprises Ltd</text>
+  
+  <text x="1100" y="580" text-anchor="end" font-family="monospace" font-size="14" fill="#58a6ff">pip install tbn-protocol</text>
+  <text x="1100" y="605" text-anchor="end" font-family="monospace" font-size="12" fill="#484f58">AGPL-3.0 | Commercial licensing available</text>
+  
+  <!-- Accent line bottom -->
+  <rect x="0" y="624" width="1200" height="4" fill="url(#accent)"/>
+</svg>

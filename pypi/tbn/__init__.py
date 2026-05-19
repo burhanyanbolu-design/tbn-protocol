@@ -4,7 +4,7 @@
 
 from .client import TBNClient
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 __author__ = "Burhan Yanbolu"
 __email__ = "burhan@hardinai.co.uk"
 __all__ = ["TBNClient"]

@@ -2,6 +2,8 @@
 Community Bot Certification Portal
 Web interface for bot certification management.
 Handles certification applications, approvals, and violations.
+
+(c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Trace: HRD-CP-8e1a6b4d
 """
 
 from flask import Blueprint, request, jsonify, render_template

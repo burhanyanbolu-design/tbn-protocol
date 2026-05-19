@@ -1,0 +1,376 @@
+openapi: 3.0.3
+info:
+  title: TBN Protocol API
+  description: |
+    Trusted Bot Network — Trust infrastructure for AI bots.
+    Verify bot identities, perform trust handshakes, and manage bot certifications.
+    
+    Every bot on the TBN network gets a unique cryptographic identity, a tamper-proof seal,
+    and a star-rated certification. Use this API to verify bots before allowing them
+    to access your systems.
+  version: 1.0.0
+  contact:
+    name: Hardin AI Solutions
+    email: burhan@hardinai.co.uk
+    url: https://tbn.hardinai.co.uk
+  license:
+    name: AGPL-3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.html
+
+servers:
+  - url: https://tbn.hardinai.co.uk
+    description: Production
+
+paths:
+  /api/stats:
+    get:
+      summary: Network Statistics
+      description: Get current TBN network statistics including registered bots, certifications, and cache performance.
+      operationId: getStats
+      tags:
+        - Network
+      responses:
+        '200':
+          description: Network statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  registered_bots:
+                    type: integer
+                    example: 35
+                  certified_bots:
+                    type: integer
+                    example: 35
+                  cache:
+                    type: object
+                    properties:
+                      hit_rate:
+                        type: string
+                        example: "45%"
+                      cached_queries:
+                        type: integer
+                  certification:
+                    type: object
+                    properties:
+                      by_level:
+                        type: object
+
+  /api/verify:
+    post:
+      summary: Verify Bot Certificate
+      description: |
+        Verify if a bot is TBN certified and trusted.
+        Returns certification status, level, and trust score.
+        Use this before allowing any bot to access your systems.
+      operationId: verifyBot
+      tags:
+        - Verification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - bot_id
+              properties:
+                bot_id:
+                  type: string
+                  description: The unique TBN bot identifier
+                  example: "tbn-bot-abc123def456"
+      responses:
+        '200':
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  certified:
+                    type: boolean
+                    example: true
+                  bot_id:
+                    type: string
+                  cert_level:
+                    type: string
+                    enum: [COMMUNITY, STANDARD, RESTRICTED]
+                    example: "STANDARD"
+                  trust_score:
+                    type: number
+                    example: 0.95
+                  verified_at:
+                    type: string
+                    format: date-time
+
+  /api/handshake:
+    post:
+      summary: Trust Handshake
+      description: |
+        Perform a trust handshake between two TBN-certified bots.
+        Both bots must be registered and certified. The handshake verifies
+        both identities and establishes a trusted connection.
+      operationId: performHandshake
+      tags:
+        - Trust
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - initiator_id
+                - responder_id
+              properties:
+                initiator_id:
+                  type: string
+                  description: Bot initiating the handshake
+                  example: "tbn-bot-abc123"
+                responder_id:
+                  type: string
+                  description: Bot responding to the handshake
+                  example: "tbn-bot-def456"
+      responses:
+        '200':
+          description: Handshake result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [SUCCESS, FAILED]
+                  handshake_id:
+                    type: string
+                  initiator_verified:
+                    type: boolean
+                  responder_verified:
+                    type: boolean
+                  trust_established:
+                    type: boolean
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/register:
+    post:
+      summary: Register Bot
+      description: |
+        Register a new bot on the TBN network.
+        Requires admin authentication. Returns a unique bot ID and certificate.
+      operationId: registerBot
+      tags:
+        - Registration
+      security:
+        - AdminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type
+              properties:
+                name:
+                  type: string
+                  description: Bot name
+                  example: "MyCompanyBot"
+                type:
+                  type: string
+                  enum: [SEARCH, VALIDATOR, CONNECTOR, MESSENGER]
+                  example: "SEARCH"
+      responses:
+        '200':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bot_id:
+                    type: string
+                    example: "tbn-bot-abc123def456"
+                  name:
+                    type: string
+                  cert_level:
+                    type: string
+                  registered_at:
+                    type: string
+                    format: date-time
+
+  /api/search:
+    post:
+      summary: Trusted Search
+      description: |
+        Search the TBN network for trusted AI tools and services.
+        Results are filtered to only show TBN-verified sources.
+      operationId: trustedSearch
+      tags:
+        - Search
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  example: "Find trusted AI tools for small businesses"
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        url:
+                          type: string
+                        trust_level:
+                          type: string
+                  source:
+                    type: string
+
+  /api/bots:
+    get:
+      summary: List Registered Bots
+      description: Get a list of all bots registered on the TBN network.
+      operationId: listBots
+      tags:
+        - Network
+      responses:
+        '200':
+          description: List of bots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bots:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        bot_id:
+                          type: string
+                        name:
+                          type: string
+                        type:
+                          type: string
+                        cert_level:
+                          type: string
+
+  /api/platform/request:
+    post:
+      summary: Platform Access Request
+      description: |
+        Simulate a bot requesting access to a platform.
+        The platform checks the bot's TBN certification before granting access.
+        Demonstrates how TBN protects systems from unverified bots.
+      operationId: platformRequest
+      tags:
+        - Platform Integration
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - bot_id
+                - resource
+                - intent
+              properties:
+                bot_id:
+                  type: string
+                  example: "tbn-bot-abc123"
+                resource:
+                  type: string
+                  example: "/api/data"
+                intent:
+                  type: string
+                  example: "SEARCH"
+                fake:
+                  type: boolean
+                  description: Set true to test with a fake/unverified bot
+                  example: false
+      responses:
+        '200':
+          description: Access decision
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  granted:
+                    type: boolean
+                  reason:
+                    type: string
+                  bot_verified:
+                    type: boolean
+                  access_level:
+                    type: string
+
+  /bot-info:
+    get:
+      summary: Bot Information Page
+      description: Public page explaining what TBN-Bot does (linked in User-Agent header).
+      operationId: botInfo
+      tags:
+        - Public
+      responses:
+        '200':
+          description: HTML page about TBN-Bot
+          content:
+            text/html:
+              schema:
+                type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: API key (format tbn_live_xxxx)
+    AdminAuth:
+      type: apiKey
+      in: header
+      name: X-Admin-Secret
+      description: Admin secret for bot registration
+
+tags:
+  - name: Network
+    description: Network statistics and bot listing
+  - name: Verification
+    description: Verify bot certificates
+  - name: Trust
+    description: Trust handshakes between bots
+  - name: Registration
+    description: Register new bots (admin only)
+  - name: Search
+    description: Trusted search across verified sources
+  - name: Platform Integration
+    description: Platform access control using TBN
+  - name: Public
+    description: Public information pages

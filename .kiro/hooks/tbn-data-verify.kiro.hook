@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "TBN Data Quality Check",
+  "description": "Runs the data verification audit on the server whenever a bot file is saved, ensuring all data stays accurate and no fake/random values slip through",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "hardin-data-network/bots/*.py"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "ssh -i .ssh_temp_key ubuntu@3.11.229.68 \"python3 /opt/tbn-protocol/hardin-data-network/verify_all_data.py 2>&1 | tail -15\""
+  }
+}

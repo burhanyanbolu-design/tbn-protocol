@@ -18,8 +18,8 @@ class MessengerBot(Bot):
 
     BOT_TYPE = "MESSENGER"
 
-    def __init__(self, name: str, bica: BICA, ca=None):
-        super().__init__(name, bica, ca=ca)
+    def __init__(self, name: str, bica: BICA, ca=None, **kwargs):
+        super().__init__(name, bica, ca=ca, **kwargs)
         self._routing_table: dict[str, object] = {}  # bot_id → Bot
         self._forwarded_count = 0
         self._rejected_count = 0
