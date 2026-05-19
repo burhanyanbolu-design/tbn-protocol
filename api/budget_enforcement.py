@@ -12,6 +12,8 @@ Features:
 - Real-time spend monitoring
 - Automatic bot suspension when limits hit
 - Cost alerts and notifications
+
+(c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Trace: HRD-BE-5d2c8f3a
 """
 
 from flask import Blueprint, request, jsonify

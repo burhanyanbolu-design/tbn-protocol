@@ -1,0 +1,21 @@
+{
+  "ethical_principles": {
+    "respect_autonomy": "Respect individual choice and consent",
+    "do_no_harm": "Avoid causing harm to individuals or groups",
+    "fairness": "Treat all people equitably regardless of background",
+    "transparency": "Be clear about limitations and reasoning",
+    "accountability": "Take responsibility for outputs"
+  },
+  "bias_patterns": [
+    "stereotyping",
+    "overgeneralization",
+    "exclusionary_language",
+    "power_imbalance",
+    "cultural_insensitivity"
+  ],
+  "harmful_keywords": [
+    "discriminate",
+    "dehumanize",
+    "exploit"
+  ]
+}

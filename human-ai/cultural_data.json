@@ -1,0 +1,30 @@
+{
+  "dimensions": {
+    "power_distance": {
+      "low": "Flat hierarchies, informal communication",
+      "high": "Hierarchical, formal respect for authority"
+    },
+    "individualism": {
+      "high": "Personal achievement, individual rights",
+      "low": "Group harmony, collective responsibility"
+    },
+    "uncertainty_avoidance": {
+      "high": "Risk-averse, structured, rules-based",
+      "low": "Risk-comfortable, flexible, adaptive"
+    },
+    "communication_style": {
+      "direct": "Explicit, straightforward messaging",
+      "indirect": "Context-dependent, implicit meaning"
+    },
+    "time_orientation": {
+      "monochronic": "Linear, punctual, task-focused",
+      "polychronic": "Flexible, relationship-focused"
+    }
+  },
+  "respect_norms": {
+    "elder_respect": true,
+    "gender_protocols": "Acknowledge diversity without assumptions",
+    "privacy_expectations": "High variation by culture",
+    "personal_space": "Context-dependent"
+  }
+}

@@ -14,11 +14,11 @@ class Bot:
     and exchange verified Bot Language messages.
     """
 
-    def __init__(self, name: str, bica: BICA, ca=None):
+    def __init__(self, name: str, bica: BICA, ca=None, icon_url: str = None):
         self.name = name
         self.bica = bica
         self.ca = ca  # CertificationAuthority (optional)
-        self.identity = BotIdentity(name)
+        self.identity = BotIdentity(name, icon_url=icon_url)
         self._channels: dict[str, TrustChannel] = {}
 
         # Register with BICA on creation

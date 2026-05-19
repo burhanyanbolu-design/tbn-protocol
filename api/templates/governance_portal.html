@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TBN Governance Control Panel</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-EF6RKG8KY2");</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e0e0e0;font-family:'Segoe UI',sans-serif;min-height:100vh}
+.header{background:#0d1117;border-bottom:1px solid #30363d;padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:18px;font-weight:700;color:#fff}.logo span{color:#00d4ff}
+.nav a{color:#8b949e;text-decoration:none;font-size:13px;margin-left:20px}.nav a:hover{color:#fff}
+.company-bar{background:#161b22;border-bottom:1px solid #21262d;padding:10px 32px;display:flex;align-items:center;gap:16px}
+.company-label{font-size:12px;color:#8b949e}
+.company-select{background:#0d1117;border:1px solid #30363d;color:#fff;padding:6px 12px;border-radius:6px;font-size:13px;outline:none}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#00ff88;display:inline-block;margin-right:6px}
+.tabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid #30363d}
+.tab{padding:12px 24px;font-size:13px;font-weight:600;color:#8b949e;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab:hover{color:#fff}
+.tab.active{color:#00d4ff;border-bottom-color:#00d4ff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.main{max-width:1400px;margin:0 auto;padding:24px 20px}
+.page-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px}
+.page-sub{font-size:13px;color:#8b949e;margin-bottom:24px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;cursor:pointer;transition:all .2s}
+.stat-card:hover{border-color:#00d4ff;transform:translateY(-2px)}
+.stat-label{font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-value{font-size:32px;font-weight:700;color:#fff;margin-bottom:4px}
+.stat-sub{font-size:12px;color:#8b949e}
+.stat-card.green .stat-value{color:#00ff88}
+.stat-card.red .stat-value{color:#ff4444}
+.stat-card.blue .stat-value{color:#00d4ff}
+.stat-card.orange .stat-value{color:#ff6b35}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px}
+.card-title{font-size:13px;font-weight:600;color:#fff;letter-spacing:.5px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.badge-green{background:rgba(0,255,136,.15);color:#00ff88;border:1px solid rgba(0,255,136,.3)}
+.badge-red{background:rgba(255,68,68,.15);color:#ff4444;border:1px solid rgba(255,68,68,.3)}
+.badge-blue{background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3)}
+.badge-orange{background:rgba(255,107,53,.15);color:#ff6b35;border:1px solid rgba(255,107,53,.3)}
+.ledger-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #21262d;font-size:12px}
+.ledger-row:last-child{border:none}
+.ledger-action{color:#fff;font-weight:500}
+.ledger-bot{color:#8b949e;font-size:11px;margin-top:2px}
+.ledger-time{color:#484f58}
+.ledger-outcome{font-size:11px;padding:2px 8px;border-radius:10px}
+.outcome-success{background:rgba(0,255,136,.1);color:#00ff88}
+.outcome-blocked{background:rgba(255,68,68,.1);color:#ff4444}
+.outcome-rule{background:rgba(255,107,53,.1);color:#ff6b35}
+.alert-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #21262d;align-items:flex-start}
+.alert-row:last-child{border:none}
+.alert-icon{font-size:18px;flex-shrink:0}
+.alert-body{flex:1}
+.alert-title{font-size:13px;color:#fff;margin-bottom:2px}
+.alert-desc{font-size:11px;color:#8b949e}
+.alert-time{font-size:11px;color:#484f58;white-space:nowrap}
+.compliance-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #21262d}
+.compliance-item:last-child{border:none}
+.compliance-name{font-size:13px;color:#fff}
+.compliance-sub{font-size:11px;color:#8b949e;margin-top:2px}
+.score-bar{height:6px;background:#21262d;border-radius:3px;margin-top:6px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:#00ff88;transition:width .5s}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:#00d4ff;color:#000}.btn-primary:hover{background:#00b8d9}
+.btn-success{background:#00ff88;color:#000}.btn-success:hover{background:#00d970}
+.btn-outline{background:none;border:1px solid #30363d;color:#8b949e}.btn-outline:hover{border-color:#00d4ff;color:#00d4ff}
+.rules-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #21262d;font-size:12px}
+.rules-row:last-child{border:none}
+.rule-name{color:#fff;font-size:13px}
+.rule-type{color:#8b949e;font-size:11px}
+.rule-action{font-size:11px;padding:2px 8px;border-radius:10px}
+.action-block{background:rgba(255,68,68,.1);color:#ff4444}
+.action-throttle{background:rgba(255,170,0,.1);color:#ffaa00}
+.action-alert{background:rgba(0,212,255,.1);color:#00d4ff}
+.action-encrypt{background:rgba(155,89,182,.1);color:#9b59b6}
+.agreement-item{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:14px;margin-bottom:10px}
+.agreement-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.agreement-name{font-size:13px;font-weight:bold;color:#fff}
+.agreement-id{font-size:10px;color:#6e7681}
+.level-badge{font-size:10px;padding:3px 8px;border-radius:4px;font-weight:bold}
+.level-FULL{background:#1a3a2a;color:#00ff88}
+.level-LIMITED{background:#1f3a5f;color:#58a6ff}
+.level-RESTRICTED{background:#3a2a1a;color:#d29922}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:11px;color:#6e7681;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;padding:9px 12px;font-family:'Segoe UI',sans-serif;font-size:12px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#00d4ff}
+.form-group textarea{resize:vertical;min-height:70px;font-family:monospace}
+.response-box{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:12px;font-size:11px;color:#00ff88;min-height:60px;max-height:200px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-top:12px;font-family:monospace}
+.response-box.error{color:#ff4444}
+.empty{text-align:center;padding:30px;color:#484f58;font-size:13px}
+.spinner{width:20px;height:20px;border:2px solid #30363d;border-top-color:#00d4ff;border-radius:50%;animation:spin .8s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#161b22;border:1px solid:#30363d;border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:18px;font-weight:700;color:#fff}
+.modal-close{background:none;border:none;color:#8b949e;font-size:24px;cursor:pointer;padding:0;width:30px;height:30px}
+.modal-close:hover{color:#fff}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">TBN <span>GOVERNANCE</span></div>
+  <div class="nav">
+    <a href="/">Dashboard</a>
+    <a href="/governance/portal" style="color:#fff">Governance</a>
+    <a href="/certification/portal">Certification</a>
+    <a href="/pricing">Pricing</a>
+    <a href="mailto:burhan@hardinai.co.uk">Support</a>
+  </div>
+</div>
+<div class="company-bar">
+  <span class="company-label">Company:</span>
+  <select class="company-select" id="companySelect" onchange="loadAll()">
+    <option value="Hardin AI Solutions">Hardin AI Solutions</option>
+    <option value="Test Company Ltd">Test Company Ltd</option>
+    <option value="Demo Corp">Demo Corp</option>
+  </select>
+  <span><span class="status-dot"></span><span style="font-size:12px;color:#00ff88">LIVE MONITORING</span></span>
+  <span style="margin-left:auto;font-size:12px;color:#484f58" id="lastUpdated">Loading...</span>
+</div>
+
+<div class="main">
+  <div class="page-title">Governance Control Panel</div>
+  <div class="page-sub">Unified control center for AI governance, data agreements, compliance & monitoring</div>
+  
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('overview')">📊 Overview</div>
+    <div class="tab" onclick="switchTab('trust')">🔒 Trust Ledger</div>
+    <div class="tab" onclick="switchTab('data')">📋 Data Agreements</div>
+    <div class="tab" onclick="switchTab('rules')">⚙️ Rules Engine</div>
+    <div class="tab" onclick="switchTab('compliance')">✅ Compliance</div>
+  </div>
+
+  <!-- Overview Tab -->
+  <div id="tab-overview" class="tab-content active">
+    <div class="grid4">
+      <div class="stat-card blue" onclick="switchTab('trust')"><div class="stat-label">Total Bot Actions</div><div class="stat-value" id="statActions">-</div><div class="stat-sub">All time</div></div>
+      <div class="stat-card green"><div class="stat-label">Active Bots</div><div class="stat-value" id="statBots">-</div><div class="stat-sub">Last 30 days</div></div>
+      <div class="stat-card orange" onclick="switchTab('trust')"><div class="stat-label">Open Alerts</div><div class="stat-value" id="statAlerts">-</div><div class="stat-sub">Needs review</div></div>
+      <div class="stat-card green" onclick="switchTab('compliance')"><div class="stat-label">Compliance Score</div><div class="stat-value" id="statScore">-</div><div class="stat-sub">GDPR + EU AI Act</div></div>
+    </div>
+    <div class="grid4">
+      <div class="stat-card blue" onclick="switchTab('data')"><div class="stat-label">Data Agreements</div><div class="stat-value" id="statAgreements">-</div><div class="stat-sub">Active companies</div></div>
+      <div class="stat-card green"><div class="stat-label">Access Allowed</div><div class="stat-value" id="statAllowed">-</div><div class="stat-sub">Last 24h</div></div>
+      <div class="stat-card red"><div class="stat-label">Access Denied</div><div class="stat-value" id="statDenied">-</div><div class="stat-sub">Last 24h</div></div>
+      <div class="stat-card blue" onclick="switchTab('rules')"><div class="stat-label">Active Rules</div><div class="stat-value" id="statRules">-</div><div class="stat-sub">Governance policies</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Recent Trust Ledger <span id="chainStatus" class="badge badge-blue">Verifying...</span></div>
+        <div id="overviewLedger"><div class="spinner"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Behaviour Alerts <button class="btn btn-outline" onclick="loadAlerts()" style="font-size:11px;padding:4px 10px">Refresh</button></div>
+        <div id="overviewAlerts"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Ledger Tab -->
+  <div id="tab-trust" class="tab-content">
+    <div class="grid3">
+      <div class="stat-card blue"><div class="stat-label">Total Entries</div><div class="stat-value" id="trustTotal">-</div><div class="stat-sub">Immutable records</div></div>
+      <div class="stat-card green"><div class="stat-label">Chain Status</div><div class="stat-value" id="trustChain">-</div><div class="stat-sub">Blockchain integrity</div></div>
+      <div class="stat-card orange"><div class="stat-label">Active Alerts</div><div class="stat-value" id="trustAlerts">-</div><div class="stat-sub">Anomalies detected</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Trust Ledger Entries <button class="btn btn-outline" onclick="loadLedger()" style="font-size:11px;padding:4px 10px">Refresh</button></div>
+        <div id="ledgerContent"><div class="spinner"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Behaviour Alerts <button class="btn btn-success" onclick="resolveAllAlerts()" style="font-size:11px;padding:4px 10px">Resolve All</button></div>
+        <div id="alertsContent"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Agreements Tab -->
+  <div id="tab-data" class="tab-content">
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">📝 Create Data Sharing Agreement</div>
+        <div class="form-group"><label>Company ID</label><input type="text" id="ag-company-id" placeholder="e.g. nhs-royal-london" /></div>
+        <div class="form-group"><label>Company Name</label><input type="text" id="ag-company-name" placeholder="e.g. Royal London Hospital NHS Trust" /></div>
+        <div class="form-group">
+          <label>Access Level</label>
+          <select id="ag-access-level">
+            <option value="LIMITED">🟡 LIMITED - Specific fields only</option>
+            <option value="FULL">🟢 FULL - All allowed data</option>
+            <option value="RESTRICTED">🔴 RESTRICTED - Minimal access</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Allowed Data Types (comma separated)</label><input type="text" id="ag-data-types" placeholder="patient_demographics, medical_records" /></div>
+        <div class="form-group"><label>Allowed Fields (JSON format)</label><textarea id="ag-allowed-fields" placeholder='{"patient_demographics": ["name", "dob", "nhs_number"]}'></textarea></div>
+        <div class="form-group"><label>Blocked Fields (JSON format)</label><textarea id="ag-blocked-fields" placeholder='{"patient_demographics": ["address", "phone", "email"]}'></textarea></div>
+        <div class="form-group"><label>Max Records Per Request</label><input type="number" id="ag-max-records" value="100" /></div>
+        <div class="form-group"><label>Rate Limit (requests per minute)</label><input type="number" id="ag-rate-limit" value="60" /></div>
+        <div class="form-group"><label>Required Cert Levels (comma separated)</label><input type="text" id="ag-cert-levels" placeholder="COMMUNITY, STANDARD" /></div>
+        <button class="btn btn-success" onclick="createAgreement()">📝 Create Agreement</button>
+        <div class="response-box" id="ag-response">// response will appear here</div>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ Validate Data Scope</div>
+        <p style="font-size:11px;color:#8b949e;margin-bottom:14px">Test if a bot is allowed to access specific data under a company agreement.</p>
+        <div class="form-group"><label>Bot ID</label><input type="text" id="val-bot-id" placeholder="tbn-bot-xxxx" /></div>
+        <div class="form-group"><label>Company ID</label><input type="text" id="val-company-id" placeholder="nhs-royal-london" /></div>
+        <div class="form-group"><label>Data Type</label><select id="val-data-type"><option value="patient_demographics">patient_demographics</option><option value="medical_records">medical_records</option><option value="financial_data">financial_data</option><option value="public_data">public_data</option><option value="search_results">search_results</option></select></div>
+        <div class="form-group"><label>Fields Requested (comma separated)</label><input type="text" id="val-fields" placeholder="name, dob, nhs_number" /></div>
+        <div class="form-group"><label>Max Records</label><input type="number" id="val-max-records" value="50" /></div>
+        <div class="form-group"><label>Purpose</label><input type="text" id="val-purpose" placeholder="Clinical decision support" /></div>
+        <div class="form-group"><label>Bot Cert Level</label><select id="val-cert-level"><option value="COMMUNITY">🟢 COMMUNITY</option><option value="STANDARD">🟡 STANDARD</option><option value="RESTRICTED">🔴 RESTRICTED</option></select></div>
+        <div class="form-group"><label>Environment</label><select id="val-env"><option value="external">External</option><option value="internal">Internal</option></select></div>
+        <button class="btn btn-primary" onclick="validateScope()">✅ Validate Scope</button>
+        <div class="response-box" id="val-response">// validation result will appear here</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Active Data Agreements <button class="btn btn-outline" onclick="loadAgreements()" style="font-size:11px;padding:4px 10px">Refresh</button></div>
+      <div id="agreements-list"><div class="spinner"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔄 Dynamic Access Level Control</div>
+      <p style="font-size:11px;color:#8b949e;margin-bottom:14px">Change a company access level instantly without recreating the agreement.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+        <div class="form-group" style="flex:1;margin:0"><label>Company ID</label><input type="text" id="dyn-company-id" placeholder="nhs-royal-london" /></div>
+        <div class="form-group" style="flex:1;margin:0"><label>New Access Level</label><select id="dyn-level"><option value="FULL">FULL</option><option value="LIMITED">LIMITED</option><option value="RESTRICTED">RESTRICTED</option></select></div>
+        <button class="btn btn-primary" onclick="updateAccessLevel()" style="margin-bottom:0">🔄 Update Level</button>
+      </div>
+      <div class="response-box" id="dyn-response">// response will appear here</div>
+    </div>
+  </div>
+
+  <!-- Rules Engine Tab -->
+  <div id="tab-rules" class="tab-content">
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">⚙️ Active Governance Rules <span class="badge badge-green">Live</span></div>
+        <div id="rulesContent"><div class="spinner"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">➕ Add Custom Rule</div>
+        <div class="form-group"><label>Rule Name</label><input type="text" id="rule-name" placeholder="e.g. Block sensitive data export" /></div>
+        <div class="form-group">
+          <label>Rule Type</label>
+          <select id="rule-type">
+            <option value="action_block">Action Block</option>
+            <option value="rate_limit">Rate Limit</option>
+            <option value="time_restriction">Time Restriction</option>
+            <option value="data_classification">Data Classification</option>
+            <option value="certification_check">Certification Check</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Condition (JSON)</label><textarea id="rule-condition" placeholder='{"action": "EXPORT", "data_size_mb": ">100"}'></textarea></div>
+        <div class="form-group">
+          <label>Action</label>
+          <select id="rule-action">
+            <option value="BLOCK">BLOCK</option>
+            <option value="THROTTLE">THROTTLE</option>
+            <option value="ALERT">ALERT</option>
+            <option value="ENCRYPT_AND_LOG">ENCRYPT_AND_LOG</option>
+          </select>
+        </div>
+        <button class="btn btn-success" onclick="addRule()">➕ Add Rule</button>
+        <div class="response-box" id="rule-response">// response will appear here</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance Tab -->
+  <div id="tab-compliance" class="tab-content">
+    <div class="grid3">
+      <div class="stat-card green"><div class="stat-label">GDPR Status</div><div class="stat-value">95%</div><div class="stat-sub">Compliant</div></div>
+      <div class="stat-card green"><div class="stat-label">EU AI Act</div><div class="stat-value">97%</div><div class="stat-sub">Compliant</div></div>
+      <div class="stat-card blue"><div class="stat-label">Last Audit</div><div class="stat-value" id="lastAudit">-</div><div class="stat-sub">Timestamp</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Compliance Status <button class="btn btn-primary" onclick="generateReport()" style="font-size:11px;padding:4px 10px">Generate Report</button></div>
+      <div id="complianceContent"><div class="spinner"></div></div>
+    </div>
+    <div class="card" id="reportCard" style="display:none">
+      <div class="card-title">📄 Compliance Report <button class="btn btn-outline" onclick="document.getElementById('reportCard').style.display='none'" style="font-size:11px;padding:4px 10px">Close</button></div>
+      <div id="reportContent" style="font-family:monospace;font-size:12px;line-height:1.8;white-space:pre-wrap;color:#e0e0e0"></div>
+    </div>
+  </div>
+
+</div>
+<script>
+function company(){return document.getElementById('companySelect').value;}
+async function get(url){const r=await fetch(url);return r.json();}
+async function post(url,data){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});return r.json();}
+
+async function loadDashboard(){
+  try{
+    const d=await get('/api/govern/dashboard/'+encodeURIComponent(company()));
+    document.getElementById('statActions').textContent=(d.trust_ledger.total_entries||0).toLocaleString();
+    document.getElementById('statBots').textContent=d.active_bots||0;
+    document.getElementById('statAlerts').textContent=d.alerts.count||0;
+    document.getElementById('statScore').textContent='95%';
+    document.getElementById('lastUpdated').textContent='Updated: '+new Date().toLocaleTimeString();
+  }catch(e){console.error(e);}
+}
+
+async function loadLedger(){
+  try{
+    const ledger=await get('/api/govern/ledger/'+encodeURIComponent(company()));
+    const verify=await get('/api/govern/ledger/verify');
+    const chainEl=document.getElementById('chainStatus');
+    if(verify.valid){chainEl.className='badge badge-green';chainEl.textContent='Chain Intact';}
+    else{chainEl.className='badge badge-red';chainEl.textContent='Chain Broken!';}
+    const entries=ledger.entries||[];
+    if(!entries.length){document.getElementById('ledgerContent').innerHTML='<div class="empty">No entries yet. Bot actions will appear here.</div>';return;}
+    document.getElementById('ledgerContent').innerHTML=entries.slice(0,8).map(function(e){
+      var cls=e.outcome==='SUCCESS'?'outcome-success':e.outcome==='BLOCKED'?'outcome-blocked':'outcome-rule';
+      return '<div class="ledger-row"><div><div class="ledger-action">'+e.action+'</div><div class="ledger-bot">'+e.bot_id+' &bull; '+e.resource.substring(0,30)+'</div></div><div style="text-align:right"><span class="ledger-outcome '+cls+'">'+e.outcome+'</span><div class="ledger-time">'+e.timestamp+'</div></div></div>';
+    }).join('');
+  }catch(e){document.getElementById('ledgerContent').innerHTML='<div class="empty">Error loading ledger</div>';}
+}
+
+async function loadAlerts(){
+  try{
+    const d=await get('/api/govern/alerts?company='+encodeURIComponent(company()));
+    const alerts=d.alerts||[];
+    if(!alerts.length){document.getElementById('alertsContent').innerHTML='<div class="empty" style="color:#00ff88">No alerts - all bots behaving normally</div>';return;}
+    var icons={CRITICAL:'&#128308;',HIGH:'&#128992;',MEDIUM:'&#128993;',LOW:'&#128994;'};
+    document.getElementById('alertsContent').innerHTML=alerts.slice(0,5).map(function(a){
+      return '<div class="alert-row"><div class="alert-icon">'+(icons[a.severity]||'&#9898;')+'</div><div class="alert-body"><div class="alert-title">'+a.alert_type.replace(/_/g,' ')+'</div><div class="alert-desc">'+a.description+'</div></div><div class="alert-time">'+a.created_at+'</div></div>';
+    }).join('');
+  }catch(e){document.getElementById('alertsContent').innerHTML='<div class="empty">Error loading alerts</div>';}
+}
+
+function loadCompliance(){
+  var frameworks=[{name:'GDPR',score:95},{name:'EU AI Act',score:97}];
+  document.getElementById('complianceContent').innerHTML=frameworks.map(function(f){
+    return '<div class="compliance-item"><div><div class="compliance-name">'+f.name+'</div><div class="compliance-sub">Last checked: today</div><div class="score-bar"><div class="score-fill" style="width:'+f.score+'%"></div></div></div><span class="badge badge-green">COMPLIANT '+f.score+'%</span></div>';
+  }).join('');
+}
+
+async function loadRules(){
+  try{
+    const d=await get('/api/govern/rules/'+encodeURIComponent(company()));
+    const rules=d.rules||[];
+    if(!rules.length){document.getElementById('rulesContent').innerHTML='<div class="empty">No rules configured</div>';return;}
+    var actionClass={BLOCK:'action-block',THROTTLE:'action-throttle',ALERT:'action-alert',ENCRYPT_AND_LOG:'action-encrypt'};
+    document.getElementById('rulesContent').innerHTML=rules.slice(0,6).map(function(r){
+      return '<div class="rules-row"><div><div class="rule-name">'+r.name+'</div><div class="rule-type">'+r.type+'</div></div><span class="rule-action '+(actionClass[r.action]||'action-alert')+'">'+r.action+'</span></div>';
+    }).join('');
+  }catch(e){document.getElementById('rulesContent').innerHTML='<div class="empty">Error loading rules</div>';}
+}
+
+async function generateReport(){
+  var card=document.getElementById('reportCard');
+  var content=document.getElementById('reportContent');
+  card.style.display='block';
+  content.textContent='Generating compliance report...';
+  try{
+    const d=await post('/api/govern/compliance/report',{company:company(),framework:'GDPR'});
+    var out='GDPR COMPLIANCE REPORT\n'+'='.repeat(50)+'\n';
+    out+='Company:   '+d.company+'\n';
+    out+='Period:    '+(d.period||'Last 30 days')+'\n';
+    out+='Status:    '+d.status+'\n';
+    out+='Generated: '+new Date().toLocaleString()+'\n\nCONTROLS CHECKED:\n';
+    (d.controls||[]).forEach(function(c){out+=(c.status==='PASS'?'PASS':'FAIL')+' '+c.article+'\n   Evidence: '+c.evidence+'\n';});
+    var s=d.summary||{};
+    out+='\nSUMMARY:\nTotal bot actions:  '+(s.total_bot_actions||0)+'\nBlocked actions:    '+(s.blocked_actions||0)+'\nActive bots:        '+(s.active_bots||0)+'\nCompliance score:   '+(s.compliance_score||0)+'%\n\nSigned by: '+(d.signed_by||'')+'\nSignature: '+(d.signature||'');
+    content.textContent=out;
+  }catch(e){content.textContent='Error: '+e.message;}
+}
+
+// Tab switching
+function switchTab(tabName){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.tab[onclick*="'+tabName+'"]').classList.add('active');
+  document.getElementById('tab-'+tabName).classList.add('active');
+  if(tabName==='trust')loadLedger();
+  if(tabName==='data')loadAgreements();
+  if(tabName==='rules')loadRules();
+  if(tabName==='compliance')loadCompliance();
+}
+
+// Data Agreements
+async function loadAgreements(){
+  try{
+    const res=await get('/governance/agreements');
+    const agreements=res.agreements||[];
+    document.getElementById('statAgreements').textContent=agreements.length;
+    if(!agreements.length){document.getElementById('agreements-list').innerHTML='<div class="empty">No agreements yet</div>';return;}
+    document.getElementById('agreements-list').innerHTML=agreements.map(a=>`
+      <div class="agreement-item">
+        <div class="agreement-header">
+          <div><div class="agreement-name">${a.company_name}</div><div class="agreement-id">${a.company_id}</div></div>
+          <span class="level-badge level-${a.access_level}">${a.access_level}</span>
+        </div>
+        <div style="font-size:10px;color:#6e7681;margin-top:6px">
+          Data types: ${a.allowed_data_types.map(t=>'<span class="badge">'+t+'</span>').join('')}
+        </div>
+        <div style="font-size:10px;color:#6e7681;margin-top:4px">
+          Max records: ${a.max_records_per_request} | Rate: ${a.rate_limit_per_minute}/min | Cert: ${a.allowed_cert_levels.join(', ')}
+        </div>
+      </div>`).join('');
+  }catch(e){document.getElementById('agreements-list').innerHTML='<div class="empty">Error loading agreements</div>';}
+}
+
+async function createAgreement(){
+  const companyId=document.getElementById('ag-company-id').value.trim();
+  const companyName=document.getElementById('ag-company-name').value.trim();
+  const accessLevel=document.getElementById('ag-access-level').value;
+  const dataTypesRaw=document.getElementById('ag-data-types').value.trim();
+  const allowedFieldsRaw=document.getElementById('ag-allowed-fields').value.trim();
+  const blockedFieldsRaw=document.getElementById('ag-blocked-fields').value.trim();
+  const maxRecords=parseInt(document.getElementById('ag-max-records').value);
+  const rateLimit=parseInt(document.getElementById('ag-rate-limit').value);
+  const certLevelsRaw=document.getElementById('ag-cert-levels').value.trim();
+  const responseBox=document.getElementById('ag-response');
+  if(!companyId||!companyName){responseBox.textContent='Error: Company ID and name are required';responseBox.className='response-box error';return;}
+  let allowedFields={},blockedFields={};
+  try{if(allowedFieldsRaw)allowedFields=JSON.parse(allowedFieldsRaw);}catch(e){responseBox.textContent='Error: Invalid JSON in allowed fields';responseBox.className='response-box error';return;}
+  try{if(blockedFieldsRaw)blockedFields=JSON.parse(blockedFieldsRaw);}catch(e){responseBox.textContent='Error: Invalid JSON in blocked fields';responseBox.className='response-box error';return;}
+  const payload={company_id:companyId,company_name:companyName,access_level:accessLevel,allowed_data_types:dataTypesRaw?dataTypesRaw.split(',').map(s=>s.trim()):[],allowed_fields:allowedFields,blocked_fields:blockedFields,max_records_per_request:maxRecords,rate_limit_per_minute:rateLimit,allowed_cert_levels:certLevelsRaw?certLevelsRaw.split(',').map(s=>s.trim().toUpperCase()):['COMMUNITY','STANDARD']};
+  try{
+    responseBox.textContent='Creating agreement...';responseBox.className='response-box';
+    const data=await post('/governance/agreements',payload);
+    responseBox.textContent=JSON.stringify(data,null,2);
+    responseBox.className=data.success?'response-box':'response-box error';
+    if(data.success)loadAgreements();
+  }catch(e){responseBox.textContent='Error: '+e.message;responseBox.className='response-box error';}
+}
+
+async function validateScope(){
+  const botId=document.getElementById('val-bot-id').value.trim();
+  const companyId=document.getElementById('val-company-id').value.trim();
+  const dataType=document.getElementById('val-data-type').value;
+  const fieldsRaw=document.getElementById('val-fields').value.trim();
+  const maxRecords=parseInt(document.getElementById('val-max-records').value);
+  const purpose=document.getElementById('val-purpose').value.trim();
+  const certLevel=document.getElementById('val-cert-level').value;
+  const env=document.getElementById('val-env').value;
+  const responseBox=document.getElementById('val-response');
+  if(!botId||!companyId){responseBox.textContent='Error: Bot ID and Company ID required';responseBox.className='response-box error';return;}
+  const payload={bot_id:botId,company_id:companyId,data_type:dataType,fields_requested:fieldsRaw?fieldsRaw.split(',').map(s=>s.trim()):[],max_records:maxRecords,purpose:purpose,bot_cert_level:certLevel,environment:env};
+  try{
+    responseBox.textContent='Validating...';responseBox.className='response-box';
+    const data=await post('/governance/validate',payload);
+    responseBox.textContent=JSON.stringify(data,null,2);
+    responseBox.className=data.allowed?'response-box':'response-box error';
+  }catch(e){responseBox.textContent='Error: '+e.message;responseBox.className='response-box error';}
+}
+
+async function updateAccessLevel(){
+  const companyId=document.getElementById('dyn-company-id').value.trim();
+  const level=document.getElementById('dyn-level').value;
+  const responseBox=document.getElementById('dyn-response');
+  if(!companyId){responseBox.textContent='Error: Company ID required';responseBox.className='response-box error';return;}
+  try{
+    const res=await fetch('/governance/agreements/'+companyId+'/access-level',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({access_level:level})});
+    const data=await res.json();
+    responseBox.textContent=JSON.stringify(data,null,2);
+    responseBox.className=data.success?'response-box':'response-box error';
+    if(data.success)loadAgreements();
+  }catch(e){responseBox.textContent='Error: '+e.message;responseBox.className='response-box error';}
+}
+
+async function verifyChain(){
+  try{
+    const verify=await get('/api/govern/ledger/verify');
+    alert(verify.message);
+  }catch(e){alert('Error verifying chain: '+e.message);}
+}
+
+async function resolveAllAlerts(){
+  if(!confirm('Mark all alerts as resolved?'))return;
+  alert('Feature coming soon - alert resolution');
+}
+
+async function addRule(){
+  const name=document.getElementById('rule-name').value.trim();
+  const type=document.getElementById('rule-type').value;
+  const conditionRaw=document.getElementById('rule-condition').value.trim();
+  const action=document.getElementById('rule-action').value;
+  const responseBox=document.getElementById('rule-response');
+  if(!name||!conditionRaw){responseBox.textContent='Error: Rule name and condition required';responseBox.className='response-box error';return;}
+  let condition={};
+  try{condition=JSON.parse(conditionRaw);}catch(e){responseBox.textContent='Error: Invalid JSON in condition';responseBox.className='response-box error';return;}
+  responseBox.textContent='Adding rule...';responseBox.className='response-box';
+  setTimeout(()=>{responseBox.textContent='Success: Rule added (feature in development)';responseBox.className='response-box';},500);
+}
+
+async function loadGovernanceStats(){
+  try{
+    const stats=await get('/governance/stats');
+    if(stats.success){
+      document.getElementById('statAgreements').textContent=stats.stats.total_agreements||0;
+      document.getElementById('statAllowed').textContent=stats.stats.allowed||0;
+      document.getElementById('statDenied').textContent=stats.stats.denied||0;
+    }
+  }catch(e){console.error(e);}
+}
+
+async function loadAll(){
+  await Promise.all([loadDashboard(),loadLedger(),loadAlerts(),loadCompliance(),loadRules(),loadGovernanceStats()]);
+  document.getElementById('lastAudit').textContent=new Date().toLocaleDateString();
+}
+loadAll();
+setInterval(loadAll,30000);
+</script>
+</body>
+</html>

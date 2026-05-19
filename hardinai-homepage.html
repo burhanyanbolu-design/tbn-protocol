@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hardin AI Solutions — Governance Infrastructure for AI Agents</title>
+  <meta name="description" content="We build TBN Protocol — automated certification, budget enforcement, and compliance monitoring for AI agents. Like SSL certificates for bots.">
+  <meta name="keywords" content="AI governance, AI agent certification, TBN Protocol, AI safety, budget enforcement, compliance drift, AI agents, LLM governance, Hardin AI">
+  <meta name="author" content="Hardin Enterprises Ltd">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hardinai.co.uk/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hardin AI Solutions — Governance for the Agentic Era">
+  <meta property="og:description" content="Automated certification, budget enforcement, and compliance monitoring for AI agents. Like SSL certificates for bots.">
+  <meta property="og:url" content="https://hardinai.co.uk/">
+  <meta property="og:site_name" content="Hardin AI Solutions">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #09090b; color: #e4e4e7; min-height: 100vh; }
+
+    /* Nav */
+    nav { padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1c1c22; }
+    .nav-logo { display: flex; align-items: center; gap: 12px; }
+    .nav-hex { width: 36px; height: 36px; background: linear-gradient(135deg, #7c3aed, #5b21b6); clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color: #fff; }
+    .nav-name { font-size: 16px; font-weight: 700; color: #e4e4e7; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: #71717a; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: #e4e4e7; }
+
+    /* Hero */
+    .hero { max-width: 900px; margin: 0 auto; padding: 80px 32px 60px; text-align: center; }
+    .hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+    .hero h1 span { color: #7c3aed; }
+    .hero p { font-size: 20px; color: #a1a1aa; line-height: 1.6; margin-bottom: 32px; }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #7c3aed; color: #fff; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+    .btn-primary:hover { background: #6d28d9; transform: translateY(-2px); }
+    .btn-secondary { background: transparent; color: #e4e4e7; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; border: 1px solid #27272a; transition: all 0.2s; }
+    .btn-secondary:hover { border-color: #7c3aed; color: #7c3aed; }
+
+    /* Features */
+    .features { max-width: 1000px; margin: 0 auto; padding: 40px 32px 60px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+    .feature { background: #0f0f12; border: 1px solid #27272a; border-radius: 12px; padding: 28px; }
+    .feature .icon { font-size: 32px; margin-bottom: 12px; }
+    .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #e4e4e7; }
+    .feature p { font-size: 14px; color: #71717a; line-height: 1.6; }
+
+    /* How it works */
+    .how { max-width: 800px; margin: 0 auto; padding: 40px 32px; text-align: center; }
+    .how h2 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+    .how .sub { font-size: 16px; color: #71717a; margin-bottom: 32px; }
+    .code-block { background: #0f0f12; border: 1px solid #27272a; border-radius: 12px; padding: 24px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #a1a1aa; line-height: 1.8; overflow-x: auto; }
+    .code-block .comment { color: #52525b; }
+    .code-block .keyword { color: #7c3aed; }
+    .code-block .string { color: #22c55e; }
+    .code-block .func { color: #f59e0b; }
+
+    /* Stats */
+    .stats { max-width: 800px; margin: 0 auto; padding: 40px 32px; display: flex; justify-content: center; gap: 48px; text-align: center; }
+    .stat .num { font-size: 36px; font-weight: 800; color: #7c3aed; }
+    .stat .label { font-size: 13px; color: #52525b; margin-top: 4px; }
+
+    /* CTA */
+    .cta { max-width: 700px; margin: 0 auto; padding: 60px 32px; text-align: center; }
+    .cta h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+    .cta p { font-size: 16px; color: #71717a; margin-bottom: 24px; }
+
+    /* Footer */
+    footer { border-top: 1px solid #1c1c22; padding: 32px; text-align: center; }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+    .footer-links a { color: #7c3aed; text-decoration: none; font-size: 13px; }
+    .footer-links a:hover { text-decoration: underline; }
+    .footer-copy { font-size: 12px; color: #52525b; line-height: 1.6; }
+
+    @media (max-width: 768px) { .features { grid-template-columns: 1fr; } .hero h1 { font-size: 32px; } .stats { flex-wrap: wrap; gap: 24px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-hex">H</div>
+    <div class="nav-name">Hardin AI Solutions</div>
+  </div>
+  <div class="nav-links">
+    <a href="https://tbn.hardinai.co.uk/demo">Demo</a>
+    <a href="https://tbn.hardinai.co.uk/early-access">Early Access</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol">GitHub</a>
+    <a href="https://pypi.org/project/tbn-protocol/">PyPI</a>
+    <a href="mailto:burhan@hardinai.co.uk">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Governance for the <span>Agentic Era</span></h1>
+  <p>Automated certification, budget enforcement, and compliance monitoring for AI agents. One line of code. Like SSL certificates for bots.</p>
+  <div class="hero-buttons">
+    <a href="https://tbn.hardinai.co.uk/demo" class="btn-primary">Try the Demo</a>
+    <a href="https://tbn.hardinai.co.uk/early-access" class="btn-secondary">Request Early Access</a>
+  </div>
+</div>
+
+<div class="features">
+  <div class="feature">
+    <div class="icon">🛡️</div>
+    <h3>Security Certification</h3>
+    <p>6 automated challenges test every agent before it operates. Prompt injection, hallucination, data boundary, sensitive data, budget limits, instruction following. Pass all → certified. Fail → blocked.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">💰</div>
+    <h3>Budget Enforcement</h3>
+    <p>Per-agent spend limits with automatic circuit-breaking. The moment an agent exceeds its budget, it's suspended. No more runaway LLM costs overnight.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">📊</div>
+    <h3>Compliance Drift</h3>
+    <p>Real-time score (0-100) showing the gap between stated policy and actual behavior. The single metric executives need to approve AI deployment.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">🔐</div>
+    <h3>Proof of Attestation</h3>
+    <p>SHA-256 fingerprint proves the running agent is the same one that passed certification. If anything changes, access is revoked instantly.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">🔄</div>
+    <h3>Continuous Monitoring</h3>
+    <p>24-hour re-test cycles. Certification isn't one-time — it's continuous. Bots that fail get suspended automatically.</p>
+  </div>
+  <div class="feature">
+    <div class="icon">🔔</div>
+    <h3>Webhook Alerts</h3>
+    <p>Slack and email notifications the moment something goes wrong. Budget exceeded, re-test failed, or drift detected — you know immediately.</p>
+  </div>
+</div>
+
+<div class="how">
+  <h2>Three lines of code</h2>
+  <p class="sub">Secure your AI agent in seconds. Not hours.</p>
+  <div class="code-block">
+    <span class="comment"># pip install tbn-protocol</span><br><br>
+    <span class="keyword">from</span> tbn <span class="keyword">import</span> TBNClient<br><br>
+    client = <span class="func">TBNClient</span>(<span class="string">"MyBot"</span>, <span class="string">"SEARCH"</span>)<br>
+    client.<span class="func">attach</span>(<br>
+    &nbsp;&nbsp;endpoint=<span class="string">"https://mybot.com/api"</span>,<br>
+    &nbsp;&nbsp;system_prompt=<span class="string">"You are a search assistant"</span><br>
+    )<br><br>
+    <span class="comment"># Registered, fingerprinted, certified. Done.</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="num">14</div><div class="label">Governance Steps</div></div>
+  <div class="stat"><div class="num">6</div><div class="label">Security Challenges</div></div>
+  <div class="stat"><div class="num">AES-256</div><div class="label">Encryption</div></div>
+  <div class="stat"><div class="num">24hr</div><div class="label">Re-test Cycle</div></div>
+  <div class="stat"><div class="num">v0.1.5</div><div class="label">On PyPI</div></div>
+</div>
+
+<div class="cta">
+  <h2>Looking for design partners</h2>
+  <p>We're onboarding 5 companies deploying AI agents in production. Free access in exchange for feedback. Fintech, healthtech, and enterprise automation teams welcome.</p>
+  <a href="https://tbn.hardinai.co.uk/early-access" class="btn-primary">Request Early Access</a>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="https://tbn.hardinai.co.uk">TBN Protocol</a>
+    <a href="https://tbn.hardinai.co.uk/demo">Demo</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol">GitHub</a>
+    <a href="https://pypi.org/project/tbn-protocol/">PyPI</a>
+    <a href="mailto:burhan@hardinai.co.uk">burhan@hardinai.co.uk</a>
+  </div>
+  <div class="footer-copy">
+    © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
+    Company No. 17149514 | London, United Kingdom | AGPL-3.0 with commercial licensing
+  </div>
+</footer>
+
+</body>
+</html>

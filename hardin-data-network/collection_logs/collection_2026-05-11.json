@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2026-05-10T23:27:40.789228+00:00",
+    "url": "https://www.gov.uk/government/statistics",
+    "domain": "www.gov.uk",
+    "status": "success",
+    "response_code": 200,
+    "data_collected": true,
+    "user_agent": "TBN-Bot/1.0 (+https://tbn.hardinai.co.uk/bot-info; contact: burhan@hardinai.co.uk)",
+    "notes": ""
+  }
+]

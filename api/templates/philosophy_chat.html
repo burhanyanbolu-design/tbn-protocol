@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philosophy Bots — TBN Protocol</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f0f;
+    color: #e8e8e8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    padding: 20px 30px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header a { color: #888; text-decoration: none; font-size: 14px; }
+  header a:hover { color: #fff; }
+  header h1 { font-size: 20px; font-weight: 600; color: #fff; }
+  header span { color: #555; }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 65px);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 280px;
+    border-right: 1px solid #222;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-title {
+    padding: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .bot-list { flex: 1; overflow-y: auto; padding: 12px; }
+
+  .bot-card {
+    padding: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .bot-card:hover { background: #1a1a1a; border-color: #333; }
+  .bot-card.active { background: #1a1a2e; border-color: #4a6fa5; }
+
+  .bot-card-name { font-weight: 600; font-size: 15px; margin-bottom: 3px; }
+  .bot-card-book { font-size: 12px; color: #888; }
+  .bot-card-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: #1a3a1a;
+    color: #4caf50;
+    margin-top: 6px;
+  }
+
+  /* Add book button */
+  .add-book-btn {
+    margin: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px dashed #333;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .add-book-btn:hover { border-color: #4a6fa5; color: #4a6fa5; background: #0d1520; }
+
+  /* ── Chat area ── */
+  .chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Bot info bar */
+  .bot-info-bar {
+    padding: 16px 24px;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .bot-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a6fa5, #7c4dff);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .bot-info-name { font-weight: 600; font-size: 16px; }
+  .bot-info-book { font-size: 13px; color: #888; }
+
+  /* Messages */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .message { display: flex; gap: 12px; max-width: 80%; }
+  .message.user { align-self: flex-end; flex-direction: row-reverse; }
+  .message.bot  { align-self: flex-start; }
+
+  .msg-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .message.bot  .msg-avatar { background: linear-gradient(135deg, #4a6fa5, #7c4dff); }
+  .message.user .msg-avatar { background: #2a2a2a; }
+
+  .msg-bubble {
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .message.bot  .msg-bubble { background: #1a1a1a; border-radius: 4px 16px 16px 16px; }
+  .message.user .msg-bubble { background: #1a2a4a; border-radius: 16px 4px 16px 16px; }
+
+  /* Typing indicator */
+  .typing { display: flex; gap: 4px; padding: 8px 4px; }
+  .typing span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #555; animation: bounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  /* Welcome screen */
+  .welcome {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 40px; color: #555;
+  }
+  .welcome-icon { font-size: 48px; margin-bottom: 16px; }
+  .welcome h2 { font-size: 20px; color: #888; margin-bottom: 8px; }
+  .welcome p  { font-size: 14px; line-height: 1.6; max-width: 360px; }
+
+  /* Suggested questions */
+  .suggestions {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center; margin-top: 20px;
+  }
+  .suggestion-btn {
+    padding: 8px 14px; border-radius: 20px;
+    border: 1px solid #333; background: transparent;
+    color: #888; cursor: pointer; font-size: 13px;
+    transition: all 0.15s;
+  }
+  .suggestion-btn:hover { border-color: #4a6fa5; color: #4a6fa5; background: #0d1520; }
+
+  /* Input area */
+  .input-area {
+    padding: 16px 24px;
+    border-top: 1px solid #1a1a1a;
+    display: flex; gap: 10px; align-items: flex-end;
+  }
+  .input-area textarea {
+    flex: 1; padding: 12px 16px;
+    background: #1a1a1a; border: 1px solid #333;
+    border-radius: 12px; color: #e8e8e8;
+    font-size: 14px; resize: none; outline: none;
+    font-family: inherit; line-height: 1.5;
+    max-height: 120px;
+    transition: border-color 0.15s;
+  }
+  .input-area textarea:focus { border-color: #4a6fa5; }
+  .input-area textarea::placeholder { color: #555; }
+  .send-btn {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: #4a6fa5; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; transition: background 0.15s; flex-shrink: 0;
+  }
+  .send-btn:hover { background: #5a7fb5; }
+  .send-btn:disabled { background: #2a2a2a; cursor: not-allowed; }
+
+  /* ── Add Book Modal ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8); z-index: 100;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #1a1a1a; border: 1px solid #333;
+    border-radius: 16px; padding: 32px; width: 480px; max-width: 95vw;
+  }
+  .modal h2 { font-size: 18px; margin-bottom: 6px; }
+  .modal p  { font-size: 13px; color: #888; margin-bottom: 24px; }
+  .modal label { display: block; font-size: 12px; color: #888; margin-bottom: 6px; margin-top: 16px; }
+  .modal input, .modal select {
+    width: 100%; padding: 10px 14px;
+    background: #111; border: 1px solid #333;
+    border-radius: 8px; color: #e8e8e8; font-size: 14px; outline: none;
+  }
+  .modal input:focus, .modal select:focus { border-color: #4a6fa5; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
+  .btn-cancel {
+    padding: 10px 20px; border-radius: 8px;
+    border: 1px solid #333; background: transparent;
+    color: #888; cursor: pointer; font-size: 14px;
+  }
+  .btn-cancel:hover { color: #fff; border-color: #555; }
+  .btn-add {
+    padding: 10px 20px; border-radius: 8px;
+    border: none; background: #4a6fa5;
+    color: #fff; cursor: pointer; font-size: 14px; font-weight: 600;
+  }
+  .btn-add:hover { background: #5a7fb5; }
+  .btn-add:disabled { background: #2a2a2a; cursor: not-allowed; }
+
+  .progress-msg { font-size: 13px; color: #4a6fa5; margin-top: 12px; min-height: 20px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/">← TBN</a>
+  <span>|</span>
+  <h1>📚 Philosophy Bots</h1>
+</header>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-title">Wisdom Bots</div>
+    <div class="bot-list" id="botList">
+      <div style="padding:20px;color:#555;font-size:13px;">Loading bots...</div>
+    </div>
+    <button class="add-book-btn" onclick="openAddBook()">
+      + Add a new book
+    </button>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-area" id="chatArea">
+
+    <!-- Bot info bar (hidden until bot selected) -->
+    <div class="bot-info-bar" id="botInfoBar" style="display:none">
+      <div class="bot-avatar" id="botAvatar">📖</div>
+      <div>
+        <div class="bot-info-name" id="botInfoName">—</div>
+        <div class="bot-info-book" id="botInfoBook">—</div>
+      </div>
+    </div>
+
+    <!-- Welcome / messages -->
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcomeScreen">
+        <div class="welcome-icon">📚</div>
+        <h2>Choose a philosophy bot</h2>
+        <p>Each bot has read a book and genuinely internalized its wisdom. They don't quote — they think through your situation using that philosophy.</p>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area" id="inputArea" style="display:none">
+      <textarea id="userInput" placeholder="Ask anything about life, decisions, purpose..." rows="1"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Add Book Modal -->
+<div class="modal-overlay" id="addBookModal">
+  <div class="modal">
+    <h2>📖 Add a New Book</h2>
+    <p>Provide a book file and the bot will read it, extract the philosophy, and join the network. Supports epub, html, pdf, txt.</p>
+
+    <label>Bot Name (what to call this bot)</label>
+    <input type="text" id="newBotName" placeholder="e.g. Marcus, Viktor, Socrates">
+
+    <label>Book Title</label>
+    <input type="text" id="newBookTitle" placeholder="e.g. Meditations">
+
+    <label>Author</label>
+    <input type="text" id="newAuthor" placeholder="e.g. Marcus Aurelius">
+
+    <label>Book File (epub, html, pdf, txt)</label>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="text" id="newEpubPath" placeholder="Select a file or paste path..." style="flex:1">
+      <button onclick="document.getElementById('filePickerInput').click()"
+        style="padding:10px 14px;background:#2a2a2a;border:1px solid #444;border-radius:8px;color:#ccc;cursor:pointer;white-space:nowrap;font-size:13px;">
+        📂 Browse
+      </button>
+    </div>
+    <input type="file" id="filePickerInput" accept=".epub,.html,.htm,.pdf,.txt"
+      style="display:none" onchange="handleFilePick(this)">
+
+    <div class="progress-msg" id="addProgress"></div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddBook()">Cancel</button>
+      <button class="btn-add" id="addBtn" onclick="addBook()">Add Book</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let activeBotId = null;
+  let conversationHistory = [];
+  const SUGGESTIONS = [
+    "I'm scared to pursue my dream",
+    "How do I find my purpose in life?",
+    "I feel lost and don't know what to do",
+    "How do I deal with failure?",
+    "What makes a life meaningful?",
+  ];
+
+  // ── Load bots on startup ──────────────────────────────────────────
+  async function loadBots() {
+    try {
+      const res = await fetch('/api/philosophy/bots');
+      const data = await res.json();
+      renderBotList(data.philosophy_bots || []);
+    } catch (e) {
+      document.getElementById('botList').innerHTML =
+        '<div style="padding:20px;color:#c44;font-size:13px;">Could not load bots</div>';
+    }
+  }
+
+  function renderBotList(bots) {
+    const list = document.getElementById('botList');
+    if (!bots.length) {
+      list.innerHTML = '<div style="padding:20px;color:#555;font-size:13px;">No bots yet. Add a book!</div>';
+      return;
+    }
+    list.innerHTML = bots.map(b => `
+      <div class="bot-card ${b.bot_id === activeBotId ? 'active' : ''}"
+           onclick="selectBot('${b.bot_id}', '${b.bot_name}', '${b.book}', '${b.author}')">
+        <div class="bot-card-name">${b.bot_name}</div>
+        <div class="bot-card-book">${b.book} · ${b.author}</div>
+        ${b.verified ? '<span class="bot-card-badge">✅ TBN Verified</span>' : ''}
+      </div>
+    `).join('');
+  }
+
+  // ── Select a bot ──────────────────────────────────────────────────
+  function selectBot(botId, name, book, author) {
+    activeBotId = botId;
+    conversationHistory = [];
+
+    // Update sidebar
+    document.querySelectorAll('.bot-card').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    // Update info bar
+    document.getElementById('botInfoBar').style.display = 'flex';
+    document.getElementById('botInfoName').textContent = name;
+    document.getElementById('botInfoBook').textContent = `${book} · ${author}`;
+
+    // Show input
+    document.getElementById('inputArea').style.display = 'flex';
+
+    // Clear messages and show welcome for this bot
+    const msgs = document.getElementById('messages');
+    msgs.innerHTML = `
+      <div class="welcome" id="welcomeScreen">
+        <div class="welcome-icon">📖</div>
+        <h2>Talking to ${name}</h2>
+        <p>This bot has internalized the philosophy of <em>${book}</em>. Ask anything about life, purpose, or decisions.</p>
+        <div class="suggestions">
+          ${SUGGESTIONS.map(s => `<button class="suggestion-btn" onclick="useSuggestion('${s}')">${s}</button>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function useSuggestion(text) {
+    document.getElementById('userInput').value = text;
+    sendMessage();
+  }
+
+  // ── Send message ──────────────────────────────────────────────────
+  async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text || !activeBotId) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('sendBtn').disabled = true;
+
+    // Remove welcome screen
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) welcome.remove();
+
+    // Add user message
+    addMessage('user', text, '👤');
+
+    // Add typing indicator
+    const typingId = addTyping();
+
+    try {
+      const res = await fetch('/api/philosophy/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bot_id: activeBotId,
+          message: text,
+          history: conversationHistory,
+        }),
+      });
+      const data = await res.json();
+
+      removeTyping(typingId);
+
+      if (data.error) {
+        addMessage('bot', '⚠️ ' + data.error, '📖');
+      } else {
+        addMessage('bot', data.response, '📖');
+        conversationHistory = data.history || [];
+      }
+    } catch (e) {
+      removeTyping(typingId);
+      addMessage('bot', '⚠️ Could not reach the bot. Is Ollama running?', '📖');
+    }
+
+    document.getElementById('sendBtn').disabled = false;
+    input.focus();
+  }
+
+  function addMessage(role, text, avatar) {
+    const msgs = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.innerHTML = `
+      <div class="msg-avatar">${avatar}</div>
+      <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+    `;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    const msgs = document.getElementById('messages');
+    const id = 'typing-' + Date.now();
+    const div = document.createElement('div');
+    div.className = 'message bot';
+    div.id = id;
+    div.innerHTML = `
+      <div class="msg-avatar">📖</div>
+      <div class="msg-bubble">
+        <div class="typing"><span></span><span></span><span></span></div>
+      </div>
+    `;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return id;
+  }
+
+  function removeTyping(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  // ── Add Book Modal ────────────────────────────────────────────────
+  function openAddBook()  { document.getElementById('addBookModal').classList.add('open'); }
+  function closeAddBook() {
+    document.getElementById('addBookModal').classList.remove('open');
+    document.getElementById('addProgress').textContent = '';
+    document.getElementById('filePickerInput').value = '';
+  }
+
+  let pickedFile = null;
+
+  function handleFilePick(input) {
+    if (input.files && input.files[0]) {
+      pickedFile = input.files[0];
+      document.getElementById('newEpubPath').value = pickedFile.name;
+    }
+  }
+
+  async function addBook() {
+    const name     = document.getElementById('newBotName').value.trim();
+    const title    = document.getElementById('newBookTitle').value.trim();
+    const author   = document.getElementById('newAuthor').value.trim();
+    const progress = document.getElementById('addProgress');
+    const btn      = document.getElementById('addBtn');
+
+    if (!name || !title || !author) {
+      progress.textContent = '⚠️ Bot name, title and author are required.';
+      progress.style.color = '#c44';
+      return;
+    }
+
+    btn.disabled = true;
+    progress.style.color = '#4a6fa5';
+    progress.textContent = '📖 Reading book and extracting philosophy... (this takes ~30 seconds)';
+
+    try {
+      let res, data;
+
+      if (pickedFile) {
+        // Upload the file
+        const formData = new FormData();
+        formData.append('file', pickedFile);
+        formData.append('bot_name', name);
+        formData.append('book_title', title);
+        formData.append('author', author);
+
+        res = await fetch('/api/philosophy/add_book_upload', {
+          method: 'POST',
+          body: formData,
+        });
+      } else {
+        // Path-based fallback
+        const epubPath = document.getElementById('newEpubPath').value.trim();
+        res = await fetch('/api/philosophy/add_book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bot_name: name, book_title: title, author, epub_path: epubPath }),
+        });
+      }
+
+      data = await res.json();
+
+      if (data.error) {
+        progress.textContent = '❌ ' + data.error;
+        progress.style.color = '#c44';
+      } else {
+        progress.textContent = `✅ ${name} is ready! (${data.principles} principles extracted)`;
+        progress.style.color = '#4caf50';
+        pickedFile = null;
+        setTimeout(() => { closeAddBook(); loadBots(); }, 2000);
+      }
+    } catch (e) {
+      progress.textContent = '❌ Error: ' + e.message;
+      progress.style.color = '#c44';
+    }
+
+    btn.disabled = false;
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────
+  loadBots();
+</script>
+</body>
+</html>

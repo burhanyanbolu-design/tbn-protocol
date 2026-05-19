@@ -1,0 +1,82 @@
+{
+  "bots": [
+    {
+      "bot_id": "human-ai-d60dd84f0834",
+      "bot_name": "TheAlchemist",
+      "book_title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "domain": "Philosophy",
+      "created": "2026-05-10T23:36:42.362856",
+      "knowledge_entry_id": "fcc15311a076",
+      "topics": [
+        "The Alchemist About",
+        "Specifically",
+        "The Pilgrimage",
+        "Tarifa",
+        "Publishers Inc",
+        "Half",
+        "There",
+        "He",
+        "His",
+        "In",
+        "France",
+        "God",
+        "The Alchemist",
+        "You",
+        "Then"
+      ]
+    },
+    {
+      "bot_id": "human-ai-20b627a4f016",
+      "bot_name": "alberteinstein",
+      "book_title": "albert einstein",
+      "author": "albert einstein",
+      "domain": "Education",
+      "created": "2026-05-10T23:40:20.854006",
+      "knowledge_entry_id": "e5d8a9494049",
+      "topics": [
+        "Einstein",
+        "What Einstein",
+        "Zurich",
+        "Ulm",
+        "What",
+        "Our",
+        "Who",
+        "School",
+        "There",
+        "He",
+        "Sciences",
+        "His",
+        "Where",
+        "One",
+        "How"
+      ]
+    },
+    {
+      "bot_id": "human-ai-d4c9a8e06048",
+      "bot_name": "marcusaurelius",
+      "book_title": "The Meditations of the Emperor Marcus Aurelius Antoninus",
+      "author": "Marcus Aurelius Antoninus",
+      "domain": "Philosoby",
+      "created": "2026-05-10T23:48:51.730023",
+      "knowledge_entry_id": "7f3eb4d823b2",
+      "topics": [
+        "His",
+        "Of",
+        "Commonwealth",
+        "Fronto",
+        "Epictetus",
+        "My",
+        "Verus",
+        "Athenodorus",
+        "Title",
+        "The Meditatios",
+        "To Rusticus",
+        "All",
+        "Sextus",
+        "Emperor Marcus Aurelius Antoninus",
+        "He"
+      ]
+    }
+  ]
+}

@@ -4,126 +4,144 @@
     "name": "SearchBot-1",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzTVSsYbCStuMs77UimJt\nmuCTcxk6KMMpbg3MiPb1IkuKE41MT5iex6I4FKd+uRaTFFrXHXfaKJImSgH4TQdh\nqFkCbpjmhAzTlgRNManq4dl9K4Xe19pwMgCFtqfO1UvX0YoPinx1vAxDn3RXl6pq\nCjKQSTHdn+nOab80Snq1soNDcN1yo08bM4YbtVhgZq3PxMhhs6BhiwJrqxG2Jiov\n4QkiZ0Av/mCLgX0YH+Dg3qYioQzb7jdmnNlsGEwUEz9z/ZXu2CIbFHqi8j9SXwUc\nR2xue/C7LwnAaWLPq3jiuxUhIjagwB7/yzsLwV25lFhosrtBCw/pqPuXAlmgCLIb\nlQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:43:22.029652+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-94c5482be7f16711": {
     "bot_id": "tbn-bot-94c5482be7f16711",
     "name": "ValidatorBot-1",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1/LQ3QSXnxL9f9FApGlH\n+14Y7Yh0HisIzjQtwaVjKl0F+Lc7ZxOdIFRvTarAq8nGvp6zQ+0slmqpZWo5IPAI\nz+88NX6JnsZDWslvaGWOE0b7/NZXfA+S7uWzl6SPH3QpNYOL9te83l0p7yhmSqTP\n8QN2D9dBzI2E5sNeAC+ts8jvCpbkNsYInf9aoBX6NNmuco2unyFLgizGdKPLF9jt\no1hYA18gS/MEHyoNtuMsi5U6bvXptCtMHC80/dg6KUPn+yCyw0a5wYlJlUI7Gj8K\nfTQQceDhRtErUlCCHdUEh3Pnb/z6DOLWw/qdmrLq3C1ysYQ3QYutKKsxKRK/XKH4\nGQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:43:22.069903+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-b0b20bca9ac6246a": {
     "bot_id": "tbn-bot-b0b20bca9ac6246a",
     "name": "ConnectorBot-1",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA39PgQoB1SqvSp+qYr3Cp\nqILrhvXt9m5OpePVJL+2aCs+elRFoctRiE6VziYCbE0yaLNB+TaG/Y4kYGykcp6V\nrTQaLm/YgDDxNGy4KRME9SKMXrSrlJomHet75BBNp+Vk7v4bHX28bmUA9TfWjhjX\nooUuwMHXPLhLeHe8Hn17hbYsQN2yrY5SiH6rnKB6X8p1wdu4N/NDL2haZU2G7cB8\nf3Y8Ns8oqPWRiRHsUADWhPjy9dC9o1117S4kOX2s6K8Ktqsc/nIKSntzGJJ+hYY3\ntgbIuNElFgdahDGN7PqSEBebQlozEO1zcFPKGA93f9FzPdCP7iGjTIqAZX6O8Qyi\ntQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:43:22.099477+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/connector.svg"
   },
   "tbn-bot-08b531539c0926ea": {
     "bot_id": "tbn-bot-08b531539c0926ea",
     "name": "MessengerBot-1",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtPz8hxUR8xLrg2CfNanb\nLklV2thEDQed8KUlzv27bd7W0/hqZBpU7AQEscombKQBl5t/1LrXOJo8D3qZYO1J\n8lrUbBWCVcnE2t+pYV5QG1Y+Mjn6lUZOTLnxlODcwE0MjoYOl80Shba/p8zctZYz\nWKufhC89XlTYtpdwKk4CCUDXqnl9SuBH+c8JNuQKnyAxL46lJYWhE9ToO/arSvXX\n7yB0olyFX62Bd0/myHR6wd+qawMaIYlh2kiTgv+6dFdHJm7LkLoSPjium1ivGjl4\nBF61dnftrg3pbR+DEzHsq3x7XGFisdgfj8c4ufUxKV1FdC56yyvUrllKb5ETQ0by\nsQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:43:22.112493+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/messenger.svg"
   },
   "tbn-bot-29dc912a08e2cdaf": {
     "bot_id": "tbn-bot-29dc912a08e2cdaf",
     "name": "SearchBot-London",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsld6v3KIT6rsr9C0TAsn\nkLoN38dOmbrG/4i3Ohegwt3HyejbGiXXNqfGNT68nqKJnhvKBBzJaJ5f+iR/u+sA\nyr6sKHF8+TsWzVt7gJUDZM/OnZvMKUTR9/66+5opFOYWtkklbkxswh+1d4W4k9Kh\nFdp/RX++CqH3XdjwxMlu8J1WzCrwlTupJAFFNbEaN1LzDIiveX33Yy/bPe20W3w8\ndi/djfFx+POIOq/lUs5MYA1fhO/U20mR/XcoUVv7E3A9FFBzNJL+KuGkwlKUG5DY\nnX6m+EuTJzPOzz0dqOFVbgehlR7N6vW2QSZSAvpXhEOioTIBFOoD7vCg20DGP1qq\n1QIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.119091+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-e27c5a84577dcbb9": {
     "bot_id": "tbn-bot-e27c5a84577dcbb9",
     "name": "ValidatorBot-London",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAurkz1pzfYuIlPWoFiWtu\n+g764Q91thRTO7UmL+OJzSmVZp44RbVN0/AoD9wBz0G2tefYy5SWOghQOtMHNHhe\nJPTvgjAjd0dxnVBor+UvKWn+xnp0+nmIaCMw77xWHfcuQuz+c82P4nm+KdUt9cAZ\ntXJ4yu9XSDDWUCSiTLLiq6cglpxFJA7FFzEGIl9Tfzkh9B1UIIe7azxM7TiG8hvf\nGrMrYRYzVlfGLPU10x6HXbO8gJzonlOB9YYB/PqteiG5cst45476F7TNGd3pPXP/\nS/mrp6NPSRDG35Nn5/CdcCVdqxGJMrEevjdkyG3NWRuGTnM3R8wd+A3bUvhiY+j/\nIQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.204390+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-e6a2bdc58331b746": {
     "bot_id": "tbn-bot-e6a2bdc58331b746",
     "name": "SearchBot-NewYork",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyH1k1vo87qd2Lmr/YL2Z\nf0rvrSfEFhlmekHINsEbuj9Z3ailrbUHhv8JuBJq5D06v20ZJaHYNFBRXny7puXF\n7daT5PffMFLpKgQPfpcEOzJAuBoPNKO1LQW9q4Ehpn1amRhTuKIpVuXbSyMVeTc1\nFhqvuHYeGhyJ3I51h5/4J0rd9NHvja0XYtRwDmlYNtgvVY24fjxk4ZQpMnrJ5LbN\nQg4Dxevvm56paP6GVSx/tOuwNJUH6gF74Cjdt4ad5g9w8ZqYK9rG8890XgW30x7r\nPsecP3t6+BdYljkFb3CxfChXNGk2n7bL5NXhpmmJtWWExUaDKv1xDskkaAncvT66\nVwIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.243658+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-49e240e96866b3c9": {
     "bot_id": "tbn-bot-49e240e96866b3c9",
     "name": "MessengerBot-NewYork",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvCvY8TNFUUsuGcHKRkwR\nFaUIw2v8TXMLxU5gIg6rzsS80T92dODPcGUg9z9jgYlDE0PQw1XQMjoBQ9CkKIoZ\n2ykzX88yB9OTPBpOmrRKSaV0Vd9XPJJr3pAPgK0+hFJu8IMMoOVEhNGibqgTZrkM\nz/X/SRM+JvJvAZDsWKDY9ViP7kbiWxAW+V3VAx+43EGlLvMonApQD0+3Te+mtA90\n0K01uA0r6Zk98xXQ1N/hTSPPVrwIRV8clUUnT9lMIBVyI7q+5nd/n8cOXDi11AI9\nxsmAnQg3rNzDJ9ykajCzlrAmnWTxE7imJy1CCOIjTulAnGvb6M/SESq+7CqVaCUK\nCwIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.256543+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/messenger.svg"
   },
   "tbn-bot-59a1ffa4c5c9d362": {
     "bot_id": "tbn-bot-59a1ffa4c5c9d362",
     "name": "SearchBot-Singapore",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmjHAxbCRWxJvA5kSE3j1\n+/WsMOQgFc7+tELTAeoyxVDiTwQ8N5mL280MihI2dXp8vG/A7bL9DoOS4bFRPsgN\nHxOUPQG3AEh230rEiT2jL02O2XGXh2/d4pL06OMcvijrWOfZUW+RLaG1jN/4jp8f\nxupWYJ/KB0DNb8WikprQ9liFzNx1N7MoDM44vbBTBYKf793cifw1l8JV2xg+1f8V\n8xd9RN/tA/bTh6K1b2rf1G7EAUBuV3V3oBMZ0B/MHDYohGoD10msXWevQxarq+RN\nQ44+K5di1jFk8DaNVHUc9QH+hyD2L8PK6fqVl9IYUdY3QJ4StiWUdde3AJ/p1e7v\newIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.423539+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-88454f08c84b0029": {
     "bot_id": "tbn-bot-88454f08c84b0029",
     "name": "ValidatorBot-Singapore",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyyadw4gSS4qNkCB3szb0\nAWQwZpLFOErzj6VX+GE+zh7AQj/3nQJ5W3YJW5PilZOOcDb7nCCKvF8jCqAIlOF8\nYpARVrXQxZSwJk0QxnBjhd24JT/Ibnm0aGaG2H882SJMPzi5PBkFr/mifR6fowk1\nOOJmc+UKxuu1rmDFolgWavyHy+odjjWqp/V/hfgMsVpK4jP+f5xnDmJD+QoZpWGP\nkFTciU6ZlPhBuchs8ElGVjd420QoWzNRDXqI8d8r2jtO4mdP8v66XtOqOQeqGkxP\n8l8Euw860EBB27Ae/iOewmOf2yfFfE4pzLqG5jkFcnCWS4yvf0Wly9nJY7oYYJYH\nKwIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:45:43.469823+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-a9d2281cb116551f": {
     "bot_id": "tbn-bot-a9d2281cb116551f",
     "name": "MySearchBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA36P5y6QS5XGbZThvNJjS\nxyzPNR96yYSiCcryy/8dAMNoSg7s1Trg1lKflG+qTQs7XEE3zQZbkWECwca2RR/u\nwvD4EK8+1KNFWDlYtqFBpdSeD50cY7Bd55YaM/LZp+fKp85b361xtuEuiY5wOlyF\nMM4DzTxeG4OYepFyocqXoWMKPZcNGoamKteE+TM9AgAEeZC471W9pkJd78ISHwIg\n6+fa3vgiLpy88qSTPmFGwUpPc7CKSyfGNL38b4QgrOIXPMRZQKqXVoQEZBs3ofvV\njMbSJ+O8PkS4UWgby8Vz5xWx5ikrujKvVGYfkvMkoP5olieNaoHgEFC6iklK2yv4\nHwIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:47:54.231392+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-e2b1c338f877aba9": {
     "bot_id": "tbn-bot-e2b1c338f877aba9",
     "name": "MyValidatorBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxoeiATGje34WMqspLa6O\nByFRDaMe4wN5PpGb65H90mlUlfGGLIjuWfIYrjwH/Mvv68r7Bu8K3l8meDo3lCyk\nncVsLC/ArV92nI9nu7szvaNF9cTuFnCT/h+6R0MP1mmXNn1GNpNXkwujhqgh/53i\nDb21EShFTOiJiun0cq9eHunUnzwOI/m+UfFOGP5wXTfca8SI7mbMkB65st1WT9VU\nCP5M0XTmMiEXB4izzKEURUqn3Y9rEUxqhbKMeRXzUfshSjJLxof21Qa3ppkWgk/q\nWy4d4vzzaNQlhe/QNBfUqPufJDaRLDG3/tcNxJ+K0ojP9UI6GlmUrRYUIiHNOyti\n8QIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:47:54.294411+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-fe0818e36ef4061a": {
     "bot_id": "tbn-bot-fe0818e36ef4061a",
     "name": "MySearchBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApfhjUpkCNdYLIEsdpHjY\nVbW4If2nPy96VEns9kuBQPH5i26SaLSN4EB+bhK2b5NNbeFWmjxdL3GNUMXVzB1h\n0bPaH3xjaFxkUm6eOAePKpkCOD0zqhtAMPM1zeMBUjuJH5jePQKGtrWMPMSqj/xI\nuZGrgX2E6DCd4oXSN4c1NF1JfCsp8iYqAWJ25oaJjwVDT1Xhk4WdJ3cCtO3lW7nG\nNI6EWLY9+OIucwb2azd8ZuOfQTsSMsZ6pgEsyLDMpyrSYAS/l5W/WN6CKkaxviLE\nHuMFhceD+D5BncUkh/NqciXwJG/fd1iq42gWR4tIzE62edu6w1KjINFJVPxK+EoU\nTwIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:48:26.564948+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-f5ee508bdeb37cbe": {
     "bot_id": "tbn-bot-f5ee508bdeb37cbe",
     "name": "MyValidatorBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz/nlF7RAiMVj5GC26bD/\nvaVNGqVBCDuL17VOQ4AMctEkSTCNkeTwA8RgzbXf9J51ewlh/FKn6qs7jIGXk7IW\n3IHesy7hMxwPV48Czwp9Dc//n5mJkfrb0dGiTHnYMPbtRNbzCOs4d7EP8LZxZhDA\nSoWHq+RMXMjUTq41Vk1RWOSDYua8Np8pJI4+3zCRN6d8Dfy7j4MhVde30qyE/sQ0\nUSmExwHfHLNcJwMw+SVIZK6dbIbb8fuXcBkWnnGuXcPSXyVoqJVGOlfFU3D/dX66\nQjLTtQngsWP1tXQ5tx+gHVUmiCXAkhHtAvu55mTxbBcrpRfn8ztLkG9J6dz9KOfP\n/wIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:48:26.605149+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-f5cae5c0347d3da8": {
     "bot_id": "tbn-bot-f5cae5c0347d3da8",
     "name": "AlphaBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAktPM96O8Ysc9M1T6pcQ7\nM+FrjEQvJfhZmUO1J5qi2IiW5DC8rHUNovmxqheAv2pdyw12KzDJMnk92jkREhVS\nMuXY28FdMT00AQ+KiAUEaoZxu+WrqpnYfLnMZPAy4oU5tKY63wZNLN1lHvobGD4Y\n1KyeT8z9xDfd0J4hr5nJIe9FW0q1Hez2dD5lT92XrrDvQdXB/Vv/bD82L1TwmGDq\nxGmCkUNpqpXogc4iT8WgY6enCUVjWv40hEpE8wKaJ+uiv3Zn+oLd2dcH/1Mk1IyN\nq3718BrPaqjmqwUFzdxJ0HpRiR6bI85frJP4aBNnyslEAopXpX1bY2pimqWQ4ev8\n3wIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:53:40.284700+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-f05ef01b990aa3e4": {
     "bot_id": "tbn-bot-f05ef01b990aa3e4",
     "name": "BetaBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoxqO7I5FTcXKab7mGoFj\nfZe6BEp2uoPPbcGZt4RikyvfMJ1OEp014D++NGQcgIXVDCZRQpTae1KPXE798mwa\n9zWF+PZc2krXDQm3yUsSbQyuurxx9/akzxJt9WSq4R/YslRJ7dsa8tOj9b/RrLe3\n6Ws5BPMfXb333lldB8s9D9P++0X8fxByMFOdH7axoZG8bH/54aidQAjL1PYOhgGH\nNqihYBZUkZVAmQeKjBno/e13S2VSIMyyW4TD2OKmpfH/Z7glVT+OoGLOJSfHLJqX\n+kNaw84jP+a4hBG5F1L7cnkbyp4AAtVYOVXZLDa5TqOayp2rI1jYiovVxvESZBTY\nTQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:53:42.512109+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-0565c73b40bd0d67": {
     "bot_id": "tbn-bot-0565c73b40bd0d67",
     "name": "AlphaBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAniNU5PqK4gOsQcsa+pBZ\n8vpqKxBixc0ycne+IseQ+L7wqM+SzegoI2/QnmkRy7HIjXG2Fg5hwnZrwaE6A2U+\nMf+KbNCpYBPg0+VyEXMwKs2/Tz5gv4drT5b+Ye3tOd/dBf55r+2q84KL4T82hBiO\ndDzP9sJiSuQWXY4ctj5ZaAhwjWS7TTEkOUQ8o7dwucRqBkH0iqleQ0H9uTBBHuXb\nERyb8LKbu3x8YYa0O9fPx4MDW90h2aBkQ6ifcDDyOOL6ACUbexS1iZ+s6PtaQKkR\napy95crYmbAh6MMCPVaKn0VOYS4bUYZDO9cn1FWBvnq3+ScDwwZxXZez3lhMECGb\n5QIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T10:59:27.093713+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-81f448154f4913de": {
     "bot_id": "tbn-bot-81f448154f4913de",
     "name": "BetaBot",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsS0JWVPzZDEquzlq2e2x\n3J/u/sdQ3j8SnRyJKMkXGDfl177s1QFvCts6qAIRSZzDyn46vQ4kalnBsdJLakBm\ntA2C2agwZqpmTw7884n4zGd1eVAcc2RXdoqu54IF8+SyrIiafDIzmMj3zGGivAWL\nAtNNyih+UyVpkVI/gUa1HGQYM04y2gu7yJ8YmAMwR6eNEk7KTd4b+sjR2sQ0gUIu\n3q6E7xUVzzpz7YAYwRCb/DAaw6g3F4GIzMAx/JjnGqHDUFUXeck6NrX0uYzyS1Ml\n3xPfZbR9iY7/jUf90AkaAuU8kqgMmMnyibxMOFuchM5E1kC4NWyDGKLgkYKU8H1S\nJQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T11:00:28.005566+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-d8d57cb06d2b4366": {
     "bot_id": "tbn-bot-d8d57cb06d2b4366",
@@ -132,7 +150,8 @@
     "created_at": "2026-05-03T11:17:07.439263+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "COMMUNITY",
-    "purpose": "Trusted AI tool discovery for the TBN network"
+    "purpose": "Trusted AI tool discovery for the TBN network",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-5c61344a5cc3cfd6": {
     "bot_id": "tbn-bot-5c61344a5cc3cfd6",
@@ -141,7 +160,8 @@
     "created_at": "2026-05-03T11:17:07.480227+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-790683450c3ead51": {
     "bot_id": "tbn-bot-790683450c3ead51",
@@ -150,14 +170,16 @@
     "created_at": "2026-05-03T11:17:07.545689+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "RESTRICTED",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/connector.svg"
   },
   "tbn-bot-3b2bb1b03282a430": {
     "bot_id": "tbn-bot-3b2bb1b03282a430",
     "name": "BadActor",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoE3kG3Q+HDhMINK7/cKd\npe2FsI0j7/QnTElxSTVhLWEf8IUYs5hQF/Wzw2ZsRWANyIqtJ/5N3yCjNvfLOOB1\n0sJ7iXWIRmh0eo5dq2QskTeSrfA0695hLRtZoi8MT6rGrERL9SpsbQVEEXrxaoCJ\nT2yifjAra6UnCYioADfFFaoZt6inxTTTvYKHet1cR8+Asm/E4eCDu+HStAciVACw\n/TdA//beI2WLlOG8vBbWM/oBkph1qr8Jl9dNsw/4o/2HuktrgbetUaSQTXfsyulq\nK3SbPIf4oJZmNj9Qh1og7e1rT2KIoXXvIkddP8x5tjdpOsZpjzScuivHhJuR8H2y\n0wIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T11:17:07.675478+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-eea210afda24adc7": {
     "bot_id": "tbn-bot-eea210afda24adc7",
@@ -166,7 +188,8 @@
     "created_at": "2026-05-03T11:18:13.537302+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "COMMUNITY",
-    "purpose": "Trusted AI tool discovery for the TBN network"
+    "purpose": "Trusted AI tool discovery for the TBN network",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-a1cc0d69edf18b91": {
     "bot_id": "tbn-bot-a1cc0d69edf18b91",
@@ -175,7 +198,8 @@
     "created_at": "2026-05-03T11:18:50.017088+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "COMMUNITY",
-    "purpose": "Trusted AI tool discovery for the TBN network"
+    "purpose": "Trusted AI tool discovery for the TBN network",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/search.svg"
   },
   "tbn-bot-33f592d9107a4baf": {
     "bot_id": "tbn-bot-33f592d9107a4baf",
@@ -184,7 +208,8 @@
     "created_at": "2026-05-03T11:18:50.050596+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/validator.svg"
   },
   "tbn-bot-2e1cfda286b275ec": {
     "bot_id": "tbn-bot-2e1cfda286b275ec",
@@ -193,14 +218,16 @@
     "created_at": "2026-05-03T11:18:50.127241+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "RESTRICTED",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/connector.svg"
   },
   "tbn-bot-5efdb2d86389158c": {
     "bot_id": "tbn-bot-5efdb2d86389158c",
     "name": "BadActor",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAneyl/ZSR0LaMlZbmX/az\nw8Zs8h250OqRbxgPqh/9OD3Te/xZ+2bKEQDnNhbPh2OAvrrG2afmLEBNcl0NZsnv\nVDIsuavJdLT7SaXRDAJ9OVxen4a3q29IGRoPHrmpURIz0ZwZHG4Y0l9iV+gL99DM\n6gM6e7o8i03o7nKm92UIlzkvx9JnEVeGbjO7fp9sFKLb8g1J7wJhtIytx+fnvizQ\n7V0bx1GetdtHUasWHb22WlwfNLYtbYxIkIwadROnSCGYFmDtd9IWI9ZA7RyIEbef\nZggF9zdeGeCZEBjoX//SJzfeE1WZ73KwumHmrRM5Q/AqhMGH48RL5vEpRyKYndu5\nMQIDAQAB\n-----END PUBLIC KEY-----\n",
     "created_at": "2026-05-03T11:18:50.181592+00:00",
-    "tbn_version": "0.1.0"
+    "tbn_version": "0.1.0",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-d95c4428e2a31289": {
     "bot_id": "tbn-bot-d95c4428e2a31289",
@@ -209,7 +236,8 @@
     "created_at": "2026-05-03T12:36:57.276449+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "COMMUNITY",
-    "purpose": "Trusted AI search for TBN network"
+    "purpose": "Trusted AI search for TBN network",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-4ae2019dc0bc9ee1": {
     "bot_id": "tbn-bot-4ae2019dc0bc9ee1",
@@ -218,7 +246,8 @@
     "created_at": "2026-05-03T12:36:59.368329+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-73d95154eadebbac": {
     "bot_id": "tbn-bot-73d95154eadebbac",
@@ -227,7 +256,8 @@
     "created_at": "2026-05-03T12:37:32.237224+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "COMMUNITY",
-    "purpose": "Trusted AI search"
+    "purpose": "Trusted AI search",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-c662802468d7e9cd": {
     "bot_id": "tbn-bot-c662802468d7e9cd",
@@ -236,7 +266,8 @@
     "created_at": "2026-05-03T12:37:34.499676+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-f9cfa9edc0798772": {
     "bot_id": "tbn-bot-f9cfa9edc0798772",
@@ -245,7 +276,8 @@
     "created_at": "2026-05-03T15:32:19.654908+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-45c85e923a87021c": {
     "bot_id": "tbn-bot-45c85e923a87021c",
@@ -254,7 +286,8 @@
     "created_at": "2026-05-03T15:32:56.158995+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-3f1da225c530657b": {
     "bot_id": "tbn-bot-3f1da225c530657b",
@@ -263,7 +296,8 @@
     "created_at": "2026-05-03T15:50:04.547421+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   },
   "tbn-bot-ca0c1598a6b1f789": {
     "bot_id": "tbn-bot-ca0c1598a6b1f789",
@@ -272,6 +306,7 @@
     "created_at": "2026-05-03T15:50:41.422391+00:00",
     "tbn_version": "0.1.0",
     "cert_level": "STANDARD",
-    "purpose": ""
+    "purpose": "",
+    "icon_url": "https://tbn.hardinai.co.uk/static/icons/tbn-default.svg"
   }
 }

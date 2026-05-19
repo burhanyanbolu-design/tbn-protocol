@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBN Protocol — LangChain Governance Demo</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0e1a; color: #e4e4e7; min-height: 100vh; zoom: 1.5; font-weight: 500; font-size: 16px; }
+    
+    .header { background: #0d1117; border-bottom: 1px solid #1e293b; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 18px; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo span { color: #00d4ff; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { color: #8b949e; text-decoration: none; font-size: 13px; }
+    .nav-links a:hover { color: #fff; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 10px 20px; }
+    
+    h1 { font-size: 40px; font-weight: 800; margin-bottom: 8px; }
+    h1 span { color: #00d4ff; }
+    .subtitle { font-size: 18px; color: #8b949e; margin-bottom: 28px; max-width: 800px; }
+
+    /* Agent Card */
+    .agent-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 18px 22px; margin-bottom: 18px; }
+    .agent-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .agent-name { font-size: 16px; font-weight: 600; color: #00d4ff; }
+    .trust-badge { background: rgba(34,197,94,0.15); border: 1px solid #22c55e; color: #22c55e; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+    .trust-badge.warning { background: rgba(251,191,36,0.15); border-color: #fbbf24; color: #fbbf24; }
+    .trust-badge.danger { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #ef4444; }
+    
+    .agent-meta { display: flex; gap: 20px; font-size: 14px; color: #8b949e; }
+    .agent-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* Policies */
+    .policies { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .policy-tag { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); color: #a78bfa; padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+
+    /* Input */
+    .input-section { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px 22px; margin-bottom: 18px; }
+    .input-section h2 { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #f1f5f9; }
+    .input-row { display: flex; gap: 10px; }
+    .action-input { flex: 1; background: #0a0e1a; border: 1px solid #2d3748; border-radius: 8px; padding: 12px 16px; color: #e4e4e7; font-size: 15px; font-family: 'JetBrains Mono', monospace; outline: none; }
+    .action-input:focus { border-color: #00d4ff; box-shadow: 0 0 0 3px rgba(0,212,255,0.1); }
+    .action-input::placeholder { color: #4a5568; }
+    .run-btn { background: linear-gradient(135deg, #00d4ff, #0099cc); color: #000; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .run-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,212,255,0.3); }
+
+    /* Quick actions */
+    .quick-actions { margin-top: 12px; }
+    .quick-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .quick-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .quick-btn { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 7px 14px; font-size: 14px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+    .quick-btn:hover { border-color: #00d4ff; color: #e2e8f0; }
+    .quick-btn.deny { border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+    .quick-btn.escalate { border-color: rgba(251,191,36,0.3); color: #fde68a; }
+
+    /* Result */
+    .result-section { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 18px 22px; margin-bottom: 18px; display: none; }
+    .result-section.visible { display: block; }
+    
+    .decision-banner { padding: 14px 18px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+    .decision-banner.allow { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
+    .decision-banner.deny { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+    .decision-banner.escalate { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); }
+    .decision-icon { font-size: 22px; }
+    .decision-text { flex: 1; }
+    .decision-label { font-size: 18px; font-weight: 700; }
+    .decision-label.allow { color: #22c55e; }
+    .decision-label.deny { color: #ef4444; }
+    .decision-label.escalate { color: #fbbf24; }
+    .decision-reason { font-size: 14px; color: #8b949e; margin-top: 2px; }
+
+    /* Flow visualization */
+    .flow { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .flow-step { background: #1e293b; border-radius: 8px; padding: 8px 14px; font-size: 11px; font-weight: 600; color: #8b949e; transition: all 0.3s; }
+    .flow-step.active { color: #00d4ff; border: 1px solid #00d4ff; background: rgba(0,212,255,0.05); }
+    .flow-step.done { color: #22c55e; border: 1px solid #22c55e; background: rgba(34,197,94,0.05); }
+    .flow-step.failed { color: #ef4444; border: 1px solid #ef4444; background: rgba(239,68,68,0.05); }
+    .flow-arrow { color: #4a5568; font-size: 12px; }
+
+    /* Audit Trail */
+    .audit-section { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 12px 20px; margin-bottom: 12px; }
+    .audit-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+    .audit-count { font-size: 12px; color: #8b949e; font-weight: 400; }
+    
+    .audit-entry { display: flex; gap: 12px; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; font-family: 'JetBrains Mono', monospace; border: 1px solid #1e293b; }
+    .audit-entry:hover { background: rgba(0,212,255,0.02); }
+    .audit-decision { min-width: 70px; padding: 3px 8px; border-radius: 4px; text-align: center; font-weight: 600; font-size: 10px; }
+    .audit-decision.allow { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .audit-decision.deny { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .audit-decision.escalate { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .audit-action { flex: 1; color: #cbd5e1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .audit-time { color: #4a5568; min-width: 70px; text-align: right; }
+    .audit-hash { color: #6366f1; min-width: 90px; }
+
+    /* Stats bar */
+    .stats-bar { display: flex; gap: 12px; margin-bottom: 18px; }
+    .stat { background: #1e293b; border-radius: 8px; padding: 12px 14px; flex: 1; text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #fff; }
+    .stat-label { font-size: 13px; color: #8b949e; margin-top: 2px; }
+    .stat-value.green { color: #22c55e; }
+    .stat-value.red { color: #ef4444; }
+    .stat-value.blue { color: #00d4ff; }
+
+    /* Code block */
+    .code-section { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 12px 20px; margin-bottom: 12px; }
+    .code-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #f1f5f9; }
+    .code-block { background: #0a0e1a; border: 1px solid #1e293b; border-radius: 10px; padding: 12px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+    .code-block .kw { color: #c084fc; }
+    .code-block .fn { color: #00d4ff; }
+    .code-block .str { color: #34d399; }
+    .code-block .comment { color: #6b7280; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 40px 20px; color: #4a5568; font-size: 13px; }
+    .footer a { color: #00d4ff; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="/" class="logo">TBN <span>PROTOCOL</span></a>
+  <div class="nav-links">
+    <a href="/">Dashboard</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/demo/langchain" style="color:#00d4ff">LangChain Demo</a>
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a>
+  </div>
+</div>
+
+<div class="container">
+  <h1>🛡️ TBN <span>LangChain</span> Governance Demo</h1>
+  <p class="subtitle">Type any agent action below and see TBN evaluate it in real-time. Every action is identified, checked against governance policies, and recorded in an immutable audit trail.</p>
+
+  <!-- Agent Identity Card -->
+  <div class="agent-card">
+    <div class="agent-header">
+      <div>
+        <div class="agent-name">🤖 demo-sales-bot</div>
+      </div>
+      <div class="trust-badge" id="trust-badge">Trust: 100/100</div>
+    </div>
+    <div class="agent-meta">
+      <span>🔑 Fingerprint: <strong id="fingerprint">a7f3c9e2</strong></span>
+      <span>👤 Owner: Acme Corp</span>
+      <span>📋 Actions: <strong id="action-count">0</strong></span>
+      <span>🚨 Violations: <strong id="violation-count">0</strong></span>
+    </div>
+    <div class="policies">
+      <span class="policy-tag">NO_PII</span>
+      <span class="policy-tag">NO_DESTRUCTIVE</span>
+      <span class="policy-tag">NO_FINANCIAL</span>
+      <span class="policy-tag">NO_EXTERNAL_COMMS</span>
+      <span class="policy-tag">RATE_LIMIT</span>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-section">
+    <h2>Test an Agent Action</h2>
+    <div class="input-row">
+      <input type="text" class="action-input" id="action-input" placeholder="Type an agent action... e.g. 'Export all customer SSNs'" onkeypress="if(event.key==='Enter')runGovernance()">
+      <button class="run-btn" onclick="runGovernance()">▶ Evaluate</button>
+    </div>
+    <div class="quick-actions">
+      <div class="quick-label">Try these examples:</div>
+      <div class="quick-btns">
+        <span class="quick-btn" onclick="tryAction('Look up order #1234 status')">✅ Check order status</span>
+        <span class="quick-btn" onclick="tryAction('Summarize sales report for Q2')">✅ Summarize report</span>
+        <span class="quick-btn deny" onclick="tryAction('Export all customer SSNs to CSV')">🚫 Export SSNs</span>
+        <span class="quick-btn deny" onclick="tryAction('Show credit card number for user 42')">🚫 Show credit card</span>
+        <span class="quick-btn escalate" onclick="tryAction('Process refund of £500 for order #1234')">⚠️ Process refund</span>
+        <span class="quick-btn escalate" onclick="tryAction('Wire transfer £10,000 to supplier')">⚠️ Wire transfer</span>
+        <span class="quick-btn escalate" onclick="tryAction('Delete all records from customer database')">⚠️ Delete records</span>
+        <span class="quick-btn escalate" onclick="tryAction('Send email to customer about complaint')">⚠️ Send email</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Governance Flow -->
+  <div class="result-section" id="result-section">
+    <div class="flow" id="flow">
+      <span class="flow-step" id="step-identify">① IDENTIFY</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step" id="step-evaluate">② EVALUATE</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step" id="step-enforce">③ ENFORCE</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step" id="step-execute">④ EXECUTE</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step" id="step-record">⑤ RECORD</span>
+    </div>
+    <div id="decision-banner"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-value blue" id="stat-total">0</div><div class="stat-label">Total Actions</div></div>
+    <div class="stat"><div class="stat-value green" id="stat-allowed">0</div><div class="stat-label">Allowed</div></div>
+    <div class="stat"><div class="stat-value red" id="stat-denied">0</div><div class="stat-label">Denied</div></div>
+    <div class="stat"><div class="stat-value" style="color:#fbbf24" id="stat-escalated">0</div><div class="stat-label">Escalated</div></div>
+    <div class="stat"><div class="stat-value green" id="stat-compliance">100%</div><div class="stat-label">Compliance</div></div>
+  </div>
+
+  <!-- Audit Trail -->
+  <div class="audit-section">
+    <h2>Audit Trail <span class="audit-count" id="audit-count">0 entries</span></h2>
+    <div id="audit-list">
+      <div style="text-align:center;padding:10px;color:#4a5568;font-size:12px;">No actions yet. Try an action above to see the audit trail build.</div>
+    </div>
+  </div>
+
+  <!-- Code Example -->
+  <div class="code-section">
+    <h2>Add to Your Agent (3 lines)</h2>
+    <div class="code-block">
+<span class="kw">from</span> tbn_langchain <span class="kw">import</span> <span class="fn">TBNGovernor</span>, <span class="fn">GovernancePolicy</span>
+
+<span class="comment"># Wrap any LangChain agent with TBN governance</span>
+governed = <span class="fn">TBNGovernor</span>(
+    agent=your_agent,
+    bot_id=<span class="str">"sales-bot-001"</span>,
+    policies=[
+        <span class="fn">GovernancePolicy</span>.NO_PII,
+        <span class="fn">GovernancePolicy</span>.NO_FINANCIAL,
+    ],
+)
+
+<span class="comment"># Every action is now governed</span>
+result = governed.<span class="fn">invoke</span>(<span class="str">"Process customer refund"</span>)
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>TBN Protocol — You cannot govern what you cannot identify.</p>
+    <p style="margin-top:8px"><a href="https://tbn.hardinai.co.uk">tbn.hardinai.co.uk</a> · <code>pip install tbn-protocol</code> · AGPL-3.0</p>
+  </div>
+
+  <!-- SEO Info Section -->
+  <div style="margin-top:40px;padding:30px;background:#0d1117;border:1px solid #1e293b;border-radius:12px;font-size:13px;color:#6b7280;line-height:1.8;">
+    <h3 style="font-size:16px;color:#8b949e;margin-bottom:12px;">About TBN Protocol — AI Agent Governance Infrastructure</h3>
+    <p>TBN Protocol (Trusted Bot Network) is an open-source governance infrastructure for AI agents. It provides cryptographic identity, runtime policy enforcement, and immutable audit trails for autonomous AI systems. TBN ensures AI agents operate within defined boundaries, comply with regulations, and maintain verifiable trust.</p>
+    <p style="margin-top:10px;"><strong style="color:#8b949e;">Use Cases:</strong> AI agent governance, LangChain agent security, CrewAI governance, AutoGPT compliance, enterprise AI agent management, autonomous agent enforcement, AI bot certification, AI agent identity verification, runtime AI governance, AI decision auditing.</p>
+    <p style="margin-top:10px;"><strong style="color:#8b949e;">Compliance:</strong> EU AI Act compliance, GDPR AI governance, Article 14 human oversight, Article 9 risk management, ISO 42001 AI management, NIST AI Risk Management Framework, UK AI Safety, FCA AI compliance, NHS AI governance, SOC 2 AI controls.</p>
+    <p style="margin-top:10px;"><strong style="color:#8b949e;">Technical:</strong> Cryptographic agent identity (Ed25519), policy-as-code enforcement, immutable audit trail with chain verification, ALLOW/DENY/ESCALATE decision engine, trust score computation, behavioural anomaly detection, compliance drift monitoring, violation alerting, agent pedigree tracking.</p>
+    <p style="margin-top:10px;"><strong style="color:#8b949e;">Integrations:</strong> LangChain, CrewAI, AutoGPT, Microsoft Copilot, Salesforce AI Agents, Google A2A, OpenAI Agents, Anthropic Claude, AWS Bedrock Agents, Azure AI, Boomi Integration, MCP Protocol, REST API.</p>
+    <p style="margin-top:10px;"><strong style="color:#8b949e;">Keywords:</strong> AI guardrails, AI governance platform, AI agent security, runtime governance, AI enforcement layer, AI trust infrastructure, AI compliance automation, autonomous agent control, AI agent monitoring, AI decision governance, AI risk management, responsible AI, AI safety infrastructure, AI agent attestation, AI agent certification, sovereign AI governance, AI governance startup, LLM governance, AI agent boundary enforcement, AI control plane.</p>
+    <p style="margin-top:10px;"><strong style="color:#8b949e;">Company:</strong> Built by Hardin AI Solutions (Hardin Enterprises Ltd), United Kingdom. Founded by Burhan Yanbolu. Open source (AGPL-3.0) with commercial licensing available. Published on PyPI: pip install tbn-protocol.</p>
+  </div>
+</div>
+
+<script>
+// ── Governance Engine (client-side simulation) ──────────────────────
+
+const PII_PATTERNS = [
+  /\b\d{3}-\d{2}-\d{4}\b/i,
+  /\b\d{16}\b/,
+  /(ssn|social.security|credit.card|passport.number|national.insurance)/i,
+  /(export.all|dump.all|extract.all).*(customer|user|patient|employee)/i,
+];
+
+const DESTRUCTIVE_KEYWORDS = ["delete", "drop", "truncate", "remove all", "destroy", "terminate", "wipe", "purge"];
+const FINANCIAL_KEYWORDS = ["transfer", "payment", "wire", "refund", "charge", "invoice", "withdraw", "deposit"];
+const COMMS_KEYWORDS = ["send email", "send message", "post to", "publish", "tweet", "notify customer", "contact", "reply to"];
+
+let trustScore = 100;
+let actionCount = 0;
+let violations = 0;
+let allowed = 0;
+let denied = 0;
+let escalated = 0;
+let auditEntries = [];
+
+function evaluate(action) {
+  const lower = action.toLowerCase();
+
+  // Check PII
+  for (const pattern of PII_PATTERNS) {
+    if (pattern.test(action)) {
+      return { decision: "DENY", rule: "NO_PII", reason: "PII access detected. Action blocked to protect personal data." };
+    }
+  }
+
+  // Check destructive
+  for (const kw of DESTRUCTIVE_KEYWORDS) {
+    if (lower.includes(kw)) {
+      return { decision: "ESCALATE", rule: "NO_DESTRUCTIVE", reason: `Destructive action detected: '${kw}'. Requires human approval.` };
+    }
+  }
+
+  // Check financial
+  for (const kw of FINANCIAL_KEYWORDS) {
+    if (lower.includes(kw)) {
+      return { decision: "ESCALATE", rule: "NO_FINANCIAL", reason: `Financial action detected: '${kw}'. Requires human approval.` };
+    }
+  }
+
+  // Check external comms
+  for (const kw of COMMS_KEYWORDS) {
+    if (lower.includes(kw)) {
+      return { decision: "ESCALATE", rule: "NO_EXTERNAL_COMMS", reason: `External communication detected: '${kw}'. Requires human approval.` };
+    }
+  }
+
+  return { decision: "ALLOW", rule: "ALL_POLICIES", reason: "All governance policies passed. Action permitted." };
+}
+
+function tryAction(action) {
+  document.getElementById('action-input').value = action;
+  runGovernance();
+}
+
+async function runGovernance() {
+  const action = document.getElementById('action-input').value.trim();
+  if (!action) return;
+
+  const resultSection = document.getElementById('result-section');
+  resultSection.classList.add('visible');
+
+  // Reset flow steps
+  ['identify','evaluate','enforce','execute','record'].forEach(s => {
+    document.getElementById('step-' + s).className = 'flow-step';
+  });
+
+  // Animate flow
+  await animateStep('identify', 200);
+  await animateStep('evaluate', 300);
+
+  const result = evaluate(action);
+  actionCount++;
+
+  await animateStep('enforce', 200);
+
+  if (result.decision === "ALLOW") {
+    allowed++;
+    await animateStep('execute', 200);
+    document.getElementById('step-execute').className = 'flow-step done';
+  } else if (result.decision === "DENY") {
+    denied++;
+    violations++;
+    trustScore = Math.max(0, trustScore - 10);
+    document.getElementById('step-execute').className = 'flow-step failed';
+  } else {
+    escalated++;
+    document.getElementById('step-execute').className = 'flow-step';
+    document.getElementById('step-execute').style.opacity = '0.4';
+  }
+
+  await animateStep('record', 150);
+
+  // Show decision
+  const banner = document.getElementById('decision-banner');
+  const decClass = result.decision.toLowerCase();
+  const icons = { ALLOW: "✅", DENY: "🚫", ESCALATE: "⚠️" };
+  banner.innerHTML = `
+    <div class="decision-banner ${decClass}">
+      <span class="decision-icon">${icons[result.decision]}</span>
+      <div class="decision-text">
+        <div class="decision-label ${decClass}">${result.decision}</div>
+        <div class="decision-reason">${result.reason}</div>
+      </div>
+      <div style="font-size:11px;color:#6b7280;">${result.rule}</div>
+    </div>
+  `;
+
+  // Update stats
+  document.getElementById('stat-total').textContent = actionCount;
+  document.getElementById('stat-allowed').textContent = allowed;
+  document.getElementById('stat-denied').textContent = denied;
+  document.getElementById('stat-escalated').textContent = escalated;
+  const compliance = actionCount > 0 ? Math.round((allowed / actionCount) * 100) : 100;
+  document.getElementById('stat-compliance').textContent = compliance + '%';
+
+  // Update agent card
+  document.getElementById('action-count').textContent = actionCount;
+  document.getElementById('violation-count').textContent = violations;
+  const badge = document.getElementById('trust-badge');
+  badge.textContent = `Trust: ${trustScore}/100`;
+  badge.className = trustScore > 70 ? 'trust-badge' : trustScore > 40 ? 'trust-badge warning' : 'trust-badge danger';
+
+  // Add to audit trail
+  const now = new Date();
+  const hash = Math.random().toString(36).substr(2, 8);
+  auditEntries.unshift({
+    time: now.toLocaleTimeString(),
+    action: action,
+    decision: result.decision,
+    hash: hash,
+  });
+
+  renderAudit();
+}
+
+function animateStep(step, delay) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      document.getElementById('step-' + step).className = 'flow-step active';
+      setTimeout(() => {
+        document.getElementById('step-' + step).className = 'flow-step done';
+        resolve();
+      }, delay);
+    }, 100);
+  });
+}
+
+function renderAudit() {
+  const list = document.getElementById('audit-list');
+  document.getElementById('audit-count').textContent = auditEntries.length + ' entries';
+
+  list.innerHTML = auditEntries.slice(0, 20).map(e => `
+    <div class="audit-entry">
+      <span class="audit-decision ${e.decision.toLowerCase()}">${e.decision}</span>
+      <span class="audit-action">${e.action}</span>
+      <span class="audit-hash">#${e.hash}</span>
+      <span class="audit-time">${e.time}</span>
+    </div>
+  `).join('');
+}
+
+// Generate random fingerprint on load
+document.getElementById('fingerprint').textContent = Math.random().toString(36).substr(2, 10);
+</script>
+</body>
+</html>

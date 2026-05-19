@@ -1,0 +1,41 @@
+I'm Burhan Yanbolu, solo technical founder of TBN Protocol (Hardin Enterprises Ltd, UK). Our YC Summer 2026 application is currently under review. Here's the full picture of where we are today:
+
+WHAT WE BUILT:
+TBN Protocol — runtime trust infrastructure for AI agents. One API call verifies if an agent is certified, unchanged (fingerprint attestation), within budget, and policy-compliant. Less than 100ms response time. Open source (AGPL-3.0) with commercial licensing.
+
+TRACTION (all in the last 48 hours):
+1. First integration partner LIVE: CLARIXO (TGTRACING LLC, Cambodia) — an AI responsibility attribution system. They call our /api/verify/full endpoint and store the trust-state as evidence inside their responsibility records. All three verification paths confirmed (unknown agent, certified agent, fingerprint attestation).
+
+2. Second integration partner CONFIRMED: DigiEmu Core (Bruno Baumgartner, Switzerland) — deterministic decision-state reconstruction. He's preparing a schema this week to test the TBN to DigiEmu boundary. Async integration, architecture-first approach.
+
+3. Third potential partner identified: Causeway (VectorPeak, London) — admissibility layer. Live API with pricing. Same governance chain conversation.
+
+4. Three-layer governance chain publicly validated on LinkedIn by all parties: TBN handles agent certification and attestation (L1-L2), DigiEmu handles decision-state reconstruction (L3), CLARIXO handles responsibility attribution (L7).
+
+5. Julia Kung (independent AI governance researcher) publicly named TBN as the L1-L2 layer in her Stacked Governance Model post.
+
+6. Public verification registry launched today: tbn.hardinai.co.uk/verify — anyone can check if an agent is certified, no API key needed.
+
+7. LinkedIn article published: The Governance Chain: Why AI Agents Need More Than One Layer of Trust — getting engagement from directors at CGI, founders of competing and complementary systems.
+
+8. EIC Accelerator (EU, up to 2.5M euro grant) application started — PIC registered, draft proposal written, submission portal open.
+
+9. TfL Innovation submission made for our other project (RankWatch — taxi rank monitoring).
+
+COMPETITIVE LANDSCAPE:
+Raknor.ai is our closest competitor (certification plus adversarial testing, 13 patents, 5K-25K per year). But they are The Auditor (static certification). We are The Enforcer (runtime verification plus budget enforcement). Our moat: open protocol plus integration ecosystem plus network effects. They cannot replicate our partner network.
+
+REVENUE: None yet. Focus has been on proving the integration model works with real external partners before charging.
+
+WEAKNESSES:
+- Solo founder
+- No revenue
+- YC application has inconsistency (original submission was about a search engine, pivoted to TBN Protocol mid-application, could not edit locked fields)
+- No patents
+
+WHAT I NEED FROM YC:
+- Distribution and network to find first paying enterprise customers
+- Co-founder matching
+- Credibility for enterprise sales
+
+MY QUESTION: Given all of this — two live partners, public validation, competitive positioning as the enforcer vs Raknor's the auditor, and a governance chain forming around us — how strong is our YC application? What would you tell me to focus on before the interview if we get one?

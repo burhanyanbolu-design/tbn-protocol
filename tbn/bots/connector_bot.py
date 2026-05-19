@@ -30,8 +30,8 @@ class ConnectorBot(Bot):
         "hardin": "https://hardin-ai-search.vercel.app/api",
     }
 
-    def __init__(self, name: str, bica: BICA, ca=None):
-        super().__init__(name, bica, ca=ca)
+    def __init__(self, name: str, bica: BICA, ca=None, **kwargs):
+        super().__init__(name, bica, ca=ca, **kwargs)
         self._request_count = 0
 
     def fetch(self, platform: str, endpoint: str, params: dict = None) -> dict:

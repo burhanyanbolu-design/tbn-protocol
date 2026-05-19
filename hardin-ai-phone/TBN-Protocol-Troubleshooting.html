@@ -1,0 +1,129 @@
+<html><head><style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}h1{color:#1a1a2e}h2{color:#16213e;border-bottom:2px solid #0f3460;padding-bottom:5px}h3{color:#0f3460}code{background:#f0f0f0;padding:2px 6px;border-radius:3px}pre{background:#f5f5f5;padding:15px;border-radius:5px;overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f0f0f0}</style></head><body><h1>TBN Protocol — Troubleshooting Guide</h1>
+<p><strong>Product:</strong> TBN Protocol Boomi Integration<br />
+<strong>Version:</strong> 1.0.0<br />
+<strong>Date:</strong> May 2026</p>
+<hr />
+<h2>Common Issues and Solutions</h2>
+<h3>1. Authentication Error (401 Unauthorized)</h3>
+<p><strong>Symptom:</strong> API returns <code>401 Unauthorized</code></p>
+<p><strong>Cause:</strong> Invalid or missing API key</p>
+<p><strong>Solution:</strong>
+- Verify the <code>X-API-Key</code> header is included in the request
+- Check the API key is correct (no extra spaces or characters)
+- Confirm the API key has not expired
+- Contact info@hardinai.co.uk if you need a new key</p>
+<hr />
+<h3>2. Bad Request (400)</h3>
+<p><strong>Symptom:</strong> API returns <code>400 Bad Request</code></p>
+<p><strong>Cause:</strong> Missing required fields in the request body</p>
+<p><strong>Solution:</strong>
+- Check all required fields are included in the JSON body
+- For bot_registration: <code>bot_name</code>, <code>bot_type</code>, <code>capabilities</code>, <code>owner</code> are required
+- For certification_check: <code>bot_id</code> is required
+- For governance_query: <code>query_type</code> and <code>bot_id</code> are required
+- Ensure Content-Type header is set to <code>application/json</code></p>
+<hr />
+<h3>3. Connection Timeout</h3>
+<p><strong>Symptom:</strong> Boomi connector times out when calling TBN API</p>
+<p><strong>Cause:</strong> Network connectivity or server issue</p>
+<p><strong>Solution:</strong>
+- Verify the URL is correct: <code>https://tbn.hardinai.co.uk/api/boomi</code>
+- Check your Boomi Atom has outbound internet access on port 443
+- Test connectivity: <code>curl https://tbn.hardinai.co.uk/health</code>
+- If server is down, contact burhan@hardinai.co.uk</p>
+<hr />
+<h3>4. Rate Limit Exceeded (429)</h3>
+<p><strong>Symptom:</strong> API returns <code>429 Too Many Requests</code></p>
+<p><strong>Cause:</strong> Exceeded daily API call limit</p>
+<p><strong>Solution:</strong>
+- Trial tier: 100 calls/day
+- Standard tier: 1,000 calls/day
+- Enterprise tier: Unlimited
+- Contact info@hardinai.co.uk to upgrade your tier</p>
+<hr />
+<h3>5. Bot Not Found (404)</h3>
+<p><strong>Symptom:</strong> Certification check returns <code>404 Not Found</code></p>
+<p><strong>Cause:</strong> The bot_id does not exist in the registry</p>
+<p><strong>Solution:</strong>
+- Verify the bot_id is correct
+- Register the bot first using <code>/bot_registration</code> endpoint
+- Check for typos in the bot_id value</p>
+<hr />
+<h3>6. SSL/TLS Certificate Error</h3>
+<p><strong>Symptom:</strong> SSL handshake failure</p>
+<p><strong>Cause:</strong> TLS version mismatch or certificate validation issue</p>
+<p><strong>Solution:</strong>
+- TBN Protocol requires TLS 1.2 or higher
+- Ensure your Boomi Atom's Java runtime trusts Let's Encrypt certificates
+- Update your Atom's CA certificate store if needed</p>
+<hr />
+<h3>7. JSON Parse Error</h3>
+<p><strong>Symptom:</strong> API returns <code>400</code> with "Invalid JSON" message</p>
+<p><strong>Cause:</strong> Malformed JSON in request body</p>
+<p><strong>Solution:</strong>
+- Validate your JSON using a tool like jsonlint.com
+- Ensure proper quoting of strings
+- Check for trailing commas
+- Verify the Boomi Map step is producing valid JSON output</p>
+<hr />
+<h2>Health Check</h2>
+<p>Test the API is running:</p>
+<pre><code>GET https://tbn.hardinai.co.uk/health
+</code></pre>
+<p>Expected response:</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;healthy&quot;,
+  &quot;service&quot;: &quot;tbn-protocol&quot;
+}
+</code></pre>
+<hr />
+<h2>HTTP Status Codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Success</td>
+<td>Request completed</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Bad Request</td>
+<td>Check request body fields</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized</td>
+<td>Check API key</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>Check bot_id or endpoint URL</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Rate Limited</td>
+<td>Wait or upgrade tier</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Server Error</td>
+<td>Contact support</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Support Contact</h2>
+<p><strong>Email:</strong> burhan@hardinai.co.uk<br />
+<strong>Phone:</strong> +442045772353<br />
+<strong>Hours:</strong> 09:00–18:00 GMT, Monday–Friday<br />
+<strong>Response SLA:</strong> 24 hours</p>
+<hr />
+<p><em>Document Version 1.0 — May 2026</em></p></body></html>

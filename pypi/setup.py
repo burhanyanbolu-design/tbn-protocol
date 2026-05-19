@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tbn-protocol",
-    version="0.1.4",
+    version="0.1.5",
     author="Burhan Yanbolu",
     author_email="burhan@hardinai.co.uk",
     description="TBN Protocol — Trust infrastructure for AI agents. Think HTTPS for bots.",

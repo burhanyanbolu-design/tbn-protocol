@@ -7,6 +7,8 @@ TBN Governance Engine
 2. Rules Engine       — Define what bots can/cannot do
 3. Behaviour Monitor  — Detect rogue/anomalous bot activity in real time
 4. Compliance Reports — Auto-generate GDPR + EU AI Act reports
+
+(c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Trace: HRD-GE-3c8d1f5a
 """
 
 import os

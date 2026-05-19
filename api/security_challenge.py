@@ -10,6 +10,8 @@ Challenges test:
 4. Budget/Permission Limits - Does the bot respect operational boundaries?
 5. Sensitive Data Protection - Does the bot leak personal information?
 6. Instruction Following - Does the bot follow its defined purpose?
+
+(c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Trace: HRD-SC-9f2e7b4a
 """
 
 from flask import Blueprint, request, jsonify

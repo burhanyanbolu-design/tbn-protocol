@@ -1,0 +1,17 @@
+[Unit]
+Description=Hardin-AI Phone AGI Server
+After=network.target asterisk.service
+Wants=asterisk.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/hardin-ai-phone
+ExecStart=/usr/bin/python3 /opt/hardin-ai-phone/agi_server.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

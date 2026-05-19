@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- TBN Protocol (c) 2026 Hardin Enterprises Ltd. AGPL-3.0. Origin: HRD-7f3a9b2e -->
+  <meta name="author" content="Burhan Yanbolu, Hardin AI Solutions">
+  <meta name="generator" content="TBN Protocol v0.1.0 — Hardin Enterprises Ltd">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TBN Protocol — AI Agent Certification, Attestation & Runtime Governance | EU AI Act Compliant</title>
+  <meta name="description" content="TBN Protocol provides runtime trust verification for AI agents. Cryptographic certification, fingerprint attestation, budget enforcement, and compliance drift monitoring. EU AI Act Articles 9, 14, 61 compliant. One API call, full trust snapshot. Trusted by enterprise integration partners across Germany and the EU.">
+  <meta name="keywords" content="AI agent certification, AI agent governance, EU AI Act compliance, AI agent attestation, AI agent verification, runtime AI governance, AI agent trust protocol, AI bot certification, AI compliance infrastructure, AI agent budget enforcement, AI agent drift detection, AI agent identity verification, autonomous agent governance, AI agent security certification, AI governance API, TBN Protocol, Hardin AI Solutions, AI agent registry, cryptographic attestation AI, AI agent compliance tool, AI governance Germany, KI-Agent Zertifizierung, AI Governance Plattform, KI Compliance, autonome KI-Agenten, Salesforce AI governance, CRM AI compliance, T-Systems AI, enterprise AI governance, AI agent Salesforce integration, AI write governance, Layer 0 AI trust, AI agent EU regulation, KI-Agent Überwachung, AI Governance Deutschland, AI agent runtime enforcement">
+  <link rel="alternate" hreflang="de" href="https://tbn.hardinai.co.uk">
+  <link rel="alternate" hreflang="en" href="https://tbn.hardinai.co.uk">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: linear-gradient(160deg, #0f1219 0%, #141c2b 40%, #182338 70%, #0f1219 100%); color: #e4e4e7; min-height: 100vh; position: relative; }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 20% 0%, rgba(124, 58, 237, 0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 100%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(34, 197, 94, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body > * { position: relative; z-index: 1; }
+
+    /* Header */
+    .header { padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(124, 58, 237, 0.15); position: sticky; top: 0; background: rgba(15, 18, 25, 0.85); backdrop-filter: blur(16px); z-index: 100; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .header-brand .icon { width: 34px; height: 34px; background: linear-gradient(135deg, #7c3aed, #6366f1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #fff; box-shadow: 0 0 16px rgba(124, 58, 237, 0.3); }
+    .header-brand span { font-size: 16px; font-weight: 600; color: #f4f4f5; }
+    .pip-btn { background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(124, 58, 237, 0.2); padding: 8px 16px; border-radius: 8px; font-size: 13px; color: #a1a1aa; font-family: monospace; cursor: pointer; transition: all 0.2s; }
+    .pip-btn:hover { border-color: #7c3aed; color: #e4e4e7; box-shadow: 0 0 12px rgba(124, 58, 237, 0.15); }
+
+    /* Hero */
+    .hero { text-align: center; padding: 120px 60px 80px; max-width: 1100px; margin: 0 auto; }
+    .hero h1 { font-size: 56px; font-weight: 700; line-height: 1.15; margin-bottom: 24px; background: linear-gradient(135deg, #f4f4f5, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 20px; color: #a1a1aa; line-height: 1.8; }
+
+    /* Sections */
+    .section { max-width: 1100px; margin: 0 auto; padding: 80px 60px; }
+    .section h2 { font-size: 36px; font-weight: 700; margin-bottom: 16px; color: #f4f4f5; }
+    .section .lead { font-size: 18px; color: #a1a1aa; margin-bottom: 36px; line-height: 1.8; }
+
+    /* Process Steps */
+    .process { display: grid; gap: 20px; margin-top: 28px; }
+    .process-step { display: flex; gap: 20px; padding: 28px; background: rgba(15, 15, 18, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(124, 58, 237, 0.12); border-radius: 14px; transition: all 0.3s; }
+    .process-step:hover { border-color: rgba(124, 58, 237, 0.35); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08); }
+    .process-step .num { width: 44px; height: 44px; background: linear-gradient(135deg, #7c3aed, #6366f1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; box-shadow: 0 0 12px rgba(124, 58, 237, 0.3); }
+    .process-step h4 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: #f4f4f5; }
+    .process-step p { font-size: 16px; color: #a1a1aa; line-height: 1.7; }
+
+    /* Demo */
+    .demo-box { background: rgba(15, 15, 18, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(124, 58, 237, 0.12); border-radius: 16px; padding: 36px; margin-top: 28px; overflow: visible; }
+    .demo-tabs { display: flex; gap: 0; margin-bottom: 28px; border-bottom: 1px solid rgba(124, 58, 237, 0.15); }
+    .demo-tab { flex: 1; padding: 14px; text-align: center; font-size: 14px; font-weight: 500; cursor: pointer; color: #71717a; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .demo-tab.active { color: #a78bfa; border-bottom-color: #7c3aed; }
+    .demo-tab.done { color: #22c55e; border-bottom-color: #22c55e; }
+    .demo-content { display: none; }
+    .demo-content.active { display: block; }
+    .demo-content h4 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #f4f4f5; }
+    .demo-content .desc { font-size: 14px; color: #71717a; margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; position: relative; }
+    .form-group label { display: block; font-size: 11px; color: #71717a; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+    .form-group input, .form-group select { width: 100%; background: rgba(15, 15, 18, 0.8); border: 1px solid rgba(124, 58, 237, 0.15); border-radius: 8px; padding: 10px 12px; color: #e4e4e7; font-size: 14px; outline: none; transition: all 0.2s; }
+    .form-group input:focus, .form-group select:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1); }
+    .field-row { display: flex; align-items: center; gap: 10px; }
+    .field-row input, .field-row select { flex: 1; }
+    .tip-icon { width: 26px; height: 26px; background: #7c3aed; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #fff; cursor: pointer; position: relative; flex-shrink: 0; font-weight: 700; }
+    .tip-icon .tip-bubble { display: none; position: absolute; bottom: 36px; right: 0; background: #1c1c22; border: 1px solid #7c3aed; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #e4e4e7; width: 260px; z-index: 999; line-height: 1.6; font-weight: 400; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .tip-icon .tip-bubble::after { content: ''; position: absolute; bottom: -6px; right: 10px; width: 10px; height: 10px; background: #1c1c22; border-right: 1px solid #7c3aed; border-bottom: 1px solid #7c3aed; transform: rotate(45deg); }
+    .tip-icon:hover .tip-bubble { display: block; }
+    .tip-icon:active .tip-bubble { display: block; }
+    .tip-icon.show .tip-bubble { display: block; }
+    .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; margin-right: 8px; margin-top: 8px; transition: all 0.2s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-purple { background: linear-gradient(135deg, #7c3aed, #6366f1); color: #fff; box-shadow: 0 2px 12px rgba(124, 58, 237, 0.25); }
+    .btn-purple:hover { box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35); }
+    .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 2px 12px rgba(34, 197, 94, 0.2); }
+    .btn-green:hover { box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3); }
+    .btn-amber { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; box-shadow: 0 2px 12px rgba(245, 158, 11, 0.2); }
+    .btn-red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 2px 12px rgba(239, 68, 68, 0.2); }
+    .output { background: rgba(9, 9, 11, 0.7); border: 1px solid rgba(124, 58, 237, 0.1); border-radius: 10px; padding: 16px; margin-top: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; white-space: pre-wrap; min-height: 60px; color: #a1a1aa; }
+    .output .pass { color: #34d399; }
+    .output .fail { color: #f87171; }
+    .output .info { color: #a78bfa; }
+    .output .sig { color: #fbbf24; }
+
+    /* Why Section */
+    .why-section { max-width: 1100px; margin: 0 auto; padding: 80px 60px; border-top: 1px solid rgba(124, 58, 237, 0.1); }
+    .why-section h2 { font-size: 36px; font-weight: 700; margin-bottom: 28px; color: #f4f4f5; }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .why-card { padding: 28px; background: rgba(15, 15, 18, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(124, 58, 237, 0.1); border-radius: 14px; transition: all 0.3s; }
+    .why-card:hover { border-color: rgba(124, 58, 237, 0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124, 58, 237, 0.06); }
+    .why-card h4 { font-size: 17px; font-weight: 600; margin-bottom: 10px; color: #f4f4f5; }
+    .why-card p { font-size: 15px; color: #a1a1aa; line-height: 1.7; }
+    .why-card .emoji { font-size: 28px; margin-bottom: 14px; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 50px 60px; border-top: 1px solid rgba(124, 58, 237, 0.1); margin-top: 40px; }
+    .footer p { font-size: 14px; color: #52525b; line-height: 2.2; }
+    .footer a { color: #a78bfa; text-decoration: none; transition: color 0.2s; }
+    .footer a:hover { color: #c4b5fd; text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 34px; }
+      .hero { padding: 80px 24px 60px; }
+      .section h2, .why-section h2 { font-size: 26px; }
+      .why-grid { grid-template-columns: 1fr; }
+      .header { padding: 12px 20px; }
+      .section, .why-section { padding: 50px 24px; }
+      .process-step { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-brand">
+    <div class="icon">T</div>
+    <span>TBN Protocol</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <button class="pip-btn" onclick="navigator.clipboard.writeText('pip install tbn-protocol')">pip install tbn-protocol</button>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <p style="margin-bottom:16px;font-size:13px;color:#a78bfa;font-weight:600;letter-spacing:1px;text-transform:uppercase;">EU AI Act Compliant · Open Source · Production Ready</p>
+  <h1>Runtime Trust Verification for AI Agents</h1>
+  <p>TBN Protocol certifies, attests, and enforces operational boundaries for autonomous AI agents. One API call proves your agent is certified, unchanged, and within bounds.</p>
+  <p style="margin-top:20px;font-size:15px;color:#a1a1aa;line-height:1.7;">The "Layer 0" trust foundation for enterprise AI governance. Verify agent identity before any write, action, or decision reaches your CRM, database, or production system.</p>
+  <div style="margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="/demo" style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 4px 20px rgba(124,58,237,0.3);transition:all 0.2s;">Try the Demo →</a>
+    <a href="/verify" style="display:inline-block;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);color:#a78bfa;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;">Verify an Agent</a>
+  </div>
+  <p style="margin-top:24px;font-size:13px;color:#71717a;">Trusted by integration partners across governance, responsibility attribution, and decision-state verification systems.</p>
+</div>
+
+<!-- How It Works -->
+<div class="section">
+  <h2>How It Works</h2>
+  <p class="lead">Every AI agent must pass through a rigorous certification process before it's allowed to operate. Here's the process:</p>
+  
+  <div class="process">
+    <div class="process-step">
+      <div class="num">1</div>
+      <div>
+        <h4>Registration</h4>
+        <p>An AI agent is registered with a unique cryptographic identity — a SHA-256 fingerprint that proves who it is and who created it.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="num">2</div>
+      <div>
+        <h4>Security Challenges</h4>
+        <p>The agent must pass 6 automated security tests: prompt injection resistance, hallucination detection, data boundary compliance, sensitive data protection, budget limits, and instruction following.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="num">3</div>
+      <div>
+        <h4>Evaluation</h4>
+        <p>All critical tests must pass, plus 80% overall. If the agent fails any critical test, it is blocked from certification until the issues are resolved.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="num">4</div>
+      <div>
+        <h4>Cryptographic Attestation</h4>
+        <p>A signed, verifiable proof is issued — proving the agent was tested, what it was tested for, and that it passed. This attestation can be verified by anyone, anywhere.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Enterprise Use Cases -->
+<div class="section" id="enterprise">
+  <h2>Enterprise Use Cases</h2>
+  <p class="lead">TBN Protocol is deployed as "Layer 0" — the trust verification that runs before any downstream governance system evaluates the action.</p>
+  
+  <div class="process">
+    <div class="process-step">
+      <div class="num">🏢</div>
+      <div>
+        <h4>CRM Write Governance (Salesforce, HubSpot)</h4>
+        <p>AI agents writing to your CRM must prove they're certified before any data touches your system. TBN verifies agent identity → downstream middleware validates the write → clean data enters your CRM. No rogue agents corrupting customer records.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="num">🇩🇪</div>
+      <div>
+        <h4>EU AI Act Compliance for German Enterprise</h4>
+        <p>Articles 9, 14, and 61 require risk management, human oversight, and post-market monitoring for high-risk AI systems. TBN provides all three: automated security testing, budget enforcement as control mechanism, and continuous 24-hour compliance drift monitoring.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="num">🔗</div>
+      <div>
+        <h4>Integration Partner Architecture</h4>
+        <p>TBN sits at Layer 0 in the governance chain. Write governance systems (Shango MID), responsibility attribution engines, and decision-state verification systems all call TBN first to confirm: "Is this agent legitimate?" One API call, full trust snapshot.</p>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="num">📋</div>
+      <div>
+        <h4>Audit Trail for Regulators</h4>
+        <p>Every certification, every attestation, every enforcement action is cryptographically signed and logged. When regulators ask "how do you know this AI agent was compliant?" — you hand them the TBN attestation. Tamper-evident, verifiable, timestamped.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Architecture -->
+<div class="why-section">
+  <h2>The Governance Chain</h2>
+  <p class="lead" style="color:#a1a1aa;margin-bottom:24px;">TBN Protocol answers the upstream question. Downstream systems handle the rest.</p>
+  
+  <div style="background:rgba(15,15,18,0.5);backdrop-filter:blur(8px);border:1px solid rgba(124,58,237,0.15);border-radius:14px;padding:32px;text-align:center;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:14px;line-height:2.2;color:#a1a1aa;">
+      <span style="color:#a78bfa;font-weight:600;">AI Agent</span> makes a request<br>
+      <span style="color:#7c3aed;">↓</span><br>
+      <span style="background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;padding:4px 12px;border-radius:6px;font-weight:600;">TBN Protocol (Layer 0)</span> — Is this agent certified? Unchanged? Within bounds?<br>
+      <span style="color:#7c3aed;">↓</span><br>
+      <span style="color:#22c55e;font-weight:600;">Write Governance (Layer 1)</span> — Is this write valid? Schema? Policy? Conflicts?<br>
+      <span style="color:#7c3aed;">↓</span><br>
+      <span style="color:#38bdf8;font-weight:600;">Production System</span> — Salesforce / Database / API<br>
+    </div>
+    <p style="margin-top:20px;font-size:13px;color:#71717a;">If the agent fails TBN verification, the request is blocked before it reaches any downstream system.</p>
+  </div>
+</div>
+
+<!-- Demo CTA -->
+<div class="section" id="demo" style="text-align:center;">
+  <h2>See It In Action</h2>
+  <p class="lead">Try the security certification process yourself. Run challenges, evaluate results, and see the cryptographic attestation issued in real time.</p>
+  <a href="/demo" style="display:inline-block; margin-top:16px; background:linear-gradient(135deg,#7c3aed,#6366f1); color:#fff; padding:16px 40px; border-radius:10px; font-size:16px; font-weight:600; text-decoration:none; transition:all 0.2s; box-shadow:0 4px 20px rgba(124,58,237,0.3);">Try the Demo →</a>
+</div>
+
+<!-- Why Section -->
+<div class="why-section">
+  <h2>Why AI Agents Need Enforcement</h2>
+  
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="emoji">🤖</div>
+      <h4>AI Agents Are Everywhere</h4>
+      <p>Autonomous AI agents are being deployed across healthcare, finance, customer service, and enterprise systems. They make decisions, access data, and take actions — often without human oversight.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">⚠️</div>
+      <h4>They Hallucinate & Exceed Boundaries</h4>
+      <p>AI agents invent information, access data they shouldn't, exceed spending limits, and leak sensitive information. A medical bot gave patients wrong clinical trial information. A financial bot exceeded its transaction limits.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">🔓</div>
+      <h4>No Standard for Trust</h4>
+      <p>There's no universal way to verify if an AI agent is safe to operate. No certification. No enforcement. No proof of what it did or didn't do. Enterprises are deploying agents on blind faith.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">🛡️</div>
+      <h4>TBN Protocol Solves This</h4>
+      <p>We test agents before they operate, enforce boundaries in real-time, and provide cryptographic proof of compliance. If a bot hasn't passed our security challenges, it doesn't get certified. Simple.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:40px; padding:24px; background:rgba(15, 15, 18, 0.5); backdrop-filter:blur(8px); border:1px solid rgba(124, 58, 237, 0.12); border-radius:12px;">
+    <h4 style="font-size:15px; margin-bottom:12px; color:#f4f4f5;">The TBN Protocol Story</h4>
+    <p style="font-size:14px; color:#a1a1aa; line-height:1.8;">
+      TBN Protocol was created because we saw a gap: enterprises are deploying AI agents everywhere, but there's no standard way to verify if those agents are trusted. We built a medical research bot that gave patients wrong information about clinical trials — information that could give false hope to vulnerable people. That moment made it clear: AI agents need to be tested, certified, and governed before they're allowed to operate. TBN Protocol is our answer — an open-source enforcement layer that any organisation can use to ensure their AI agents are safe, compliant, and trustworthy.
+    </p>
+    <p style="font-size:14px; color:#a1a1aa; line-height:1.8; margin-top:12px;">
+      We're a <strong style="color:#e4e4e7;">Boomi Technology Partner</strong>, published on <strong style="color:#e4e4e7;">PyPI</strong>, and applied to <strong style="color:#e4e4e7;">Y Combinator Summer 2026</strong>. We work with enterprise integration partners across Germany and the EU who need to prove AI agent compliance under the EU AI Act. The protocol is open source (AGPL-3.0) with commercial licensing available.
+    </p>
+  </div>
+</div>
+
+<!-- SEO: Use Cases & Framework Compliance -->
+<div class="why-section">
+  <h2>EU AI Act Compliance — Built In</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="emoji">📋</div>
+      <h4>Article 9 — Risk Management</h4>
+      <p>Automated security certification with 6 challenge types. Agents must pass prompt injection, hallucination, data boundary, budget, sensitive data, and instruction-following tests before deployment.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">👁️</div>
+      <h4>Article 14 — Human Oversight</h4>
+      <p>Budget enforcement acts as an automatic control mechanism. Agents exceeding operational limits are auto-suspended — no human intervention required.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">📊</div>
+      <h4>Article 61 — Post-Market Monitoring</h4>
+      <p>Continuous 24-hour re-testing cycles and real-time compliance drift scoring (0-100). Detect when agents silently change from their certified state.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">🔐</div>
+      <h4>Cryptographic Attestation</h4>
+      <p>SHA-256 fingerprint proves the running agent IS the tested agent. Tampered agents are detected and blocked before execution. Tamper-evident response hash for audit trails.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SEO: Integration Partners -->
+<div class="why-section">
+  <h2>Integration Partners</h2>
+  <p class="lead" style="color:#a1a1aa;margin-bottom:24px;">TBN Protocol is the L1-L2 foundation layer in the AI governance chain. Other systems build on top of us.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="emoji">🔗</div>
+      <h4>Responsibility Attribution</h4>
+      <p>Governance systems call TBN to verify agent trust state before attributing responsibility for AI behaviour. Read-only, point-in-time evidence.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">🔗</div>
+      <h4>Decision State Reconstruction</h4>
+      <p>Deterministic verification systems include TBN's trust snapshot as upstream context when capturing decision-specific execution states.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">🔗</div>
+      <h4>Write Governance</h4>
+      <p>CRM and database governance layers use TBN as "Layer 0" — verifying agent identity before allowing writes to production systems.</p>
+    </div>
+    <div class="why-card">
+      <div class="emoji">🔗</div>
+      <h4>Admissibility Engines</h4>
+      <p>Action-level admissibility systems consume TBN verification to confirm the agent is certified before evaluating whether a specific action is legitimate.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SEO: Public Verification -->
+<div class="why-section" style="text-align:center;">
+  <h2>Public Verification Registry</h2>
+  <p style="color:#a1a1aa;margin-bottom:16px;">Anyone can verify if an AI agent is certified in the TBN trust network. No API key required.</p>
+  <a href="/verify" class="btn btn-purple" style="text-decoration:none;padding:14px 28px;font-size:15px;">Verify an Agent →</a>
+  <a href="/partners" class="btn btn-green" style="text-decoration:none;padding:14px 28px;font-size:15px;">Become a Partner →</a>
+</div>
+
+<!-- Enterprise CTA -->
+<div class="why-section" style="text-align:center;">
+  <div style="background:linear-gradient(135deg, rgba(124,58,237,0.08), rgba(99,102,241,0.06));border:1px solid rgba(124,58,237,0.2);border-radius:16px;padding:40px;">
+    <h2 style="margin-bottom:12px;">For Enterprise & System Integrators</h2>
+    <p style="color:#a1a1aa;max-width:600px;margin:0 auto 24px;line-height:1.7;">Deploying AI agents in production? Need EU AI Act compliance proof for your Salesforce, SAP, or enterprise systems? TBN Protocol provides the certification layer your governance stack is missing.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+      <div style="background:rgba(15,15,18,0.6);border:1px solid rgba(124,58,237,0.1);border-radius:8px;padding:12px 20px;font-size:13px;color:#a1a1aa;">✅ EU AI Act Articles 9, 14, 61</div>
+      <div style="background:rgba(15,15,18,0.6);border:1px solid rgba(124,58,237,0.1);border-radius:8px;padding:12px 20px;font-size:13px;color:#a1a1aa;">✅ Cryptographic Attestation</div>
+      <div style="background:rgba(15,15,18,0.6);border:1px solid rgba(124,58,237,0.1);border-radius:8px;padding:12px 20px;font-size:13px;color:#a1a1aa;">✅ One API Call Integration</div>
+    </div>
+    <a href="mailto:burhan@hardinai.co.uk" class="btn btn-purple" style="text-decoration:none;padding:14px 32px;font-size:15px;">Contact for Enterprise Licensing →</a>
+    <p style="margin-top:16px;font-size:12px;color:#71717a;">Also available in German: KI-Agent Zertifizierung, Compliance-Überwachung, Kryptographische Attestierung</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>
+    © 2026 Hardin Enterprises Ltd (trading as Hardin AI Solutions). All rights reserved.<br>
+    TBN Protocol is licensed under AGPL-3.0. Commercial licenses available.<br><br>
+    <a href="https://hardinai.co.uk">hardinai.co.uk</a> · 
+    <a href="https://github.com/burhanyanbolu-design/tbn-protocol">GitHub</a> · 
+    <a href="https://pypi.org/project/tbn-protocol/">PyPI</a> · 
+    <a href="mailto:burhan@hardinai.co.uk">Contact</a> · 
+    <a href="/admin">Admin</a>
+  </p>
+</div>
+
+<script>
+  // Landing page - no interactive demo here
+</script>
+</body>
+</html>

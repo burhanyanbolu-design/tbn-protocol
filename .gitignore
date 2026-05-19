@@ -25,3 +25,7 @@ certification_portal_base64.txt
 
 # Test outputs
 temp_cert.html
+
+# Confidential
+WATERMARKS.md
+.ssh_temp_key
