@@ -75,12 +75,12 @@
     .decision-reason { font-size: 14px; color: #8b949e; margin-top: 2px; }
 
     /* Flow visualization */
-    .flow { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-    .flow-step { background: #1e293b; border-radius: 8px; padding: 8px 14px; font-size: 11px; font-weight: 600; color: #8b949e; transition: all 0.3s; }
+    .flow { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 16px; }
+    .flow-step { background: #1e293b; border-radius: 8px; padding: 10px 32px; font-size: 14px; font-weight: 600; color: #8b949e; transition: all 0.3s; width: 220px; text-align: center; }
     .flow-step.active { color: #00d4ff; border: 1px solid #00d4ff; background: rgba(0,212,255,0.05); }
     .flow-step.done { color: #22c55e; border: 1px solid #22c55e; background: rgba(34,197,94,0.05); }
     .flow-step.failed { color: #ef4444; border: 1px solid #ef4444; background: rgba(239,68,68,0.05); }
-    .flow-arrow { color: #4a5568; font-size: 12px; }
+    .flow-arrow { color: #4a5568; font-size: 18px; }
 
     /* Audit Trail */
     .audit-section { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 12px 20px; margin-bottom: 12px; }
@@ -185,13 +185,13 @@
   <div class="result-section" id="result-section">
     <div class="flow" id="flow">
       <span class="flow-step" id="step-identify">① IDENTIFY</span>
-      <span class="flow-arrow">→</span>
+      <span class="flow-arrow">↓</span>
       <span class="flow-step" id="step-evaluate">② EVALUATE</span>
-      <span class="flow-arrow">→</span>
+      <span class="flow-arrow">↓</span>
       <span class="flow-step" id="step-enforce">③ ENFORCE</span>
-      <span class="flow-arrow">→</span>
+      <span class="flow-arrow">↓</span>
       <span class="flow-step" id="step-execute">④ EXECUTE</span>
-      <span class="flow-arrow">→</span>
+      <span class="flow-arrow">↓</span>
       <span class="flow-step" id="step-record">⑤ RECORD</span>
     </div>
     <div id="decision-banner"></div>

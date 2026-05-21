@@ -11,7 +11,7 @@ setup(
     name="tbn-langchain",
     version="0.1.0",
     description="TBN Protocol governance integration for LangChain agents",
-    long_description=open("README.md").read(),
+    long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="Burhan Yanbolu",
     author_email="burhan@hardinai.co.uk",
