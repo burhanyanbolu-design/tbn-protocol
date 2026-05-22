@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e1a"/>
+      <stop offset="100%" style="stop-color:#0f1628"/>
+    </linearGradient>
+    <linearGradient id="tbnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff"/>
+      <stop offset="100%" style="stop-color:#7b2ff7"/>
+    </linearGradient>
+    <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ff88"/>
+      <stop offset="100%" style="stop-color:#00d4ff"/>
+    </linearGradient>
+    <linearGradient id="failGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff4444"/>
+      <stop offset="100%" style="stop-color:#ff0066"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid dots -->
+  <g opacity="0.1">
+    <circle cx="100" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="200" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="300" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="400" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="500" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="600" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="700" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="800" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="900" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="1000" cy="100" r="1" fill="#00d4ff"/>
+    <circle cx="1100" cy="100" r="1" fill="#00d4ff"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="70" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="42" font-weight="800" fill="url(#tbnGrad)">TBN Protocol</text>
+  <text x="600" y="100" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="16" fill="#8b949e">The Trust Identity Layer for AI Agents</text>
+
+  <!-- PASS FLOW (top) -->
+  <!-- Agent box -->
+  <rect x="80" y="150" width="160" height="100" rx="12" fill="rgba(20,25,40,0.9)" stroke="#1a3a4a" stroke-width="1"/>
+  <text x="160" y="185" text-anchor="middle" font-size="28">🤖</text>
+  <text x="160" y="215" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="700" fill="#fff">AI Agent</text>
+  <text x="160" y="235" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#8b949e">Requests to act</text>
+
+  <!-- Arrow 1 -->
+  <line x1="250" y1="200" x2="350" y2="200" stroke="#00d4ff" stroke-width="2" opacity="0.6"/>
+  <polygon points="345,195 355,200 345,205" fill="#00d4ff"/>
+
+  <!-- TBN Shield (center) -->
+  <rect x="360" y="140" width="200" height="120" rx="14" fill="rgba(0,212,255,0.05)" stroke="#00d4ff" stroke-width="2" filter="url(#glow)"/>
+  <text x="460" y="180" text-anchor="middle" font-size="30">🛡️</text>
+  <text x="460" y="210" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="800" fill="#00d4ff">TBN Protocol</text>
+  <text x="460" y="230" text-anchor="middle" font-family="Segoe UI" font-size="11" fill="#8b949e">Trust Verification</text>
+  <text x="460" y="252" text-anchor="middle" font-family="Segoe UI" font-size="11" font-weight="700" fill="#00ff88">PASS ✓</text>
+
+  <!-- Arrow 2 -->
+  <line x1="570" y1="200" x2="670" y2="200" stroke="#00ff88" stroke-width="2" opacity="0.6"/>
+  <polygon points="665,195 675,200 665,205" fill="#00ff88"/>
+
+  <!-- Execution box -->
+  <rect x="680" y="150" width="160" height="100" rx="12" fill="rgba(20,25,40,0.9)" stroke="#1a4a3a" stroke-width="1"/>
+  <text x="760" y="185" text-anchor="middle" font-size="28">⚡</text>
+  <text x="760" y="215" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="700" fill="#fff">Execution</text>
+  <text x="760" y="235" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#00ff88">Action proceeds</text>
+
+  <!-- FAIL FLOW (bottom) -->
+  <!-- Rogue agent -->
+  <rect x="80" y="310" width="160" height="100" rx="12" fill="rgba(20,25,40,0.9)" stroke="#4a2020" stroke-width="1"/>
+  <text x="160" y="345" text-anchor="middle" font-size="28">👾</text>
+  <text x="160" y="375" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="700" fill="#ff6644">Untrusted Agent</text>
+  <text x="160" y="395" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#8b949e">No certification</text>
+
+  <!-- Arrow fail -->
+  <line x1="250" y1="360" x2="350" y2="360" stroke="#ff4444" stroke-width="2" opacity="0.6"/>
+  <polygon points="345,355 355,360 345,365" fill="#ff4444"/>
+
+  <!-- TBN Block -->
+  <rect x="360" y="300" width="200" height="120" rx="14" fill="rgba(255,50,50,0.05)" stroke="#ff4444" stroke-width="2"/>
+  <text x="460" y="340" text-anchor="middle" font-size="30">🚫</text>
+  <text x="460" y="370" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="800" fill="#ff4444">TBN Protocol</text>
+  <text x="460" y="390" text-anchor="middle" font-family="Segoe UI" font-size="11" fill="#8b949e">Trust Verification</text>
+  <text x="460" y="412" text-anchor="middle" font-family="Segoe UI" font-size="11" font-weight="700" fill="#ff4444">FAIL ✕</text>
+
+  <!-- Blocked X -->
+  <line x1="580" y1="350" x2="660" y2="370" stroke="#ff4444" stroke-width="3" opacity="0.5"/>
+  <line x1="580" y1="370" x2="660" y2="350" stroke="#ff4444" stroke-width="3" opacity="0.5"/>
+
+  <!-- No execution -->
+  <rect x="680" y="310" width="160" height="100" rx="12" fill="rgba(20,25,40,0.9)" stroke="#333" stroke-width="1" opacity="0.4"/>
+  <text x="760" y="345" text-anchor="middle" font-size="28" opacity="0.4">💀</text>
+  <text x="760" y="375" text-anchor="middle" font-family="Segoe UI" font-size="13" font-weight="700" fill="#666">No Execution</text>
+  <text x="760" y="395" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#555">Access denied</text>
+
+  <!-- Right side - Stack -->
+  <rect x="900" y="140" width="260" height="280" rx="10" fill="rgba(15,20,35,0.8)" stroke="#1a2a3a" stroke-width="1"/>
+  <text x="1030" y="170" text-anchor="middle" font-family="Segoe UI" font-size="12" font-weight="700" fill="#8b949e">GOVERNANCE STACK</text>
+
+  <rect x="920" y="185" width="220" height="30" rx="4" fill="rgba(100,100,100,0.15)"/>
+  <text x="1030" y="205" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#666">Application Layer</text>
+
+  <rect x="920" y="220" width="220" height="30" rx="4" fill="rgba(255,170,0,0.1)" stroke="rgba(255,170,0,0.3)" stroke-width="1"/>
+  <text x="1030" y="240" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#ffaa00">Runtime Admissibility</text>
+
+  <rect x="920" y="255" width="220" height="30" rx="4" fill="rgba(123,47,247,0.1)" stroke="rgba(123,47,247,0.3)" stroke-width="1"/>
+  <text x="1030" y="275" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#b388ff">Decision-State Verification</text>
+
+  <rect x="915" y="292" width="230" height="38" rx="6" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="2"/>
+  <text x="1030" y="316" text-anchor="middle" font-family="Segoe UI" font-size="12" font-weight="800" fill="#00d4ff">⬤ TBN — Trust Identity Layer</text>
+
+  <rect x="920" y="337" width="220" height="30" rx="4" fill="rgba(50,50,50,0.3)" stroke="rgba(80,80,80,0.3)" stroke-width="1"/>
+  <text x="1030" y="357" text-anchor="middle" font-family="Segoe UI" font-size="10" fill="#555">Cryptographic Foundation</text>
+
+  <text x="1030" y="395" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#555" font-style="italic">Everything above depends on TBN</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="470" width="1200" height="1" fill="#1a2a3a"/>
+
+  <!-- Interop section -->
+  <text x="600" y="510" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="700" fill="#fff">First Live Interoperability Proof Confirmed — May 2026</text>
+
+  <rect x="200" y="530" width="120" height="50" rx="8" fill="rgba(20,25,40,0.9)" stroke="#1a3a4a" stroke-width="1"/>
+  <text x="260" y="553" text-anchor="middle" font-family="Segoe UI" font-size="11" fill="#b388ff">DigiEmu</text>
+  <text x="260" y="570" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#666">Decision Hash</text>
+
+  <line x1="325" y1="555" x2="440" y2="555" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <circle cx="380" cy="555" r="4" fill="#00d4ff"/>
+
+  <rect x="445" y="530" width="140" height="50" rx="8" fill="rgba(0,212,255,0.05)" stroke="#00d4ff" stroke-width="1.5"/>
+  <text x="515" y="553" text-anchor="middle" font-family="Segoe UI" font-size="11" font-weight="700" fill="#00d4ff">TBN Protocol</text>
+  <text x="515" y="570" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#666">Agent Trust-State</text>
+
+  <line x1="590" y1="555" x2="700" y2="555" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <circle cx="645" cy="555" r="4" fill="#00d4ff"/>
+
+  <rect x="705" y="530" width="120" height="50" rx="8" fill="rgba(20,25,40,0.9)" stroke="#1a3a4a" stroke-width="1"/>
+  <text x="765" y="553" text-anchor="middle" font-family="Segoe UI" font-size="11" fill="#fff">Enterprise</text>
+  <text x="765" y="570" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#666">Verified Execution</text>
+
+  <!-- Footer -->
+  <text x="600" y="615" text-anchor="middle" font-family="Segoe UI" font-size="11" fill="#555">tbn.hardinai.co.uk  •  © 2026 Hardin Enterprises Ltd  •  AGPL-3.0</text>
+</svg>
