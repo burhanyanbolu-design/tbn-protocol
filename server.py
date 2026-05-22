@@ -42,6 +42,7 @@ from api.budget_enforcement import budget_enforcement
 from api.webhooks import webhooks
 from api.compliance_drift import compliance_drift
 from api.prospects import prospects_bp
+from api.digiemu_interop import digiemu_bp
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
@@ -55,6 +56,7 @@ app.register_blueprint(budget_enforcement, url_prefix="/api/budget")
 app.register_blueprint(webhooks, url_prefix="/api/webhooks")
 app.register_blueprint(compliance_drift, url_prefix="/api/compliance")
 app.register_blueprint(prospects_bp)
+app.register_blueprint(digiemu_bp, url_prefix="/api/digiemu")
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
@@ -76,6 +78,11 @@ def dashboard():
 @app.route("/demo")
 def demo_page():
     return render_template("demo.html")
+
+
+@app.route("/demo/hero")
+def demo_hero():
+    return render_template("tbn-hero-demo.html")
 
 
 @app.route("/early-access")

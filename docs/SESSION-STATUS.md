@@ -1,42 +1,36 @@
-# SESSION STATUS — May 19, 2026
+# Session Status — May 21, 2026
 
-## COMPLETED THIS SESSION:
+## What was done this session:
 
-1. **Landing page updated** (`dashboard_new.html`) — lighter, more dynamic, wider layout, bigger fonts
-2. **Enterprise/German market content added** — EU AI Act, CRM governance, Layer 0 positioning, T-Systems angle
-3. **Code watermarks added** — 11 files watermarked with unique trace IDs for AGPL protection
-4. **GitHub fork monitor** — `monitor_forks.py` with token, runs weekly on server (cron)
-5. **SECURITY.md** — public notice about AGPL enforcement
-6. **YC Application Amendment** — `docs/summaries/YC_APPLICATION_AMENDMENT.md` with T-Systems, partners, enterprise traction
-7. **API endpoints for Ishaan** — `/api/verify/full` (with cache TTL), `/api/verify/batch`, `/api/verify/cached/<id>`
-8. **Ishaan's partner registration approved** — Shango, status: approved, no API key yet (issued on call)
-9. **LinkedIn prospector tool** — `linkedin_prospector.py` working, found 7 prospects
-10. **Amitava Deb** — connection request sent (CTO, $100M+ platforms, fintech)
-11. **Emanuel Celano (EVIDE)** — comment drafted for his post (not yet posted?)
-12. **Gerard (CONTROLTOWER OS)** — reply drafted, keeping it conceptual
+### Completed:
+1. **LinkedIn Prospector Dashboard** — live at `/prospects?key=hardin-admin-2026-secret` (admin-protected, light gold theme)
+2. **SEIS Advance Assurance** — submitted to HMRC (ref: VRNP-SS2C-EMUM), 4-6 weeks for response
+3. **a16z Speedrun application** — submitted
+4. **TBN LangChain SDK** — built and published to PyPI (`pip install tbn-langchain`)
+5. **LangChain interactive demo** — live at `/demo/langchain` (zoom 1.5, bold fonts, SEO section at bottom)
+6. **TBN Architecture Diagram** — SVG at `docs/tbn-architecture-diagram.svg`
+7. **Google Analytics fixed** — all pages now tracked (8 pages were missing GA)
+8. **Ishaan/Shango** — API key issued then revoked. Meeting rescheduled to Friday 1PM. He has a landing page (shango.in) but no working product yet.
+9. **Nimit Shishodia (Firebot AI)** — met at Agentic Edge meetup. Interested in partnership. Gave feedback on TBN demo page.
+10. **Bhasker Rao (Ex-Revolut CRO)** — met at NatWest event. Strong connection for fintech compliance.
+11. **TBN Demo page redesign** — changed from 2-column grid to vertical step-by-step with paired instructions (left) and interactive cards (right), arrows between steps.
 
-## NEXT TASK (NOT STARTED):
+### Still TODO (next session):
+1. **TBN Demo page** — add arrows pointing right (from instruction to card), add "INSTRUCTION" label on top of left column, zoom out slightly (make it a bit smaller)
+2. **Follow up with Nimit (Firebot AI)** — send LinkedIn message about partnership
+3. **Follow up with Bhasker Rao** — send LinkedIn message
+4. **Friday 1PM** — Ishaan/Shango call. Don't give new API key until terms agreed. Ask to see working product.
+5. **Pitch deck** — create in Google Slides or Canva for future applications
+6. **Check PyPI downloads** — https://pypistats.org/packages/tbn-langchain
 
-**Build a LinkedIn Prospector Dashboard** — a web-based UI (HTML page) with:
-- Search fields where you can type keywords
-- Add/remove keywords (like "AI guardrails", "AI governance", "AI agent compliance")
-- Results displayed in a table
-- Click to open LinkedIn URLs
-- Mark prospects as "engaged" or "not engaged"
-- Runs the DuckDuckGo search from the browser
-- Could be a Flask route on the TBN server or a local HTML file
+### Key files:
+- Demo page: `api/templates/demo.html`
+- LangChain demo: `api/templates/demo_langchain.html`
+- TBN LangChain SDK: `tbn-langchain/` folder
+- Business plan: `docs/SEIS-Business-Plan.md`
+- Architecture diagram: `docs/tbn-architecture-diagram.svg`
 
-## TOMORROW:
-
-- **17:30 UK** — Call with Ishaan (Shango MID / T-Systems)
-- Issue him API key on the call
-- Discuss revenue split / attribution / joint pitch structure
-
-## KEY FILES:
-
-- Landing page: `api/templates/dashboard_new.html`
-- LinkedIn tool: `linkedin_prospector.py`
-- Fork monitor: `monitor_forks.py`
-- Watermarks reference: `WATERMARKS.md` (gitignored, local only)
-- YC amendment: `docs/summaries/YC_APPLICATION_AMENDMENT.md`
-- Session status: `docs/SESSION-STATUS.md`
+### Server:
+- All changes deployed to tbn.hardinai.co.uk
+- Service running: `sudo systemctl restart tbn`
+- SSH: `ssh -i .ssh_temp_key ubuntu@3.11.229.68`
