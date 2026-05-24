@@ -18,7 +18,7 @@ Product: TBN Protocol (Layer 0 — Trust Verification)
 **Party B — Shango**  
 Ishaan Ghosh, Founder  
 Trading as: Shango  
-Email: [Ishaan to confirm]  
+Email: [ishaan@shango.in]  
 Product: Shango MID (Layers 1–8 — Write Governance)  
 
 ---
@@ -234,9 +234,9 @@ If additional partners (e.g. EVIDE, Constitutional Memory, or others) formally j
 |---|---|---|
 | **Name** | Burhan Yanbolu | Ishaan Ghosh |
 | **Role** | CEO, Hardin Enterprises Ltd | Founder, Shango |
-| **Company No.** | 17149514 | [Ishaan to provide] |
-| **Date** | ___/___/2026 | ___/___/2026 |
-| **Signature** | ___________________ | ___________________ |
+| **Company No.** | 17149514 | UDYAM-WB-10-0194900 |
+| **Date** | 24/05/2026 | 22/05/2026 |
+| **Signature** | Burhan Yanbolu | Ishaan Ghosh |
 
 ---
 

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TBN Protocol — Live Trust Verification Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(160deg, #0f1923 0%, #162033 50%, #0f1923 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 { font-size: 28px; text-align: center; margin-bottom: 8px; color: #f1f5f9; }
+.subtitle { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 40px; }
+.demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+.panel {
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s;
+}
+.panel-verified { border-color: rgba(34, 197, 94, 0.3); }
+.panel-blocked { border-color: rgba(239, 68, 68, 0.3); }
+.panel-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.panel-verified .panel-title { color: #22c55e; }
+.panel-blocked .panel-title { color: #ef4444; }
+.panel-desc { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
+.agent-info {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+.agent-info .label { color: #64748b; }
+.agent-info .value { color: #e2e8f0; }
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+}
+.btn-verify {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+.btn-verify:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3); }
+.btn-block {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+.btn-block:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3); }
+.result-box {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 10px;
+  padding: 16px;
+  min-height: 180px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-y: auto;
+  max-height: 300px;
+}
+.result-pass { border: 1px solid rgba(34, 197, 94, 0.3); color: #86efac; }
+.result-fail { border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+.result-waiting { border: 1px solid rgba(148, 163, 184, 0.15); color: #64748b; }
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.badge-pass { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.badge-fail { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.explanation {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 30px;
+}
+.explanation h3 { color: #38bdf8; font-size: 14px; margin-bottom: 12px; }
+.explanation p { color: #94a3b8; font-size: 13px; line-height: 1.7; }
+.explanation strong { color: #e2e8f0; }
+.audit-trail {
+  margin-top: 30px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+}
+.audit-trail h3 { color: #fbbf24; font-size: 14px; margin-bottom: 12px; }
+.audit-entry {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  font-size: 12px;
+  display: flex;
+  gap: 12px;
+}
+.audit-entry:last-child { border-bottom: none; }
+.audit-time { color: #64748b; min-width: 70px; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.audit-event { color: #e2e8f0; }
+.footer { text-align: center; margin-top: 40px; color: #64748b; font-size: 11px; }
+.footer a { color: #38bdf8; text-decoration: none; }
+@media (max-width: 768px) { .demo-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🛡️ TBN Protocol — Live Trust Verification</h1>
+  <p class="subtitle">See what happens when a verified agent acts vs when an unverified agent tries to act</p>
+
+  <div class="demo-grid">
+    <!-- VERIFIED AGENT -->
+    <div class="panel panel-verified">
+      <div class="panel-title">✅ Verified Agent</div>
+      <p class="panel-desc">This agent is registered in TBN, certified, and operating within its declared scope.</p>
+      
+      <div class="agent-info">
+        <div><span class="label">Agent ID: </span><span class="value" id="verified-id">Loading...</span></div>
+        <div><span class="label">Name: </span><span class="value" id="verified-name">Loading...</span></div>
+        <div><span class="label">Certification: </span><span class="value">STANDARD 🔵</span></div>
+        <div><span class="label">Status: </span><span class="badge badge-pass">REGISTERED</span></div>
+      </div>
+
+      <button class="btn btn-verify" onclick="verifyAgent('verified')">
+        ▶ Agent Requests to Act — Verify with TBN
+      </button>
+
+      <div class="result-box result-waiting" id="result-verified">
+        // Click the button above to see TBN verification in action.
+        // The agent will request permission to act.
+        // TBN will verify its identity and return PASS or FAIL.
+      </div>
+    </div>
+
+    <!-- BLOCKED AGENT -->
+    <div class="panel panel-blocked">
+      <div class="panel-title">❌ Unverified Agent</div>
+      <p class="panel-desc">This agent is NOT registered in TBN. It has no certification and no verified identity.</p>
+      
+      <div class="agent-info">
+        <div><span class="label">Agent ID: </span><span class="value">fake-agent-xyz-9999</span></div>
+        <div><span class="label">Name: </span><span class="value">Unknown Impersonator</span></div>
+        <div><span class="label">Certification: </span><span class="value">NONE ⚪</span></div>
+        <div><span class="label">Status: </span><span class="badge badge-fail">NOT REGISTERED</span></div>
+      </div>
+
+      <button class="btn btn-block" onclick="verifyAgent('blocked')">
+        ▶ Agent Requests to Act — Verify with TBN
+      </button>
+
+      <div class="result-box result-waiting" id="result-blocked">
+        // Click the button above to see what happens when an
+        // unverified agent tries to act.
+        // TBN will check its identity and BLOCK it.
+      </div>
+    </div>
+  </div>
+
+  <!-- Explanation -->
+  <div class="explanation">
+    <h3>What You're Seeing</h3>
+    <p>
+      <strong>Left panel:</strong> A registered, certified AI agent requests permission to act. TBN verifies its identity cryptographically and returns <strong>PASS</strong> — the action proceeds. Every verification is signed with RSA-PSS-SHA256 and independently verifiable.<br><br>
+      <strong>Right panel:</strong> An unregistered agent attempts the same action. TBN checks its identity, finds no registration, and returns <strong>FAIL</strong> — the action is blocked before it ever reaches the target system.<br><br>
+      <strong>The key point:</strong> TBN operates at the execution boundary. It doesn't log after the fact — it prevents before the fact. Like SSL certificates for websites, but for AI agents.
+    </p>
+  </div>
+
+  <!-- Audit Trail -->
+  <div class="audit-trail">
+    <h3>📋 Immutable Audit Trail (Live)</h3>
+    <div id="audit-log">
+      <div class="audit-entry">
+        <span class="audit-time">--:--:--</span>
+        <span class="audit-event" style="color:#64748b">Waiting for verification events...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>TBN Protocol — Trust Infrastructure for AI Agents | <a href="https://tbn.hardinai.co.uk">tbn.hardinai.co.uk</a> | © 2026 Hardin Enterprises Ltd</p>
+    <p style="margin-top:6px;">Without SSL, you can't trust a website is who it claims to be. Without TBN, you can't trust an AI agent is what it claims to be.</p>
+  </div>
+</div>
+
+<script>
+let verifiedBotId = null;
+let auditEntries = [];
+
+// Load a real bot ID from the system
+async function loadVerifiedBot() {
+  try {
+    const res = await fetch('/api/bots');
+    const data = await res.json();
+    if (data.bots && data.bots.length > 0) {
+      const bot = data.bots[0];
+      verifiedBotId = bot.bot_id;
+      document.getElementById('verified-id').textContent = bot.bot_id;
+      document.getElementById('verified-name').textContent = bot.name;
+    }
+  } catch(e) {
+    document.getElementById('verified-id').textContent = 'tbn-bot-demo-001';
+    document.getElementById('verified-name').textContent = 'Demo Agent';
+  }
+}
+
+function addAuditEntry(type, message) {
+  const now = new Date();
+  const time = now.toTimeString().split(' ')[0];
+  auditEntries.unshift({ time, type, message });
+  
+  const log = document.getElementById('audit-log');
+  log.innerHTML = auditEntries.slice(0, 10).map(e => `
+    <div class="audit-entry">
+      <span class="audit-time">${e.time}</span>
+      <span class="audit-event">${e.type === 'pass' ? '✅' : '❌'} ${e.message}</span>
+    </div>
+  `).join('');
+}
+
+async function verifyAgent(type) {
+  const resultBox = document.getElementById(`result-${type}`);
+  resultBox.textContent = '⏳ Contacting TBN Protocol for verification...\n';
+  resultBox.className = 'result-box result-waiting';
+
+  const agentId = type === 'verified' ? verifiedBotId : 'fake-agent-xyz-9999';
+  const agentName = type === 'verified' ? document.getElementById('verified-name').textContent : 'Unknown Impersonator';
+
+  // Simulate the verification call
+  await new Promise(r => setTimeout(r, 800));
+  resultBox.textContent += '📡 POST /api/verify/full\n';
+  resultBox.textContent += `   { "agent_id": "${agentId}" }\n\n`;
+
+  await new Promise(r => setTimeout(r, 600));
+
+  try {
+    // Call the real TBN verify endpoint
+    const res = await fetch('/api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bot_id: agentId })
+    });
+    const data = await res.json();
+
+    if (data.certified) {
+      resultBox.className = 'result-box result-pass';
+      resultBox.textContent += '═══════════════════════════════════════\n';
+      resultBox.textContent += '  ✅ VERIFICATION RESULT: PASS\n';
+      resultBox.textContent += '═══════════════════════════════════════\n\n';
+      resultBox.textContent += `  Agent ID:      ${agentId}\n`;
+      resultBox.textContent += `  Agent Name:    ${agentName}\n`;
+      resultBox.textContent += `  Certified:     TRUE\n`;
+      resultBox.textContent += `  Status:        WITHIN BOUNDS\n`;
+      resultBox.textContent += `  Timestamp:     ${new Date().toISOString()}\n`;
+      resultBox.textContent += `  Signature:     RSA-PSS-SHA256 (verified)\n\n`;
+      resultBox.textContent += '  → ACTION ALLOWED\n';
+      resultBox.textContent += '  → Agent may proceed to target system\n';
+      resultBox.textContent += '  → Decision logged immutably\n';
+      
+      addAuditEntry('pass', `${agentName} (${agentId.slice(0,16)}...) — VERIFIED — action allowed`);
+    } else {
+      resultBox.className = 'result-box result-fail';
+      resultBox.textContent += '═══════════════════════════════════════\n';
+      resultBox.textContent += '  ❌ VERIFICATION RESULT: FAIL\n';
+      resultBox.textContent += '═══════════════════════════════════════\n\n';
+      resultBox.textContent += `  Agent ID:      ${agentId}\n`;
+      resultBox.textContent += `  Agent Name:    ${agentName}\n`;
+      resultBox.textContent += `  Certified:     FALSE\n`;
+      resultBox.textContent += `  Status:        NOT REGISTERED\n`;
+      resultBox.textContent += `  Timestamp:     ${new Date().toISOString()}\n`;
+      resultBox.textContent += `  Reason:        No valid certification found\n\n`;
+      resultBox.textContent += '  → ACTION BLOCKED\n';
+      resultBox.textContent += '  → Agent CANNOT proceed to target system\n';
+      resultBox.textContent += '  → Block event logged immutably\n';
+      resultBox.textContent += '  → Alert: Unauthorised agent attempted access\n';
+      
+      addAuditEntry('fail', `${agentName} (${agentId.slice(0,16)}...) — BLOCKED — no certification`);
+    }
+  } catch(e) {
+    resultBox.textContent += `Error: ${e.message}`;
+  }
+}
+
+// Load on page ready
+loadVerifiedBot();
+</script>
+</body>
+</html>

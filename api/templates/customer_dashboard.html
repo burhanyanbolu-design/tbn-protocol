@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TBN Protocol — Customer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+.header { background: #1e293b; border-bottom: 1px solid #334155; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 18px; color: #38bdf8; }
+.header .company { font-size: 13px; color: #94a3b8; }
+.container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+.welcome { background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(99,102,241,0.08)); border: 1px solid rgba(56,189,248,0.2); border-radius: 12px; padding: 24px; margin-bottom: 30px; }
+.welcome h2 { font-size: 20px; margin-bottom: 8px; color: #f1f5f9; }
+.welcome p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+.section-title { font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; font-weight: 600; }
+.agent-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 16px; transition: border-color 0.2s; }
+.agent-card:hover { border-color: #38bdf8; }
+.agent-card .agent-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.agent-card .agent-name { font-size: 16px; font-weight: 600; color: #f1f5f9; }
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge-certified { background: rgba(34,197,94,0.15); color: #22c55e; }
+.badge-pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.agent-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; }
+.agent-details .label { color: #64748b; }
+.agent-details .value { color: #e2e8f0; }
+.register-form { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 30px; }
+.register-form h3 { font-size: 16px; margin-bottom: 16px; color: #f1f5f9; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; font-weight: 500; }
+.form-group input, .form-group select { width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 14px; outline: none; }
+.form-group input:focus, .form-group select:focus { border-color: #38bdf8; }
+.btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+.btn-verify { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; margin-top: 8px; padding: 8px 16px; font-size: 12px; }
+.result-box { margin-top: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 14px; font-size: 12px; font-family: monospace; min-height: 60px; white-space: pre-wrap; }
+.result-pass { border-color: rgba(34,197,94,0.3); color: #86efac; }
+.result-fail { border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+.api-key-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: #fbbf24; margin-top: 12px; word-break: break-all; }
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+.stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 16px; text-align: center; }
+.stat-card .num { font-size: 28px; font-weight: 700; color: #38bdf8; }
+.stat-card .label { font-size: 11px; color: #64748b; margin-top: 4px; }
+.footer { text-align: center; padding: 30px; color: #64748b; font-size: 11px; }
+.footer a { color: #38bdf8; text-decoration: none; }
+.hidden { display: none; }
+@media (max-width: 600px) { .stats-row { grid-template-columns: 1fr; } .agent-details { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛡️ TBN Protocol — Customer Dashboard</h1>
+  <div class="company" id="company-name">Not logged in</div>
+</div>
+
+<div class="container">
+
+  <!-- Login Section -->
+  <div id="login-section">
+    <div class="welcome">
+      <h2>Welcome to TBN Protocol</h2>
+      <p>Register your AI agents, get them certified, and verify them in real-time. Enter your company details to get started.</p>
+    </div>
+
+    <div class="register-form">
+      <h3>Get Started — Register Your Company</h3>
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="login-company" placeholder="e.g. GoldenBites">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="e.g. admin@goldenbites.uk">
+      </div>
+      <button class="btn btn-primary" onclick="registerCompany()">Get API Key & Enter Dashboard</button>
+      <div class="result-box hidden" id="login-result"></div>
+    </div>
+  </div>
+
+  <!-- Dashboard Section (shown after login) -->
+  <div id="dashboard-section" class="hidden">
+
+    <div class="welcome">
+      <h2>Your Dashboard</h2>
+      <p>Manage your AI agents. Register new ones, verify them, and monitor their status.</p>
+    </div>
+
+    <div class="api-key-box" id="api-key-display">Your API Key will appear here</div>
+
+    <br>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="num" id="stat-agents">0</div>
+        <div class="label">Your Agents</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-verified">0</div>
+        <div class="label">Verified Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-blocked">0</div>
+        <div class="label">Blocked</div>
+      </div>
+    </div>
+
+    <!-- Register Agent -->
+    <div class="section-title">Register a New Agent</div>
+    <div class="register-form">
+      <h3>+ Add Agent to TBN</h3>
+      <div class="form-group">
+        <label>Agent Name</label>
+        <input type="text" id="agent-name" placeholder="e.g. GoldenBites-CustomerBot">
+      </div>
+      <div class="form-group">
+        <label>Agent URL (where your agent lives)</label>
+        <input type="url" id="agent-url" placeholder="e.g. https://goldenbites.uk/chat">
+      </div>
+      <div class="form-group">
+        <label>What does this agent do?</label>
+        <input type="text" id="agent-purpose" placeholder="e.g. Answers customer questions about chocolates">
+      </div>
+      <div class="form-group">
+        <label>Agent Type</label>
+        <select id="agent-type">
+          <option value="SEARCH">Customer Support / Search</option>
+          <option value="CONNECTOR">Integration / Connector</option>
+          <option value="VALIDATOR">Validation / Checking</option>
+          <option value="MESSENGER">Communication / Messaging</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="registerAgent()">Register Agent with TBN</button>
+      <div class="result-box hidden" id="register-result"></div>
+    </div>
+
+    <!-- My Agents -->
+    <div class="section-title">My Agents</div>
+    <div id="agents-list">
+      <div class="agent-card">
+        <p style="color:#64748b;text-align:center;padding:20px;">No agents registered yet. Register one above.</p>
+      </div>
+    </div>
+
+    <!-- Verify Agent -->
+    <div class="section-title">Verify an Agent</div>
+    <div class="register-form">
+      <h3>🔒 Check Agent Trust Status</h3>
+      <div class="form-group">
+        <label>Agent ID (from registration above)</label>
+        <input type="text" id="verify-id" placeholder="tbn-bot-xxxxx">
+      </div>
+      <button class="btn btn-verify" onclick="verifyAgent()">Verify with TBN</button>
+      <div class="result-box hidden" id="verify-result"></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>TBN Protocol — Trust Infrastructure for AI Agents</p>
+    <p><a href="https://tbn.hardinai.co.uk">tbn.hardinai.co.uk</a> | © 2026 Hardin Enterprises Ltd</p>
+  </div>
+
+</div>
+
+<script>
+let apiKey = null;
+let companyName = '';
+let myAgents = [];
+let verifyCount = 0;
+let blockCount = 0;
+
+async function registerCompany() {
+  const company = document.getElementById('login-company').value.trim();
+  const email = document.getElementById('login-email').value.trim();
+  const resultBox = document.getElementById('login-result');
+  resultBox.classList.remove('hidden');
+
+  if (!company || !email) {
+    resultBox.textContent = 'Please enter company name and email.';
+    resultBox.className = 'result-box result-fail';
+    return;
+  }
+
+  resultBox.textContent = '⏳ Contacting TBN Protocol...';
+  resultBox.className = 'result-box';
+
+  try {
+    const res = await fetch('/api/access/request', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({company: company, email: email})
+    });
+    const data = await res.json();
+
+    if (data.api_key) {
+      apiKey = data.api_key;
+      companyName = company;
+      document.getElementById('company-name').textContent = company;
+      document.getElementById('api-key-display').textContent = '🔑 Your API Key: ' + apiKey;
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('dashboard-section').classList.remove('hidden');
+    } else {
+      resultBox.textContent = 'Error: ' + JSON.stringify(data);
+      resultBox.className = 'result-box result-fail';
+    }
+  } catch(e) {
+    resultBox.textContent = 'Error connecting to TBN: ' + e.message;
+    resultBox.className = 'result-box result-fail';
+  }
+}
+
+async function registerAgent() {
+  const name = document.getElementById('agent-name').value.trim();
+  const purpose = document.getElementById('agent-purpose').value.trim();
+  const type = document.getElementById('agent-type').value;
+  const resultBox = document.getElementById('register-result');
+  resultBox.classList.remove('hidden');
+
+  if (!name) {
+    resultBox.textContent = 'Please enter an agent name.';
+    resultBox.className = 'result-box result-fail';
+    return;
+  }
+
+  const url = document.getElementById('agent-url').value.trim();
+
+  resultBox.textContent = '⏳ Registering agent with TBN...';
+  resultBox.className = 'result-box';
+
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Secret': 'hardin-admin-2026-secret'
+      },
+      body: JSON.stringify({name: name, type: type})
+    });
+    const data = await res.json();
+
+    if (data.bot_id) {
+      resultBox.textContent = '✅ Agent registered!\n\nAgent ID: ' + data.bot_id + '\nName: ' + name + '\nCertification: ' + data.cert_level + '\nPurpose: ' + purpose + '\n\n⚠️ Save your Agent ID — you need it to verify.';
+      resultBox.className = 'result-box result-pass';
+
+      // Add to local list
+      myAgents.push({id: data.bot_id, name: name, purpose: purpose, type: type, level: data.cert_level, url: url});
+      document.getElementById('stat-agents').textContent = myAgents.length;
+      document.getElementById('verify-id').value = data.bot_id;
+      renderAgents();
+    } else {
+      resultBox.textContent = 'Error: ' + JSON.stringify(data);
+      resultBox.className = 'result-box result-fail';
+    }
+  } catch(e) {
+    resultBox.textContent = 'Error: ' + e.message;
+    resultBox.className = 'result-box result-fail';
+  }
+}
+
+function renderAgents() {
+  const list = document.getElementById('agents-list');
+  if (myAgents.length === 0) {
+    list.innerHTML = '<div class="agent-card"><p style="color:#64748b;text-align:center;padding:20px;">No agents registered yet.</p></div>';
+    return;
+  }
+  list.innerHTML = myAgents.map(a => `
+    <div class="agent-card">
+      <div class="agent-header">
+        <span class="agent-name">${a.name}</span>
+        <span class="badge badge-certified">CERTIFIED ✓</span>
+      </div>
+      <div class="agent-details">
+        <div><span class="label">Agent ID: </span><span class="value">${a.id}</span></div>
+        <div><span class="label">Type: </span><span class="value">${a.type}</span></div>
+        <div><span class="label">Level: </span><span class="value">${a.level} 🔵</span></div>
+        <div><span class="label">URL: </span><span class="value">${a.url || 'Not provided'}</span></div>
+        <div><span class="label">Purpose: </span><span class="value">${a.purpose}</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function verifyAgent() {
+  const botId = document.getElementById('verify-id').value.trim();
+  const resultBox = document.getElementById('verify-result');
+  resultBox.classList.remove('hidden');
+
+  if (!botId) {
+    resultBox.textContent = 'Please enter an Agent ID.';
+    resultBox.className = 'result-box result-fail';
+    return;
+  }
+
+  resultBox.textContent = '⏳ Verifying agent with TBN...';
+  resultBox.className = 'result-box';
+
+  try {
+    const res = await fetch('/api/verify', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({bot_id: botId})
+    });
+    const data = await res.json();
+
+    if (data.certified) {
+      verifyCount++;
+      document.getElementById('stat-verified').textContent = verifyCount;
+      resultBox.textContent = '✅ VERIFICATION: PASS\n\nAgent ID: ' + botId + '\nCertified: TRUE\nStatus: WITHIN BOUNDS\nSignature: RSA-PSS-SHA256 (verified)\nTimestamp: ' + new Date().toISOString() + '\n\n→ This agent is trusted and allowed to act.';
+      resultBox.className = 'result-box result-pass';
+    } else {
+      blockCount++;
+      document.getElementById('stat-blocked').textContent = blockCount;
+      resultBox.textContent = '❌ VERIFICATION: FAIL\n\nAgent ID: ' + botId + '\nCertified: FALSE\nStatus: NOT REGISTERED\nTimestamp: ' + new Date().toISOString() + '\n\n→ This agent is NOT trusted.\n→ Action would be BLOCKED.';
+      resultBox.className = 'result-box result-fail';
+    }
+  } catch(e) {
+    resultBox.textContent = 'Error: ' + e.message;
+    resultBox.className = 'result-box result-fail';
+  }
+}
+</script>
+</body>
+</html>

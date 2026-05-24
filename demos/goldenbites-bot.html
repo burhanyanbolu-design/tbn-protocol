@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GoldenBites — Customer Chat</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f5f0e8; margin: 0; padding: 20px; }
+.container { max-width: 500px; margin: 0 auto; }
+h1 { color: #8B4513; text-align: center; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+.chat-box {
+  background: white;
+  border: 2px solid #D4A574;
+  border-radius: 12px;
+  height: 400px;
+  overflow-y: auto;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.message { margin-bottom: 12px; padding: 10px 14px; border-radius: 8px; max-width: 80%; }
+.bot-msg { background: #FFF3E0; color: #333; }
+.user-msg { background: #8B4513; color: white; margin-left: auto; text-align: right; }
+.input-row { display: flex; gap: 8px; }
+.input-row input {
+  flex: 1; padding: 12px; border: 2px solid #D4A574; border-radius: 8px;
+  font-size: 14px; outline: none;
+}
+.input-row button {
+  padding: 12px 20px; background: #8B4513; color: white; border: none;
+  border-radius: 8px; font-size: 14px; cursor: pointer;
+}
+.input-row button:hover { background: #A0522D; }
+.agent-badge {
+  text-align: center; margin-top: 12px; font-size: 11px; color: #999;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🍫 GoldenBites</h1>
+  <p class="subtitle">Luxury Chocolates — Customer Support</p>
+  
+  <div class="chat-box" id="chat">
+    <div class="message bot-msg">Hi! I'm the GoldenBites assistant. How can I help you today? You can ask me about our chocolates, prices, delivery, or how to order.</div>
+  </div>
+  
+  <div class="input-row">
+    <input type="text" id="userInput" placeholder="Ask a question..." onkeypress="if(event.key==='Enter')sendMessage()">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+  
+  <div class="agent-badge">
+    Agent: GoldenBites-CustomerBot | Status: Active
+  </div>
+</div>
+
+<script>
+// This is the GoldenBites bot — a simple rule-based agent
+// It answers customer questions about chocolates
+
+const responses = {
+  "chocolates": "We sell luxury handmade chocolates! Our range includes: Dark Chocolate Gift Boxes (£5 each), Milk Chocolate Truffles (£8 per box), White Chocolate Selection (£6), and our Premium Mixed Box (£12). All made fresh in London.",
+  "price": "Our prices: Dark Chocolate Gift Box £5, Milk Chocolate Truffles £8, White Chocolate Selection £6, Premium Mixed Box £12. Free delivery on orders over £30!",
+  "delivery": "We deliver across the UK. Standard delivery is £3.50 (3-5 days). Express delivery is £6.50 (next day). Free delivery on orders over £30!",
+  "order": "You can order via WhatsApp at +44 7XXX XXXXXX or email us at orders@goldenbites.uk. Just tell us what you'd like and your delivery address!",
+  "ingredients": "All our chocolates are made with premium Belgian cocoa. We offer dairy-free and vegan options too. Please ask about specific allergens if needed.",
+  "vegan": "Yes! We have a vegan range: Dark Chocolate Gift Box and our Vegan Truffle Selection (£9). All dairy-free and plant-based.",
+  "wholesale": "We offer wholesale pricing for orders of 50+ boxes. Contact us at wholesale@goldenbites.uk for a quote.",
+  "hello": "Hello! Welcome to GoldenBites. How can I help you today?",
+  "hi": "Hi there! What can I help you with? Ask me about our chocolates, prices, or delivery.",
+  "thanks": "You're welcome! Enjoy your chocolates 🍫",
+};
+
+function findResponse(input) {
+  const lower = input.toLowerCase();
+  
+  for (const [key, value] of Object.entries(responses)) {
+    if (lower.includes(key)) return value;
+  }
+  
+  // Default response
+  return "I can help with questions about our chocolates, prices, delivery, ordering, ingredients, vegan options, or wholesale. What would you like to know?";
+}
+
+function sendMessage() {
+  const input = document.getElementById('userInput');
+  const chat = document.getElementById('chat');
+  const text = input.value.trim();
+  
+  if (!text) return;
+  
+  // Show user message
+  chat.innerHTML += `<div class="message user-msg">${text}</div>`;
+  input.value = '';
+  
+  // Bot responds after short delay
+  setTimeout(() => {
+    const response = findResponse(text);
+    chat.innerHTML += `<div class="message bot-msg">${response}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+  }, 500);
+  
+  chat.scrollTop = chat.scrollHeight;
+}
+</script>
+</body>
+</html>
