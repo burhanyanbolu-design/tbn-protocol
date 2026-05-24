@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 1580" font-family="Arial, sans-serif">
+  <!-- Background -->
+  <rect width="1120" height="1580" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="560" y="50" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a1a2e">TBN Protocol — Runtime Trust Verification Architecture</text>
+  <text x="560" y="75" text-anchor="middle" font-size="13" fill="#666">Cryptographic AI Agent Governance for Critical National Infrastructure</text>
+  
+  <!-- PAGE 1: Architecture Flow -->
+  <text x="40" y="115" font-size="14" font-weight="bold" fill="#1a1a2e">Figure 1: Execution Boundary Architecture</text>
+  
+  <!-- AI Agent Box -->
+  <rect x="60" y="140" width="200" height="80" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="160" y="170" text-anchor="middle" font-size="13" font-weight="bold" fill="#dc2626">AI AGENT</text>
+  <text x="160" y="190" text-anchor="middle" font-size="10" fill="#666">Requests action on</text>
+  <text x="160" y="205" text-anchor="middle" font-size="10" fill="#666">critical system</text>
+  
+  <!-- Arrow down -->
+  <line x1="160" y1="220" x2="160" y2="260" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <!-- TBN Verification Box -->
+  <rect x="60" y="260" width="440" height="180" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="280" y="290" text-anchor="middle" font-size="15" font-weight="bold" fill="#2563eb">TBN PROTOCOL — LAYER 0 TRUST GATE</text>
+  
+  <!-- Verification steps -->
+  <rect x="80" y="305" width="190" height="50" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="175" y="325" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">1. Identity Verification</text>
+  <text x="175" y="342" text-anchor="middle" font-size="9" fill="#666">Cryptographic agent ID check</text>
+  
+  <rect x="290" y="305" width="190" height="50" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="385" y="325" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">2. Certification Check</text>
+  <text x="385" y="342" text-anchor="middle" font-size="9" fill="#666">L1-L5 level validation</text>
+  
+  <rect x="80" y="365" width="190" height="50" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="175" y="385" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">3. Policy Compliance</text>
+  <text x="175" y="402" text-anchor="middle" font-size="9" fill="#666">Boundary + scope enforcement</text>
+  
+  <rect x="290" y="365" width="190" height="50" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="385" y="385" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">4. RSA-PSS Signing</text>
+  <text x="385" y="402" text-anchor="middle" font-size="9" fill="#666">SHA256 cryptographic proof</text>
+  
+  <!-- Output: PASS/FAIL -->
+  <text x="280" y="430" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e40af">Output: PASS | WARN | FAIL — Signed, Immutable, Verifiable</text>
+  
+  <!-- Two paths from TBN -->
+  <!-- PASS path -->
+  <line x1="180" y1="440" x2="180" y2="490" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+  <text x="180" y="480" text-anchor="middle" font-size="11" font-weight="bold" fill="#16a34a">PASS ✓</text>
+  
+  <!-- FAIL path -->
+  <line x1="380" y1="440" x2="380" y2="490" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+  <text x="380" y="480" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">FAIL ✗</text>
+  
+  <!-- Critical System (PASS) -->
+  <rect x="80" y="500" width="200" height="70" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="180" y="530" text-anchor="middle" font-size="12" font-weight="bold" fill="#16a34a">CNI SYSTEM</text>
+  <text x="180" y="550" text-anchor="middle" font-size="10" fill="#666">Action proceeds</text>
+  <text x="180" y="563" text-anchor="middle" font-size="9" fill="#666">(verified + signed)</text>
+  
+  <!-- Blocked (FAIL) -->
+  <rect x="280" y="500" width="200" height="70" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="380" y="530" text-anchor="middle" font-size="12" font-weight="bold" fill="#dc2626">BLOCKED</text>
+  <text x="380" y="550" text-anchor="middle" font-size="10" fill="#666">Action denied before</text>
+  <text x="380" y="563" text-anchor="middle" font-size="9" fill="#666">reaching critical system</text>
+  
+  <!-- Audit Trail -->
+  <rect x="540" y="260" width="220" height="310" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+  <text x="650" y="290" text-anchor="middle" font-size="12" font-weight="bold" fill="#ca8a04">IMMUTABLE AUDIT TRAIL</text>
+  <text x="650" y="315" text-anchor="middle" font-size="10" fill="#666">Every decision logged:</text>
+  <text x="560" y="340" font-size="9" fill="#333">• Agent ID</text>
+  <text x="560" y="358" font-size="9" fill="#333">• Verification result (PASS/FAIL)</text>
+  <text x="560" y="376" font-size="9" fill="#333">• RSA-PSS-SHA256 signature</text>
+  <text x="560" y="394" font-size="9" fill="#333">• Timestamp (UTC)</text>
+  <text x="560" y="412" font-size="9" fill="#333">• Certification level</text>
+  <text x="560" y="430" font-size="9" fill="#333">• Policy status</text>
+  <text x="560" y="448" font-size="9" fill="#333">• Verification ID</text>
+  <text x="560" y="475" font-size="9" font-weight="bold" fill="#ca8a04">Independently verifiable</text>
+  <text x="560" y="493" font-size="9" font-weight="bold" fill="#ca8a04">by any third party</text>
+  <text x="560" y="520" font-size="9" fill="#333">170,813+ entries in 10K proof</text>
+  <text x="560" y="540" font-size="9" fill="#333">Append-only, tamper-evident</text>
+  
+  <!-- Connector line to audit -->
+  <line x1="500" y1="350" x2="540" y2="350" stroke="#ca8a04" stroke-width="1.5" stroke-dasharray="4"/>
+  
+  <!-- PAGE 1: Performance Stats -->
+  <text x="40" y="620" font-size="14" font-weight="bold" fill="#1a1a2e">Figure 2: Proven Performance (TRL 7)</text>
+  
+  <rect x="60" y="640" width="700" height="120" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  
+  <!-- Stats boxes -->
+  <rect x="80" y="660" width="120" height="80" rx="6" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+  <text x="140" y="695" text-anchor="middle" font-size="20" font-weight="bold" fill="#2563eb">10,000</text>
+  <text x="140" y="715" text-anchor="middle" font-size="9" fill="#666">Agent Decisions</text>
+  <text x="140" y="728" text-anchor="middle" font-size="9" fill="#666">Governed</text>
+  
+  <rect x="220" y="660" width="120" height="80" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+  <text x="280" y="695" text-anchor="middle" font-size="20" font-weight="bold" fill="#16a34a">59s</text>
+  <text x="280" y="715" text-anchor="middle" font-size="9" fill="#666">Total Time</text>
+  <text x="280" y="728" text-anchor="middle" font-size="9" fill="#666">(end-to-end)</text>
+  
+  <rect x="360" y="660" width="120" height="80" rx="6" fill="#fef9c3" stroke="#fde047" stroke-width="1"/>
+  <text x="420" y="695" text-anchor="middle" font-size="20" font-weight="bold" fill="#ca8a04">0.04ms</text>
+  <text x="420" y="715" text-anchor="middle" font-size="9" fill="#666">Per Attestation</text>
+  <text x="420" y="728" text-anchor="middle" font-size="9" fill="#666">(cached)</text>
+  
+  <rect x="500" y="660" width="120" height="80" rx="6" fill="#f3e8ff" stroke="#c084fc" stroke-width="1"/>
+  <text x="560" y="695" text-anchor="middle" font-size="20" font-weight="bold" fill="#7c3aed">4,273</text>
+  <text x="560" y="715" text-anchor="middle" font-size="9" fill="#666">Agents/Second</text>
+  <text x="560" y="728" text-anchor="middle" font-size="9" fill="#666">Verification Rate</text>
+  
+  <rect x="640" y="660" width="120" height="80" rx="6" fill="#fee2e2" stroke="#fca5a5" stroke-width="1"/>
+  <text x="700" y="695" text-anchor="middle" font-size="20" font-weight="bold" fill="#dc2626">390</text>
+  <text x="700" y="715" text-anchor="middle" font-size="9" fill="#666">Agents Blocked</text>
+  <text x="700" y="728" text-anchor="middle" font-size="9" fill="#666">(proactive defence)</text>
+  
+  <!-- PAGE 2: CNI Application -->
+  <line x1="40" y1="790" x2="1080" y2="790" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="560" y="815" text-anchor="middle" font-size="11" fill="#999">Page 2</text>
+  
+  <text x="40" y="850" font-size="14" font-weight="bold" fill="#1a1a2e">Figure 3: CNI Deployment Model — How TBN Protects Critical Infrastructure</text>
+  
+  <!-- CNI Sectors -->
+  <rect x="60" y="880" width="150" height="60" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="135" y="905" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">⚡ ENERGY</text>
+  <text x="135" y="925" text-anchor="middle" font-size="9" fill="#666">Smart grid AI agents</text>
+  
+  <rect x="230" y="880" width="150" height="60" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="305" y="905" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">🏥 HEALTH</text>
+  <text x="305" y="925" text-anchor="middle" font-size="9" fill="#666">Patient data AI agents</text>
+  
+  <rect x="400" y="880" width="150" height="60" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="475" y="905" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">📡 COMMS</text>
+  <text x="475" y="925" text-anchor="middle" font-size="9" fill="#666">Network AI agents</text>
+  
+  <rect x="570" y="880" width="150" height="60" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="645" y="905" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">🚰 WATER</text>
+  <text x="645" y="925" text-anchor="middle" font-size="9" fill="#666">SCADA AI agents</text>
+  
+  <!-- Arrows down to TBN -->
+  <line x1="135" y1="940" x2="135" y2="980" stroke="#333" stroke-width="1.5"/>
+  <line x1="305" y1="940" x2="305" y2="980" stroke="#333" stroke-width="1.5"/>
+  <line x1="475" y1="940" x2="475" y2="980" stroke="#333" stroke-width="1.5"/>
+  <line x1="645" y1="940" x2="645" y2="980" stroke="#333" stroke-width="1.5"/>
+  
+  <!-- TBN Layer -->
+  <rect x="60" y="980" width="710" height="60" rx="8" fill="#2563eb" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="415" y="1010" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">TBN PROTOCOL — EXECUTION BOUNDARY</text>
+  <text x="415" y="1030" text-anchor="middle" font-size="10" fill="#bfdbfe">Verify → Sign → PASS/FAIL → Log (every agent, every action, every time)</text>
+  
+  <!-- Arrows down -->
+  <line x1="200" y1="1040" x2="200" y2="1080" stroke="#16a34a" stroke-width="2"/>
+  <line x1="600" y1="1040" x2="600" y2="1080" stroke="#dc2626" stroke-width="2"/>
+  
+  <!-- Outcomes -->
+  <rect x="100" y="1080" width="200" height="50" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="200" y="1105" text-anchor="middle" font-size="11" font-weight="bold" fill="#16a34a">✓ TRUSTED AGENTS</text>
+  <text x="200" y="1122" text-anchor="middle" font-size="9" fill="#666">Proceed to CNI system</text>
+  
+  <rect x="500" y="1080" width="200" height="50" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="600" y="1105" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">✗ BLOCKED AGENTS</text>
+  <text x="600" y="1122" text-anchor="middle" font-size="9" fill="#666">Denied before execution</text>
+  
+  <!-- Threat scenarios -->
+  <text x="40" y="1170" font-size="14" font-weight="bold" fill="#1a1a2e">Figure 4: Threat Scenarios Addressed</text>
+  
+  <rect x="60" y="1190" width="340" height="160" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="80" y="1215" font-size="11" font-weight="bold" fill="#dc2626">Threats TBN Blocks:</text>
+  <text x="80" y="1240" font-size="10" fill="#333">• Compromised AI agent impersonation</text>
+  <text x="80" y="1260" font-size="10" fill="#333">• Credential theft / agent spoofing</text>
+  <text x="80" y="1280" font-size="10" fill="#333">• Unauthorised scope escalation</text>
+  <text x="80" y="1300" font-size="10" fill="#333">• Misconfigured agent deployment</text>
+  <text x="80" y="1320" font-size="10" fill="#333">• Prompt injection → tool execution</text>
+  <text x="80" y="1340" font-size="10" fill="#333">• Revoked agent continued operation</text>
+  
+  <rect x="420" y="1190" width="340" height="160" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="440" y="1215" font-size="11" font-weight="bold" fill="#16a34a">How TBN Responds:</text>
+  <text x="440" y="1240" font-size="10" fill="#333">• Cryptographic identity mismatch → FAIL</text>
+  <text x="440" y="1260" font-size="10" fill="#333">• Invalid/expired certification → FAIL</text>
+  <text x="440" y="1280" font-size="10" fill="#333">• Out-of-scope action → WARN/FAIL</text>
+  <text x="440" y="1300" font-size="10" fill="#333">• Unregistered agent → immediate DENY</text>
+  <text x="440" y="1320" font-size="10" fill="#333">• Revocation propagated in real-time</text>
+  <text x="440" y="1340" font-size="10" fill="#333">• All events signed + logged immutably</text>
+  
+  <!-- Footer -->
+  <text x="560" y="1400" text-anchor="middle" font-size="10" fill="#999">Hardin Enterprises Ltd | Company No. 17149514 | London, UK</text>
+  <text x="560" y="1420" text-anchor="middle" font-size="10" fill="#999">TBN Protocol — Open Source (AGPL-3.0) | pip install tbn-protocol</text>
+  
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,27 @@
+{
+  "invoice_number": "GB-20260524-0001",
+  "date": "24/05/2026",
+  "from": {
+    "company": "GoldenBites.uk",
+    "address": "123 Chocolate Lane, London, UK",
+    "bank": "Sort: 12-34-56 | Account: 12345678"
+  },
+  "to": {
+    "customer": "Sarah Johnson"
+  },
+  "items": [
+    {
+      "description": "Dark Chocolate Gift Box",
+      "quantity": 10,
+      "unit_price": 5.0,
+      "total": 50.0
+    }
+  ],
+  "subtotal": 50.0,
+  "vat": 0,
+  "total_due": 50.0,
+  "payment_terms": "Payment due within 14 days",
+  "generated_by": "GoldenBites-InvoiceBot",
+  "tbn_verified": true,
+  "tbn_bot_id": "tbn-bot-2ccebd853e36d207"
+}

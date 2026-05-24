@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardin AI — Chat Assistant</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.chat-container { width: 100%; max-width: 480px; background: #1e293b; border: 1px solid #334155; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.chat-header { background: linear-gradient(135deg, #0ea5e9, #2563eb); padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+.chat-header .dot { width: 10px; height: 10px; background: #22c55e; border-radius: 50%; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.chat-header h2 { font-size: 16px; color: white; font-weight: 600; }
+.chat-header .sub { font-size: 11px; color: rgba(255,255,255,0.7); }
+.chat-messages { height: 420px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+.msg-bot { background: #334155; color: #e2e8f0; align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg-user { background: #2563eb; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-input { display: flex; border-top: 1px solid #334155; }
+.chat-input input { flex: 1; padding: 14px 16px; background: #0f172a; border: none; color: #e2e8f0; font-size: 14px; outline: none; }
+.chat-input button { padding: 14px 20px; background: #2563eb; color: white; border: none; font-weight: 600; cursor: pointer; }
+.chat-input button:hover { background: #1d4ed8; }
+.tbn-badge { text-align: center; padding: 8px; background: #0f172a; font-size: 10px; color: #64748b; }
+.tbn-badge a { color: #38bdf8; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="dot"></div>
+    <div>
+      <h2>Hardin AI Assistant</h2>
+      <div class="sub">Ask me about TBN Protocol, AI governance, or our services</div>
+    </div>
+  </div>
+  <div class="chat-messages" id="messages">
+    <div class="msg msg-bot">Hi! I'm the Hardin AI assistant. I can answer questions about TBN Protocol, AI agent governance, our services, or how to get started. What would you like to know?</div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="input" placeholder="Ask a question..." onkeypress="if(event.key==='Enter')send()">
+    <button onclick="send()">Send</button>
+  </div>
+  <div class="tbn-badge">Agent: Hardin-AI-Assistant | <a href="https://tbn.hardinai.co.uk">Powered by TBN Protocol</a></div>
+</div>
+
+<script>
+const knowledge = {
+  "tbn": "TBN Protocol is trust infrastructure for AI agents. It verifies that an AI agent is who it claims to be before it's allowed to act — like SSL certificates for websites, but for AI agents. Every verification is cryptographically signed with RSA-PSS-SHA256.",
+  "protocol": "TBN Protocol is trust infrastructure for AI agents. It verifies that an AI agent is who it claims to be before it's allowed to act — like SSL certificates for websites, but for AI agents. Every verification is cryptographically signed with RSA-PSS-SHA256.",
+  "what is": "TBN Protocol is the independent trust verification layer for AI agents. Without SSL, you can't trust a website is who it claims to be. Without TBN, you can't trust an AI agent is what it claims to be.",
+  "how does": "TBN works in 3 steps: 1) A company registers their AI agent with TBN. 2) Every time the agent wants to act, it checks with TBN first. 3) TBN returns PASS (allowed) or FAIL (blocked). Every decision is cryptographically signed and logged immutably.",
+  "ssl": "TBN is like SSL but for AI agents. SSL proves a website is real. TBN proves an AI agent is real. Without SSL, anyone can pretend to be your bank's website. Without TBN, any AI agent can pretend to be authorised.",
+  "price": "TBN pricing starts at £5,000/month for a Proof of Concept (50 agents), £12,000/month Professional (200 agents), £25,000/month Enterprise (1,000 agents), and £50,000+/month for Enterprise+ (unlimited).",
+  "cost": "TBN pricing starts at £5,000/month for a Proof of Concept (50 agents), £12,000/month Professional (200 agents), £25,000/month Enterprise (1,000 agents), and £50,000+/month for Enterprise+ (unlimited).",
+  "eu ai": "The EU AI Act requires human oversight of AI systems by December 2027. Fines are up to €35M or 7% of global turnover. TBN provides the cryptographic proof that your AI agents are governed — the evidence regulators need.",
+  "regulation": "The EU AI Act requires human oversight of AI systems by December 2027. Fines are up to €35M or 7% of global turnover. TBN provides the cryptographic proof that your AI agents are governed — the evidence regulators need.",
+  "salesforce": "TBN integrates with Salesforce through our partner Shango. Together we provide 8-layer write governance for Agentforce — every AI write to your CRM is verified and signed before it touches customer records.",
+  "partner": "We have 6 integration partners across 6 countries using TBN as their Layer 0 trust infrastructure. Partners include Shango (Salesforce governance), DigiEmu (Swiss AI interop), EVIDE (evidentiary compliance), CLARIXO, and CertifyAI.",
+  "hardin": "Hardin AI Solutions (Hardin Enterprises Ltd, Company No. 17149514) is a UK-based AI governance company founded by Burhan Yanbolu. We build TBN Protocol — trust infrastructure for AI agents. Based in London, operating globally.",
+  "contact": "You can reach us at burhan@hardinai.co.uk or visit tbn.hardinai.co.uk. We're happy to arrange a demo or discuss how TBN can help your organisation.",
+  "demo": "You can see TBN in action at tbn.hardinai.co.uk/demo/live — it shows a verified agent getting PASS and an unverified agent getting BLOCKED in real-time. We also offer live demos — email burhan@hardinai.co.uk.",
+  "get started": "To get started: 1) Visit tbn.hardinai.co.uk/customer 2) Register your company 3) Register your AI agent 4) Get your API key 5) Add one line of code to verify your agent before it acts. Or email burhan@hardinai.co.uk for a guided setup.",
+  "register": "To register your agent with TBN: visit tbn.hardinai.co.uk/customer, enter your company details, then add your agent's name and purpose. TBN will certify it and give you an Agent ID for verification.",
+  "proof": "We've proven TBN at scale: 10,000 AI agent decisions governed in 59 seconds. Per-attestation latency: 0.04ms. Throughput: 4,273 agents verified per second. 170,813 immutable audit entries. All cryptographically signed.",
+  "open source": "TBN Protocol is open source (AGPL-3.0). You can install it with: pip install tbn-protocol. Source code is on GitHub. The protocol is free to use — we charge for the managed service and enterprise support.",
+  "pip": "Install TBN Protocol with: pip install tbn-protocol. It's available on PyPI. The package gives you local verification tools and the ability to connect to the TBN network.",
+  "hello": "Hello! How can I help you today? I can tell you about TBN Protocol, our pricing, how to get started, or answer any questions about AI agent governance.",
+  "hi": "Hi there! What would you like to know? I can explain TBN Protocol, pricing, the EU AI Act, or how to register your agents.",
+  "thanks": "You're welcome! If you need anything else, just ask. You can also reach us at burhan@hardinai.co.uk.",
+  "who": "I'm the Hardin AI Assistant — a chatbot that answers questions about TBN Protocol and Hardin AI Solutions. I'm a live example of an AI agent that could be TBN-verified.",
+  "security": "TBN uses RSA-PSS-SHA256 cryptographic signatures for every verification. Attestations are independently verifiable by any third party using our published public key. The audit trail is immutable and append-only.",
+  "competitor": "No product currently provides cryptographic runtime trust verification specifically for AI agents. API gateways authenticate requests (not agents), IAM authenticates humans (not bots), and guardrails filter outputs (not execution). TBN is a new category.",
+};
+
+function findAnswer(input) {
+  const lower = input.toLowerCase();
+  for (const [key, value] of Object.entries(knowledge)) {
+    if (lower.includes(key)) return value;
+  }
+  return "I can help with questions about: TBN Protocol, how it works, pricing, the EU AI Act, Salesforce integration, our partners, how to get started, demos, or security. What would you like to know?";
+}
+
+function send() {
+  const input = document.getElementById('input');
+  const messages = document.getElementById('messages');
+  const text = input.value.trim();
+  if (!text) return;
+
+  messages.innerHTML += `<div class="msg msg-user">${text}</div>`;
+  input.value = '';
+
+  // STEP 1: Show "verifying with TBN..."
+  const verifyMsg = document.createElement('div');
+  verifyMsg.className = 'msg msg-bot';
+  verifyMsg.style.color = '#94a3b8';
+  verifyMsg.textContent = '🔒 Verifying agent with TBN Protocol...';
+  messages.appendChild(verifyMsg);
+  messages.scrollTop = messages.scrollHeight;
+
+  // STEP 2: Call TBN to verify this agent
+  fetch('/api/verify', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({bot_id: 'tbn-bot-7d59c01ca1316ec9'})
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.certified) {
+      // PASS — agent is verified, respond to customer
+      verifyMsg.innerHTML = '🔒 <span style="color:#22c55e;">TBN Verified ✓</span> <span style="color:#64748b;font-size:10px;">(Agent: tbn-bot-7d59c01ca1316ec9 | RSA-PSS-SHA256)</span>';
+      
+      setTimeout(() => {
+        const answer = findAnswer(text);
+        messages.innerHTML += `<div class="msg msg-bot">${answer}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+      }, 300);
+    } else {
+      // FAIL — agent not verified, block response
+      verifyMsg.innerHTML = '🔒 <span style="color:#ef4444;">TBN Verification FAILED ✗</span>';
+      setTimeout(() => {
+        messages.innerHTML += `<div class="msg msg-bot" style="color:#fca5a5;background:#3b1111;">❌ This agent could not be verified by TBN Protocol. Response blocked for your safety.</div>`;
+        messages.scrollTop = messages.scrollHeight;
+      }, 300);
+    }
+  })
+  .catch(err => {
+    verifyMsg.innerHTML = '🔒 <span style="color:#fbbf24;">TBN check unavailable — responding in fallback mode</span>';
+    setTimeout(() => {
+      const answer = findAnswer(text);
+      messages.innerHTML += `<div class="msg msg-bot">${answer}</div>`;
+      messages.scrollTop = messages.scrollHeight;
+    }, 300);
+  });
+
+  messages.scrollTop = messages.scrollHeight;
+}
+</script>
+</body>
+</html>

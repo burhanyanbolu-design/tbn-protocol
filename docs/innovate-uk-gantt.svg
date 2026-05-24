@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 780" font-family="Arial, sans-serif">
+  <rect width="1120" height="780" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="560" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">TBN Protocol — Project Plan (Gantt Chart)</text>
+  <text x="560" y="55" text-anchor="middle" font-size="11" fill="#666">12-Month Project: September 2026 – August 2027 | Total Budget: £300,000</text>
+  
+  <!-- Month headers -->
+  <rect x="280" y="75" width="800" height="25" fill="#f1f5f9"/>
+  <line x1="280" y1="75" x2="1080" y2="75" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="280" y1="100" x2="1080" y2="100" stroke="#e2e8f0" stroke-width="1"/>
+  
+  <text x="313" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Sep</text>
+  <text x="380" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Oct</text>
+  <text x="447" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Nov</text>
+  <text x="513" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Dec</text>
+  <text x="580" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Jan</text>
+  <text x="647" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Feb</text>
+  <text x="713" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Mar</text>
+  <text x="780" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Apr</text>
+  <text x="847" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">May</text>
+  <text x="913" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Jun</text>
+  <text x="980" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Jul</text>
+  <text x="1047" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Aug</text>
+  
+  <!-- Grid lines -->
+  <line x1="347" y1="75" x2="347" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="413" y1="75" x2="413" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="480" y1="75" x2="480" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="547" y1="75" x2="547" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="613" y1="75" x2="613" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="680" y1="75" x2="680" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="747" y1="75" x2="747" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="813" y1="75" x2="813" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="880" y1="75" x2="880" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="947" y1="75" x2="947" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  <line x1="1013" y1="75" x2="1013" y2="620" stroke="#e2e8f0" stroke-width="0.5"/>
+  
+  <!-- Milestone 1 Header -->
+  <rect x="20" y="110" width="260" height="20" fill="#dbeafe"/>
+  <text x="30" y="124" font-size="10" font-weight="bold" fill="#2563eb">MILESTONE 1: CNI Onboarding &amp; Hardening (£75K)</text>
+  
+  <!-- M1 Tasks -->
+  <text x="30" y="150" font-size="9" fill="#333">CNI partner onboarding</text>
+  <rect x="280" y="140" width="200" height="14" rx="3" fill="#93c5fd"/>
+  
+  <text x="30" y="172" font-size="9" fill="#333">Environment access &amp; security review</text>
+  <rect x="280" y="162" width="133" height="14" rx="3" fill="#93c5fd"/>
+  
+  <text x="30" y="194" font-size="9" fill="#333">CNI-hardened TBN deployment</text>
+  <rect x="347" y="184" width="133" height="14" rx="3" fill="#93c5fd"/>
+  
+  <text x="30" y="216" font-size="9" fill="#333">1,000-agent verification test</text>
+  <rect x="413" y="206" width="67" height="14" rx="3" fill="#93c5fd"/>
+  
+  <!-- Milestone 1 diamond -->
+  <polygon points="480,213 487,220 480,227 473,220" fill="#2563eb"/>
+  
+  <!-- Milestone 2 Header -->
+  <rect x="20" y="240" width="260" height="20" fill="#dcfce7"/>
+  <text x="30" y="254" font-size="10" font-weight="bold" fill="#16a34a">MILESTONE 2: Operational Deployment (£75K)</text>
+  
+  <!-- M2 Tasks -->
+  <text x="30" y="280" font-size="9" fill="#333">Live operational deployment</text>
+  <rect x="480" y="270" width="200" height="14" rx="3" fill="#86efac"/>
+  
+  <text x="30" y="302" font-size="9" fill="#333">Adversarial testing suite</text>
+  <rect x="547" y="292" width="133" height="14" rx="3" fill="#86efac"/>
+  
+  <text x="30" y="324" font-size="9" fill="#333">50K+ verifications in production</text>
+  <rect x="547" y="314" width="133" height="14" rx="3" fill="#86efac"/>
+  
+  <text x="30" y="346" font-size="9" fill="#333">Interim performance report</text>
+  <rect x="647" y="336" width="33" height="14" rx="3" fill="#86efac"/>
+  
+  <!-- Milestone 2 diamond -->
+  <polygon points="680,343 687,350 680,357 673,350" fill="#16a34a"/>
+  
+  <!-- Milestone 3 Header -->
+  <rect x="20" y="370" width="260" height="20" fill="#fef9c3"/>
+  <text x="30" y="384" font-size="10" font-weight="bold" fill="#ca8a04">MILESTONE 3: Scale &amp; Validation (£75K)</text>
+  
+  <!-- M3 Tasks -->
+  <text x="30" y="410" font-size="9" fill="#333">100K+ verifications at scale</text>
+  <rect x="680" y="400" width="200" height="14" rx="3" fill="#fde047"/>
+  
+  <text x="30" y="432" font-size="9" fill="#333">End-user acceptance testing</text>
+  <rect x="747" y="422" width="133" height="14" rx="3" fill="#fde047"/>
+  
+  <text x="30" y="454" font-size="9" fill="#333">Compliance mapping (NIS2, EU AI Act)</text>
+  <rect x="680" y="444" width="200" height="14" rx="3" fill="#fde047"/>
+  
+  <text x="30" y="476" font-size="9" fill="#333">Incident response procedures</text>
+  <rect x="813" y="466" width="67" height="14" rx="3" fill="#fde047"/>
+  
+  <!-- Milestone 3 diamond -->
+  <polygon points="880,473 887,480 880,487 873,480" fill="#ca8a04"/>
+  
+  <!-- Milestone 4 Header -->
+  <rect x="20" y="500" width="260" height="20" fill="#f3e8ff"/>
+  <text x="30" y="514" font-size="10" font-weight="bold" fill="#7c3aed">MILESTONE 4: Commercialisation (£75K)</text>
+  
+  <!-- M4 Tasks -->
+  <text x="30" y="540" font-size="9" fill="#333">End-user formal sign-off</text>
+  <rect x="880" y="530" width="133" height="14" rx="3" fill="#c4b5fd"/>
+  
+  <text x="30" y="562" font-size="9" fill="#333">Business plan &amp; pricing finalised</text>
+  <rect x="880" y="552" width="200" height="14" rx="3" fill="#c4b5fd"/>
+  
+  <text x="30" y="584" font-size="9" fill="#333">Case study &amp; success metrics</text>
+  <rect x="947" y="574" width="133" height="14" rx="3" fill="#c4b5fd"/>
+  
+  <text x="30" y="606" font-size="9" fill="#333">3+ customer pipeline confirmed</text>
+  <rect x="947" y="596" width="133" height="14" rx="3" fill="#c4b5fd"/>
+  
+  <!-- Milestone 4 diamond -->
+  <polygon points="1080,603 1087,610 1080,617 1073,610" fill="#7c3aed"/>
+  
+  <!-- Payment Schedule -->
+  <rect x="20" y="640" width="1080" height="130" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="40" y="665" font-size="12" font-weight="bold" fill="#1a1a2e">Payment Schedule (Quarterly in Arrears)</text>
+  
+  <rect x="40" y="680" width="240" height="40" rx="4" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+  <text x="160" y="700" text-anchor="middle" font-size="10" font-weight="bold" fill="#2563eb">Q1: £75,000</text>
+  <text x="160" y="714" text-anchor="middle" font-size="8" fill="#666">Nov 2026 (months 1-3)</text>
+  
+  <rect x="300" y="680" width="240" height="40" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+  <text x="420" y="700" text-anchor="middle" font-size="10" font-weight="bold" fill="#16a34a">Q2: £75,000</text>
+  <text x="420" y="714" text-anchor="middle" font-size="8" fill="#666">Feb 2027 (months 4-6)</text>
+  
+  <rect x="560" y="680" width="240" height="40" rx="4" fill="#fef9c3" stroke="#fde047" stroke-width="1"/>
+  <text x="680" y="700" text-anchor="middle" font-size="10" font-weight="bold" fill="#ca8a04">Q3: £75,000</text>
+  <text x="680" y="714" text-anchor="middle" font-size="8" fill="#666">May 2027 (months 7-9)</text>
+  
+  <rect x="820" y="680" width="240" height="40" rx="4" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1"/>
+  <text x="940" y="700" text-anchor="middle" font-size="10" font-weight="bold" fill="#7c3aed">Q4: £75,000</text>
+  <text x="940" y="714" text-anchor="middle" font-size="8" fill="#666">Aug 2027 (months 10-12)</text>
+  
+  <text x="560" y="750" text-anchor="middle" font-size="9" font-weight="bold" fill="#333">Total Project Cost: £300,000 (inclusive of VAT) | Duration: 12 months | Start: 1 September 2026</text>
+  
+  <!-- Footer -->
+  <text x="560" y="772" text-anchor="middle" font-size="8" fill="#999">Hardin Enterprises Ltd | Company No. 17149514 | London, UK</text>
+</svg>

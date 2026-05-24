@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 780" font-family="Arial, sans-serif">
+  <rect width="1120" height="780" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="560" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">TBN Protocol — Project Cost Breakdown</text>
+  <text x="560" y="55" text-anchor="middle" font-size="11" fill="#666">Total Project Cost: £250,000 | Not VAT Registered | 12 Months (Sept 2026 – Aug 2027)</text>
+  
+  <!-- Table Header -->
+  <rect x="40" y="80" width="1040" height="30" fill="#1e40af"/>
+  <text x="60" y="100" font-size="11" font-weight="bold" fill="#ffffff">Category</text>
+  <text x="320" y="100" font-size="11" font-weight="bold" fill="#ffffff">Description</text>
+  <text x="650" y="100" font-size="11" font-weight="bold" fill="#ffffff">Monthly Cost</text>
+  <text x="780" y="100" font-size="11" font-weight="bold" fill="#ffffff">Duration</text>
+  <text x="900" y="100" font-size="11" font-weight="bold" fill="#ffffff">% Time</text>
+  <text x="990" y="100" font-size="11" font-weight="bold" fill="#ffffff">Total</text>
+  
+  <!-- Staff Costs Header -->
+  <rect x="40" y="110" width="1040" height="25" fill="#dbeafe"/>
+  <text x="60" y="127" font-size="10" font-weight="bold" fill="#1e40af">STAFF COSTS</text>
+  <text x="990" y="127" font-size="10" font-weight="bold" fill="#1e40af">£144,000</text>
+  
+  <!-- Row 1 -->
+  <rect x="40" y="135" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="152" font-size="10" fill="#333">Lead Engineer / CEO</text>
+  <text x="320" y="152" font-size="10" fill="#333">Burhan Yanbolu — Architecture, deployment, project lead</text>
+  <text x="650" y="152" font-size="10" fill="#333">£10,000</text>
+  <text x="780" y="152" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="152" font-size="10" fill="#333">100%</text>
+  <text x="990" y="152" font-size="10" fill="#333">£120,000</text>
+  
+  <!-- Row 2 -->
+  <rect x="40" y="160" width="1040" height="25" fill="#ffffff"/>
+  <text x="60" y="177" font-size="10" fill="#333">Automation Director</text>
+  <text x="320" y="177" font-size="10" fill="#333">Cem Aslan — CNI integration, workflow orchestration</text>
+  <text x="650" y="177" font-size="10" fill="#333">£2,000</text>
+  <text x="780" y="177" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="177" font-size="10" fill="#333">50%</text>
+  <text x="990" y="177" font-size="10" fill="#333">£24,000</text>
+  
+  <!-- Subcontractor Header -->
+  <rect x="40" y="195" width="1040" height="25" fill="#dcfce7"/>
+  <text x="60" y="212" font-size="10" font-weight="bold" fill="#16a34a">SUBCONTRACTOR COSTS</text>
+  <text x="990" y="212" font-size="10" font-weight="bold" fill="#16a34a">£72,000</text>
+  
+  <!-- Row 3 -->
+  <rect x="40" y="220" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="237" font-size="10" fill="#333">Security Engineer</text>
+  <text x="320" y="237" font-size="10" fill="#333">Adversarial testing, pen testing, protocol security analysis</text>
+  <text x="650" y="237" font-size="10" fill="#333">£4,000</text>
+  <text x="780" y="237" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="237" font-size="10" fill="#333">40%</text>
+  <text x="990" y="237" font-size="10" fill="#333">£48,000</text>
+  
+  <!-- Row 4 -->
+  <rect x="40" y="245" width="1040" height="25" fill="#ffffff"/>
+  <text x="60" y="262" font-size="10" fill="#333">CNI Integration Specialist</text>
+  <text x="320" y="262" font-size="10" fill="#333">OT/IT convergence, SCADA, sector-specific deployment</text>
+  <text x="650" y="262" font-size="10" fill="#333">£2,000</text>
+  <text x="780" y="262" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="262" font-size="10" fill="#333">30%</text>
+  <text x="990" y="262" font-size="10" fill="#333">£24,000</text>
+  
+  <!-- Cloud Director -->
+  <rect x="40" y="280" width="1040" height="25" fill="#f3e8ff"/>
+  <text x="60" y="297" font-size="10" font-weight="bold" fill="#7c3aed">CLOUD SERVICES</text>
+  <text x="990" y="297" font-size="10" font-weight="bold" fill="#7c3aed">£12,000</text>
+  
+  <!-- Row 5 -->
+  <rect x="40" y="305" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="322" font-size="10" fill="#333">Cloud Services Director</text>
+  <text x="320" y="322" font-size="10" fill="#333">Sukumar Srinivasan — Infrastructure hardening, DevOps, HA</text>
+  <text x="650" y="322" font-size="10" fill="#333">£1,000</text>
+  <text x="780" y="322" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="322" font-size="10" fill="#333">30%</text>
+  <text x="990" y="322" font-size="10" fill="#333">£12,000</text>
+  
+  <!-- Infrastructure Header -->
+  <rect x="40" y="345" width="1040" height="25" fill="#fef9c3"/>
+  <text x="60" y="362" font-size="10" font-weight="bold" fill="#ca8a04">INFRASTRUCTURE &amp; MATERIALS</text>
+  <text x="990" y="362" font-size="10" font-weight="bold" fill="#ca8a04">£14,000</text>
+  
+  <!-- Row 6 -->
+  <rect x="40" y="370" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="387" font-size="10" fill="#333">AWS Hosting</text>
+  <text x="320" y="387" font-size="10" fill="#333">Production + CNI-hardened environment (Lightsail, EC2)</text>
+  <text x="650" y="387" font-size="10" fill="#333">£800</text>
+  <text x="780" y="387" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="387" font-size="10" fill="#333">—</text>
+  <text x="990" y="387" font-size="10" fill="#333">£9,600</text>
+  
+  <!-- Row 7 -->
+  <rect x="40" y="395" width="1040" height="25" fill="#ffffff"/>
+  <text x="60" y="412" font-size="10" fill="#333">Security Testing Tools</text>
+  <text x="320" y="412" font-size="10" fill="#333">Burp Suite, custom adversarial testing frameworks, licences</text>
+  <text x="650" y="412" font-size="10" fill="#333">—</text>
+  <text x="780" y="412" font-size="10" fill="#333">One-off</text>
+  <text x="900" y="412" font-size="10" fill="#333">—</text>
+  <text x="990" y="412" font-size="10" fill="#333">£2,400</text>
+  
+  <!-- Row 8 -->
+  <rect x="40" y="420" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="437" font-size="10" fill="#333">Development Tools</text>
+  <text x="320" y="437" font-size="10" fill="#333">IDE licences, CI/CD, monitoring (Datadog/Sentry)</text>
+  <text x="650" y="437" font-size="10" fill="#333">—</text>
+  <text x="780" y="437" font-size="10" fill="#333">Annual</text>
+  <text x="900" y="437" font-size="10" fill="#333">—</text>
+  <text x="990" y="437" font-size="10" fill="#333">£2,000</text>
+  
+  <!-- Travel Header -->
+  <rect x="40" y="455" width="1040" height="25" fill="#fee2e2"/>
+  <text x="60" y="472" font-size="10" font-weight="bold" fill="#dc2626">TRAVEL &amp; SUBSISTENCE</text>
+  <text x="990" y="472" font-size="10" font-weight="bold" fill="#dc2626">£5,000</text>
+  
+  <!-- Row 9 -->
+  <rect x="40" y="480" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="497" font-size="10" fill="#333">CNI Site Visits</text>
+  <text x="320" y="497" font-size="10" fill="#333">Travel to pilot site for deployment, testing, reviews (~10 visits)</text>
+  <text x="650" y="497" font-size="10" fill="#333">£500</text>
+  <text x="780" y="497" font-size="10" fill="#333">10 visits</text>
+  <text x="900" y="497" font-size="10" fill="#333">—</text>
+  <text x="990" y="497" font-size="10" fill="#333">£5,000</text>
+  
+  <!-- Overheads Header -->
+  <rect x="40" y="515" width="1040" height="25" fill="#f1f5f9"/>
+  <text x="60" y="532" font-size="10" font-weight="bold" fill="#64748b">OVERHEADS</text>
+  <text x="990" y="532" font-size="10" font-weight="bold" fill="#64748b">£3,000</text>
+  
+  <!-- Row 10 -->
+  <rect x="40" y="540" width="1040" height="25" fill="#f8fafc"/>
+  <text x="60" y="557" font-size="10" fill="#333">Office &amp; Admin</text>
+  <text x="320" y="557" font-size="10" fill="#333">Office costs, communications, professional insurance</text>
+  <text x="650" y="557" font-size="10" fill="#333">£250</text>
+  <text x="780" y="557" font-size="10" fill="#333">12 months</text>
+  <text x="900" y="557" font-size="10" fill="#333">—</text>
+  <text x="990" y="557" font-size="10" fill="#333">£3,000</text>
+  
+  <!-- TOTAL -->
+  <rect x="40" y="580" width="1040" height="35" fill="#1e40af"/>
+  <text x="60" y="603" font-size="13" font-weight="bold" fill="#ffffff">TOTAL PROJECT COST</text>
+  <text x="990" y="603" font-size="13" font-weight="bold" fill="#ffffff">£250,000</text>
+  
+  <!-- Quarterly Payment Summary -->
+  <text x="40" y="650" font-size="14" font-weight="bold" fill="#1a1a2e">Quarterly Payment Schedule (Paid in Arrears)</text>
+  
+  <rect x="40" y="665" width="1040" height="25" fill="#f1f5f9"/>
+  <text x="60" y="682" font-size="10" font-weight="bold" fill="#333">Quarter</text>
+  <text x="250" y="682" font-size="10" font-weight="bold" fill="#333">Period</text>
+  <text x="500" y="682" font-size="10" font-weight="bold" fill="#333">Milestone</text>
+  <text x="900" y="682" font-size="10" font-weight="bold" fill="#333">Payment</text>
+  
+  <rect x="40" y="690" width="1040" height="22" fill="#ffffff"/>
+  <text x="60" y="706" font-size="10" fill="#333">Q1</text>
+  <text x="250" y="706" font-size="10" fill="#333">Sept – Nov 2026</text>
+  <text x="500" y="706" font-size="10" fill="#333">CNI onboarding, hardening, 1K test</text>
+  <text x="900" y="706" font-size="10" fill="#333">£62,500</text>
+  
+  <rect x="40" y="712" width="1040" height="22" fill="#f8fafc"/>
+  <text x="60" y="728" font-size="10" fill="#333">Q2</text>
+  <text x="250" y="728" font-size="10" fill="#333">Dec 2026 – Feb 2027</text>
+  <text x="500" y="728" font-size="10" fill="#333">Operational deployment, adversarial testing, 50K verifications</text>
+  <text x="900" y="728" font-size="10" fill="#333">£62,500</text>
+  
+  <rect x="40" y="734" width="1040" height="22" fill="#ffffff"/>
+  <text x="60" y="750" font-size="10" fill="#333">Q3</text>
+  <text x="250" y="750" font-size="10" fill="#333">Mar – May 2027</text>
+  <text x="500" y="750" font-size="10" fill="#333">100K scale test, end-user acceptance, compliance mapping</text>
+  <text x="900" y="750" font-size="10" fill="#333">£62,500</text>
+  
+  <rect x="40" y="756" width="1040" height="22" fill="#f8fafc"/>
+  <text x="60" y="772" font-size="10" fill="#333">Q4</text>
+  <text x="250" y="772" font-size="10" fill="#333">Jun – Aug 2027</text>
+  <text x="500" y="772" font-size="10" fill="#333">Sign-off, business plan, case study, customer pipeline</text>
+  <text x="900" y="772" font-size="10" fill="#333">£62,500</text>
+  
+  <!-- Footer -->
+  <text x="560" y="795" text-anchor="middle" font-size="8" fill="#999">Hardin Enterprises Ltd | Company No. 17149514 | Not VAT Registered | All costs at fair market value, no profit included</text>
+</svg>

@@ -147,7 +147,7 @@ def violations_dashboard():
 
 @app.route("/demo/live")
 def demo_live():
-    return render_template("demo.html")
+    return render_template("demo_live.html")
 
 
 @app.route("/demo/nhs")
@@ -173,6 +173,16 @@ def partners_page():
 @app.route("/verify")
 def verify_page():
     return render_template("verify_public.html")
+
+
+@app.route("/customer")
+def customer_dashboard():
+    return render_template("customer_dashboard.html")
+
+
+@app.route("/chat")
+def hardin_chatbot():
+    return render_template("hardin_chatbot.html")
 
 
 @app.route("/admin/partners")
