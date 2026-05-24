@@ -30,8 +30,11 @@ Production (via gunicorn — started by systemd):
 
 import os
 import logging
+import hashlib
+import secrets
 from datetime import datetime, timezone
-from flask import Flask, render_template, request, jsonify
+from functools import wraps
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from api.routes import api
 from api.certification import certification
 from api.governance import governance
@@ -46,6 +49,20 @@ from api.digiemu_interop import digiemu_bp
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
+app.secret_key = os.environ.get("TBN_SECRET_KEY", secrets.token_hex(32))
+
+# ── Customer auth ────────────────────────────────────
+CUSTOMER_PASSWORD = os.environ.get("TBN_CUSTOMER_PASSWORD", "tbn-customer-2026")
+
+
+def customer_login_required(f):
+    """Decorator to require customer login for protected routes."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("customer_authenticated"):
+            return redirect(url_for("customer_login", next=request.path))
+        return f(*args, **kwargs)
+    return decorated
 app.register_blueprint(api,                url_prefix="/api")
 app.register_blueprint(certification,      url_prefix="/certification")
 app.register_blueprint(governance,         url_prefix="/governance")
@@ -176,8 +193,29 @@ def verify_page():
 
 
 @app.route("/customer")
+@customer_login_required
 def customer_dashboard():
     return render_template("customer_dashboard.html")
+
+
+@app.route("/customer/login", methods=["GET", "POST"])
+def customer_login():
+    """Login page for customer dashboard."""
+    if request.method == "POST":
+        password = request.form.get("password", "")
+        if password == CUSTOMER_PASSWORD:
+            session["customer_authenticated"] = True
+            next_page = request.args.get("next", "/customer")
+            return redirect(next_page)
+        return render_template("customer_login.html", error="Invalid password")
+    return render_template("customer_login.html", error=None)
+
+
+@app.route("/customer/logout")
+def customer_logout():
+    """Logout from customer dashboard."""
+    session.pop("customer_authenticated", None)
+    return redirect(url_for("customer_login"))
 
 
 @app.route("/chat")
