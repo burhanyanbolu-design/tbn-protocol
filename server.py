@@ -109,7 +109,7 @@ def early_access_page():
 
 @app.route("/api/early-access", methods=["POST"])
 def early_access_submit():
-    """Store early access signups."""
+    """Store early access signups and notify Burhan."""
     import json
     data = request.get_json()
     name = data.get("name", "").strip()
@@ -118,13 +118,18 @@ def early_access_submit():
     if not name or not email:
         return jsonify({"error": "Name and email required"}), 400
     
+    company = data.get("company", "")
+    agents = data.get("agents", "")
+    concern = data.get("concern", "")
+    notes = data.get("notes", "")
+    
     signup = {
         "name": name,
         "email": email,
-        "company": data.get("company", ""),
-        "agents": data.get("agents", ""),
-        "concern": data.get("concern", ""),
-        "notes": data.get("notes", ""),
+        "company": company,
+        "agents": agents,
+        "concern": concern,
+        "notes": notes,
         "submitted_at": datetime.now(timezone.utc).isoformat()
     }
     
@@ -138,6 +143,30 @@ def early_access_submit():
     os.makedirs("data", exist_ok=True)
     with open(signups_file, "w") as f:
         json.dump(signups, f, indent=2)
+    
+    # Send email notification to Burhan
+    try:
+        from tbn.notifications import send_email
+        html_body = f"""
+        <h2 style="color:#7c3aed">🚀 New Early Access Signup!</h2>
+        <table style="font-family:monospace; font-size:14px; border-collapse:collapse;">
+            <tr><td style="padding:4px 12px 4px 0; font-weight:bold;">Name:</td><td>{name}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0; font-weight:bold;">Email:</td><td>{email}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0; font-weight:bold;">Company:</td><td>{company or '—'}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0; font-weight:bold;">Agents:</td><td>{agents or '—'}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0; font-weight:bold;">Concern:</td><td>{concern or '—'}</td></tr>
+            <tr><td style="padding:4px 12px 4px 0; font-weight:bold;">Notes:</td><td>{notes or '—'}</td></tr>
+        </table>
+        <p style="margin-top:16px; color:#71717a; font-size:12px;">
+            Total signups: {len(signups)} | Reply to {email} within 48 hours.
+        </p>
+        """
+        send_email(
+            subject=f"[TBN] 🚀 Early Access Signup: {name} ({company or 'No company'})",
+            html_body=html_body
+        )
+    except Exception as e:
+        print(f"[Early Access] Email notification failed: {e}")
     
     return jsonify({"success": True, "message": f"Welcome {name}! You're on the early access list."})
 
