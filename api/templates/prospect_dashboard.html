@@ -95,6 +95,37 @@
         <div class="keyword-tags" id="keyword-tags"></div>
       </div>
     </div>
+
+    <!-- People Search -->
+    <div class="search-section" style="border-color:#0066cc33; background:#f0f7ff;">
+      <h2 style="color:#0066cc;">👤 People Search — Find Decision Makers</h2>
+      <p style="font-size:13px; color:#4a6fa5; margin-bottom:16px;">Target CTOs, Heads of AI, and Sales leaders in fintech & healthcare</p>
+      
+      <div class="keywords-section">
+        <div class="keywords-label" style="color:#4a6fa5;">🏦 Fintech — CTO & Head of AI</div>
+        <div class="keyword-tags" id="fintech-cto-tags"></div>
+      </div>
+      
+      <div class="keywords-section" style="margin-top:14px;">
+        <div class="keywords-label" style="color:#4a6fa5;">🏥 Healthcare — CTO & Head of AI</div>
+        <div class="keyword-tags" id="healthcare-cto-tags"></div>
+      </div>
+      
+      <div class="keywords-section" style="margin-top:14px;">
+        <div class="keywords-label" style="color:#4a6fa5;">💼 Sales & Partnerships — Fintech & Healthcare</div>
+        <div class="keyword-tags" id="sales-tags"></div>
+      </div>
+      
+      <div class="keywords-section" style="margin-top:14px;">
+        <div class="keywords-label" style="color:#4a6fa5;">🎯 AI Governance Buyers</div>
+        <div class="keyword-tags" id="buyer-tags"></div>
+      </div>
+      
+      <div class="keywords-section" style="margin-top:14px;">
+        <div class="keywords-label" style="color:#4a6fa5;">🏛️ CEOs — Banks & Digital Banks</div>
+        <div class="keyword-tags" id="ceo-banking-tags"></div>
+      </div>
+    </div>
     
     <!-- Status -->
     <div class="status-bar" id="status-bar"></div>
@@ -148,6 +179,98 @@
     };
     tagsContainer.appendChild(tag);
   });
+
+  // ── People Search Tags ──────────────────────────────────────────
+  const FINTECH_CTO = [
+    'CTO fintech AI governance',
+    'Head of AI fintech',
+    'VP Engineering fintech AI',
+    'Chief Technology Officer fintech AI agents',
+    'CTO AI compliance banking',
+    'Head of AI digital banking',
+    'fintech CTO AI strategy',
+    'VP AI fintech London',
+    'CTO neobank AI',
+    'Head of Engineering payments AI',
+  ];
+
+  const HEALTHCARE_CTO = [
+    'CTO healthcare AI',
+    'Head of AI healthtech',
+    'VP Engineering health AI',
+    'Chief Technology Officer NHS AI',
+    'CTO digital health AI governance',
+    'Head of AI pharma',
+    'VP AI healthcare UK',
+    'CTO medtech AI agents',
+    'Head of Data AI healthcare',
+    'Chief AI Officer health',
+  ];
+
+  const SALES_TAGS = [
+    'VP Sales fintech AI',
+    'Head of Partnerships fintech',
+    'Business Development AI healthcare',
+    'VP Sales healthtech',
+    'Head of Sales AI platform',
+    'Director Partnerships AI governance',
+    'VP Business Development AI compliance',
+    'Sales Director enterprise AI',
+    'Head of Revenue AI startup',
+    'Partnership Manager AI fintech',
+  ];
+
+  const BUYER_TAGS = [
+    'Chief AI Officer enterprise',
+    'Head of AI governance',
+    'VP AI risk compliance',
+    'Director AI ethics enterprise',
+    'Head of Responsible AI',
+    'CISO AI security',
+    'Chief Data Officer AI governance',
+    'Head of AI operations enterprise',
+    'VP Compliance AI regulation',
+    'Director AI strategy enterprise',
+  ];
+
+  const CEO_BANKING = [
+    'CEO digital bank',
+    'CEO neobank',
+    'CEO fintech UK',
+    'CEO challenger bank',
+    'Founder digital bank AI',
+    'CEO banking startup',
+    'CEO payments company AI',
+    'Managing Director digital banking',
+    'CEO open banking',
+    'Founder neobank UK',
+    'CEO wealthtech',
+    'CEO regtech',
+    'CEO insurtech AI',
+    'CEO lending platform AI',
+    'Founder payments fintech',
+  ];
+
+  function renderPeopleTags(containerId, keywords) {
+    const container = document.getElementById(containerId);
+    keywords.forEach(kw => {
+      const tag = document.createElement('span');
+      tag.className = 'keyword-tag';
+      tag.style.borderColor = '#0066cc55';
+      tag.textContent = kw;
+      tag.onclick = () => {
+        document.getElementById('search-input').value = kw;
+        runSearch();
+      };
+      container.appendChild(tag);
+    });
+  }
+
+  renderPeopleTags('fintech-cto-tags', FINTECH_CTO);
+  renderPeopleTags('healthcare-cto-tags', HEALTHCARE_CTO);
+  renderPeopleTags('sales-tags', SALES_TAGS);
+  renderPeopleTags('buyer-tags', BUYER_TAGS);
+  renderPeopleTags('ceo-banking-tags', CEO_BANKING);
 
   // All prospects stored locally
   let allProspects = [];

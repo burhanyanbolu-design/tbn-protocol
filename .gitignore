@@ -1,31 +1,118 @@
+# TBN Protocol — .gitignore
+# Aggressive exclusion of secrets and sensitive files
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+
+# Virtual environments
 .env
+.env.*
+!.env.example
 .venv/
 venv/
-*.egg-info/
+env/
+
+# Build / dist
 dist/
 build/
-.DS_Store
 
-# SSH keys
+# OS
+.DS_Store
+Thumbs.db
+
+# SECRETS & CREDENTIALS
 *.pem
 *.key
+.ssh_temp_key*
+id_rsa*
+id_ed25519*
+*.ppk
+known_hosts
 
-# Temporary/utility scripts
+# API keys / cookies / tokens / sessions
+*cookies*.txt
+*cookies*.json
+instagram_cookies.*
+instagram_browser_cookies.*
+instaloader_session*
+*.session
+.netrc
+api_keys.json
+credentials.json
+service-account*.json
+
+# TBN signing keys (private)
+data/tbn_signing_key.pem
+data/tbn_master.pem
+
+# SESSION CONTEXT (may contain credentials)
+data/SESSION-CONTEXT-*.md
+docs/SESSION-CONTEXT-*.md
+
+# PATCH / DEBUG / TEMP SCRIPTS
+api/patch_*.py
+api/do_patch*.py
+api/final_patch.py
+api/check_syntax.py
+api/test_pw_*.py
+api/test_ig_*.py
+api/test_graphql*.py
+api/test_media_id.py
+api/test_v2.py
+api/test_playwright_debug.py
+api/convert_cookies.py
+api/setup_ig_session.py
+api/video_agent_patch.py
+api/deploy_memory.py
+api/deploy_v2.py
+api/apply_patch.py
+api/fix_*.py
+api/cleanup_*.py
 transfer_file.py
 fix_*.py
 cleanup_*.py
 read_blog_config.py
 check_registry.py
 setup_github_bica.py
+generate_shango_key.py
+check_shango_usage.py
+register_demo_agents.py
+add_blog_post*.py
+rebuild_blog.py
+
+# TEST OUTPUTS
 certification_portal_base64.txt
-
-# Test outputs
 temp_cert.html
+*.tmp.html
 
-# Confidential
+# CONFIDENTIAL / INTERNAL
 WATERMARKS.md
-.ssh_temp_key
+docs/pitchdec*.pdf
+docs/YC-Interview-Prep.md
+docs/ARIA-*.md
+docs/Frank-*.md
+docs/Shango-*.md
+docs/TBN-CertifyAI-*.md
+docs/TBN-Authbound-*.md
+docs/TBN-Bind-*.md
+
+# TEST DATA / OUTPUTS
+chroma_db/
+data/linkedin_prospects/
+data/*_identity.json
+data/*_philosophy_core.json
+data/bica_registry.json
+data/tbn_philosophy_registry.json
+
+# EXTERNAL FOLDERS
+heathrowblackcabs/
+tbn-agent-network/
+video-agent/
+
+# BACKUPS
+*.bak
+*.backup

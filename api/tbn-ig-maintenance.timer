@@ -1,0 +1,14 @@
+[Unit]
+Description=TBN Video Agent — Daily Instagram cookie refresh
+Requires=tbn-ig-maintenance.service
+
+[Timer]
+# Run daily at 3:30 AM (low traffic time)
+OnCalendar=*-*-* 03:30:00
+# Also run 5 minutes after boot in case timer was missed
+OnBootSec=5min
+# Catch up if the system was off during the scheduled time
+Persistent=true
+
+[Install]
+WantedBy=timers.target

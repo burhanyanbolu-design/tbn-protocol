@@ -1,37 +1,306 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>TBN Video Agent — Governed Video Intelligence</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',system-ui,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}.hdr{background:linear-gradient(135deg,#1a1a2e,#0f0f1a);border-bottom:1px solid #27272a;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}.hdr h1{font-size:18px;font-weight:700}.hdr h1 b{color:#7c3aed}.badge{background:#7c3aed22;color:#a78bfa;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-left:12px}.cnt{max-width:1000px;margin:0 auto;padding:32px 24px}h2{font-size:24px;font-weight:800;margin-bottom:8px}h2 b{color:#7c3aed}.sub{color:#a1a1aa;font-size:14px;margin-bottom:32px}
-.upload-zone{background:#111118;border:2px dashed #27272a;border-radius:16px;padding:48px;text-align:center;cursor:pointer;transition:all 0.3s;margin-bottom:24px}.upload-zone:hover{border-color:#7c3aed;background:#7c3aed08}.upload-zone.active{border-color:#4ade80;background:#4ade8008}.upload-zone h3{font-size:18px;margin-bottom:8px}.upload-zone p{color:#71717a;font-size:13px}.upload-zone input{display:none}
-.modes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:24px}.mode{background:#111118;border:1px solid #27272a;border-radius:10px;padding:12px;text-align:center;cursor:pointer;transition:all 0.2s}.mode:hover{border-color:#7c3aed}.mode.sel{border-color:#7c3aed;background:#7c3aed15}.mode .icon{font-size:20px;margin-bottom:4px}.mode .name{font-size:11px;font-weight:600;color:#a1a1aa}.mode.sel .name{color:#a78bfa}
-.run-btn{width:100%;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:24px;transition:all 0.2s}.run-btn:hover{box-shadow:0 8px 32px rgba(124,58,237,0.4)}.run-btn:disabled{opacity:0.4;cursor:not-allowed}
-.status{background:#111118;border:1px solid #27272a;border-radius:12px;padding:16px;margin-bottom:24px;display:none}.status.show{display:block}.status .step{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px}.status .step .dot{width:8px;height:8px;border-radius:50%;background:#52525b;flex-shrink:0}.status .step.done .dot{background:#4ade80}.status .step.active .dot{background:#fbbf24;animation:pulse 1s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.results{display:none}.results.show{display:block}.result-card{background:#111118;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:16px}.result-card h3{font-size:14px;font-weight:700;color:#a78bfa;margin-bottom:10px}.result-card p{font-size:13px;color:#a1a1aa;line-height:1.6}.result-card .val{color:#e4e4e7;font-weight:500}
-.frames-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}.frames-grid img{width:100%;border-radius:8px;border:1px solid #27272a}
-.receipt{background:#0f1a0f;border:1px solid #22c55e44;border-radius:12px;padding:16px;margin-top:16px}.receipt h3{color:#4ade80;font-size:13px;margin-bottom:8px}.receipt .field{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid #27272a11}.receipt .field .k{color:#71717a}.receipt .field .v{color:#e4e4e7;font-family:monospace;font-size:11px}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tag{background:#7c3aed22;color:#a78bfa;padding:3px 10px;border-radius:12px;font-size:11px}
-footer{text-align:center;padding:32px;font-size:11px;color:#52525b;border-top:1px solid #27272a;margin-top:48px}footer a{color:#7c3aed;text-decoration:none}</style></head>
-<body><div class="hdr"><div style="display:flex;align-items:center"><h1><b>TBN</b> Video Agent</h1><span class="badge">Governed Video Intelligence</span></div><a href="https://tbn.hardinai.co.uk" style="color:#a78bfa;text-decoration:none;font-size:13px">Back to TBN</a></div>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#1a1a2e,#0f0f1a);border-bottom:1px solid #27272a;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}
+.hdr h1{font-size:18px;font-weight:700}.hdr h1 b{color:#7c3aed}
+.badge{background:#7c3aed22;color:#a78bfa;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-left:12px}
+.cnt{max-width:1000px;margin:0 auto;padding:32px 24px}
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:32px;background:#111118;border-radius:12px;padding:4px}
+.tab{flex:1;padding:12px;text-align:center;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;color:#71717a;transition:all 0.2s}
+.tab:hover{color:#a1a1aa}.tab.active{background:#7c3aed;color:#fff}
+.panel{display:none}.panel.active{display:block}
+/* Upload */
+.upload-zone{background:#111118;border:2px dashed #27272a;border-radius:16px;padding:40px;text-align:center;cursor:pointer;transition:all 0.3s;margin-bottom:20px}
+</style></head>
+<body>
+<div class="hdr"><div style="display:flex;align-items:center"><h1><b>TBN</b> Video Agent</h1><span class="badge">Governed Video Intelligence</span></div><a href="https://tbn.hardinai.co.uk" style="color:#a78bfa;text-decoration:none;font-size:13px">← Back to TBN</a></div>
 <div class="cnt">
-<h2>AI Agent That Can <b>See</b></h2>
-<p class="sub">Upload a video. The agent watches, understands, decides, and acts — all governed by TBN Protocol with cryptographic receipts.</p>
-<div class="upload-zone" id="dropzone" onclick="document.getElementById('fileinput').click()"><h3>Drop video here or click to upload</h3><p>MP4, MOV, WebM — max 100MB</p><input type="file" id="fileinput" accept="video/*" onchange="fileSelected(this)"></div>
-<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px"><div style="flex:1;height:1px;background:#27272a"></div><span style="color:#52525b;font-size:12px">OR paste a video URL</span><div style="flex:1;height:1px;background:#27272a"></div></div>
-<div style="display:flex;gap:8px;margin-bottom:24px"><input type="text" id="urlInput" placeholder="https://example.com/video.mp4 or Vimeo URL" style="flex:1;background:#111118;border:1px solid #27272a;border-radius:10px;padding:14px 16px;color:#e4e4e7;font-size:14px;outline:none"><button onclick="urlSelected()" style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:13px;font-weight:600;cursor:pointer">Use URL</button></div>
-<div class="modes" id="modes"><div class="mode sel" data-mode="observe" onclick="selMode(this)"><div class="icon">👁</div><div class="name">OBSERVE</div></div><div class="mode" data-mode="learn" onclick="selMode(this)"><div class="icon">🧠</div><div class="name">LEARN</div></div><div class="mode" data-mode="analyse" onclick="selMode(this)"><div class="icon">🔍</div><div class="name">ANALYSE</div></div><div class="mode" data-mode="monitor" onclick="selMode(this)"><div class="icon">🛡</div><div class="name">MONITOR</div></div><div class="mode" data-mode="extract" onclick="selMode(this)"><div class="icon">📋</div><div class="name">EXTRACT</div></div></div>
-<button class="run-btn" id="runbtn" onclick="runAgent()" disabled>Select a video to start</button>
-<button onclick="useDemo()" style="width:100%;background:#111118;border:1px solid #27272a;border-radius:12px;padding:12px;font-size:13px;color:#a1a1aa;cursor:pointer;margin-bottom:24px">Or use demo video (already on server — instant)</button>
-<div class="status" id="status"></div>
-<div class="results" id="results"></div>
+<!-- Tabs -->
+<div class="tabs">
+<div class="tab active" onclick="switchTab('analyse')">🎬 Analyse</div>
+<div class="tab" onclick="switchTab('knowledge')">🧠 Knowledge</div>
+<div class="tab" onclick="switchTab('ask')">💬 Ask Agent</div>
 </div>
-<footer>Powered by <a href="https://tbn.hardinai.co.uk">TBN Protocol</a> — Trust Infrastructure for AI Agents | 2026 Hardin Enterprises Ltd</footer></body></html>
+
+<!-- ═══ ANALYSE PANEL ═══ -->
+<div class="panel active" id="panel-analyse">
+<div class="upload-zone" id="dropzone" onclick="document.getElementById('fileinput').click()">
+<div style="font-size:32px;margin-bottom:8px">📹</div>
+<h3 style="font-size:16px;margin-bottom:6px">Drop video here or click to upload</h3>
+<p style="color:#71717a;font-size:13px">MP4, MOV, WebM — max 200MB</p>
+<input type="file" id="fileinput" accept="video/*" onchange="fileSelected(this)" style="display:none">
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+<div style="flex:1;height:1px;background:#27272a"></div>
+<span style="color:#52525b;font-size:12px">OR paste a URL (YouTube, Instagram, Vimeo, any video link)</span>
+<div style="flex:1;height:1px;background:#27272a"></div>
+</div>
+
+<div style="display:flex;gap:8px;margin-bottom:20px">
+<input type="text" id="urlInput" placeholder="https://youtube.com/watch?v=... or any video URL" style="flex:1;background:#111118;border:1px solid #27272a;border-radius:10px;padding:12px 16px;color:#e4e4e7;font-size:14px;outline:none">
+<button onclick="urlSelected()" style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer">Use URL</button>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px" id="modes">
+<div class="mode sel" data-mode="observe" onclick="selMode(this)"><div style="font-size:18px">👁</div><div style="font-size:11px;font-weight:600;color:#a78bfa;margin-top:4px">OBSERVE</div></div>
+<div class="mode" data-mode="learn" onclick="selMode(this)"><div style="font-size:18px">🧠</div><div style="font-size:11px;font-weight:600;color:#a1a1aa;margin-top:4px">LEARN</div></div>
+<div class="mode" data-mode="analyse" onclick="selMode(this)"><div style="font-size:18px">🔍</div><div style="font-size:11px;font-weight:600;color:#a1a1aa;margin-top:4px">ANALYSE</div></div>
+<div class="mode" data-mode="monitor" onclick="selMode(this)"><div style="font-size:18px">🛡</div><div style="font-size:11px;font-weight:600;color:#a1a1aa;margin-top:4px">MONITOR</div></div>
+<div class="mode" data-mode="extract" onclick="selMode(this)"><div style="font-size:18px">📋</div><div style="font-size:11px;font-weight:600;color:#a1a1aa;margin-top:4px">EXTRACT</div></div>
+</div>
+
+<button class="run-btn" id="runbtn" onclick="runAgent()" disabled>Select a video to start</button>
+<button onclick="useDemo()" style="width:100%;background:#111118;border:1px solid #27272a;border-radius:10px;padding:10px;font-size:13px;color:#71717a;cursor:pointer;margin-bottom:20px">Use demo video (instant)</button>
+
+<div id="status" style="display:none"></div>
+<div id="results"></div>
+</div>
+
+<!-- ═══ KNOWLEDGE PANEL ═══ -->
+<div class="panel" id="panel-knowledge">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+<div><h2 style="font-size:20px;font-weight:700">Agent Knowledge</h2><p style="color:#71717a;font-size:13px;margin-top:4px">Everything the agent has learned from videos</p></div>
+<button onclick="loadMemory()" style="background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer">Refresh</button>
+</div>
+
+<!-- Stats cards -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px" id="stats-cards">
+<div style="background:#111118;border:1px solid #27272a;border-radius:12px;padding:16px;text-align:center">
+<div style="font-size:28px;font-weight:800;color:#7c3aed" id="stat-videos">0</div>
+<div style="font-size:11px;color:#71717a;margin-top:4px">Videos Watched</div>
+</div>
+<div style="background:#111118;border:1px solid #27272a;border-radius:12px;padding:16px;text-align:center">
+<div style="font-size:28px;font-weight:800;color:#4ade80" id="stat-entities">0</div>
+<div style="font-size:11px;color:#71717a;margin-top:4px">Entities Known</div>
+</div>
+<div style="background:#111118;border:1px solid #27272a;border-radius:12px;padding:16px;text-align:center">
+<div style="font-size:28px;font-weight:800;color:#fbbf24" id="stat-facts">0</div>
+<div style="font-size:11px;color:#71717a;margin-top:4px">Facts Stored</div>
+</div>
+</div>
+
+<!-- Entity type filter -->
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="type-filters">
+<button class="filter-btn active" onclick="filterEntities('')">All</button>
+<button class="filter-btn" onclick="filterEntities('person')">👤 People</button>
+<button class="filter-btn" onclick="filterEntities('company')">🏢 Companies</button>
+<button class="filter-btn" onclick="filterEntities('brand')">🏷 Brands</button>
+<button class="filter-btn" onclick="filterEntities('organisation')">🏛 Organisations</button>
+<button class="filter-btn" onclick="filterEntities('podcast')">🎙 Podcasts</button>
+<button class="filter-btn" onclick="filterEntities('university')">🎓 Universities</button>
+<button class="filter-btn" onclick="filterEntities('location')">📍 Locations</button>
+<button class="filter-btn" onclick="filterEntities('product')">📦 Products</button>
+</div>
+
+<!-- Entity list -->
+<div id="entity-list" style="display:grid;gap:8px"></div>
+</div>
+
+<!-- ═══ ASK PANEL ═══ -->
+<div class="panel" id="panel-ask">
+<h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Ask the Agent</h2>
+<p style="color:#71717a;font-size:13px;margin-bottom:24px">Ask anything about what the agent has learned from videos</p>
+
+<div style="display:flex;gap:8px;margin-bottom:24px">
+<input type="text" id="askInput" placeholder="Who is Burhan Yanbolu? / What companies work in AI? / What did the speaker say about..." style="flex:1;background:#111118;border:1px solid #27272a;border-radius:10px;padding:14px 16px;color:#e4e4e7;font-size:14px;outline:none" onkeydown="if(event.key==='Enter')askAgent()">
+<button onclick="askAgent()" id="askBtn" style="background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:14px 24px;font-size:14px;font-weight:600;cursor:pointer">Ask</button>
+</div>
+
+<!-- Quick questions -->
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px">
+<button class="quick-q" onclick="quickAsk('Who is Burhan?')">Who is Burhan?</button>
+<button class="quick-q" onclick="quickAsk('What companies have been mentioned?')">Companies mentioned</button>
+<button class="quick-q" onclick="quickAsk('What topics have been discussed?')">Topics discussed</button>
+<button class="quick-q" onclick="quickAsk('Summarise everything you know')">Summarise all</button>
+</div>
+
+<div id="ask-result" style="display:none"></div>
+<div id="ask-history" style="display:grid;gap:12px"></div>
+</div>
+
+</div><!-- end .cnt -->
+<footer style="text-align:center;padding:32px;font-size:11px;color:#52525b;border-top:1px solid #27272a;margin-top:48px">Powered by <a href="https://tbn.hardinai.co.uk" style="color:#7c3aed;text-decoration:none">TBN Protocol</a> — Trust Infrastructure for AI Agents | 2026 Hardin Enterprises Ltd</footer>
+
+<style>
+/* Additional styles */
+.upload-zone:hover{border-color:#7c3aed;background:#7c3aed08}
+.upload-zone.active{border-color:#4ade80;background:#4ade8008}
+.mode{background:#111118;border:1px solid #27272a;border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:all 0.2s}
+.mode:hover{border-color:#7c3aed}.mode.sel{border-color:#7c3aed;background:#7c3aed15}
+.run-btn{width:100%;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;transition:all 0.2s}
+.run-btn:hover{box-shadow:0 8px 32px rgba(124,58,237,0.4)}.run-btn:disabled{opacity:0.4;cursor:not-allowed}
+.filter-btn{background:#111118;border:1px solid #27272a;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;color:#a1a1aa;cursor:pointer;transition:all 0.2s}
+.filter-btn:hover{border-color:#7c3aed;color:#a78bfa}.filter-btn.active{background:#7c3aed22;border-color:#7c3aed;color:#a78bfa}
+.quick-q{background:#111118;border:1px solid #27272a;border-radius:8px;padding:8px 14px;font-size:12px;color:#a1a1aa;cursor:pointer;transition:all 0.2s}
+.quick-q:hover{border-color:#7c3aed;color:#a78bfa}
+.entity-card{background:#111118;border:1px solid #27272a;border-radius:10px;padding:14px;transition:all 0.2s;cursor:pointer}
+.entity-card:hover{border-color:#7c3aed}
+.result-card{background:#111118;border:1px solid #27272a;border-radius:12px;padding:16px;margin-bottom:12px}
+.result-card h3{font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:8px}
+.result-card p{font-size:13px;color:#a1a1aa;line-height:1.6}
+.receipt{background:#0f1a0f;border:1px solid #22c55e44;border-radius:12px;padding:14px;margin-top:12px}
+.receipt h3{color:#4ade80;font-size:12px;margin-bottom:6px}
+.receipt .field{display:flex;justify-content:space-between;padding:3px 0;font-size:11px}
+.receipt .field .k{color:#71717a}.receipt .field .v{color:#e4e4e7;font-family:monospace;font-size:10px}
+.tag{background:#7c3aed22;color:#a78bfa;padding:2px 8px;border-radius:10px;font-size:10px;display:inline-block;margin:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+
 <script>
+// ═══ TAB SWITCHING ═══
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+  event.target.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='knowledge') loadMemory();
+}
+
+// ═══ ANALYSE TAB ═══
 var selectedFile=null,selectedMode='observe',useUrl=false,videoUrl='';
-var MODES={observe:'Describe what is physically happening in this video - people, actions, environment, objects, movements. Also analyse the audio content - what is being said.',learn:'Extract all knowledge and information being communicated in this video - topics discussed, facts stated, expertise shared, conclusions drawn. Transcribe and summarise what the speaker is saying.',analyse:'Critically analyse this video content - quality of arguments, accuracy of claims, sentiment, target audience, what is missing. Include analysis of speech content.',monitor:'Assess this video for safety, compliance, and governance concerns - flag any risks, violations, or issues. Check for signs of deepfake, AI-generated audio, or dubbed content.',extract:'Extract specific data from this video - names mentioned, numbers, action items, decisions, key quotes, timestamps of events. Provide full transcript.'};
-function selMode(el){document.querySelectorAll('.mode').forEach(function(m){m.classList.remove('sel')});el.classList.add('sel');selectedMode=el.dataset.mode;if(selectedFile||useUrl)document.getElementById('runbtn').textContent='Run Video Agent ('+selectedMode.toUpperCase()+' mode)';}
-function fileSelected(input){if(input.files&&input.files[0]){selectedFile=input.files[0];useUrl=false;var dz=document.getElementById('dropzone');dz.classList.add('active');dz.querySelector('h3').textContent=selectedFile.name;dz.querySelector('p').textContent=Math.round(selectedFile.size/1024/1024)+'MB - Ready';document.getElementById('runbtn').disabled=false;document.getElementById('runbtn').textContent='Run Video Agent ('+selectedMode.toUpperCase()+' mode)';}}
-function urlSelected(){var url=document.getElementById('urlInput').value.trim();if(!url){alert('Enter a video URL');return;}videoUrl=url;useUrl=true;selectedFile=null;var dz=document.getElementById('dropzone');dz.classList.add('active');dz.querySelector('h3').textContent='URL: '+url.substring(0,50)+'...';dz.querySelector('p').textContent='Will download from URL';document.getElementById('runbtn').disabled=false;document.getElementById('runbtn').textContent='Run Video Agent ('+selectedMode.toUpperCase()+' mode)';}
-function useDemo(){useUrl=true;videoUrl='DEMO';selectedFile=null;var dz=document.getElementById('dropzone');dz.classList.add('active');dz.querySelector('h3').textContent='Demo Video (on server)';dz.querySelector('p').textContent='No upload needed - instant processing';document.getElementById('runbtn').disabled=false;document.getElementById('runbtn').textContent='Run Video Agent ('+selectedMode.toUpperCase()+' mode)';}
-function runAgent(){var btn=document.getElementById('runbtn');btn.disabled=true;btn.textContent='Processing...';var status=document.getElementById('status');status.className='status show';status.innerHTML='<div class="step active"><div class="dot"></div>Uploading video...</div>';var formData=new FormData();if(useUrl){formData.append('url',videoUrl);}else if(selectedFile){formData.append('video',selectedFile);}formData.append('mode',selectedMode);formData.append('task',MODES[selectedMode]);var xhr=new XMLHttpRequest();xhr.upload.onprogress=function(e){if(e.lengthComputable){var pct=Math.round(e.loaded/e.total*100);status.innerHTML='<div class="step active"><div class="dot"></div>Uploading... '+pct+'%</div>';}};xhr.onload=function(){if(xhr.status===200){var data=JSON.parse(xhr.responseText);if(data.success){showResults(data);}else{status.innerHTML='<div class="step"><div class="dot" style="background:#f87171"></div>Error: '+data.error+'</div>';btn.disabled=false;btn.textContent='Retry';}}else{status.innerHTML='<div class="step"><div class="dot" style="background:#f87171"></div>Server error ('+xhr.status+')</div>';btn.disabled=false;btn.textContent='Retry';}};xhr.onerror=function(){status.innerHTML='<div class="step"><div class="dot" style="background:#f87171"></div>Connection error</div>';btn.disabled=false;btn.textContent='Retry';};xhr.open('POST','/api/video-agent/process');xhr.send(formData);}
-function showResults(data){var status=document.getElementById('status');status.innerHTML='<div class="step done"><div class="dot"></div>Video uploaded</div><div class="step done"><div class="dot"></div>'+data.frames_extracted+' frames extracted</div><div class="step done"><div class="dot"></div>Gemini analysis complete ('+selectedMode.toUpperCase()+' mode)</div><div class="step done"><div class="dot"></div>TBN governance applied</div><div class="step done"><div class="dot"></div>Action executed</div>';var r=document.getElementById('results');r.className='results show';var u=data.understanding||{};var receipt=data.receipt||{};var eventsHtml=(u.events||[]).map(function(e){return '<li>'+e+'</li>'}).join('');var objectsHtml=(u.objects||[]).map(function(o){return '<span class="tag">'+o+'</span>'}).join('');var risksHtml=(u.risks||[]).map(function(r){return '<li>'+r+'</li>'}).join('');r.innerHTML='<div class="result-card"><h3>Video Understanding ('+selectedMode.toUpperCase()+' Mode)</h3><p class="val">'+( u.summary||'No summary')+'</p></div>'+(u.transcript_summary?'<div class="result-card"><h3>What Was Said (Audio)</h3><p class="val">'+u.transcript_summary+'</p></div>':'')+(eventsHtml?'<div class="result-card"><h3>Events Detected</h3><ul style="font-size:13px;color:#a1a1aa;padding-left:16px;line-height:2">'+eventsHtml+'</ul></div>':'')+(objectsHtml?'<div class="result-card"><h3>Objects / Elements</h3><div class="tags">'+objectsHtml+'</div></div>':'')+'<div class="result-card"><h3>Context</h3><p>'+(u.context||'Not determined')+'</p></div>'+(risksHtml?'<div class="result-card"><h3>Risks / Concerns</h3><ul style="font-size:13px;color:#f87171;padding-left:16px;line-height:2">'+risksHtml+'</ul></div>':'')+'<div class="result-card"><h3>Recommended Action</h3><p class="val">'+(u.recommended_action||'None')+'</p><p style="margin-top:8px;font-size:12px;color:#71717a">Confidence: '+(u.confidence||0)*100+'%</p></div><div class="receipt"><h3>TBN Governance Receipt</h3><div class="field"><span class="k">Receipt ID</span><span class="v">'+(receipt.receipt_id||'')+'</span></div><div class="field"><span class="k">Decision</span><span class="v" style="color:'+(receipt.decision==='ALLOWED'?'#4ade80':'#f87171')+'">'+(receipt.decision||'')+'</span></div><div class="field"><span class="k">Risk Score</span><span class="v">'+(receipt.risk_score||0)+'/100</span></div><div class="field"><span class="k">Governed By</span><span class="v">'+(receipt.governed_by||'TBN Protocol')+'</span></div><div class="field"><span class="k">Hash</span><span class="v">'+(receipt.decision_hash||'').substring(0,40)+'...</span></div><div class="field"><span class="k">Timestamp</span><span class="v">'+(receipt.timestamp||'')+'</span></div></div>';document.getElementById('runbtn').disabled=false;document.getElementById('runbtn').textContent='Run Again';}
+var MODES={observe:'Describe what is physically happening in this video.',learn:'Extract all knowledge and information from this video.',analyse:'Critically analyse this video content.',monitor:'Assess this video for safety and compliance concerns.',extract:'Extract specific data — names, numbers, quotes, transcript.'};
+
+function selMode(el){
+  document.querySelectorAll('.mode').forEach(function(m){m.classList.remove('sel');m.querySelector('div:last-child').style.color='#a1a1aa'});
+  el.classList.add('sel');el.querySelector('div:last-child').style.color='#a78bfa';
+  selectedMode=el.dataset.mode;
+  if(selectedFile||useUrl)document.getElementById('runbtn').textContent='Run Agent ('+selectedMode.toUpperCase()+')';
+}
+function fileSelected(input){
+  if(input.files&&input.files[0]){selectedFile=input.files[0];useUrl=false;
+  var dz=document.getElementById('dropzone');dz.classList.add('active');
+  dz.querySelector('h3').textContent=selectedFile.name;
+  dz.querySelector('p').textContent=Math.round(selectedFile.size/1024/1024)+'MB';
+  document.getElementById('runbtn').disabled=false;
+  document.getElementById('runbtn').textContent='Run Agent ('+selectedMode.toUpperCase()+')';}
+}
+function urlSelected(){
+  var url=document.getElementById('urlInput').value.trim();if(!url){alert('Enter a URL');return;}
+  videoUrl=url;useUrl=true;selectedFile=null;
+  var dz=document.getElementById('dropzone');dz.classList.add('active');
+  dz.querySelector('h3').textContent=url.length>50?url.substring(0,50)+'...':url;
+  dz.querySelector('p').textContent='Will download from URL';
+  document.getElementById('runbtn').disabled=false;
+  document.getElementById('runbtn').textContent='Run Agent ('+selectedMode.toUpperCase()+')';
+}
+function useDemo(){
+  useUrl=true;videoUrl='DEMO';selectedFile=null;
+  var dz=document.getElementById('dropzone');dz.classList.add('active');
+  dz.querySelector('h3').textContent='Demo Video (on server)';
+  dz.querySelector('p').textContent='Instant processing';
+  document.getElementById('runbtn').disabled=false;
+  document.getElementById('runbtn').textContent='Run Agent ('+selectedMode.toUpperCase()+')';
+}
+
+function runAgent(){
+  var btn=document.getElementById('runbtn');btn.disabled=true;btn.textContent='Processing...';
+  var status=document.getElementById('status');status.style.display='block';
+  status.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:12px;background:#111118;border:1px solid #27272a;border-radius:10px"><div style="width:8px;height:8px;border-radius:50%;background:#fbbf24;animation:pulse 1s infinite"></div><span style="font-size:13px">Downloading & analysing video...</span></div>';
+  var formData=new FormData();
+  if(useUrl){formData.append('url',videoUrl);}else if(selectedFile){formData.append('video',selectedFile);}
+  formData.append('mode',selectedMode);formData.append('task',MODES[selectedMode]);
+  var xhr=new XMLHttpRequest();
+  xhr.upload.onprogress=function(e){if(e.lengthComputable){var pct=Math.round(e.loaded/e.total*100);status.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:12px;background:#111118;border:1px solid #27272a;border-radius:10px"><div style="width:8px;height:8px;border-radius:50%;background:#fbbf24;animation:pulse 1s infinite"></div><span style="font-size:13px">Uploading... '+pct+'%</span></div>';}};
+  xhr.onload=function(){
+    if(xhr.status===200){var data=JSON.parse(xhr.responseText);if(data.success){showResults(data);}else{status.innerHTML='<div style="padding:12px;background:#1a0f0f;border:1px solid #f8717144;border-radius:10px;font-size:13px;color:#f87171">Error: '+data.error+'</div>';btn.disabled=false;btn.textContent='Retry';}}
+    else{status.innerHTML='<div style="padding:12px;background:#1a0f0f;border:1px solid #f8717144;border-radius:10px;font-size:13px;color:#f87171">Server error ('+xhr.status+')</div>';btn.disabled=false;btn.textContent='Retry';}
+  };
+  xhr.onerror=function(){status.innerHTML='<div style="padding:12px;background:#1a0f0f;border:1px solid #f8717144;border-radius:10px;font-size:13px;color:#f87171">Connection error</div>';btn.disabled=false;btn.textContent='Retry';};
+  xhr.open('POST','/api/video-agent/process');xhr.send(formData);
+}
+
+function showResults(data){
+  var status=document.getElementById('status');
+  status.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:12px;background:#0f1a0f;border:1px solid #4ade8044;border-radius:10px"><div style="width:8px;height:8px;border-radius:50%;background:#4ade80"></div><span style="font-size:13px;color:#4ade80">Done — '+data.frames_extracted+' frames analysed, knowledge stored ✓</span></div>';
+  var u=data.understanding||{};var receipt=data.receipt||{};
+  var r=document.getElementById('results');
+  var html='<div class="result-card"><h3>Summary ('+selectedMode.toUpperCase()+')</h3><p style="color:#e4e4e7">'+(u.summary||'No summary')+'</p></div>';
+  if(u.transcript_summary) html+='<div class="result-card"><h3>🎤 What Was Said</h3><p style="color:#e4e4e7">'+u.transcript_summary+'</p></div>';
+  if(u.events&&u.events.length) html+='<div class="result-card"><h3>Events</h3><ul style="font-size:13px;color:#a1a1aa;padding-left:16px;line-height:2">'+u.events.map(function(e){return '<li>'+e+'</li>'}).join('')+'</ul></div>';
+  if(u.objects&&u.objects.length) html+='<div class="result-card"><h3>Objects / Elements</h3><div>'+u.objects.map(function(o){return '<span class="tag">'+o+'</span>'}).join('')+'</div></div>';
+  if(u.entities){
+    var entHtml='';
+    for(var type in u.entities){if(u.entities[type]&&u.entities[type].length){entHtml+='<div style="margin-bottom:8px"><span style="font-size:11px;color:#71717a;text-transform:uppercase">'+type+':</span> ';u.entities[type].forEach(function(e){var n=typeof e==='string'?e:e.name;entHtml+='<span class="tag">'+n+'</span>';});entHtml+='</div>';}}
+    if(entHtml) html+='<div class="result-card"><h3>🏷 Entities Extracted</h3>'+entHtml+'</div>';
+  }
+  if(u.risks&&u.risks.length) html+='<div class="result-card"><h3>⚠️ Risks</h3><ul style="font-size:13px;color:#f87171;padding-left:16px;line-height:2">'+u.risks.map(function(r){return '<li>'+r+'</li>'}).join('')+'</ul></div>';
+  html+='<div class="receipt"><h3>🔐 TBN Governance Receipt</h3>';
+  html+='<div class="field"><span class="k">Receipt</span><span class="v">'+(receipt.receipt_id||'')+'</span></div>';
+  html+='<div class="field"><span class="k">Decision</span><span class="v" style="color:'+(receipt.decision==='ALLOWED'?'#4ade80':'#f87171')+'">'+(receipt.decision||'')+'</span></div>';
+  html+='<div class="field"><span class="k">Risk</span><span class="v">'+(receipt.risk_score||0)+'/100</span></div>';
+  html+='<div class="field"><span class="k">Hash</span><span class="v">'+(receipt.decision_hash||'').substring(0,40)+'...</span></div>';
+  html+='<div class="field"><span class="k">Time</span><span class="v">'+(receipt.timestamp||'')+'</span></div></div>';
+  r.innerHTML=html;
+  document.getElementById('runbtn').disabled=false;document.getElementById('runbtn').textContent='Run Again';
+}
+
+// ═══ KNOWLEDGE TAB ═══
+var allEntities=[];
+function loadMemory(){
+  fetch('/api/video-agent/memory').then(function(r){return r.json()}).then(function(data){
+    document.getElementById('stat-videos').textContent=data.total_videos_watched||0;
+    document.getElementById('stat-entities').textContent=data.total_entities_known||0;
+    document.getElementById('stat-facts').textContent=data.total_facts_stored||0;
+    // Load entities
+    fetch('/api/video-agent/entities').then(function(r){return r.json()}).then(function(edata){
+      allEntities=edata.entities||[];
+      renderEntities(allEntities);
+    });
+  });
+}
+function filterEntities(type){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  if(!type){renderEntities(allEntities);}
+  else{renderEntities(allEntities.filter(function(e){return e.type===type}));}
+}
+function renderEntities(list){
+  var el=document.getElementById('entity-list');
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#52525b">No entities yet. Analyse some videos to build knowledge.</div>';return;}
+  var typeIcons={person:'👤',company:'🏢',brand:'🏷',organisation:'🏛',podcast:'🎙',university:'🎓',location:'📍',product:'📦',influencer:'⭐',channel:'📺'};
+  el.innerHTML=list.map(function(e){
+    return '<div class="entity-card" onclick="showEntity(\''+e.name+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="margin-right:6px">'+(typeIcons[e.type]||'📌')+'</span><span style="font-weight:600;font-size:14px">'+e.name+'</span><span class="tag" style="margin-left:8px">'+e.type+'</span></div><span style="color:#71717a;font-size:12px">'+e.mentions+' mention'+(e.mentions>1?'s':'')+'</span></div></div>';
+  }).join('');
+}
+function showEntity(name){
+  fetch('/api/video-agent/entity/'+encodeURIComponent(name)).then(function(r){return r.json()}).then(function(data){
+    if(data.error){alert(data.error);return;}
+    var facts=data.facts||[];
+    var html='<div class="result-card" style="margin-bottom:16px"><h3>'+data.name+' ('+data.type+')</h3>';
+    if(data.description) html+='<p style="color:#e4e4e7;margin-bottom:8px">'+data.description+'</p>';
+    html+='<p style="font-size:12px;color:#71717a">Mentioned '+data.mentions+' times | First seen: '+(data.first_seen||'').split('T')[0]+'</p>';
+    if(facts.length){html+='<ul style="margin-top:10px;font-size:13px;color:#a1a1aa;padding-left:16px;line-height:1.8">';facts.slice(0,15).forEach(function(f){html+='<li>'+f+'</li>';});html+='</ul>';}
+    html+='</div>';
+    document.getElementById('entity-list').innerHTML=html+'<button onclick="loadMemory()" style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:8px 16px;font-size:12px;color:#a1a1aa;cursor:pointer">← Back to all entities</button>';
+  });
+}
+
+// ═══ ASK TAB ═══
+function quickAsk(q){document.getElementById('askInput').value=q;askAgent();}
+function askAgent(){
+  var q=document.getElementById('askInput').value.trim();if(!q)return;
+  var btn=document.getElementById('askBtn');btn.disabled=true;btn.textContent='Thinking...';
+  var resultDiv=document.getElementById('ask-result');
+  resultDiv.style.display='block';
+  resultDiv.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:16px;background:#111118;border:1px solid #27272a;border-radius:10px"><div style="width:8px;height:8px;border-radius:50%;background:#fbbf24;animation:pulse 1s infinite"></div><span style="font-size:13px">Searching knowledge & thinking...</span></div>';
+  var formData=new FormData();formData.append('question',q);
+  fetch('/api/video-agent/ask',{method:'POST',body:formData}).then(function(r){return r.json()}).then(function(data){
+    var html='<div class="result-card"><h3>💬 '+q+'</h3><p style="color:#e4e4e7;white-space:pre-wrap;line-height:1.7">'+data.answer+'</p>';
+    html+='<div style="margin-top:12px;padding-top:10px;border-top:1px solid #27272a;font-size:11px;color:#71717a">';
+    html+='Sources: '+data.sources_used+' videos';
+    if(data.entities_referenced&&data.entities_referenced.length) html+=' | Entities: '+data.entities_referenced.join(', ');
+    html+='</div></div>';
+    resultDiv.innerHTML=html;
+    btn.disabled=false;btn.textContent='Ask';
+  }).catch(function(e){
+    resultDiv.innerHTML='<div style="padding:12px;background:#1a0f0f;border:1px solid #f8717144;border-radius:10px;font-size:13px;color:#f87171">Error: '+e.message+'</div>';
+    btn.disabled=false;btn.textContent='Ask';
+  });
+}
 </script>
+</body></html>
