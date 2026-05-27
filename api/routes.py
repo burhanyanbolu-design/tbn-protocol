@@ -1950,3 +1950,11 @@ def verify_public():
         "mfc_all_passed": mfc_all_passed,
         "frameworks": ["EU AI Act Art. 9", "EU AI Act Art. 14", "EU AI Act Art. 61", "UK GDPR"],
     })
+
+
+# ── GET /video-agent — Video Agent UI page ───────────────────────────
+@api.route("/video-agent", methods=["GET"])
+def video_agent_page():
+    """Serve the TBN Video Agent UI"""
+    from flask import render_template
+    return render_template("video_agent.html")

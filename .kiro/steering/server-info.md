@@ -14,6 +14,7 @@
 | hardinai.co.uk | Open WebUI (Docker) | 8080 | Docker container: hardin-ai |
 | tbn.hardinai.co.uk | TBN Protocol (Flask/Gunicorn) | 5004 | /opt/tbn-protocol |
 | blog.hardinai.co.uk | Static blog (Nginx) | 80/443 | /var/www/blog |
+| net.hardinai.co.uk | TBN Agent Network (basic auth) | 8200 | /opt/tbn-agent-network |
 | lgmd.hardinai.co.uk | LGMD Research Agent | unknown | /home/ubuntu/lgmd-research-agent |
 | ai.hardinai.co.uk | AI service | unknown | unknown |
 

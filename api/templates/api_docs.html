@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Protocol — Verifiable Intelligence API</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#1a1a2e,#0f0f1a);border-bottom:1px solid #27272a;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}
+.hdr h1{font-size:18px;font-weight:700}.hdr h1 b{color:#7c3aed}
+.cnt{max-width:900px;margin:0 auto;padding:48px 24px}
+h2{font-size:22px;font-weight:800;margin:40px 0 8px;color:#e4e4e7}
+h3{font-size:16px;font-weight:700;margin:24px 0 8px;color:#a78bfa}
+p{font-size:14px;color:#a1a1aa;line-height:1.7;margin-bottom:12px}
+.hero{text-align:center;margin-bottom:48px}
+.hero h1{font-size:32px;font-weight:800;margin-bottom:12px}.hero h1 b{color:#7c3aed}
+.hero p{font-size:16px;color:#a1a1aa;max-width:600px;margin:0 auto}
+</style></head><body>
+<div class="hdr"><h1><b>TBN</b> Protocol API</h1><a href="/video-agent" style="color:#a78bfa;text-decoration:none;font-size:13px">Video Agent →</a></div>
+<div class="cnt">
+<div class="hero">
+<h1>Verifiable <b>Intelligence</b> Protocol</h1>
+<p>Cryptographic proof for every AI observation. Every output is auditable, untampered, and institutionally trusted.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:12px;padding:20px;margin-bottom:32px">
+<h3 style="margin-top:0;color:#4ade80">What is Proof of Processing?</h3>
+<p>TBN receipts certify that a specific AI observation <strong>occurred</strong> under governance. They prove:</p>
+<ul style="font-size:13px;color:#a1a1aa;padding-left:20px;line-height:2">
+<li><strong>WHAT</strong> was processed (video hash, source URL, file size)</li>
+<li><strong>WHEN</strong> it was processed (ISO timestamp)</li>
+<li><strong>HOW</strong> it was processed (model, mode, parameters)</li>
+<li><strong>WHAT</strong> was observed (claims with individual confidence scores)</li>
+<li><strong>WHO</strong> governed it (TBN Protocol, agent ID, decision hash)</li>
+</ul>
+<p style="margin-bottom:0;color:#fbbf24;font-size:12px;margin-top:12px">⚠️ Receipts are Proof of Processing, not Proof of Truth. AI confidence scores indicate probabilistic accuracy.</p>
+</div>
+
+<h2>Core Endpoints</h2>
+
+<h3>1. Process a Video</h3>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4ade80">POST /api/video-agent/process</code>
+<p style="margin-top:8px;margin-bottom:8px">Submit a video for analysis. Returns structured intelligence + verifiable receipt.</p>
+<p style="font-size:12px;color:#71717a;margin-bottom:4px"><strong>Parameters (multipart form):</strong></p>
+<ul style="font-size:12px;color:#a1a1aa;padding-left:16px;line-height:2;font-family:'JetBrains Mono',monospace">
+<li>video — file upload (MP4/MOV/WebM, max 200MB)</li>
+<li>url — OR a video URL (YouTube, Vimeo, any link)</li>
+<li>mode — observe | learn | analyse | monitor | extract</li>
+</ul>
+</div>
+
+<h3>2. Verify a Receipt</h3>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4ade80">GET /api/verify/receipt/{receipt_id}</code>
+<p style="margin-top:8px;margin-bottom:8px">Publicly verify any TBN receipt. No API key required. Returns integrity status + full receipt data.</p>
+<p style="font-size:12px;color:#71717a">Third parties use this to confirm a receipt is authentic and untampered.</p>
+</div>
+
+<h3>3. Ask the Agent</h3>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4ade80">POST /api/video-agent/ask</code>
+<p style="margin-top:8px;margin-bottom:8px">Query the agent's knowledge. It synthesises answers from all videos it has observed.</p>
+<p style="font-size:12px;color:#71717a;margin-bottom:4px"><strong>Body:</strong></p>
+<code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#a1a1aa">{"question": "Who is [person]? What does [company] do?"}</code>
+</div>
+
+<h3>4. Knowledge Memory</h3>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4ade80">GET /api/video-agent/memory</code>
+<p style="margin-top:8px;margin-bottom:0">Stats: total videos watched, entities known, facts stored, breakdown by type.</p>
+</div>
+
+<h3>5. List Entities</h3>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4ade80">GET /api/video-agent/entities?type=company</code>
+<p style="margin-top:8px;margin-bottom:0">All known entities. Filter by: person, company, brand, organisation, podcast, university, location, product.</p>
+</div>
+
+<h3>6. List All Receipts</h3>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#4ade80">GET /api/verify/receipts</code>
+<p style="margin-top:8px;margin-bottom:0">Summary of all issued receipts. Audit trail for compliance.</p>
+</div>
+
+<h2>Integration Example</h2>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<p style="font-size:12px;color:#71717a;margin-bottom:8px"><strong>Python — Process a video and verify the receipt:</strong></p>
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#a1a1aa;line-height:1.8;overflow-x:auto"><code>import requests
+
+# 1. Submit a video for governed analysis
+resp = requests.post("https://tbn.hardinai.co.uk/api/video-agent/process",
+    data={"url": "https://youtube.com/watch?v=...", "mode": "observe"})
+result = resp.json()
+receipt_id = result["receipt"]["receipt_id"]
+
+# 2. Verify the receipt (any third party can do this)
+verify = requests.get(f"https://tbn.hardinai.co.uk/api/verify/receipt/{receipt_id}")
+proof = verify.json()
+
+assert proof["verified"] == True
+assert proof["proof_type"] == "PROCESSING"
+assert proof["hash_integrity"] == "VALID"
+assert proof["signature_integrity"] == "VALID"
+
+# 3. Ask the agent what it learned
+answer = requests.post("https://tbn.hardinai.co.uk/api/video-agent/ask",
+    json={"question": "What was discussed in the video?"})
+print(answer.json()["answer"])</code></pre>
+</div>
+
+<h2>Receipt Structure (v2)</h2>
+<div style="background:#111118;border:1px solid #27272a;border-radius:8px;padding:16px;margin-bottom:16px">
+<pre style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#a1a1aa;line-height:1.7;overflow-x:auto"><code>{
+  "receipt_id": "tbn_vr_a1b2c3d4e5f6...",
+  "version": "2.0",
+  "proof_type": "PROCESSING",
+  "disclaimer": "This receipt certifies processing occurred, not accuracy...",
+  "timestamp": "2026-05-27T14:30:00Z",
+  "agent_id": "video-agent-001",
+  "decision": "ALLOWED",
+  "risk_score": 25,
+  "governed_by": "TBN Protocol v1.0 — Hardin Enterprises Ltd",
+  "provenance": {
+    "source_url": "https://youtube.com/watch?v=...",
+    "video_hash": "a1b2c3d4...",
+    "duration_seconds": 180,
+    "frames_analysed": 10,
+    "audio_transcribed": true
+  },
+  "processing": {
+    "model": "gemini-2.5-flash",
+    "mode": "observe",
+    "protocol_version": "TBN v1.0"
+  },
+  "claims": [
+    {"type": "summary", "content": "...", "confidence": 0.92},
+    {"type": "entity", "entity_type": "person", "name": "...", "confidence": 0.85}
+  ],
+  "decision_hash": "sha256:...",
+  "signature": "RSA-PSS-SHA256 base64...",
+  "verification_url": "https://tbn.hardinai.co.uk/api/verify/receipt/tbn_vr_..."
+}</code></pre>
+</div>
+
+<h2>Target Industries</h2>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:32px">
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:16px">
+<div style="font-size:18px;margin-bottom:6px">🏦</div>
+<h4 style="font-size:13px;font-weight:700;margin-bottom:4px">RegTech / Compliance</h4>
+<p style="font-size:12px;margin-bottom:0">Prove you monitored executive communications. Auditable AI surveillance with receipts.</p>
+</div>
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:16px">
+<div style="font-size:18px;margin-bottom:6px">⚖️</div>
+<h4 style="font-size:13px;font-weight:700;margin-bottom:4px">Legal Discovery</h4>
+<p style="font-size:12px;margin-bottom:0">Process video evidence with verifiable chain of custody. Every observation receipted.</p>
+</div>
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:16px">
+<div style="font-size:18px;margin-bottom:6px">🛡️</div>
+<h4 style="font-size:13px;font-weight:700;margin-bottom:4px">Intelligence / OSINT</h4>
+<p style="font-size:12px;margin-bottom:0">Automated video intelligence gathering with provenance. Know what was said, when, by whom.</p>
+</div>
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:16px">
+<div style="font-size:18px;margin-bottom:6px">🏥</div>
+<h4 style="font-size:13px;font-weight:700;margin-bottom:4px">Insurance Claims</h4>
+<p style="font-size:12px;margin-bottom:0">Verify video evidence authenticity. Deepfake detection + processing receipts for claims.</p>
+</div>
+</div>
+
+<div style="text-align:center;padding:32px;border-top:1px solid #27272a;margin-top:32px">
+<p style="font-size:13px;color:#71717a">TBN Protocol — Hardin Enterprises Ltd | <a href="mailto:burhan@hardinai.co.uk" style="color:#7c3aed;text-decoration:none">burhan@hardinai.co.uk</a></p>
+<p style="font-size:11px;color:#52525b;margin-top:4px">AGPL-3.0 | Commercial licensing available</p>
+</div>
+</div></body></html>

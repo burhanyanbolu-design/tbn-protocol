@@ -1,0 +1,10 @@
+[Unit]
+Description=TBN Video Agent — Instagram cookie maintenance
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/bin/python3 /opt/tbn-protocol/maintain_ig_cookies.py
+StandardOutput=append:/var/log/tbn/ig_maintenance.log
+StandardError=append:/var/log/tbn/ig_maintenance.log
