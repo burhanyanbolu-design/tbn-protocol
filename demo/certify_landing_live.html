@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Certify — AI Content Compliance Certification</title>
+<meta name="description" content="Scan your ads for AI-generated synthetic performers. 5 free checks every month, or £29 for small businesses & startups. Cryptographic compliance certificates for NY SB8420, CA SB942, EU AI Act Article 50. Documented proof of due diligence.">
+<meta name="keywords" content="AI content compliance, synthetic performer detection, NY SB8420, California SB942, EU AI Act Article 50, deepfake detection, AI-generated content, advertising compliance, AI disclosure law, synthetic performer disclosure, content certification, AI transparency, cryptographic certificate, compliance proof, advertising regulations 2026, AI content labeling, deepfake scanner, AI ad compliance, New York AI law, European AI Act, free AI ad check">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
+a{color:#7c3aed;text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Header */
+.header{background:linear-gradient(135deg,#0f0a1a,#1a0a2e);border-bottom:1px solid #27272a;padding:16px 0}
+.header .container{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:800;color:#fff}.logo b{color:#7c3aed}
+.nav{display:flex;gap:24px;align-items:center}
+.nav a{color:#a1a1aa;font-size:13px;font-weight:500}
+.nav a:hover{color:#fff}
+
+/* Hero */
+.hero{padding:80px 0 60px;text-align:center}
+.hero .badge{display:inline-block;background:#ef444422;color:#fca5a5;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:24px}
+.hero h1{font-size:48px;font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#fff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:18px;color:#a1a1aa;max-width:700px;margin:0 auto 40px;line-height:1.7}
+.hero .stat{display:inline-flex;gap:32px;margin-top:20px}
+.hero .stat div{text-align:center}
+.hero .stat .num{font-size:32px;font-weight:800;color:#ef4444}
+.hero .stat .label{font-size:12px;color:#71717a;margin-top:4px}
+
+/* Upload Section */
+.upload-section{padding:60px 0;border-top:1px solid #27272a}
+.upload-box{background:#111118;border:2px dashed #27272a;border-radius:16px;padding:60px 40px;text-align:center;cursor:pointer;transition:all 0.3s}
+.upload-box:hover{border-color:#7c3aed;background:#0f0a1a}
+.upload-box h3{font-size:20px;margin-bottom:8px}
+.upload-box p{color:#71717a;font-size:14px}
+.upload-box input{display:none}
+.or-divider{text-align:center;padding:20px 0;color:#52525b;font-size:13px}
+.url-input{display:flex;gap:8px}
+.url-input input{flex:1;background:#111118;border:1px solid #27272a;border-radius:10px;padding:14px 16px;color:#e4e4e7;font-size:14px;outline:none}
+.url-input input:focus{border-color:#7c3aed}
+.btn{background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:14px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn:hover{background:#6d28d9}
+.btn-red{background:#ef4444}.btn-red:hover{background:#dc2626}
+
+/* Results */
+.result-section{display:none;padding:40px 0}
+.cert-card{background:#0f1a0f;border:2px solid #22c55e44;border-radius:16px;padding:32px;margin-bottom:24px}
+.cert-card.fail{background:#1a0f0f;border-color:#ef444444}
+.cert-card.review{background:#1a1a0f;border-color:#eab30844}
+.cert-card h2{font-size:24px;margin-bottom:16px}
+.cert-card .status{font-size:14px;padding:6px 14px;border-radius:8px;display:inline-block;font-weight:700;margin-bottom:16px}
+.cert-card .status.compliant{background:#22c55e22;color:#4ade80}
+.cert-card .status.disclosure{background:#ef444422;color:#fca5a5}
+.cert-card .status.review{background:#eab30822;color:#fde047}
+.cert-fields{display:grid;gap:8px;margin-top:16px}
+.cert-field{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #27272a22;font-size:13px}
+.cert-field .k{color:#71717a}.cert-field .v{color:#e4e4e7;font-family:monospace;font-size:11px;max-width:400px;overflow:hidden;text-overflow:ellipsis}
+
+/* Pricing */
+.pricing{padding:80px 0;border-top:1px solid #27272a}
+.pricing h2{text-align:center;font-size:32px;font-weight:800;margin-bottom:12px}
+.pricing .sub{text-align:center;color:#71717a;font-size:14px;margin-bottom:48px}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+.price-card{background:#111118;border:1px solid #27272a;border-radius:16px;padding:32px;text-align:center}
+.price-card.featured{border-color:#7c3aed;background:#0f0a1a}
+.price-card h3{font-size:18px;margin-bottom:8px}
+.price-card .price{font-size:36px;font-weight:800;color:#7c3aed;margin:16px 0}
+.price-card .price span{font-size:14px;color:#71717a;font-weight:400}
+.price-card ul{list-style:none;text-align:left;margin:20px 0}
+.price-card li{padding:6px 0;font-size:13px;color:#a1a1aa}
+.price-card li::before{content:"✓ ";color:#4ade80}
+
+/* Frameworks */
+.frameworks{padding:60px 0;border-top:1px solid #27272a}
+.frameworks h2{text-align:center;font-size:28px;font-weight:800;margin-bottom:40px}
+.fw-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.fw-card{background:#111118;border:1px solid #27272a;border-radius:12px;padding:24px}
+.fw-card h3{font-size:16px;margin-bottom:8px;color:#fca5a5}
+.fw-card p{font-size:13px;color:#a1a1aa;line-height:1.6}
+.fw-card .fine{font-size:20px;font-weight:800;color:#ef4444;margin-top:12px}
+
+/* How it works */
+.how{padding:60px 0;border-top:1px solid #27272a}
+.how h2{text-align:center;font-size:28px;font-weight:800;margin-bottom:40px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.step{text-align:center;padding:24px 16px}
+.step .num{width:40px;height:40px;background:#7c3aed;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:12px}
+.step h4{font-size:14px;margin-bottom:6px}
+.step p{font-size:12px;color:#71717a}
+
+/* Footer */
+.footer{border-top:1px solid #27272a;padding:32px 0;text-align:center;font-size:11px;color:#52525b}
+
+/* Loading */
+.loading{display:none;text-align:center;padding:40px}
+.spinner{width:40px;height:40px;border:3px solid #27272a;border-top-color:#7c3aed;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+.hero h1{font-size:32px}
+.steps{grid-template-columns:1fr 1fr}
+.fw-grid{grid-template-columns:1fr}
+.price-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="container">
+<div class="logo"><b>TBN</b> Certify</div>
+<nav class="nav">
+<a href="#how">How it works</a>
+<a href="#pricing">Pricing</a>
+<a href="#frameworks">Compliance</a>
+<a href="https://tbn.hardinai.co.uk" target="_blank">TBN Protocol</a>
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<div class="container">
+<div class="badge">⚠️ NY SB8420: June 9 | EU AI Act Art. 50: August 2 — Compliance deadlines approaching</div>
+<h1>Is Your Ad AI-Generated?<br>Prove You Checked.</h1>
+<p>Scan your advertising content for AI-generated synthetic performers. Get a cryptographically signed compliance certificate — your documented proof you checked before publishing.</p>
+<div class="stat">
+<div><div class="num">$5,000</div><div class="label">Per repeat violation (NY SB8420)</div></div>
+<div><div class="num">5 FREE</div><div class="label">Checks every month</div></div>
+<div><div class="num">£29</div><div class="label">Small business / startup</div></div>
+</div>
+</div>
+</section>
+
+<section class="upload-section" id="scan">
+<div class="container">
+<h2 style="font-size:24px;font-weight:700;margin-bottom:8px;text-align:center">Choose Your Plan</h2>
+<p style="color:#71717a;font-size:14px;text-align:center;margin-bottom:32px">Start free. Everyone gets 5 checks every month — no card needed.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:600px;margin:0 auto">
+<a href="https://certify.hardinai.co.uk/scan" style="display:block;background:#111118;border:2px solid #22c55e;border-radius:12px;padding:24px;text-align:center;text-decoration:none;transition:all 0.2s">
+<div style="font-size:32px;margin-bottom:8px">✅</div>
+<div style="font-size:16px;font-weight:700;color:#e4e4e7;margin-bottom:4px">Free</div>
+<div style="font-size:24px;font-weight:800;color:#22c55e;margin-bottom:8px">5 checks / mo</div>
+<div style="font-size:12px;color:#71717a">Image or video • no login • instant result</div>
+</a>
+<a href="https://buy.stripe.com/14AeVe9WJ6PE80v5yE2oE05" target="_blank" style="display:block;background:#0f0a1a;border:2px solid #7c3aed;border-radius:12px;padding:24px;text-align:center;text-decoration:none;transition:all 0.2s">
+<div style="font-size:32px;margin-bottom:8px">🚀</div>
+<div style="font-size:16px;font-weight:700;color:#e4e4e7;margin-bottom:4px">Small Business / Startup</div>
+<div style="font-size:24px;font-weight:800;color:#7c3aed;margin-bottom:8px">£29</div>
+<div style="font-size:12px;color:#71717a">Image & video scans + signed certificate</div>
+</a>
+</div>
+
+<div style="text-align:center;margin-top:20px">
+<a href="mailto:info@hardinai.co.uk?subject=TBN%20Certify%20-%20Enterprise%20Pricing&body=Hi%2C%0A%0AWe%27re%20interested%20in%20enterprise%20pricing%20for%20TBN%20Certify.%0A%0ACompany%3A%20%0AEstimated%20monthly%20scans%3A%20%0APlatforms%20(LinkedIn%2FMeta%2FGoogle)%3A%20%0A%0AThanks" style="color:#a78bfa;font-size:13px;text-decoration:none">🏢 Agency or enterprise running volume? Contact us for custom pricing →</a>
+</div>
+
+<p style="text-align:center;color:#52525b;font-size:11px;margin-top:16px">After payment, you’ll be redirected to upload your content for scanning. Certificate delivered instantly.</p>
+</div>
+</section>
+
+
+
+
+
+<section class="how" id="how">
+<div class="container">
+<h2>How It Works</h2>
+<div class="steps">
+<div class="step"><div class="num">1</div><h4>Start free</h4><p>5 checks/mo, or upgrade for £29</p></div>
+<div class="step"><div class="num">2</div><h4>Upload</h4><p>Submit your ad content</p></div>
+<div class="step"><div class="num">3</div><h4>Scan</h4><p>AI detects synthetic performers</p></div>
+<div class="step"><div class="num">4</div><h4>Certify + Verify</h4><p>Certificate issued with public URL</p></div>
+</div>
+
+<!-- Bulk / Enterprise CTA -->
+<div id="bulk-pricing" style="margin-top:48px;background:linear-gradient(135deg,#0f0a1a,#1a0a2e);border:1px solid #7c3aed44;border-radius:16px;padding:40px;text-align:center">
+<h3 style="font-size:22px;font-weight:700;margin-bottom:12px">Need bulk scanning or enterprise pricing?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.7;max-width:600px;margin:0 auto 24px">Running a large campaign? Managing multiple brands? Need white-label certificates or API integration? We offer custom pricing for agencies and enterprises with high-volume scanning needs.</p>
+<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+<a href="mailto:info@hardinai.co.uk?subject=TBN%20Certify%20-%20Bulk%20Pricing%20Enquiry&body=Hi%2C%0A%0AI%27m%20interested%20in%20bulk%20pricing%20for%20TBN%20Certify.%0A%0ACompany%3A%20%0AEstimated%20monthly%20scans%3A%20%0AContent%20types%3A%20%0A%0AThanks" class="btn" style="display:inline-block;text-decoration:none">📧 Contact for Bulk Pricing</a>
+<a href="mailto:info@hardinai.co.uk?subject=TBN%20Certify%20-%20Enterprise%20Demo&body=Hi%2C%0A%0AI%27d%20like%20to%20schedule%20a%20demo%20of%20TBN%20Certify%20for%20our%20team.%0A%0ACompany%3A%20%0AUse%20case%3A%20%0A%0AThanks" class="btn" style="display:inline-block;text-decoration:none;background:#27272a">🎯 Request Enterprise Demo</a>
+</div>
+<p style="color:#52525b;font-size:12px;margin-top:20px">Volume discounts available • White-label options • Dedicated account manager • SLA guarantee<br>Custom API integration • Webhook notifications • Priority support</p>
+</div>
+
+</div>
+</section>
+
+<section class="frameworks" id="frameworks">
+<div class="container">
+<h2>Compliance Frameworks</h2>
+<div class="fw-grid" style="grid-template-columns:1fr 1fr">
+<div class="fw-card">
+<h3>🗽 New York SB8420-A</h3>
+<p>Requires advertisers to "conspicuously disclose" when AI-generated synthetic performers appear in any advertisement distributed in New York. Effective June 9, 2026. Enforced by the NY Attorney General.</p>
+<div class="fine">$1,000 first violation / $5,000 subsequent</div>
+</div>
+<div class="fw-card">
+<h3>🌴 California SB942</h3>
+<p>AI Transparency Act requires large GenAI providers to offer detection tools and embed provenance data in AI-generated content. Effective January 1, 2026.</p>
+<div class="fine">Provenance data required</div>
+</div>
+<div class="fw-card">
+<h3>🇪🇺 EU AI Act — Article 50</h3>
+<p>All 27 EU member states. Deepfakes must be labelled. AI-generated content must carry machine-readable marks. Deployers must disclose synthetic content. Effective August 2, 2026.</p>
+<div class="fine">Applies to 450 million people</div>
+</div>
+<div class="fw-card">
+<h3>🏛 Illinois SB315</h3>
+<p>Requires frontier AI developers (with $500M+ revenue) to publish safety frameworks and undergo annual third-party safety audits. Effective January 1, 2028. Signals the direction of US AI regulation.</p>
+<div class="fine">Frontier AI developers only</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pricing" id="pricing">
+<div class="container">
+<h2>Pricing</h2>
+<div class="sub">Start free. Upgrade only when you need to. One scan costs less than 1% of one fine.</div>
+<div class="price-grid">
+<div class="price-card">
+<h3>Free</h3>
+<div class="price">£0 <span>/ forever</span></div>
+<ul>
+<li>5 checks every month — for everyone</li>
+<li>Image or video</li>
+<li>AI synthetic-performer detection</li>
+<li>Disclosure check</li>
+<li>No login, no card</li>
+</ul>
+<a href="https://certify.hardinai.co.uk/scan" class="btn" style="display:block;text-decoration:none;width:100%;text-align:center;margin-top:12px;background:#22c55e;color:#06251f">Start free — 5 checks/mo</a>
+</div>
+<div class="price-card featured">
+<h3>Small Business &amp; Startup</h3>
+<div class="price">£29</div>
+<ul>
+<li>Image &amp; video scans</li>
+<li>RSA-PSS signed certificate</li>
+<li>Public verification URL</li>
+<li>Documented proof of due diligence</li>
+<li>Built for SMBs, startups &amp; creators</li>
+</ul>
+<a href="https://buy.stripe.com/14AeVe9WJ6PE80v5yE2oE05" target="_blank" class="btn" style="display:block;text-decoration:none;width:100%;text-align:center;margin-top:16px">Get certified — £29</a>
+</div>
+<div class="price-card">
+<h3>Enterprise &amp; Agencies</h3>
+<div class="price">Custom</div>
+<ul>
+<li>High-volume scanning</li>
+<li>LinkedIn / Meta / Google campaigns</li>
+<li>White-label certificates</li>
+<li>API + webhook integration</li>
+<li>Dedicated support &amp; SLA</li>
+</ul>
+<a href="mailto:info@hardinai.co.uk?subject=TBN%20Certify%20-%20Enterprise%20Pricing&body=Hi%2C%0A%0AWe%27re%20interested%20in%20enterprise%20pricing%20for%20TBN%20Certify.%0A%0ACompany%3A%20%0AEstimated%20monthly%20scans%3A%20%0APlatforms%20(LinkedIn%2FMeta%2FGoogle)%3A%20%0A%0AThanks" class="btn" style="display:block;text-decoration:none;width:100%;margin-top:16px;text-align:center;background:#27272a">Contact us for pricing</a>
+</div>
+</div>
+</div>
+</section>
+
+
+<!-- SEO Content Section -->
+<section class="seo-content" id="faq" style="padding:80px 0;border-top:1px solid #27272a">
+<div class="container">
+<h2 style="font-size:28px;font-weight:800;margin-bottom:40px;text-align:center">AI Content Compliance: What You Need to Know</h2>
+
+<div style="display:grid;gap:32px;max-width:800px;margin:0 auto">
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">What is NY SB8420 and how does it affect advertisers?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">New York Senate Bill SB8420-A, signed by Governor Kathy Hochul in December 2025, requires all advertisers to conspicuously disclose when AI-generated synthetic performers appear in advertisements distributed in New York State. A synthetic performer is any digitally created media that appears as a real person, including AI-generated models, deepfake faces, and AI-altered human likenesses. The law takes effect June 9, 2026. Civil penalties are $1,000 for a first violation and $5,000 for each subsequent violation, enforced by the NY Attorney General. Brands, agencies, and content creators publishing ads in New York should verify their content before distribution.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">What is the EU AI Act Article 50 transparency requirement?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">The European Union AI Act Article 50 establishes transparency obligations for AI-generated content across all 27 EU member states, affecting 450 million people. Effective August 2, 2026, deployers of AI systems that generate or manipulate image, audio, or video content constituting a deepfake must disclose that the content has been artificially generated or manipulated. Providers must implement machine-readable marks enabling detection of synthetic content. The EU Commission published its Code of Practice on marking and labelling of AI-generated content in December 2025, with final guidelines issued May 2026.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">What is California SB942 AI Transparency Act?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">California Senate Bill 942, the AI Transparency Act, became effective January 1, 2026. It requires large generative AI providers with over 1 million monthly users to offer free AI detection tools, embed provenance data in AI-generated content, and provide visible disclosure options for synthetic media. The law mandates that AI-generated images, videos, and audio carry imperceptible watermarks and metadata showing where content originated. Companies using AI-generated content in California must ensure proper provenance tracking and disclosure.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">How much are the fines for non-compliance?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">Under New York SB8420-A, civil penalties are $1,000 for a first violation and $5,000 for each subsequent violation. Each undisclosed synthetic performer in an advertisement may constitute a separate violation. Enforcement is initiated by the New York Attorney General. Under the EU AI Act, member states set their own penalty frameworks for transparency obligation violations. The cost of a single compliance scan (from £29) is a fraction of even the minimum penalty.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">What is a synthetic performer?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">A synthetic performer is any digitally created media generated using artificial intelligence or software algorithms that creates the impression of a human performer who is not recognisable as any identifiable natural person. This includes AI-generated models in product photography, AI-created spokespersons in video advertisements, deepfake technology applied to human likenesses, AI-generated influencers used in social media marketing, and any digitally altered human appearance in commercial content. If your advertisement features a person that was created or significantly altered by AI, it likely contains a synthetic performer under the law.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">How does TBN Certify work?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">TBN Certify uses advanced AI analysis powered by Google Gemini to scan your advertising content for synthetic performers, deepfakes, AI-generated faces, and manipulated media. When you upload an image or video, our system analyses every frame for signs of AI generation including facial inconsistencies, synthetic textures, lip-sync mismatches, and artificial body movements. The scan produces a compliance certificate that is cryptographically signed using RSA-PSS-SHA256, timestamped, and stored with a public verification URL. This certificate serves as legal proof that you performed due diligence before publishing. Any third party — regulators, auditors, legal teams — can independently verify the certificate using the public URL.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">What makes TBN Certify different from other AI detection tools?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">Most AI content detection tools provide a probability score — they tell you "this image is 87% likely AI-generated." That is not legal proof. TBN Certify provides a cryptographically signed compliance certificate with a public verification URL, tamper-proof timestamp, content hash, and RSA-PSS-SHA256 digital signature. This is legal-grade evidence that you checked your content before publishing. The certificate maps to specific regulatory frameworks (NY SB8420-A, CA SB942, EU AI Act Art. 50, IL SB315) and can be presented to regulators, used in legal proceedings, or embedded on your website as a compliance badge. No other tool combines AI detection with cryptographic certification and public verification.</p>
+</div>
+
+<div>
+<h3 style="font-size:18px;color:#a78bfa;margin-bottom:12px">Who needs AI content compliance certification?</h3>
+<p style="color:#a1a1aa;font-size:14px;line-height:1.8">Any business or individual publishing advertisements containing human likenesses in New York, California, or the European Union should verify their content for synthetic performers before distribution. This includes advertising agencies, brand marketing teams, social media managers, e-commerce companies using AI-generated product models, influencer marketing platforms, media buyers, creative studios, film and video production companies, and any organisation using AI tools like Midjourney, DALL-E, Stable Diffusion, or AI video generators to create commercial content featuring human-like figures.</p>
+</div>
+
+</div>
+
+<div style="margin-top:60px;text-align:center;padding:40px;background:#111118;border-radius:16px;border:1px solid #27272a">
+<h3 style="font-size:20px;margin-bottom:12px">Ready to certify your content?</h3>
+<p style="color:#a1a1aa;font-size:14px;margin-bottom:24px">Scan your first ad in under 60 seconds. No signup required for single scans.</p>
+<a href="#scan" class="btn" style="display:inline-block;text-decoration:none">Start Scanning →</a>
+</div>
+
+</div>
+</section>
+
+<footer class="footer">
+<div class="container">
+<p>TBN Certify — Content Compliance Certification | Powered by <a href="https://tbn.hardinai.co.uk">TBN Protocol</a></p>
+<p style="margin-top:8px">© 2026 Hardin Enterprises Ltd. All rights reserved. | <a href="mailto:info@hardinai.co.uk">info@hardinai.co.uk</a></p>
+<p style="margin-top:12px;font-size:11px;color:#52525b">Regulatory information on this page is provided for general guidance only and does not constitute legal advice. Laws and enforcement mechanisms may change. Consult qualified legal counsel for compliance decisions specific to your situation.</p>
+</div>
+</footer>
+
+
+</body>
+</html>

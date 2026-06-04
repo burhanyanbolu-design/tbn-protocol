@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Certify — AI Content Compliance Certification</title>
+<meta name="description" content="Scan your ads for AI-generated synthetic performers. Get cryptographic compliance certificates for NY SB8420 and CA SB942. Documented proof of due diligence.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
+a{color:#7c3aed;text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Header */
+.header{background:linear-gradient(135deg,#0f0a1a,#1a0a2e);border-bottom:1px solid #27272a;padding:16px 0}
+.header .container{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:800;color:#fff}.logo b{color:#7c3aed}
+.nav{display:flex;gap:24px;align-items:center}
+.nav a{color:#a1a1aa;font-size:13px;font-weight:500}
+.nav a:hover{color:#fff}
+
+/* Hero */
+.hero{padding:80px 0 60px;text-align:center}
+.hero .badge{display:inline-block;background:#ef444422;color:#fca5a5;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:24px}
+.hero h1{font-size:48px;font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#fff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:18px;color:#a1a1aa;max-width:700px;margin:0 auto 40px;line-height:1.7}
+.hero .stat{display:inline-flex;gap:32px;margin-top:20px}
+.hero .stat div{text-align:center}
+.hero .stat .num{font-size:32px;font-weight:800;color:#ef4444}
+.hero .stat .label{font-size:12px;color:#71717a;margin-top:4px}
+
+/* Upload Section */
+.upload-section{padding:60px 0;border-top:1px solid #27272a}
+.upload-box{background:#111118;border:2px dashed #27272a;border-radius:16px;padding:60px 40px;text-align:center;cursor:pointer;transition:all 0.3s}
+.upload-box:hover{border-color:#7c3aed;background:#0f0a1a}
+.upload-box h3{font-size:20px;margin-bottom:8px}
+.upload-box p{color:#71717a;font-size:14px}
+.upload-box input{display:none}
+.or-divider{text-align:center;padding:20px 0;color:#52525b;font-size:13px}
+.url-input{display:flex;gap:8px}
+.url-input input{flex:1;background:#111118;border:1px solid #27272a;border-radius:10px;padding:14px 16px;color:#e4e4e7;font-size:14px;outline:none}
+.url-input input:focus{border-color:#7c3aed}
+.btn{background:#7c3aed;color:#fff;border:none;border-radius:10px;padding:14px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn:hover{background:#6d28d9}
+.btn-red{background:#ef4444}.btn-red:hover{background:#dc2626}
+
+/* Results */
+.result-section{display:none;padding:40px 0}
+.cert-card{background:#0f1a0f;border:2px solid #22c55e44;border-radius:16px;padding:32px;margin-bottom:24px}
+.cert-card.fail{background:#1a0f0f;border-color:#ef444444}
+.cert-card.review{background:#1a1a0f;border-color:#eab30844}
+.cert-card h2{font-size:24px;margin-bottom:16px}
+.cert-card .status{font-size:14px;padding:6px 14px;border-radius:8px;display:inline-block;font-weight:700;margin-bottom:16px}
+.cert-card .status.compliant{background:#22c55e22;color:#4ade80}
+.cert-card .status.disclosure{background:#ef444422;color:#fca5a5}
+.cert-card .status.review{background:#eab30822;color:#fde047}
+.cert-fields{display:grid;gap:8px;margin-top:16px}
+.cert-field{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #27272a22;font-size:13px}
+.cert-field .k{color:#71717a}.cert-field .v{color:#e4e4e7;font-family:monospace;font-size:11px;max-width:400px;overflow:hidden;text-overflow:ellipsis}
+
+/* Pricing */
+.pricing{padding:80px 0;border-top:1px solid #27272a}
+.pricing h2{text-align:center;font-size:32px;font-weight:800;margin-bottom:12px}
+.pricing .sub{text-align:center;color:#71717a;font-size:14px;margin-bottom:48px}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+.price-card{background:#111118;border:1px solid #27272a;border-radius:16px;padding:32px;text-align:center}
+.price-card.featured{border-color:#7c3aed;background:#0f0a1a}
+.price-card h3{font-size:18px;margin-bottom:8px}
+.price-card .price{font-size:36px;font-weight:800;color:#7c3aed;margin:16px 0}
+.price-card .price span{font-size:14px;color:#71717a;font-weight:400}
+.price-card ul{list-style:none;text-align:left;margin:20px 0}
+.price-card li{padding:6px 0;font-size:13px;color:#a1a1aa}
+.price-card li::before{content:"✓ ";color:#4ade80}
+
+/* Frameworks */
+.frameworks{padding:60px 0;border-top:1px solid #27272a}
+.frameworks h2{text-align:center;font-size:28px;font-weight:800;margin-bottom:40px}
+.fw-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.fw-card{background:#111118;border:1px solid #27272a;border-radius:12px;padding:24px}
+.fw-card h3{font-size:16px;margin-bottom:8px;color:#fca5a5}
+.fw-card p{font-size:13px;color:#a1a1aa;line-height:1.6}
+.fw-card .fine{font-size:20px;font-weight:800;color:#ef4444;margin-top:12px}
+
+/* How it works */
+.how{padding:60px 0;border-top:1px solid #27272a}
+.how h2{text-align:center;font-size:28px;font-weight:800;margin-bottom:40px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.step{text-align:center;padding:24px 16px}
+.step .num{width:40px;height:40px;background:#7c3aed;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:12px}
+.step h4{font-size:14px;margin-bottom:6px}
+.step p{font-size:12px;color:#71717a}
+
+/* Footer */
+.footer{border-top:1px solid #27272a;padding:32px 0;text-align:center;font-size:11px;color:#52525b}
+
+/* Loading */
+.loading{display:none;text-align:center;padding:40px}
+.spinner{width:40px;height:40px;border:3px solid #27272a;border-top-color:#7c3aed;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+.hero h1{font-size:32px}
+.steps{grid-template-columns:1fr 1fr}
+.fw-grid{grid-template-columns:1fr}
+.price-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="container">
+<div class="logo"><b>TBN</b> Certify</div>
+<nav class="nav">
+<a href="#how">How it works</a>
+<a href="#pricing">Pricing</a>
+<a href="#frameworks">Compliance</a>
+<a href="https://tbn.hardinai.co.uk" target="_blank">TBN Protocol</a>
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<div class="container">
+<div class="badge">⚠️ NY SB8420 takes effect June 9, 2026 — 12 days</div>
+<h1>Is Your Ad AI-Generated?<br>Prove You Checked.</h1>
+<p>Scan your advertising content for AI-generated synthetic performers. Get a cryptographically signed compliance certificate — your documented proof you checked before publishing.</p>
+<div class="stat">
+<div><div class="num">$5,000</div><div class="label">Per repeat violation (NY SB8420)</div></div>
+<div><div class="num">£15</div><div class="label">Per scan (your cost)</div></div>
+<div><div class="num">333x</div><div class="label">ROI per scan</div></div>
+</div>
+</div>
+</section>
+
+<section class="upload-section" id="scan">
+<div class="container">
+<div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+<h3>📁 Drop your ad creative here</h3>
+<p>Image (JPG, PNG, WebP) or Video (MP4, MOV) — up to 100MB</p>
+<input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFile(this.files[0])">
+</div>
+<div class="or-divider">— or paste a YouTube/video URL —</div>
+<div class="url-input">
+<input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=...">
+<button class="btn" onclick="handleUrl()">Scan URL</button>
+</div>
+</div>
+</section>
+
+<div class="loading" id="loading">
+<div class="container">
+<div class="spinner"></div>
+<p style="color:#a1a1aa">Scanning content for synthetic performers...</p>
+<p style="color:#52525b;font-size:12px;margin-top:8px">AI analysis powered by Google Gemini • Certified by TBN Protocol</p>
+</div>
+</div>
+
+<section class="result-section" id="results">
+<div class="container">
+<div class="cert-card" id="certCard">
+<h2 id="certTitle">Certificate</h2>
+<div class="status compliant" id="certStatus">COMPLIANT</div>
+<p id="certDetail" style="color:#a1a1aa;font-size:14px;margin-bottom:16px"></p>
+<div class="cert-fields" id="certFields"></div>
+<div style="margin-top:24px;display:flex;gap:12px">
+<button class="btn" onclick="copyVerifyUrl()">📋 Copy Verification URL</button>
+<button class="btn" style="background:#22c55e" onclick="downloadCert()">⬇️ Download Certificate</button>
+</div>
+</div>
+</div>
+</section>
+
+<section class="how" id="how">
+<div class="container">
+<h2>How It Works</h2>
+<div class="steps">
+<div class="step"><div class="num">1</div><h4>Upload</h4><p>Drop your ad image or video</p></div>
+<div class="step"><div class="num">2</div><h4>Scan</h4><p>AI detects synthetic performers</p></div>
+<div class="step"><div class="num">3</div><h4>Certify</h4><p>Cryptographic certificate issued</p></div>
+<div class="step"><div class="num">4</div><h4>Verify</h4><p>Public URL proves compliance</p></div>
+</div>
+</div>
+</section>
+
+<section class="frameworks" id="frameworks">
+<div class="container">
+<h2>Compliance Frameworks</h2>
+<div class="fw-grid">
+<div class="fw-card">
+<h3>🗽 New York SB8420-A</h3>
+<p>Requires advertisers to "conspicuously disclose" when AI-generated synthetic performers appear in any advertisement distributed in New York. Effective June 9, 2026. Enforced by the NY Attorney General.</p>
+<div class="fine">$1,000 first violation / $5,000 subsequent</div>
+</div>
+<div class="fw-card">
+<h3>🌴 California SB942</h3>
+<p>AI Transparency Act requires large GenAI providers to offer detection tools and embed provenance data in AI-generated content. Effective January 1, 2026.</p>
+<div class="fine">Provenance data required</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pricing" id="pricing">
+<div class="container">
+<h2>Pricing</h2>
+<div class="sub">Prove due diligence before publishing. One scan costs a fraction of one penalty.</div>
+<div class="price-grid">
+<div class="price-card">
+<h3>Per Scan</h3>
+<div class="price">£15 <span>/ image</span></div>
+<ul>
+<li>Single image scan + certificate</li>
+<li>RSA-PSS signed proof</li>
+<li>Public verification URL</li>
+<li>Instant results</li>
+</ul>
+<div class="price" style="font-size:24px">£45 <span>/ video (short)</span></div>
+<div class="price" style="font-size:24px">£95 <span>/ video (long)</span></div>
+</div>
+<div class="price-card featured">
+<h3>Professional</h3>
+<div class="price">£749 <span>/ month</span></div>
+<ul>
+<li>100 scans included (any type)</li>
+<li>API access</li>
+<li>Dashboard + history</li>
+<li>Priority processing</li>
+<li>Embeddable compliance badge</li>
+<li>Batch upload</li>
+</ul>
+<button class="btn" style="width:100%;margin-top:16px">Contact Sales</button>
+</div>
+<div class="price-card">
+<h3>Enterprise</h3>
+<div class="price">£2,499 <span>/ month</span></div>
+<ul>
+<li>Unlimited scans</li>
+<li>White-label certificates</li>
+<li>Custom branding</li>
+<li>SLA guarantee</li>
+<li>Dedicated support</li>
+<li>Webhook notifications</li>
+</ul>
+<button class="btn" style="width:100%;margin-top:16px;background:#27272a">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="container">
+<p>TBN Certify — Content Compliance Certification | Powered by <a href="https://tbn.hardinai.co.uk">TBN Protocol</a></p>
+<p style="margin-top:8px">© 2026 Hardin Enterprises Ltd. All rights reserved. | <a href="mailto:info@hardinai.co.uk">info@hardinai.co.uk</a></p>
+<p style="margin-top:12px;font-size:11px;color:#52525b">Regulatory information on this page is provided for general guidance only and does not constitute legal advice. Consult qualified legal counsel for compliance decisions specific to your situation.</p>
+</div>
+</footer>
+
+<script>
+var API_KEY = ''; // User enters their key or uses demo mode
+var lastCert = null;
+
+// Drag and drop
+var dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', function(e){e.preventDefault();dz.style.borderColor='#7c3aed'});
+dz.addEventListener('dragleave', function(){dz.style.borderColor='#27272a'});
+dz.addEventListener('drop', function(e){e.preventDefault();dz.style.borderColor='#27272a';if(e.dataTransfer.files.length)handleFile(e.dataTransfer.files[0])});
+
+function handleFile(file) {
+    if (!file) return;
+    showLoading();
+    var fd = new FormData();
+    fd.append('file', file);
+    fetch('/api/v1/certify-content', {
+        method: 'POST',
+        headers: API_KEY ? {'Authorization': 'Bearer ' + API_KEY} : {},
+        body: fd
+    })
+    .then(function(r){return r.json()})
+    .then(showResult)
+    .catch(function(e){hideLoading();alert('Error: ' + e.message)});
+}
+
+function handleUrl() {
+    var url = document.getElementById('urlInput').value.trim();
+    if (!url) return;
+    showLoading();
+    fetch('/api/v1/certify-content', {
+        method: 'POST',
+        headers: Object.assign({'Content-Type': 'application/json'}, API_KEY ? {'Authorization': 'Bearer ' + API_KEY} : {}),
+        body: JSON.stringify({url: url})
+    })
+    .then(function(r){return r.json()})
+    .then(showResult)
+    .catch(function(e){hideLoading();alert('Error: ' + e.message)});
+}
+
+function showLoading() {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+}
+function hideLoading() {
+    document.getElementById('loading').style.display = 'none';
+}
+
+function showResult(data) {
+    hideLoading();
+    if (!data.success) {
+        alert('Scan failed: ' + (data.error || 'Unknown error'));
+        return;
+    }
+    lastCert = data.certificate;
+    var cert = data.certificate;
+    var card = document.getElementById('certCard');
+    var status = document.getElementById('certStatus');
+    var title = document.getElementById('certTitle');
+    var detail = document.getElementById('certDetail');
+    var fields = document.getElementById('certFields');
+
+    // Status styling
+    card.className = 'cert-card';
+    if (cert.status === 'COMPLIANT') {
+        card.className += ''; status.className = 'status compliant'; status.textContent = '✅ COMPLIANT';
+        title.textContent = '🔒 Compliance Certificate Issued';
+    } else if (cert.status === 'REQUIRES_DISCLOSURE') {
+        card.className += ' fail'; status.className = 'status disclosure'; status.textContent = '⚠️ REQUIRES DISCLOSURE';
+        title.textContent = '⚠️ Synthetic Performer Detected';
+    } else {
+        card.className += ' review'; status.className = 'status review'; status.textContent = '🔍 REVIEW NEEDED';
+        title.textContent = '🔍 Manual Review Recommended';
+    }
+
+    detail.textContent = cert.status_detail;
+
+    // Fields
+    fields.innerHTML = [
+        ['Certificate ID', cert.certificate_id],
+        ['Content Hash', cert.content_hash],
+        ['Scan Timestamp', cert.scan_timestamp],
+        ['Confidence', (cert.confidence * 100).toFixed(0) + '%'],
+        ['Frameworks', cert.frameworks.join(', ')],
+        ['Signature Algorithm', cert.signature_algorithm],
+        ['Signature', cert.signature.substring(0, 60) + '...'],
+        ['Verification URL', cert.verification_url],
+        ['Issued By', cert.issued_by],
+    ].map(function(f){return '<div class="cert-field"><span class="k">'+f[0]+'</span><span class="v">'+f[1]+'</span></div>'}).join('');
+
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function copyVerifyUrl() {
+    if (lastCert) {
+        navigator.clipboard.writeText(lastCert.verification_url);
+        alert('Verification URL copied!');
+    }
+}
+
+function downloadCert() {
+    if (lastCert) {
+        var blob = new Blob([JSON.stringify(lastCert, null, 2)], {type: 'application/json'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = lastCert.certificate_id + '.json';
+        a.click();
+    }
+}
+</script>
+</body>
+</html>
