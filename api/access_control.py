@@ -57,6 +57,15 @@ TIERS = {
         "features":    ["read_write", "all_data", "real_time", "analytics",
                         "webhooks", "dedicated_support", "sla", "custom_bots"],
     },
+    "PRODUCTION": {
+        "name":        "Production Partner",
+        "price_gbp":   None,       # partnership agreement
+        "calls_per_day": None,     # unlimited
+        "bot_access":  None,       # all bots
+        "duration_days": None,
+        "features":    ["read_write", "all_data", "real_time", "analytics",
+                        "webhooks", "dedicated_support", "sla", "production_attestation"],
+    },
 }
 
 # ── API Key storage (JSON file — upgrade to DB when scaling) ─────────
