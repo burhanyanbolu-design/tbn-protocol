@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Protocol — The Independent Certificate Authority for AI Agents</title>
+<meta name="description" content="TBN Protocol is the independent certification layer for AI agents. Like SSL certificates for websites, but for autonomous AI systems. Cryptographic proof of every AI decision — independently verifiable by anyone.">
+<meta name="keywords" content="AI agent certification, AI governance, TBN Protocol, AI compliance, EU AI Act, agent attestation, cryptographic receipts, AI audit trail, independent verification, AI agent identity, autonomous AI governance, RSA-PSS, AI certificate authority, agent governance infrastructure, AI accountability, agentic AI security, AI agent verification, machine identity, AI trust layer, write governance">
+<meta property="og:title" content="TBN Protocol — The Certificate Authority for AI Agents">
+<meta property="og:description" content="Independent cryptographic certification for AI agents. Every action signed. Every receipt verifiable. No trust required.">
+<meta property="og:url" content="https://tbn.hardinai.co.uk">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
+a{color:#7c3aed;text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Header */
+.header{border-bottom:1px solid #27272a;padding:16px 0}
+.header .container{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:800;color:#fff}.logo b{color:#7c3aed}
+.nav{display:flex;gap:20px;align-items:center}
+.nav a{color:#a1a1aa;font-size:13px;font-weight:500;transition:color 0.2s}
+.nav a:hover{color:#fff}
+.btn{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{background:#6d28d9;color:#fff}
+.btn-outline{background:transparent;border:1px solid #27272a;color:#a1a1aa}
+.btn-outline:hover{border-color:#7c3aed;color:#fff}
+
+/* Hero */
+.hero{padding:20px 0 50px;text-align:center}
+.hero .badge{display:inline-block;background:#7c3aed22;color:#a78bfa;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:24px}
+.hero h1{font-size:52px;font-weight:900;line-height:1.1;margin-bottom:24px;max-width:800px;margin-left:auto;margin-right:auto}
+.hero p{font-size:18px;color:#a1a1aa;max-width:700px;margin:0 auto 40px;line-height:1.7}
+.hero-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Stats */
+.stats{padding:60px 0;border-top:1px solid #27272a}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-item .num{font-size:36px;font-weight:800;color:#fff}
+.stat-item .label{font-size:13px;color:#71717a;margin-top:4px}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* How it works */
+.how{padding:80px 0;border-top:1px solid #27272a}
+.how h2{text-align:center;font-size:32px;font-weight:800;margin-bottom:48px}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.how-card{background:#111118;border:1px solid #27272a;border-radius:12px;padding:32px;text-align:center}
+.how-card .icon{font-size:40px;margin-bottom:16px}
+.how-card h3{font-size:16px;margin-bottom:8px}
+.how-card p{font-size:13px;color:#a1a1aa;line-height:1.6}
+@media(max-width:768px){.how-grid{grid-template-columns:1fr}}
+
+/* Use cases */
+.usecases{padding:80px 0;border-top:1px solid #27272a}
+.usecases h2{text-align:center;font-size:32px;font-weight:800;margin-bottom:16px}
+.usecases .sub{text-align:center;color:#71717a;font-size:14px;margin-bottom:48px}
+.usecase-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.usecase-card{background:#111118;border:1px solid #27272a;border-radius:12px;padding:24px}
+.usecase-card h3{font-size:15px;margin-bottom:8px;color:#a78bfa}
+.usecase-card p{font-size:13px;color:#a1a1aa;line-height:1.6}
+@media(max-width:768px){.usecase-grid{grid-template-columns:1fr}}
+
+/* Verify section */
+.verify{padding:80px 0;border-top:1px solid #27272a;text-align:center}
+.verify h2{font-size:28px;font-weight:800;margin-bottom:16px}
+.verify p{color:#71717a;font-size:14px;margin-bottom:24px}
+.verify-box{background:#111118;border:1px solid #27272a;border-radius:12px;padding:24px;max-width:700px;margin:0 auto;text-align:left}
+.verify-box code{font-family:'Courier New',monospace;font-size:12px;color:#4ade80;display:block;margin:8px 0;word-break:break-all}
+
+/* CTA */
+.cta{padding:80px 0;border-top:1px solid #27272a;text-align:center}
+.cta h2{font-size:28px;font-weight:800;margin-bottom:16px}
+.cta p{color:#71717a;font-size:14px;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto}
+.cta-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Footer */
+.footer{border-top:1px solid #27272a;padding:32px 0;text-align:center}
+.footer p{font-size:12px;color:#52525b}
+.footer a{color:#71717a}
+
+/* SEO content */
+.seo{padding:60px 0;border-top:1px solid #27272a}
+.seo h2{font-size:24px;font-weight:800;margin-bottom:24px;text-align:center}
+.seo-content{max-width:800px;margin:0 auto}
+.seo-content h3{font-size:16px;margin-top:24px;margin-bottom:8px;color:#a78bfa}
+.seo-content p{font-size:14px;color:#a1a1aa;line-height:1.8;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="container">
+<div class="logo"><b>TBN</b> Protocol</div>
+<nav class="nav">
+<a href="#how">How It Works</a>
+<a href="#usecases">Use Cases</a>
+<a href="#verify">Verify</a>
+<a href="/partner" class="btn btn-outline">Partner With Us</a>
+<a href="/console" class="btn">Console</a>
+</nav>
+</div>
+</header>
+
+<section class="hero">
+<div class="container">
+
+<!-- TBN Handshake Animation -->
+<div class="handshake-anim" id="handshakeWrap">
+<style>
+.handshake-anim{margin:10px auto 20px;max-width:100%;position:relative}
+.hs-wrap{background:radial-gradient(ellipse at 50% 30%,#1a1440 0%,#100c28 55%,#0a0818 100%);border-radius:12px;padding:14px 12px 10px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,0.4),inset 0 0 30px rgba(83,74,183,0.06)}
+.hs-dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,#6a60d8 1px,transparent 1px);background-size:30px 30px;opacity:0.08;pointer-events:none;border-radius:16px}
+.hs-fh{position:absolute;font-family:'Courier New',monospace;font-size:9px;color:#6a60d8;opacity:0.4;animation:hsDrift 6s ease-in-out infinite;pointer-events:none}
+@keyframes hsDrift{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-7px);opacity:.12}}
+.hs-stage{position:relative;height:150px}
+.hs-fx-canvas{position:absolute;inset:0;pointer-events:none;z-index:1}
+.hs-ground{position:absolute;bottom:0;left:3%;right:3%;height:1px;background:linear-gradient(90deg,transparent,#4b42a0 20%,#6a60d8 50%,#4b42a0 80%,transparent);box-shadow:0 0 10px rgba(106,96,216,0.5)}
+.hs-agent{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center;width:90px;z-index:2}
+.hs-label{font-size:8px;font-weight:600;letter-spacing:2px;color:#9a93e8;text-transform:uppercase;margin-bottom:2px;text-shadow:0 0 8px rgba(154,147,232,0.3)}
+.hs-pill{font-family:'Courier New',monospace;font-size:7px;color:#74e3bc;background:rgba(4,52,44,0.85);border:0.5px solid #1D9E75;border-radius:8px;padding:1px 6px;margin-bottom:3px;letter-spacing:1px;box-shadow:0 0 8px rgba(29,158,117,0.3)}
+.hs-scene{position:relative;width:80px;height:80px}
+.hs-ring-svg{position:absolute;top:0;left:0;opacity:0.7}
+.hs-glow{position:absolute;top:50%;left:50%;width:58px;height:58px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none}
+.hs-glow-g{box-shadow:0 0 30px 8px rgba(29,220,150,0.45),0 0 60px 18px rgba(29,220,150,0.18),inset 0 0 14px rgba(29,220,150,0.3)}
+.hs-glow-b{box-shadow:0 0 30px 8px rgba(80,170,255,0.45),0 0 60px 18px rgba(80,170,255,0.18),inset 0 0 14px rgba(80,170,255,0.3)}
+.hs-face{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%}
+.hs-mid-canvas{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:3}
+.hs-burst{position:absolute;bottom:68px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;pointer-events:none;opacity:0;z-index:4}
+.hs-burst .hs-badge{font-family:'Courier New',monospace;font-size:9px;color:#0a2820;background:linear-gradient(180deg,#74e3bc,#3fbf94);letter-spacing:2px;font-weight:bold;padding:2px 10px;border-radius:12px;box-shadow:0 0 16px rgba(93,202,165,0.5)}
+.hs-burst .hs-sub{font-family:'Courier New',monospace;font-size:7px;color:#9a93e8;letter-spacing:1px}
+.hs-status{margin-top:6px;text-align:center;font-size:10px;color:#bdb7f2;letter-spacing:1.2px;min-height:14px;font-weight:500;text-shadow:0 0 6px rgba(189,183,242,0.2)}
+</style>
+<div class="hs-wrap">
+<div class="hs-dot-grid"></div>
+<span class="hs-fh" style="top:10px;left:50px;animation-delay:0s">7F3A·B91C</span>
+<span class="hs-fh" style="top:36px;right:46px;animation-delay:1.2s">F4A1·2D7C</span>
+<span class="hs-fh" style="bottom:30px;left:32px;animation-delay:2s">C038·91BE</span>
+<span class="hs-fh" style="bottom:30px;right:32px;animation-delay:0.7s">8E53·3C8B</span>
+<div class="hs-stage" id="hsStage">
+<canvas class="hs-fx-canvas" id="hsFxCanvas"></canvas>
+<div class="hs-ground"></div>
+<div class="hs-agent" id="hsAgentA">
+<div class="hs-label">Agent</div>
+<div class="hs-pill">TBN·CERTIFIED</div>
+<div class="hs-scene">
+<div class="hs-glow hs-glow-g" id="hsGlowA"></div>
+<svg class="hs-ring-svg" id="hsRoA" width="80" height="80" viewBox="0 0 100 100">
+<defs><path id="hsoaA" d="M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+<circle cx="50" cy="50" r="45" fill="none" stroke="#534AB7" stroke-width="0.8"/>
+<text font-family="'Courier New',monospace" font-size="5.5" fill="#9a93e8" letter-spacing="1.2"><textPath href="#hsoaA" startOffset="0%">TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · </textPath></text>
+</svg>
+<svg class="hs-ring-svg" id="hsRiA" width="80" height="80" viewBox="0 0 100 100">
+<defs><path id="hsiaA" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs>
+<circle cx="50" cy="50" r="36" fill="none" stroke="#3C3489" stroke-width="0.8"/>
+<text font-family="'Courier New',monospace" font-size="5.5" fill="#6a60d8" letter-spacing="0.8"><textPath href="#hsiaA" startOffset="0%">7F3A · B91C · F4A1 · 2D7C · 8E53 · C038 · A271 · 91BE · </textPath></text>
+</svg>
+<canvas class="hs-face" id="hsFaceA" width="48" height="48"></canvas>
+</div>
+</div>
+<div class="hs-agent" id="hsAgentB">
+<div class="hs-label">Validator</div>
+<div class="hs-pill">TBN·CERTIFIED</div>
+<div class="hs-scene">
+<div class="hs-glow hs-glow-b" id="hsGlowB"></div>
+<svg class="hs-ring-svg" id="hsRoB" width="80" height="80" viewBox="0 0 100 100">
+<defs><path id="hsoaB" d="M50,50 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+<circle cx="50" cy="50" r="45" fill="none" stroke="#534AB7" stroke-width="0.8"/>
+<text font-family="'Courier New',monospace" font-size="5.5" fill="#9a93e8" letter-spacing="1.2"><textPath href="#hsoaB" startOffset="0%">TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · </textPath></text>
+</svg>
+<svg class="hs-ring-svg" id="hsRiB" width="80" height="80" viewBox="0 0 100 100">
+<defs><path id="hsiaB" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/></defs>
+<circle cx="50" cy="50" r="36" fill="none" stroke="#3C3489" stroke-width="0.8"/>
+<text font-family="'Courier New',monospace" font-size="5.5" fill="#6a60d8" letter-spacing="0.8"><textPath href="#hsiaB" startOffset="0%">D901 · 6F4E · 0D62 · C5F8 · 39E0 · B7A4 · 8C1D · F062 · </textPath></text>
+</svg>
+<canvas class="hs-face" id="hsFaceB" width="48" height="48"></canvas>
+</div>
+</div>
+<canvas id="hsMidCanvas" class="hs-mid-canvas" width="320" height="70"></canvas>
+<div class="hs-burst" id="hsBurst"><div class="hs-badge">✓ VERIFIED</div><div class="hs-sub">TBN handshake complete</div></div>
+</div>
+<div class="hs-status" id="hsStatus">Agents approaching...</div>
+</div>
+</div>
+<!-- End Animation -->
+
+<div class="badge">🔐 Independent AI Agent Certification — Live in Production</div>
+<h1>The Certificate Authority for AI Agents</h1>
+<p>Like SSL certificates for websites — but for autonomous AI systems. Every agent gets a verified identity. Every action gets a cryptographic receipt. Anyone can verify it independently, without trusting anyone.</p>
+
+<div class="hero-buttons">
+<a href="#verify" class="btn">Verify a Receipt →</a>
+<a href="/partner" class="btn btn-outline">Become a Partner</a>
+<a href="https://github.com/burhanyanbolu-design/tbn-protocol" class="btn btn-outline" target="_blank">GitHub (Open Source)</a>
+</div>
+</div>
+</section>
+
+<section class="stats">
+<div class="container">
+<div class="stats-grid">
+<div class="stat-item"><div class="num">1,336+</div><div class="label">Receipts Issued</div></div>
+<div class="stat-item"><div class="num">RSA-PSS</div><div class="label">SHA-256 Signed</div></div>
+<div class="stat-item"><div class="num">Offline</div><div class="label">Verification</div></div>
+<div class="stat-item"><div class="num">Aug 2026</div><div class="label">EU AI Act Deadline</div></div>
+</div>
+</div>
+</section>
+
+<section class="how" id="how">
+<div class="container">
+<h2>How TBN Protocol Works</h2>
+<div class="how-grid">
+<div class="how-card">
+<div class="icon">🪪</div>
+<h3>1. Certify Identity</h3>
+<p>Every AI agent gets a verified, cryptographic identity before it can operate. Like a passport — issued once, verified always.</p>
+</div>
+<div class="how-card">
+<div class="icon">📝</div>
+<h3>2. Attest Every Action</h3>
+<p>Every time an agent makes a decision (approve, block, process), TBN signs a receipt. One API call. ~200ms. Immutable proof.</p>
+</div>
+<div class="how-card">
+<div class="icon">✅</div>
+<h3>3. Verify Independently</h3>
+<p>Anyone can verify any receipt — regulators, auditors, your customers — without trusting TBN or the agent's operator. Fully offline.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="usecases" id="usecases">
+<div class="container">
+<h2>Who Needs TBN Protocol</h2>
+<div class="sub">Any company where AI agents make decisions that matter</div>
+<div class="usecase-grid">
+<div class="usecase-card">
+<h3>🏦 Financial Services</h3>
+<p>AI agents approving loans, processing claims, making investment decisions. Every decision needs a provable audit trail for regulators (FCA, PRA, ECB).</p>
+</div>
+<div class="usecase-card">
+<h3>🏥 Healthcare</h3>
+<p>AI agents triaging patients, processing referrals, interpreting results. Clinical governance requires proof of every automated decision.</p>
+</div>
+<div class="usecase-card">
+<h3>🔒 AI Governance Tools</h3>
+<p>Companies like Beyond Guard, ActTrident, and Airia that enforce AI policies — TBN makes their governance independently verifiable.</p>
+</div>
+<div class="usecase-card">
+<h3>🏢 Enterprise AI</h3>
+<p>Any company using AI agents to write to CRMs, databases, ticketing systems. When the auditor asks "prove what your AI did" — show them the receipts.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="verify" id="verify">
+<div class="container">
+<h2>Don't Trust Us — Verify It Yourself</h2>
+<p>Every receipt is independently verifiable. Try it right now:</p>
+<div class="verify-box">
+<p style="color:#71717a;font-size:12px;margin-bottom:12px">Verify a real production receipt:</p>
+<code>GET https://tbn.hardinai.co.uk/api/v1/verify/tbn_vr_0af954b9c2bf6f2645c64536cb4f4c9f</code>
+<p style="color:#71717a;font-size:12px;margin-top:16px;margin-bottom:12px">Get our public signing key (for offline verification):</p>
+<code>GET https://tbn.hardinai.co.uk/api/signing/public-key</code>
+<p style="color:#71717a;font-size:12px;margin-top:16px;margin-bottom:12px">Check system health:</p>
+<code>GET https://tbn.hardinai.co.uk/api/v1/health</code>
+</div>
+<p style="margin-top:24px;color:#52525b;font-size:12px">Offline verification: Extract 8 receipt fields → canonical JSON (sort_keys, no whitespace) → RSA-PSS / SHA-256 / MGF1 / salt=MAX against published key. No server call needed.</p>
+</div>
+</section>
+
+<section class="cta">
+<div class="container">
+<h2>Ready to Govern Your AI Agents?</h2>
+<p>Integration takes hours, not months. One API call per decision. First 1,000 receipts free.</p>
+<div class="cta-buttons">
+<a href="/partner" class="btn">Register as Partner →</a>
+<a href="/console" class="btn btn-outline">View Console</a>
+<a href="/api/v1/health" class="btn btn-outline" target="_blank">Check Health</a>
+</div>
+</div>
+</section>
+
+<section class="seo">
+<div class="container">
+<h2>AI Agent Governance Infrastructure</h2>
+<div class="seo-content">
+
+<h3>What is TBN Protocol?</h3>
+<p>TBN Protocol is an independent certificate authority for AI agents — the trust infrastructure that the AI agent economy needs to operate safely and accountably. Just as SSL certificates enabled e-commerce by verifying website identity, TBN Protocol enables governed AI by verifying agent identity and certifying agent actions with cryptographic proof.</p>
+
+<h3>Why do AI agents need certification?</h3>
+<p>AI agents are increasingly autonomous — making decisions, writing to business systems, processing sensitive data without human intervention. The EU AI Act (effective August 2026), NY SB8420, California SB942, and South Korea's AI Basic Act all require transparency and accountability for AI-generated actions. Without independent certification, companies rely on self-reported logs that can't be independently verified by regulators or auditors.</p>
+
+<h3>How does TBN Protocol work?</h3>
+<p>TBN Protocol operates at two points: before the agent acts (identity certification) and after each action (attestation receipt). Every receipt is signed with RSA-PSS-SHA256 using a 2048-bit key. The signature covers a canonical JSON of eight fields and can be verified offline by anyone with the published public key — no server call, no trust required.</p>
+
+<h3>Who uses TBN Protocol?</h3>
+<p>TBN Protocol serves AI governance tools, enterprise companies deploying AI agents, financial services firms requiring audit trails, and any organisation that needs to prove AI decisions are governed. Our first production partner has verified 1,000+ receipts in production, with every receipt independently verifiable.</p>
+
+<h3>How is TBN Protocol different from logging?</h3>
+<p>A log written by the same system that performed the action is not oversight — it's documentation. TBN provides independent, cryptographic proof signed by a third party. The receipt exists outside the operator's control, can't be edited, and is verifiable by anyone. That's the difference between "we say we governed it" and "here's the proof anyone can check."</p>
+
+<h3>What compliance frameworks does TBN support?</h3>
+<p>TBN receipts include the compliance frameworks evaluated against each decision — including EU AI Act, ISO/IEC 42001, GDPR, SOC2, and others. The framework context travels inside the signed receipt, so compliance evidence is embedded in the cryptographic proof itself.</p>
+
+<h3>Is TBN Protocol open source?</h3>
+<p>Yes. TBN Protocol is open source under AGPL-3.0, available on GitHub and installable via PyPI (pip install tbn-protocol). The signing specification is published, the public key is available at /api/signing/public-key, and offline verification is documented — ensuring no single point of trust.</p>
+
+</div>
+</div>
+</section>
+
+<footer class="footer">
+<div class="container">
+<p><a href="/">TBN Protocol</a> · <a href="/dashboard">Dashboard</a> · <a href="/console">Console</a> · <a href="/partner">Partner Registration</a> · <a href="https://github.com/burhanyanbolu-design/tbn-protocol" target="_blank">GitHub</a> · <a href="https://pypi.org/project/tbn-protocol/" target="_blank">PyPI</a></p>
+<p style="margin-top:12px">© 2026 Hardin Enterprises Ltd. All rights reserved. | <a href="mailto:info@hardinai.co.uk">info@hardinai.co.uk</a></p>
+<p style="margin-top:8px;font-size:11px">London, United Kingdom · Independent AI Agent Certification</p>
+</div>
+</footer>
+
+<script>
+(function(){
+  const stageEl=document.getElementById('hsStage');
+  const agentA=document.getElementById('hsAgentA');
+  const agentB=document.getElementById('hsAgentB');
+  const glowA=document.getElementById('hsGlowA');
+  const glowB=document.getElementById('hsGlowB');
+  const midCanvas=document.getElementById('hsMidCanvas');
+  const mctx=midCanvas.getContext('2d');
+  const fxCanvas=document.getElementById('hsFxCanvas');
+  const fctx=fxCanvas.getContext('2d');
+  const burstEl=document.getElementById('hsBurst');
+  const statusBar=document.getElementById('hsStatus');
+  const ctxA=document.getElementById('hsFaceA').getContext('2d');
+  const ctxB=document.getElementById('hsFaceB').getContext('2d');
+
+  function sizeFx(){fxCanvas.width=stageEl.offsetWidth;fxCanvas.height=stageEl.offsetHeight;}
+  sizeFx();window.addEventListener('resize',sizeFx);
+
+  let W=stageEl.offsetWidth||680;
+  const stageH=stageEl.offsetHeight||150;
+  const agentW=90;
+  const circleCenterY=stageH-40;
+  // Start from the very edges of the container
+  const startA=6;
+  const startB=W-agentW-6;
+  const meetGap=22;
+  const meetA=W/2-agentW-meetGap/2,meetB=W/2+meetGap/2;
+
+  let t=0;
+  let blinkA={s:0,tm:0,nx:160},blinkB={s:0,tm:0,nx:220};
+  const PHASE={WALK_IN:0,REACH:1,SHAKE:2,HOLD:3,RETRACT:4,WALK_BACK:5,PAUSE:6};
+  let phase=PHASE.WALK_IN,phaseT=0;
+  const DUR={WALK_IN:240,REACH:65,SHAKE:120,HOLD:150,RETRACT:55,WALK_BACK:240,PAUSE:90};
+  let curAx=startA,curBx=startB;
+
+  function lerp(a,b,p){return a+(b-a)*p;}
+  function ease(p){return p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;}
+  function getBlink(b){
+    b.tm++;if(b.s===0&&b.tm>=b.nx){b.s=1;b.tm=0;}
+    if(b.s===1&&b.tm>=5){b.s=2;b.tm=0;}
+    if(b.s===2&&b.tm>=5){b.s=0;b.tm=0;b.nx=120+Math.random()*100;}
+    if(b.s===0)return 7;if(b.s===1)return Math.max(0.5,7-(b.tm/5)*6.5);
+    return Math.max(0.5,(b.tm/5)*7);
+  }
+
+  function drawFace(ctx,tick,eyeH,isGreen,happy){
+    const cx=24,cy=24;ctx.clearRect(0,0,48,48);
+    const bob=Math.sin(tick*0.018)*1.5;ctx.save();ctx.translate(0,bob);
+    const headR=19,headY=cy+1;
+    const g=ctx.createRadialGradient(cx-4,headY-4,2,cx,headY,headR);
+    if(isGreen){g.addColorStop(0,'#15b88a');g.addColorStop(1,'#0a7a5c');}
+    else{g.addColorStop(0,'#3a9eee');g.addColorStop(1,'#1a5ea0');}
+    ctx.beginPath();ctx.arc(cx,headY,headR,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff';ctx.lineWidth=1.5;
+    ctx.shadowColor=isGreen?'rgba(64,255,187,0.7)':'rgba(96,187,255,0.7)';ctx.shadowBlur=10;ctx.stroke();ctx.shadowBlur=0;
+    ctx.beginPath();ctx.arc(cx,headY,headR-3,0,Math.PI*2);
+    ctx.strokeStyle=isGreen?'#28d9a0':'#4aadff';ctx.lineWidth=0.5;ctx.stroke();
+    const eyeY=headY-4;
+    [-5,5].forEach(function(ox){
+      ctx.beginPath();ctx.ellipse(cx+ox,eyeY,3,eyeH*0.7,0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#aaffdd':'#aaddff';ctx.shadowColor=isGreen?'rgba(170,255,221,0.7)':'rgba(170,221,255,0.7)';ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;
+      ctx.beginPath();ctx.ellipse(cx+ox,eyeY,1.8,eyeH*0.4,0,0,Math.PI*2);ctx.fillStyle=isGreen?'#064035':'#042C53';ctx.fill();
+      ctx.beginPath();ctx.ellipse(cx+ox,eyeY,0.9,eyeH*0.2,0,0,Math.PI*2);ctx.fillStyle='#020e0a';ctx.fill();
+    });
+    const smR=happy?8:6;
+    ctx.beginPath();ctx.arc(cx,headY+5,smR,0.2*Math.PI,0.8*Math.PI);
+    ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff';ctx.lineWidth=1.2;ctx.lineCap='round';
+    ctx.shadowColor=isGreen?'rgba(64,255,187,0.4)':'rgba(96,187,255,0.4)';ctx.shadowBlur=4;ctx.stroke();ctx.shadowBlur=0;
+    const aBase=headY-headR;
+    ctx.beginPath();ctx.moveTo(cx,aBase);ctx.lineTo(cx,aBase-7);
+    ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff';ctx.lineWidth=1.2;ctx.stroke();
+    const pulse=0.7+0.3*Math.sin(tick*0.09);
+    ctx.save();ctx.shadowColor=isGreen?'rgba(64,255,187,1)':'rgba(96,187,255,1)';ctx.shadowBlur=12;
+    ctx.beginPath();ctx.arc(cx,aBase-9,2.5*pulse,0,Math.PI*2);ctx.fillStyle=isGreen?'#40ffbb':'#60bbff';ctx.fill();ctx.restore();
+    ctx.restore();
+  }
+
+  function drawHands(progress,shakeAmt){
+    const CW=320,CH=70;mctx.clearRect(0,0,CW,CH);if(progress<=0)return;
+    const midX=CW/2,midY=CH*0.46;
+    const armStartOffset=30;
+    const shake=shakeAmt*(Math.sin(t*0.45)*2.5);
+    const handY=midY+shake;
+    function drawArm(startX,endX,isGreen){
+      const g2=mctx.createLinearGradient(startX,0,endX,0);
+      if(isGreen){g2.addColorStop(0,'#063b30');g2.addColorStop(1,'#0c6b54');}
+      else{g2.addColorStop(0,'#082f57');g2.addColorStop(1,'#1060a8');}
+      mctx.save();mctx.beginPath();
+      mctx.moveTo(startX,midY+3);mctx.lineTo(endX,handY+3);
+      mctx.lineTo(endX,handY-3);mctx.lineTo(startX,midY-3);mctx.closePath();
+      mctx.fillStyle=g2;mctx.fill();
+      mctx.strokeStyle=isGreen?'#1D9E75':'#378ADD';mctx.lineWidth=0.8;mctx.stroke();mctx.restore();
+    }
+    const leftStart=midX-armStartOffset,rightStart=midX+armStartOffset;
+    const leftEnd=lerp(leftStart,midX-4,progress),rightEnd=lerp(rightStart,midX+4,progress);
+    drawArm(leftStart,leftEnd,true);drawArm(rightStart,rightEnd,false);
+    if(progress>0.82){
+      const hp=Math.min((progress-0.82)/0.18,1);
+      const hx=midX,hy=handY;
+      mctx.save();mctx.shadowColor='rgba(93,202,165,0.4)';mctx.shadowBlur=8*hp;
+      mctx.beginPath();
+      mctx.moveTo(hx-1,hy-8*hp);mctx.lineTo(hx+7,hy-5*hp);mctx.lineTo(hx+9,hy-2*hp);
+      mctx.lineTo(hx+8,hy+1);mctx.lineTo(hx+5,hy+3);mctx.lineTo(hx-1,hy+3);
+      mctx.lineTo(hx-8,hy+1);mctx.lineTo(hx-9,hy-2*hp);mctx.lineTo(hx-7,hy-5*hp);mctx.closePath();
+      mctx.fillStyle='#1D9E75';mctx.fill();mctx.strokeStyle='#74e3bc';mctx.lineWidth=0.8;mctx.stroke();
+      mctx.shadowBlur=0;mctx.restore();
+    }
+  }
+
+  let particles=[];
+  function spawnBurst(cx,cy){for(let i=0;i<30;i++){const ang=Math.random()*Math.PI*2;const sp=1.2+Math.random()*3.5;particles.push({x:cx,y:cy,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp-0.8,life:1,decay:0.014+Math.random()*0.02,r:1.2+Math.random()*2,col:Math.random()<0.5?'93,202,165':(Math.random()<0.5?'250,199,117':'133,183,235')});}}
+
+  function drawFx(beamStrength){
+    fctx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+    const cy=circleCenterY;
+    if(beamStrength>0){
+      const ax=curAx+agentW/2,bx=curBx+agentW/2;
+      fctx.save();const grad=fctx.createLinearGradient(ax,0,bx,0);
+      grad.addColorStop(0,'rgba(29,158,117,'+(0.4*beamStrength)+')');
+      grad.addColorStop(0.5,'rgba(155,210,255,'+(0.6*beamStrength)+')');
+      grad.addColorStop(1,'rgba(55,138,221,'+(0.4*beamStrength)+')');
+      fctx.strokeStyle=grad;fctx.lineWidth=2*beamStrength;
+      fctx.shadowColor='rgba(120,180,255,0.7)';fctx.shadowBlur=12*beamStrength;
+      fctx.beginPath();fctx.moveTo(ax,cy);fctx.lineTo(bx,cy);fctx.stroke();fctx.restore();
+      const span=bx-ax;
+      for(let k=0;k<3;k++){const dir=(k%2===0)?((t*0.012+k*0.33)%1):(1-((t*0.012+k*0.33)%1));const x2=ax+span*dir;
+      fctx.save();fctx.fillStyle='rgba(180,230,255,'+beamStrength+')';fctx.shadowColor='rgba(180,230,255,0.8)';fctx.shadowBlur=8;
+      fctx.beginPath();fctx.arc(x2,cy+Math.sin(t*0.2+k)*2,2*beamStrength,0,Math.PI*2);fctx.fill();fctx.restore();}
+    }
+    particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=0.05;p.life-=p.decay;
+    if(p.life>0){fctx.save();fctx.globalAlpha=Math.max(0,p.life);fctx.fillStyle='rgba('+p.col+',1)';fctx.shadowColor='rgba('+p.col+',0.7)';fctx.shadowBlur=6;
+    fctx.beginPath();fctx.arc(p.x,p.y,p.r,0,Math.PI*2);fctx.fill();fctx.restore();}});
+    particles=particles.filter(function(p){return p.life>0;});
+  }
+
+  function setPos(a,b){curAx=a;curBx=b;agentA.style.left=a+'px';agentB.style.left=b+'px';}
+
+  let outerAngle=0,innerAngle=0;
+  const roA=document.getElementById('hsRoA'),riA=document.getElementById('hsRiA');
+  const roB=document.getElementById('hsRoB'),riB=document.getElementById('hsRiB');
+  let burstFired=false;
+
+  function loop(){
+    t++;phaseT++;outerAngle+=0.06;innerAngle+=0.03;
+    roA.style.transform='rotate('+outerAngle+'deg)';roA.style.transformOrigin='40px 40px';
+    riA.style.transform='rotate('+(-innerAngle)+'deg)';riA.style.transformOrigin='40px 40px';
+    roB.style.transform='rotate('+(-outerAngle)+'deg)';roB.style.transformOrigin='40px 40px';
+    riB.style.transform='rotate('+innerAngle+'deg)';riB.style.transformOrigin='40px 40px';
+    const ehA=getBlink(blinkA),ehB=getBlink(blinkB);
+    let beamStrength=0,happy=false;
+
+    if(phase===PHASE.WALK_IN){const p=ease(Math.min(phaseT/DUR.WALK_IN,1));setPos(lerp(startA,meetA,p),lerp(startB,meetB,p));drawHands(0,0);burstEl.style.opacity=0;burstFired=false;beamStrength=p>0.6?(p-0.6)/0.4*0.35:0;statusBar.textContent=p<0.5?'Agents approaching...':'Verifying TBN certificates...';if(phaseT>=DUR.WALK_IN){phase=PHASE.REACH;phaseT=0;}}
+    else if(phase===PHASE.REACH){setPos(meetA,meetB);const p=ease(Math.min(phaseT/DUR.REACH,1));drawHands(p,0);beamStrength=0.45;statusBar.textContent='Extending for handshake...';if(phaseT>=DUR.REACH){phase=PHASE.SHAKE;phaseT=0;}}
+    else if(phase===PHASE.SHAKE){setPos(meetA,meetB);drawHands(1,Math.min(phaseT/10,1));beamStrength=0.75;statusBar.textContent='TBN handshake in progress...';statusBar.style.color='#bdb7f2';if(phaseT>=DUR.SHAKE){phase=PHASE.HOLD;phaseT=0;}}
+    else if(phase===PHASE.HOLD){setPos(meetA,meetB);drawHands(1,1);beamStrength=1;happy=true;if(!burstFired){spawnBurst(W/2,circleCenterY);burstFired=true;}burstEl.style.opacity=Math.min(phaseT/12,1);statusBar.textContent='✓ Trust established';statusBar.style.color='#74e3bc';if(phaseT>=DUR.HOLD){phase=PHASE.RETRACT;phaseT=0;}}
+    else if(phase===PHASE.RETRACT){setPos(meetA,meetB);const p=1-ease(Math.min(phaseT/DUR.RETRACT,1));drawHands(p,0);beamStrength=p*0.5;happy=true;burstEl.style.opacity=Math.max(0,1-phaseT/18);statusBar.textContent='Handshake complete';statusBar.style.color='#74e3bc';if(phaseT>=DUR.RETRACT){phase=PHASE.WALK_BACK;phaseT=0;}}
+    else if(phase===PHASE.WALK_BACK){const p=ease(Math.min(phaseT/DUR.WALK_BACK,1));setPos(lerp(meetA,startA,p),lerp(meetB,startB,p));drawHands(0,0);burstEl.style.opacity=0;statusBar.style.color='#bdb7f2';statusBar.textContent='Channel secured · agents returning';if(phaseT>=DUR.WALK_BACK){phase=PHASE.PAUSE;phaseT=0;}}
+    else if(phase===PHASE.PAUSE){setPos(startA,startB);drawHands(0,0);statusBar.textContent='';if(phaseT>=DUR.PAUSE){phase=PHASE.WALK_IN;phaseT=0;}}
+
+    const glowPulse=0.6+0.4*Math.sin(t*0.08)+beamStrength*0.5;
+    glowA.style.opacity=Math.min(1,0.4+glowPulse*0.35);
+    glowB.style.opacity=Math.min(1,0.4+glowPulse*0.35);
+    drawFace(ctxA,t,ehA,true,happy);drawFace(ctxB,t,ehB,false,happy);
+    drawFx(beamStrength);
+    requestAnimationFrame(loop);
+  }
+  setPos(startA,startB);loop();
+})();
+</script>
+</body>
+</html>
