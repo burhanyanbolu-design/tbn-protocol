@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TBN Agent Handshake — v6</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#08060f; display:flex; align-items:center; justify-content:center; min-height:100vh; font-family:'Inter',system-ui,sans-serif; }
+  .wrap {
+    background:radial-gradient(ellipse at 50% 30%, #1a1440 0%, #100c28 55%, #0a0818 100%);
+    border-radius:18px;
+    padding:30px 16px 24px;
+    position:relative;
+    overflow:hidden;
+    width:720px;
+    max-width:96vw;
+    box-shadow:0 30px 80px rgba(0,0,0,0.7), inset 0 0 60px rgba(83,74,183,0.08);
+  }
+  .dot-grid {
+    position:absolute;inset:0;
+    background-image:radial-gradient(circle,#6a60d8 1px,transparent 1px);
+    background-size:30px 30px;
+    opacity:0.10;
+    pointer-events:none;
+    border-radius:18px;
+  }
+  .vignette {
+    position:absolute;inset:0;border-radius:18px;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(10,8,30,0.55) 100%);
+  }
+  .fh {
+    position:absolute;
+    font-family:'Courier New',monospace;
+    font-size:10px;
+    color:#6a60d8;
+    opacity:0.4;
+    animation:drift 6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes drift{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-8px);opacity:.12}}
+  .stage { position:relative; height:300px; }
+  .fx-canvas { position:absolute; inset:0; pointer-events:none; z-index:1; }
+  .ground {
+    position:absolute; bottom:0; left:3%; right:3%; height:1px;
+    background:linear-gradient(90deg, transparent, #4b42a0 20%, #6a60d8 50%, #4b42a0 80%, transparent);
+    box-shadow:0 0 12px rgba(106,96,216,0.6);
+  }
+  .agent-col {
+    position:absolute;
+    bottom:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:130px;
+    z-index:2;
+  }
+  .agent-label { font-size:11px; font-weight:600; letter-spacing:2.5px; color:#9a93e8; text-transform:uppercase; margin-bottom:5px; text-shadow:0 0 10px rgba(154,147,232,0.4); }
+  .cert-pill {
+    font-family:'Courier New',monospace; font-size:9px; color:#74e3bc;
+    background:rgba(4,52,44,0.85); border:0.5px solid #1D9E75; border-radius:10px;
+    padding:2px 9px; margin-bottom:6px; letter-spacing:1px;
+    box-shadow:0 0 12px rgba(29,158,117,0.35);
+  }
+  .scene-wrap { position:relative; width:120px; height:120px; }
+  .ring-svg { position:absolute; top:0; left:0; }
+  .glow-disc {
+    position:absolute; top:50%; left:50%; width:88px; height:88px;
+    transform:translate(-50%,-50%); border-radius:50%; pointer-events:none;
+  }
+  .glow-green { box-shadow:0 0 50px 14px rgba(29,220,150,0.6), 0 0 100px 30px rgba(29,220,150,0.25), inset 0 0 24px rgba(29,220,150,0.4); }
+  .glow-blue  { box-shadow:0 0 50px 14px rgba(80,170,255,0.6), 0 0 100px 30px rgba(80,170,255,0.25), inset 0 0 24px rgba(80,170,255,0.4); }
+  .agent-canvas { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; }
+  .status-bar {
+    margin-top:16px; text-align:center; font-size:12px; color:#bdb7f2;
+    letter-spacing:1.5px; min-height:18px; font-weight:500;
+    transition:color 0.3s; text-shadow:0 0 8px rgba(189,183,242,0.3);
+  }
+  .mid-canvas { position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); pointer-events:none; z-index:3; }
+  .burst-el {
+    position:absolute; bottom:100px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    pointer-events:none; opacity:0; z-index:4;
+  }
+  .burst-el .v-badge {
+    font-family:'Courier New',monospace; font-size:13px; color:#0a2820;
+    background:linear-gradient(180deg,#74e3bc,#3fbf94);
+    letter-spacing:2px; font-weight:bold; padding:4px 14px; border-radius:20px;
+    box-shadow:0 0 24px rgba(93,202,165,0.7);
+  }
+  .burst-el .v-sub { font-family:'Courier New',monospace; font-size:9px; color:#9a93e8; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="dot-grid"></div>
+  <span class="fh" style="top:14px;left:70px;animation-delay:0s">7F3A·B91C</span>
+  <span class="fh" style="top:48px;right:62px;animation-delay:1.2s">F4A1·2D7C</span>
+  <span class="fh" style="bottom:48px;left:46px;animation-delay:2s">C038·91BE</span>
+  <span class="fh" style="bottom:48px;right:46px;animation-delay:0.7s">8E53·3C8B</span>
+  <span class="fh" style="top:90px;left:50%;animation-delay:1.6s">A271·F062</span>
+
+  <div class="stage" id="stage">
+    <canvas class="fx-canvas" id="fxCanvas"></canvas>
+    <div class="ground"></div>
+
+    <div class="agent-col" id="agentA">
+      <div class="agent-label">Agent</div>
+      <div class="cert-pill">TBN·CERTIFIED</div>
+      <div class="scene-wrap">
+        <div class="glow-disc glow-green" id="glowA"></div>
+        <svg class="ring-svg" id="roA" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="oaA" d="M60,60 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0"/></defs>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#534AB7" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#9a93e8" letter-spacing="1.5">
+            <textPath href="#oaA" startOffset="0%">TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · </textPath>
+          </text>
+        </svg>
+        <svg class="ring-svg" id="riA" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="iaA" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#3C3489" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#6a60d8" letter-spacing="1">
+            <textPath href="#iaA" startOffset="0%">7F3A · B91C · F4A1 · 2D7C · 8E53 · C038 · A271 · 91BE · 7F3A · B91C · F4A1 · </textPath>
+          </text>
+        </svg>
+        <canvas class="agent-canvas" id="canvasA" width="74" height="74"></canvas>
+      </div>
+    </div>
+
+    <div class="agent-col" id="agentB">
+      <div class="agent-label">Validator</div>
+      <div class="cert-pill">TBN·CERTIFIED</div>
+      <div class="scene-wrap">
+        <div class="glow-disc glow-blue" id="glowB"></div>
+        <svg class="ring-svg" id="roB" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="oaB" d="M60,60 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0"/></defs>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#534AB7" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#9a93e8" letter-spacing="1.5">
+            <textPath href="#oaB" startOffset="0%">TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · </textPath>
+          </text>
+        </svg>
+        <svg class="ring-svg" id="riB" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="iaB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#3C3489" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#6a60d8" letter-spacing="1">
+            <textPath href="#iaB" startOffset="0%">D901 · 6F4E · 0D62 · C5F8 · 39E0 · B7A4 · 8C1D · F062 · D901 · 6F4E · 0D62 · </textPath>
+          </text>
+        </svg>
+        <canvas class="agent-canvas" id="canvasB" width="74" height="74"></canvas>
+      </div>
+    </div>
+
+    <canvas id="midCanvas" class="mid-canvas" width="440" height="110"></canvas>
+
+    <div class="burst-el" id="burstEl">
+      <div class="v-badge">✓ VERIFIED</div>
+      <div class="v-sub">TBN handshake complete</div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="statusBar">Agents approaching...</div>
+</div>
+
+<script>
+(function(){
+  const stageEl = document.getElementById('stage');
+  const agentA = document.getElementById('agentA');
+  const agentB = document.getElementById('agentB');
+  const glowA = document.getElementById('glowA');
+  const glowB = document.getElementById('glowB');
+  const midCanvas = document.getElementById('midCanvas');
+  const mctx = midCanvas.getContext('2d');
+  const fxCanvas = document.getElementById('fxCanvas');
+  const fctx = fxCanvas.getContext('2d');
+  const burstEl = document.getElementById('burstEl');
+  const statusBar = document.getElementById('statusBar');
+  const ctxA = document.getElementById('canvasA').getContext('2d');
+  const ctxB = document.getElementById('canvasB').getContext('2d');
+
+  function sizeFx(){
+    fxCanvas.width = stageEl.offsetWidth;
+    fxCanvas.height = stageEl.offsetHeight;
+  }
+  sizeFx();
+  window.addEventListener('resize', sizeFx);
+
+  let W = stageEl.offsetWidth || 720;
+  const stageH = stageEl.offsetHeight || 300;
+  const agentW = 130;
+
+  // The vertical centre of an agent circle, measured from the top of the stage.
+  // Column: label(~16) + pill(~20) + 120 circle, anchored at bottom. Circle centre ≈ 60px above bottom.
+  const circleCenterY = stageH - 60;
+
+  // Positions (x = left edge of the 130px column)
+  const startA = 6;
+  const startB = W - agentW - 6;
+  const meetGap = 30;
+  const meetA = W/2 - agentW - meetGap/2;
+  const meetB = W/2 + meetGap/2;
+
+  let t = 0;
+  let blinkA = {s:0,tm:0,nx:160};
+  let blinkB = {s:0,tm:0,nx:220};
+
+  const PHASE = {WALK_IN:0, REACH:1, SHAKE:2, HOLD:3, RETRACT:4, WALK_BACK:5, PAUSE:6};
+  let phase = PHASE.WALK_IN;
+  let phaseT = 0;
+  const DUR = {WALK_IN:150, REACH:42, SHAKE:80, HOLD:95, RETRACT:34, WALK_BACK:150, PAUSE:55};
+
+  // current agent left positions (for fx beam math)
+  let curAx = startA, curBx = startB;
+
+  function lerp(a,b,p){return a+(b-a)*p;}
+  function ease(p){return p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;}
+  function easeOutBack(p){const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);}
+
+  function getBlink(b){
+    b.tm++;
+    if(b.s===0&&b.tm>=b.nx){b.s=1;b.tm=0;}
+    if(b.s===1&&b.tm>=5){b.s=2;b.tm=0;}
+    if(b.s===2&&b.tm>=5){b.s=0;b.tm=0;b.nx=120+Math.random()*100;}
+    if(b.s===0)return 9;
+    if(b.s===1)return Math.max(0.5,9-(b.tm/5)*8.5);
+    return Math.max(0.5,(b.tm/5)*9);
+  }
+
+  function drawFace(ctx, tick, eyeH, isGreen, happy){
+    const cx=37,cy=37;
+    ctx.clearRect(0,0,74,74);
+    const bob=Math.sin(tick*0.018)*2.5;
+    ctx.save();
+    ctx.translate(0,bob);
+    const headR=30, headY=cy+2;
+
+    // Head gradient
+    const g=ctx.createRadialGradient(cx-8,headY-8,4,cx,headY,headR);
+    if(isGreen){ g.addColorStop(0,'#15b88a'); g.addColorStop(1,'#0a7a5c'); }
+    else { g.addColorStop(0,'#3a9eee'); g.addColorStop(1,'#1a5ea0'); }
+    ctx.beginPath(); ctx.arc(cx,headY,headR,0,Math.PI*2);
+    ctx.fillStyle=g; ctx.fill();
+    ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff'; ctx.lineWidth=2.5;
+    ctx.shadowColor=isGreen?'rgba(64,255,187,0.8)':'rgba(96,187,255,0.8)'; ctx.shadowBlur=18; ctx.stroke(); ctx.shadowBlur=0;
+
+    ctx.beginPath(); ctx.arc(cx,headY,headR-5,0,Math.PI*2);
+    ctx.strokeStyle=isGreen?'#28d9a0':'#4aadff'; ctx.lineWidth=0.8; ctx.stroke();
+
+    // Scan line
+    const scanY=headY-headR+((tick*1.1)%(headR*2));
+    if(scanY>headY-headR&&scanY<headY+headR){
+      ctx.save(); ctx.beginPath(); ctx.arc(cx,headY,headR-2,0,Math.PI*2); ctx.clip();
+      ctx.beginPath(); ctx.moveTo(cx-headR,scanY); ctx.lineTo(cx+headR,scanY);
+      ctx.strokeStyle=isGreen?'rgba(29,158,117,0.18)':'rgba(55,138,221,0.18)'; ctx.lineWidth=5; ctx.stroke(); ctx.restore();
+    }
+
+    // Eyes
+    const eyeY=headY-7;
+    [-9,9].forEach(function(ox){
+      ctx.beginPath(); ctx.ellipse(cx+ox,eyeY,5,eyeH,0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#aaffdd':'#aaddff'; ctx.fill();
+      ctx.shadowColor=isGreen?'rgba(170,255,221,0.9)':'rgba(170,221,255,0.9)'; ctx.shadowBlur=10;
+      ctx.fill(); ctx.shadowBlur=0;
+      ctx.beginPath(); ctx.ellipse(cx+ox+1.5,eyeY-1.5,1.8,1.8,0,0,Math.PI*2);
+      ctx.fillStyle='#ffffff'; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+ox,eyeY,3,eyeH*0.55,0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#064035':'#042C53'; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+ox,eyeY,1.5,eyeH*0.3,0,0,Math.PI*2);
+      ctx.fillStyle='#020e0a'; ctx.fill();
+    });
+
+    // Smile — bigger when happy
+    const smileR = happy ? 12 : 10;
+    ctx.beginPath(); ctx.arc(cx,headY+7,smileR,0.15*Math.PI,0.85*Math.PI);
+    ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.shadowColor=isGreen?'rgba(64,255,187,0.6)':'rgba(96,187,255,0.6)'; ctx.shadowBlur=8; ctx.stroke(); ctx.shadowBlur=0;
+
+    // Antenna
+    const aBaseY=headY-headR;
+    ctx.beginPath(); ctx.moveTo(cx,aBaseY); ctx.lineTo(cx,aBaseY-11);
+    ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff'; ctx.lineWidth=1.8; ctx.stroke();
+    const pulse=0.7+0.3*Math.sin(tick*0.09);
+    ctx.save();
+    ctx.shadowColor=isGreen?'rgba(64,255,187,1)':'rgba(96,187,255,1)'; ctx.shadowBlur=20;
+    ctx.beginPath(); ctx.arc(cx,aBaseY-14,4*pulse,0,Math.PI*2);
+    ctx.fillStyle=isGreen?'#40ffbb':'#60bbff'; ctx.fill();
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(cx,aBaseY-14,1.8,0,Math.PI*2);
+    ctx.fillStyle='#ffffff'; ctx.fill();
+
+    // Ear panels
+    [-headR+1,headR-1].forEach(function(ox,i){
+      const ex=cx+ox;
+      ctx.beginPath(); ctx.rect(ex+(i===0?-5:0),headY-5,5,10);
+      ctx.fillStyle=isGreen?'#0a6050':'#0C4480'; ctx.fill();
+      ctx.strokeStyle=isGreen?'#40ffbb':'#60bbff'; ctx.lineWidth=1.2; ctx.stroke();
+      ctx.beginPath(); ctx.rect(ex+(i===0?-4:1),headY-3,2,6);
+      ctx.fillStyle=isGreen?'#40ffbb':'#60bbff';
+      ctx.shadowColor=isGreen?'rgba(64,255,187,0.8)':'rgba(96,187,255,0.8)'; ctx.shadowBlur=6;
+      ctx.fill(); ctx.shadowBlur=0;
+    });
+
+    ctx.restore();
+  }
+
+  // ── Handshake arms + clasp (drawn on midCanvas, centred) ──
+  function drawHands(progress, shakeAmt){
+    const CW=440, CH=110;
+    mctx.clearRect(0,0,CW,CH);
+    if(progress<=0) return;
+
+    const midX=CW/2, midY=CH*0.46;
+    // Arms start from the inner edge of each circle (3 o'clock on left agent, 9 o'clock on right)
+    // The gap between agents is 30px, so each arm starts ~15px from center
+    const armStartOffset = 40;
+    const shake=shakeAmt*(Math.sin(t*0.45)*3.5);
+    const handY=midY+shake;
+
+    function drawArm(startX, endX, isGreen){
+      const g=mctx.createLinearGradient(startX,0,endX,0);
+      if(isGreen){ g.addColorStop(0,'#063b30'); g.addColorStop(1,'#0c6b54'); }
+      else { g.addColorStop(0,'#082f57'); g.addColorStop(1,'#1060a8'); }
+      const border=isGreen?'#1D9E75':'#378ADD';
+      mctx.save();
+      mctx.beginPath();
+      mctx.moveTo(startX, midY+5);
+      mctx.lineTo(endX, handY+5);
+      mctx.lineTo(endX, handY-5);
+      mctx.lineTo(startX, midY-5);
+      mctx.closePath();
+      mctx.fillStyle=g; mctx.fill();
+      mctx.strokeStyle=border; mctx.lineWidth=1.2; mctx.stroke();
+      mctx.restore();
+    }
+
+    // Left arm: starts at left edge (outside circle), extends toward center
+    const leftStart = midX - armStartOffset;
+    const rightStart = midX + armStartOffset;
+    const leftEnd = lerp(leftStart, midX - 6, progress);
+    const rightEnd = lerp(rightStart, midX + 6, progress);
+
+    drawArm(leftStart, leftEnd, true);
+    drawArm(rightStart, rightEnd, false);
+
+    // Clasp
+    if(progress>0.82){
+      const hp=Math.min((progress-0.82)/0.18,1);
+      const hx=midX, hy=handY;
+      mctx.save();
+      mctx.shadowColor='rgba(93,202,165,0.6)'; mctx.shadowBlur=14*hp;
+      mctx.beginPath();
+      mctx.moveTo(hx-2,hy-14*hp);
+      mctx.lineTo(hx+12,hy-10*hp);
+      mctx.lineTo(hx+16,hy-4*hp);
+      mctx.lineTo(hx+14,hy+2);
+      mctx.lineTo(hx+8,hy+6);
+      mctx.lineTo(hx-2,hy+6);
+      mctx.lineTo(hx-14,hy+2);
+      mctx.lineTo(hx-16,hy-4*hp);
+      mctx.lineTo(hx-12,hy-10*hp);
+      mctx.closePath();
+      mctx.fillStyle='#1D9E75'; mctx.fill();
+      mctx.strokeStyle='#74e3bc'; mctx.lineWidth=1.5; mctx.stroke();
+      mctx.shadowBlur=0;
+
+      mctx.beginPath();
+      mctx.moveTo(hx-14,hy+2);
+      mctx.bezierCurveTo(hx-10,hy+14,hx+10,hy+14,hx+14,hy+2);
+      mctx.strokeStyle='#74e3bc'; mctx.lineWidth=1.2; mctx.stroke();
+
+      for(let i=-2;i<=2;i++){
+        mctx.beginPath();
+        mctx.moveTo(hx+i*5, hy-4);
+        mctx.lineTo(hx+i*5, hy-14*hp);
+        mctx.strokeStyle='rgba(116,227,188,0.4)'; mctx.lineWidth=3; mctx.lineCap='round'; mctx.stroke();
+      }
+      mctx.restore();
+    }
+  }
+
+  // ── FX layer: connection beam, data packets, particle burst ──
+  let particles = [];
+  function spawnBurst(cx, cy){
+    for(let i=0;i<46;i++){
+      const ang=Math.random()*Math.PI*2;
+      const sp=1.5+Math.random()*4.5;
+      particles.push({
+        x:cx, y:cy,
+        vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 1,
+        life:1, decay:0.012+Math.random()*0.02,
+        r:1.5+Math.random()*2.5,
+        col: Math.random()<0.5 ? '93,202,165' : (Math.random()<0.5?'250,199,117':'133,183,235')
+      });
+    }
+  }
+
+  function drawFx(beamStrength, midX){
+    fctx.clearRect(0,0,fxCanvas.width,fxCanvas.height);
+    const cy = circleCenterY;
+
+    // Connection beam between the two agent circle centres
+    if(beamStrength>0){
+      const ax = curAx + agentW/2;
+      const bx = curBx + agentW/2;
+      // glow beam
+      fctx.save();
+      const grad=fctx.createLinearGradient(ax,0,bx,0);
+      grad.addColorStop(0,'rgba(29,158,117,'+(0.5*beamStrength)+')');
+      grad.addColorStop(0.5,'rgba(155,210,255,'+(0.7*beamStrength)+')');
+      grad.addColorStop(1,'rgba(55,138,221,'+(0.5*beamStrength)+')');
+      fctx.strokeStyle=grad;
+      fctx.lineWidth=2.5*beamStrength;
+      fctx.shadowColor='rgba(120,180,255,0.8)';
+      fctx.shadowBlur=16*beamStrength;
+      fctx.beginPath();
+      fctx.moveTo(ax,cy);
+      fctx.lineTo(bx,cy);
+      fctx.stroke();
+      fctx.restore();
+
+      // Traveling data packets along the beam
+      const span=bx-ax;
+      for(let k=0;k<4;k++){
+        const pp=((t*0.012 + k*0.25)%1);
+        const px=ax+span*pp;
+        const dir=(k%2===0)?pp:(1-pp);
+        const x2=ax+span*dir;
+        fctx.save();
+        fctx.fillStyle='rgba(180,230,255,'+beamStrength+')';
+        fctx.shadowColor='rgba(180,230,255,0.9)';
+        fctx.shadowBlur=10;
+        fctx.beginPath();
+        fctx.arc(x2,cy + Math.sin(t*0.2+k)*3, 2.4*beamStrength, 0, Math.PI*2);
+        fctx.fill();
+        fctx.restore();
+      }
+    }
+
+    // Particles
+    particles.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.06; p.life-=p.decay;
+      if(p.life>0){
+        fctx.save();
+        fctx.globalAlpha=Math.max(0,p.life);
+        fctx.fillStyle='rgba('+p.col+',1)';
+        fctx.shadowColor='rgba('+p.col+',0.8)';
+        fctx.shadowBlur=8;
+        fctx.beginPath();
+        fctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        fctx.fill();
+        fctx.restore();
+      }
+    });
+    particles = particles.filter(function(p){return p.life>0;});
+  }
+
+  function setPositions(posAx, posBx){
+    curAx=posAx; curBx=posBx;
+    agentA.style.left = posAx + 'px';
+    agentB.style.left = posBx + 'px';
+  }
+
+  let outerAngle=0, innerAngle=0;
+  const roA=document.getElementById('roA'), riA=document.getElementById('riA');
+  const roB=document.getElementById('roB'), riB=document.getElementById('riB');
+
+  let burstFired=false;
+
+  function loop(){
+    t++; phaseT++;
+    outerAngle+=0.13; innerAngle+=0.07;
+
+    roA.style.transform='rotate('+outerAngle+'deg)'; roA.style.transformOrigin='60px 60px';
+    riA.style.transform='rotate('+(-innerAngle)+'deg)'; riA.style.transformOrigin='60px 60px';
+    roB.style.transform='rotate('+(-outerAngle)+'deg)'; roB.style.transformOrigin='60px 60px';
+    riB.style.transform='rotate('+innerAngle+'deg)'; riB.style.transformOrigin='60px 60px';
+
+    const ehA=getBlink(blinkA);
+    const ehB=getBlink(blinkB);
+
+    let beamStrength=0;
+    let happy=false;
+
+    if(phase===PHASE.WALK_IN){
+      const p=ease(Math.min(phaseT/DUR.WALK_IN,1));
+      setPositions(lerp(startA,meetA,p), lerp(startB,meetB,p));
+      drawHands(0,0);
+      burstEl.style.opacity=0; burstFired=false;
+      beamStrength = p>0.6 ? (p-0.6)/0.4*0.4 : 0;
+      statusBar.textContent = p<0.5 ? 'Agents approaching...' : 'Verifying TBN certificates...';
+      if(phaseT>=DUR.WALK_IN){phase=PHASE.REACH;phaseT=0;}
+    }
+    else if(phase===PHASE.REACH){
+      setPositions(meetA,meetB);
+      const p=ease(Math.min(phaseT/DUR.REACH,1));
+      drawHands(p,0);
+      beamStrength=0.5;
+      statusBar.textContent='Extending for handshake...';
+      if(phaseT>=DUR.REACH){phase=PHASE.SHAKE;phaseT=0;}
+    }
+    else if(phase===PHASE.SHAKE){
+      setPositions(meetA,meetB);
+      drawHands(1, Math.min(phaseT/10,1));
+      beamStrength=0.8;
+      statusBar.textContent='TBN handshake in progress...';
+      statusBar.style.color='#bdb7f2';
+      if(phaseT>=DUR.SHAKE){phase=PHASE.HOLD;phaseT=0;}
+    }
+    else if(phase===PHASE.HOLD){
+      setPositions(meetA,meetB);
+      drawHands(1,1);
+      beamStrength=1;
+      happy=true;
+      if(!burstFired){ spawnBurst(W/2, circleCenterY); burstFired=true; }
+      burstEl.style.opacity=Math.min(phaseT/12,1);
+      statusBar.textContent='✓ Trust established';
+      statusBar.style.color='#74e3bc';
+      if(phaseT>=DUR.HOLD){phase=PHASE.RETRACT;phaseT=0;}
+    }
+    else if(phase===PHASE.RETRACT){
+      setPositions(meetA,meetB);
+      const p=1-ease(Math.min(phaseT/DUR.RETRACT,1));
+      drawHands(p,0);
+      beamStrength=p*0.6;
+      happy=true;
+      burstEl.style.opacity=Math.max(0,1-phaseT/18);
+      statusBar.textContent='Handshake complete';
+      statusBar.style.color='#74e3bc';
+      if(phaseT>=DUR.RETRACT){phase=PHASE.WALK_BACK;phaseT=0;}
+    }
+    else if(phase===PHASE.WALK_BACK){
+      const p=ease(Math.min(phaseT/DUR.WALK_BACK,1));
+      setPositions(lerp(meetA,startA,p), lerp(meetB,startB,p));
+      drawHands(0,0);
+      burstEl.style.opacity=0;
+      statusBar.style.color='#bdb7f2';
+      statusBar.textContent='Channel secured · agents returning';
+      if(phaseT>=DUR.WALK_BACK){phase=PHASE.PAUSE;phaseT=0;}
+    }
+    else if(phase===PHASE.PAUSE){
+      setPositions(startA,startB);
+      drawHands(0,0);
+      statusBar.textContent='';
+      if(phaseT>=DUR.PAUSE){phase=PHASE.WALK_IN;phaseT=0;}
+    }
+
+    // Glow pulse intensifies during handshake
+    const glowPulse = 0.6 + 0.4*Math.sin(t*0.08) + beamStrength*0.6;
+    glowA.style.opacity = Math.min(1, 0.4+glowPulse*0.4);
+    glowB.style.opacity = Math.min(1, 0.4+glowPulse*0.4);
+
+    drawFace(ctxA,t,ehA,true,happy);
+    drawFace(ctxB,t,ehB,false,happy);
+    drawFx(beamStrength, W/2);
+
+    requestAnimationFrame(loop);
+  }
+
+  setPositions(startA, startB);
+  loop();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+
+<style>
+  .wrap {
+    background: #26215C;
+    border-radius: 16px;
+    padding: 28px 24px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dot-grid {
+    position: absolute; top:0; left:0; right:0; bottom:0;
+    background-image: radial-gradient(circle, #534AB7 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.15;
+    pointer-events: none;
+    border-radius: 16px;
+  }
+  .floating-hash {
+    position: absolute;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: #534AB7;
+    opacity: 0.45;
+    animation: drift 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes drift { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-7px);opacity:.15} }
+  .stage {
+    position: relative;
+    height: 260px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .ground {
+    position: absolute;
+    bottom: 0; left: 5%; right: 5%;
+    height: 1px;
+    background: #3C3489;
+  }
+  .agent-wrap {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .agent-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #7F77DD;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .cert-pill {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    color: #5DCAA5;
+    background: #04342C;
+    border: 0.5px solid #1D9E75;
+    border-radius: 10px;
+    padding: 2px 8px;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .scene-canvas {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+  .ring-svg {
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .agent-canvas {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+  }
+  .status-bar {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #AFA9EC;
+    letter-spacing: 1px;
+    min-height: 20px;
+  }
+  .shake-burst {
+    position: absolute;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+</style>
+
+<div class="wrap">
+  <div class="dot-grid"></div>
+  <span class="floating-hash" style="top:14px;left:60px;animation-delay:0s">7F3A·B91C</span>
+  <span class="floating-hash" style="top:50px;right:60px;animation-delay:1.2s">F4A1·2D7C</span>
+  <span class="floating-hash" style="bottom:40px;left:40px;animation-delay:2s">C038·91BE</span>
+  <span class="floating-hash" style="bottom:40px;right:40px;animation-delay:0.7s">8E53·3C8B</span>
+
+  <div class="stage" id="stage">
+    <div class="ground"></div>
+
+    <div class="agent-wrap" id="agentA" style="left:0;">
+      <div class="agent-label">Agent</div>
+      <div class="cert-pill">TBN·CERTIFIED</div>
+      <div class="scene-canvas" id="sceneA">
+        <svg class="ring-svg" id="ringOuterA" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="oArcA" d="M60,60 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0"/></defs>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#534AB7" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7.5" fill="#7F77DD" letter-spacing="1.5">
+            <textPath href="#oArcA" startOffset="0%">TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · </textPath>
+          </text>
+        </svg>
+        <svg class="ring-svg" id="ringInnerA" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="iArcA" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#3C3489" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#534AB7" letter-spacing="1">
+            <textPath href="#iArcA" startOffset="0%">7F3A · B91C · F4A1 · 2D7C · 8E53 · C038 · A271 · 91BE · 7F3A · B91C · F4A1 · 2D7C · </textPath>
+          </text>
+        </svg>
+        <canvas class="agent-canvas" id="canvasA" width="74" height="74"></canvas>
+      </div>
+    </div>
+
+    <div class="agent-wrap" id="agentB" style="right:0;">
+      <div class="agent-label">Validator</div>
+      <div class="cert-pill">TBN·CERTIFIED</div>
+      <div class="scene-canvas" id="sceneB">
+        <svg class="ring-svg" id="ringOuterB" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="oArcB" d="M60,60 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0"/></defs>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#534AB7" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7.5" fill="#7F77DD" letter-spacing="1.5">
+            <textPath href="#oArcB" startOffset="0%">TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · </textPath>
+          </text>
+        </svg>
+        <svg class="ring-svg" id="ringInnerB" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="iArcB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#3C3489" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#534AB7" letter-spacing="1">
+            <textPath href="#iArcB" startOffset="0%">D901 · 6F4E · 0D62 · C5F8 · 39E0 · B7A4 · 8C1D · F062 · D901 · 6F4E · 0D62 · C5F8 · </textPath>
+          </text>
+        </svg>
+        <canvas class="agent-canvas" id="canvasB" width="74" height="74"></canvas>
+      </div>
+    </div>
+
+    <canvas id="handshakeCanvas" width="100" height="60" style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);opacity:0;"></canvas>
+    <div id="burstEl" class="shake-burst" style="position:absolute;bottom:130px;left:50%;transform:translateX(-50%);opacity:0;">
+      <div style="font-family:'Courier New',monospace;font-size:10px;color:#5DCAA5;letter-spacing:1px;">VERIFIED</div>
+      <div style="font-family:'Courier New',monospace;font-size:9px;color:#7F77DD;">✓ TBN handshake complete</div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="statusBar">Agents approaching...</div>
+</div>
+
+<script>
+(function(){
+  const stageEl = document.getElementById('stage');
+  const stageW = stageEl.offsetWidth || 600;
+
+  const agentA = document.getElementById('agentA');
+  const agentB = document.getElementById('agentB');
+  const handshakeCanvas = document.getElementById('handshakeCanvas');
+  const hctx = handshakeCanvas.getContext('2d');
+  const burstEl = document.getElementById('burstEl');
+  const statusBar = document.getElementById('statusBar');
+
+  const canvasA = document.getElementById('canvasA');
+  const canvasB = document.getElementById('canvasB');
+  const ctxA = canvasA.getContext('2d');
+  const ctxB = canvasB.getContext('2d');
+
+  let t = 0;
+  let blinkA = {state:0,timer:0,next:160};
+  let blinkB = {state:0,timer:0,next:220};
+
+  const PHASE_WALK = 0, PHASE_SHAKE = 1, PHASE_HOLD = 2, PHASE_WALK_BACK = 3, PHASE_PAUSE = 4;
+  let phase = PHASE_WALK;
+  let phaseT = 0;
+  const WALK_DUR = 160;
+  const HOLD_DUR = 90;
+  const BACK_DUR = 160;
+  const PAUSE_DUR = 60;
+
+  const startGap = 60;
+  const meetGap = 10;
+
+  function lerp(a,b,p){ return a+(b-a)*p; }
+  function easeInOut(p){ return p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2; }
+
+  function getBlink(b){
+    b.timer++;
+    if(b.state===0 && b.timer>=b.next){ b.state=1; b.timer=0; }
+    if(b.state===1 && b.timer>=5){ b.state=2; b.timer=0; }
+    if(b.state===2 && b.timer>=5){ b.state=0; b.timer=0; b.next=120+Math.random()*100; }
+    if(b.state===0) return 9;
+    if(b.state===1) return Math.max(0.5, 9-(b.timer/5)*8.5);
+    return Math.max(0.5, (b.timer/5)*9);
+  }
+
+  function drawFace(ctx, tick, eyeH, color, facing) {
+    const W=74,H=74,cx=37,cy=37;
+    ctx.clearRect(0,0,W,H);
+    const bob = Math.sin(tick*0.018)*2.5;
+    ctx.save();
+    ctx.translate(0,bob);
+
+    const headR = 30;
+    const headY = cy+2;
+
+    ctx.beginPath();
+    ctx.arc(cx,headY,headR,0,Math.PI*2);
+    ctx.fillStyle = color==='green' ? '#085041' : '#0C447C';
+    ctx.fill();
+    ctx.strokeStyle = color==='green' ? '#1D9E75' : '#378ADD';
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx,headY,headR-5,0,Math.PI*2);
+    ctx.strokeStyle = color==='green' ? '#0F6E56' : '#185FA5';
+    ctx.lineWidth=0.8;
+    ctx.stroke();
+
+    const scanY = headY - headR + ((tick*1.1)%(headR*2));
+    if(scanY>headY-headR && scanY<headY+headR){
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx,headY,headR-2,0,Math.PI*2);
+      ctx.clip();
+      ctx.beginPath();
+      ctx.moveTo(cx-headR,scanY);
+      ctx.lineTo(cx+headR,scanY);
+      ctx.strokeStyle = color==='green' ? 'rgba(29,158,117,0.18)' : 'rgba(55,138,221,0.18)';
+      ctx.lineWidth=5;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const eyeY = headY-7;
+    const eox = facing==='right' ? 9 : -9;
+    [-9,9].forEach(function(ox){
+      ctx.beginPath();
+      ctx.ellipse(cx+ox,eyeY,5,eyeH,0,0,Math.PI*2);
+      ctx.fillStyle = color==='green' ? '#9FE1CB' : '#85B7EB';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx+ox+1.5,eyeY-1.5,1.8,1.8,0,0,Math.PI*2);
+      ctx.fillStyle='#E1F5EE';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx+ox,eyeY,3,eyeH*0.55,0,0,Math.PI*2);
+      ctx.fillStyle=color==='green'?'#085041':'#042C53';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx+ox,eyeY,1.5,eyeH*0.3,0,0,Math.PI*2);
+      ctx.fillStyle='#04342C';
+      ctx.fill();
+    });
+
+    const smileY=headY+10;
+    ctx.beginPath();
+    ctx.arc(cx,smileY-3,10,0.2*Math.PI,0.8*Math.PI);
+    ctx.strokeStyle=color==='green'?'#5DCAA5':'#85B7EB';
+    ctx.lineWidth=2;
+    ctx.lineCap='round';
+    ctx.stroke();
+
+    const aBaseY=headY-headR;
+    ctx.beginPath();
+    ctx.moveTo(cx,aBaseY);
+    ctx.lineTo(cx,aBaseY-11);
+    ctx.strokeStyle=color==='green'?'#1D9E75':'#378ADD';
+    ctx.lineWidth=1.8;
+    ctx.stroke();
+    const pulse=0.75+0.25*Math.sin(tick*0.09);
+    ctx.beginPath();
+    ctx.arc(cx,aBaseY-14,3.5*pulse,0,Math.PI*2);
+    ctx.fillStyle=color==='green'?'#5DCAA5':'#85B7EB';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx,aBaseY-14,1.5,0,Math.PI*2);
+    ctx.fillStyle='#E1F5EE';
+    ctx.fill();
+
+    [-headR+1,headR-1].forEach(function(ox,i){
+      const ex=cx+ox;
+      ctx.beginPath();
+      ctx.rect(ex+(i===0?-5:0),headY-5,5,10);
+      ctx.fillStyle=color==='green'?'#085041':'#0C447C';
+      ctx.fill();
+      ctx.strokeStyle=color==='green'?'#1D9E75':'#378ADD';
+      ctx.lineWidth=1.2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.rect(ex+(i===0?-4:1),headY-3,2,6);
+      ctx.fillStyle=color==='green'?'#5DCAA5':'#85B7EB';
+      ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  function drawHandshake(progress) {
+    hctx.clearRect(0,0,100,60);
+    if(progress<=0) return;
+    const cx=50, cy=32;
+    hctx.strokeStyle='#5DCAA5';
+    hctx.lineWidth=3;
+    hctx.lineCap='round';
+    hctx.lineJoin='round';
+
+    const armLen=22*Math.min(progress*2,1);
+    hctx.beginPath();
+    hctx.moveTo(cx-armLen,cy-4);
+    hctx.lineTo(cx,cy);
+    hctx.lineTo(cx+armLen,cy-4);
+    hctx.stroke();
+
+    if(progress>0.5){
+      const p2=(progress-0.5)*2;
+      hctx.strokeStyle='#9FE1CB';
+      hctx.lineWidth=2;
+      hctx.beginPath();
+      hctx.moveTo(cx,cy);
+      hctx.lineTo(cx-8*p2,cy+10*p2);
+      hctx.stroke();
+      hctx.beginPath();
+      hctx.moveTo(cx,cy);
+      hctx.lineTo(cx+8*p2,cy+10*p2);
+      hctx.stroke();
+    }
+  }
+
+  function positionAgents(progress) {
+    const half = (stageW/2);
+    const agentW = 120;
+    const startA = startGap;
+    const endA = half - agentW/2 - meetGap;
+    const startB = stageW - startGap - agentW;
+    const endB = half - agentW/2 + meetGap;
+
+    const pA = lerp(startA, endA, progress);
+    const pB = lerp(startB, endB, progress);
+
+    agentA.style.left = pA + 'px';
+    agentA.style.right = 'auto';
+    agentB.style.left = pB + 'px';
+    agentB.style.right = 'auto';
+  }
+
+  function positionBack(progress) {
+    const half = (stageW/2);
+    const agentW = 120;
+    const endA = half - agentW/2 - meetGap;
+    const startA = startGap;
+    const endB = half - agentW/2 + meetGap;
+    const startB = stageW - startGap - agentW;
+
+    const pA = lerp(endA, startA, progress);
+    const pB = lerp(endB, startB, progress);
+
+    agentA.style.left = pA + 'px';
+    agentB.style.left = pB + 'px';
+  }
+
+  const outerA = document.getElementById('ringOuterA');
+  const innerA = document.getElementById('ringInnerA');
+  const outerB = document.getElementById('ringOuterB');
+  const innerB = document.getElementById('ringInnerB');
+  let outerAngle=0, innerAngle=0;
+
+  const statuses = ['Agents approaching...','Verifying TBN certificates...','Handshake in progress...','Trust established!','Agents stepping back...',''];
+
+  function loop(){
+    t++;
+    phaseT++;
+    outerAngle+=0.13; innerAngle+=0.07;
+
+    outerA.style.transform=`rotate(${outerAngle}deg)`;
+    outerA.style.transformOrigin='60px 60px';
+    innerA.style.transform=`rotate(${innerAngle}deg)`;
+    innerA.style.transformOrigin='60px 60px';
+    outerB.style.transform=`rotate(${outerAngle}deg)`;
+    outerB.style.transformOrigin='60px 60px';
+    innerB.style.transform=`rotate(${innerAngle}deg)`;
+    innerB.style.transformOrigin='60px 60px';
+
+    const ehA = getBlink(blinkA);
+    const ehB = getBlink(blinkB);
+    drawFace(ctxA, t, ehA, 'green', 'right');
+    drawFace(ctxB, t, ehB, 'blue', 'left');
+
+    if(phase===PHASE_WALK){
+      const p = easeInOut(Math.min(phaseT/WALK_DUR,1));
+      positionAgents(p);
+      if(p<0.4) statusBar.textContent='Agents approaching...';
+      else statusBar.textContent='Verifying TBN certificates...';
+      if(phaseT>=WALK_DUR){ phase=PHASE_SHAKE; phaseT=0; statusBar.textContent='Handshake in progress...'; }
+    } else if(phase===PHASE_SHAKE){
+      positionAgents(1);
+      const p=Math.min(phaseT/30,1);
+      handshakeCanvas.style.opacity=p;
+      drawHandshake(p);
+      if(phaseT>=30){ phase=PHASE_HOLD; phaseT=0; }
+    } else if(phase===PHASE_HOLD){
+      positionAgents(1);
+      drawHandshake(1);
+      handshakeCanvas.style.opacity=1;
+      burstEl.style.opacity=Math.min(phaseT/15,1);
+      statusBar.textContent='Trust established!';
+      if(phaseT>=HOLD_DUR){ phase=PHASE_WALK_BACK; phaseT=0; burstEl.style.opacity=0; handshakeCanvas.style.opacity=0; }
+    } else if(phase===PHASE_WALK_BACK){
+      const p=easeInOut(Math.min(phaseT/BACK_DUR,1));
+      positionBack(p);
+      statusBar.textContent='Agents stepping back...';
+      if(phaseT>=BACK_DUR){ phase=PHASE_PAUSE; phaseT=0; }
+    } else if(phase===PHASE_PAUSE){
+      statusBar.textContent='';
+      if(phaseT>=PAUSE_DUR){ phase=PHASE_WALK; phaseT=0; }
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  positionAgents(0);
+  loop();
+})();
+</script>

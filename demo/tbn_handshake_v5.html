@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TBN Agent Handshake — v5</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1a1640; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+  .wrap {
+    background:#26215C;
+    border-radius:16px;
+    padding:28px 16px 24px;
+    position:relative;
+    overflow:hidden;
+    width:700px;
+    max-width:95vw;
+  }
+  .dot-grid {
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    background-image:radial-gradient(circle,#534AB7 1px,transparent 1px);
+    background-size:28px 28px;
+    opacity:0.15;
+    pointer-events:none;
+    border-radius:16px;
+  }
+  .fh {
+    position:absolute;
+    font-family:'Courier New',monospace;
+    font-size:10px;
+    color:#534AB7;
+    opacity:0.45;
+    animation:drift 6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes drift{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-7px);opacity:.15}}
+  .stage { position:relative; height:300px; }
+  .ground { position:absolute; bottom:0; left:3%; right:3%; height:1px; background:#3C3489; }
+  .agent-col {
+    position:absolute;
+    bottom:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:130px;
+    transition: none;
+  }
+  .agent-label { font-size:11px; font-weight:500; letter-spacing:2px; color:#7F77DD; text-transform:uppercase; margin-bottom:4px; }
+  .cert-pill { font-family:'Courier New',monospace; font-size:9px; color:#5DCAA5; background:#04342C; border:0.5px solid #1D9E75; border-radius:10px; padding:2px 8px; margin-bottom:4px; letter-spacing:1px; }
+  .scene-wrap { position:relative; width:120px; height:120px; }
+  .ring-svg { position:absolute; top:0; left:0; }
+  .agent-canvas { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; }
+  .status-bar { margin-top:14px; text-align:center; font-size:12px; color:#AFA9EC; letter-spacing:1px; min-height:18px; }
+  .mid-canvas { position:absolute; bottom:0; left:50%; transform:translateX(-50%); pointer-events:none; margin-bottom:35px; }
+  .burst-el {
+    position:absolute;
+    bottom:140px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    pointer-events:none;
+    opacity:0;
+    transition: opacity 0.3s;
+  }
+  .burst-el .v-text { font-family:'Courier New',monospace; font-size:12px; color:#5DCAA5; letter-spacing:2px; font-weight:bold; }
+  .burst-el .v-sub { font-family:'Courier New',monospace; font-size:9px; color:#7F77DD; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="dot-grid"></div>
+  <span class="fh" style="top:12px;left:60px;animation-delay:0s">7F3A·B91C</span>
+  <span class="fh" style="top:45px;right:55px;animation-delay:1.2s">F4A1·2D7C</span>
+  <span class="fh" style="bottom:38px;left:38px;animation-delay:2s">C038·91BE</span>
+  <span class="fh" style="bottom:38px;right:38px;animation-delay:0.7s">8E53·3C8B</span>
+
+  <div class="stage" id="stage">
+    <div class="ground"></div>
+
+    <div class="agent-col" id="agentA">
+      <div class="agent-label">Agent</div>
+      <div class="cert-pill">TBN·CERTIFIED</div>
+      <div class="scene-wrap">
+        <svg class="ring-svg" id="roA" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="oaA" d="M60,60 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0"/></defs>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#534AB7" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#7F77DD" letter-spacing="1.5">
+            <textPath href="#oaA" startOffset="0%">TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · </textPath>
+          </text>
+        </svg>
+        <svg class="ring-svg" id="riA" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="iaA" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#3C3489" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#534AB7" letter-spacing="1">
+            <textPath href="#iaA" startOffset="0%">7F3A · B91C · F4A1 · 2D7C · 8E53 · C038 · A271 · 91BE · 7F3A · B91C · F4A1 · </textPath>
+          </text>
+        </svg>
+        <canvas class="agent-canvas" id="canvasA" width="74" height="74"></canvas>
+      </div>
+    </div>
+
+    <div class="agent-col" id="agentB">
+      <div class="agent-label">Validator</div>
+      <div class="cert-pill">TBN·CERTIFIED</div>
+      <div class="scene-wrap">
+        <svg class="ring-svg" id="roB" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="oaB" d="M60,60 m-54,0 a54,54 0 1,1 108,0 a54,54 0 1,1 -108,0"/></defs>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#534AB7" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#7F77DD" letter-spacing="1.5">
+            <textPath href="#oaB" startOffset="0%">TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · TBN·PROTOCOL · CERT:tbn-vl-9f3b12d4 · RSA-PSS · v1.0 · </textPath>
+          </text>
+        </svg>
+        <svg class="ring-svg" id="riB" width="120" height="120" viewBox="0 0 120 120">
+          <defs><path id="iaB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#3C3489" stroke-width="1"/>
+          <text font-family="'Courier New',monospace" font-size="7" fill="#534AB7" letter-spacing="1">
+            <textPath href="#iaB" startOffset="0%">D901 · 6F4E · 0D62 · C5F8 · 39E0 · B7A4 · 8C1D · F062 · D901 · 6F4E · 0D62 · </textPath>
+          </text>
+        </svg>
+        <canvas class="agent-canvas" id="canvasB" width="74" height="74"></canvas>
+      </div>
+    </div>
+
+    <canvas id="midCanvas" class="mid-canvas" width="220" height="100"></canvas>
+
+    <div class="burst-el" id="burstEl">
+      <div class="v-text">✓ VERIFIED</div>
+      <div class="v-sub">TBN handshake complete</div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="statusBar">Agents approaching...</div>
+</div>
+
+<script>
+(function(){
+  const stageEl = document.getElementById('stage');
+  const agentA = document.getElementById('agentA');
+  const agentB = document.getElementById('agentB');
+  const midCanvas = document.getElementById('midCanvas');
+  const mctx = midCanvas.getContext('2d');
+  const burstEl = document.getElementById('burstEl');
+  const statusBar = document.getElementById('statusBar');
+  const canvasA = document.getElementById('canvasA');
+  const canvasB = document.getElementById('canvasB');
+  const ctxA = canvasA.getContext('2d');
+  const ctxB = canvasB.getContext('2d');
+
+  let W = stageEl.offsetWidth || 700;
+  const agentW = 130;
+
+  // Positions
+  const startA = 10;                        // far left
+  const startB = W - agentW - 10;           // far right
+  const meetGap = 30;                       // gap between agents when they meet
+  const meetA = W/2 - agentW - meetGap/2;   // where A stops
+  const meetB = W/2 + meetGap/2;            // where B stops
+
+  let t = 0;
+  let blinkA = {s:0,tm:0,nx:160};
+  let blinkB = {s:0,tm:0,nx:220};
+
+  // Phases: WALK_IN → REACH → SHAKE → HOLD → RETRACT → WALK_BACK → PAUSE → loop
+  const PHASE = {WALK_IN:0, REACH:1, SHAKE:2, HOLD:3, RETRACT:4, WALK_BACK:5, PAUSE:6};
+  let phase = PHASE.WALK_IN;
+  let phaseT = 0;
+  const DUR = {WALK_IN:140, REACH:45, SHAKE:80, HOLD:90, RETRACT:35, WALK_BACK:140, PAUSE:60};
+
+  function lerp(a,b,p){return a+(b-a)*p;}
+  function ease(p){return p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;}
+
+  function getBlink(b){
+    b.tm++;
+    if(b.s===0&&b.tm>=b.nx){b.s=1;b.tm=0;}
+    if(b.s===1&&b.tm>=5){b.s=2;b.tm=0;}
+    if(b.s===2&&b.tm>=5){b.s=0;b.tm=0;b.nx=120+Math.random()*100;}
+    if(b.s===0)return 9;
+    if(b.s===1)return Math.max(0.5,9-(b.tm/5)*8.5);
+    return Math.max(0.5,(b.tm/5)*9);
+  }
+
+  function drawFace(ctx, tick, eyeH, isGreen){
+    const W=74,H=74,cx=37,cy=37;
+    ctx.clearRect(0,0,W,H);
+    const bob=Math.sin(tick*0.018)*2.5;
+    ctx.save();
+    ctx.translate(0,bob);
+    const headR=30, headY=cy+2;
+
+    // Head
+    ctx.beginPath(); ctx.arc(cx,headY,headR,0,Math.PI*2);
+    ctx.fillStyle=isGreen?'#085041':'#0C447C'; ctx.fill();
+    ctx.strokeStyle=isGreen?'#1D9E75':'#378ADD'; ctx.lineWidth=2; ctx.stroke();
+
+    // Inner ring
+    ctx.beginPath(); ctx.arc(cx,headY,headR-5,0,Math.PI*2);
+    ctx.strokeStyle=isGreen?'#0F6E56':'#185FA5'; ctx.lineWidth=0.8; ctx.stroke();
+
+    // Scan line
+    const scanY=headY-headR+((tick*1.1)%(headR*2));
+    if(scanY>headY-headR&&scanY<headY+headR){
+      ctx.save(); ctx.beginPath(); ctx.arc(cx,headY,headR-2,0,Math.PI*2); ctx.clip();
+      ctx.beginPath(); ctx.moveTo(cx-headR,scanY); ctx.lineTo(cx+headR,scanY);
+      ctx.strokeStyle=isGreen?'rgba(29,158,117,0.18)':'rgba(55,138,221,0.18)'; ctx.lineWidth=5; ctx.stroke(); ctx.restore();
+    }
+
+    // Eyes
+    const eyeY=headY-7;
+    [-9,9].forEach(function(ox){
+      ctx.beginPath(); ctx.ellipse(cx+ox,eyeY,5,eyeH,0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#9FE1CB':'#85B7EB'; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+ox+1.5,eyeY-1.5,1.8,1.8,0,0,Math.PI*2);
+      ctx.fillStyle='#E1F5EE'; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+ox,eyeY,3,eyeH*0.55,0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#085041':'#042C53'; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx+ox,eyeY,1.5,eyeH*0.3,0,0,Math.PI*2);
+      ctx.fillStyle='#04342C'; ctx.fill();
+    });
+
+    // Smile
+    ctx.beginPath(); ctx.arc(cx,headY+7,10,0.2*Math.PI,0.8*Math.PI);
+    ctx.strokeStyle=isGreen?'#5DCAA5':'#85B7EB'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke();
+
+    // Antenna
+    const aBaseY=headY-headR;
+    ctx.beginPath(); ctx.moveTo(cx,aBaseY); ctx.lineTo(cx,aBaseY-11);
+    ctx.strokeStyle=isGreen?'#1D9E75':'#378ADD'; ctx.lineWidth=1.8; ctx.stroke();
+    const pulse=0.75+0.25*Math.sin(tick*0.09);
+    ctx.beginPath(); ctx.arc(cx,aBaseY-14,3.5*pulse,0,Math.PI*2);
+    ctx.fillStyle=isGreen?'#5DCAA5':'#85B7EB'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,aBaseY-14,1.5,0,Math.PI*2);
+    ctx.fillStyle='#E1F5EE'; ctx.fill();
+
+    // Ear panels
+    [-headR+1,headR-1].forEach(function(ox,i){
+      const ex=cx+ox;
+      ctx.beginPath(); ctx.rect(ex+(i===0?-5:0),headY-5,5,10);
+      ctx.fillStyle=isGreen?'#085041':'#0C447C'; ctx.fill();
+      ctx.strokeStyle=isGreen?'#1D9E75':'#378ADD'; ctx.lineWidth=1.2; ctx.stroke();
+      ctx.beginPath(); ctx.rect(ex+(i===0?-4:1),headY-3,2,6);
+      ctx.fillStyle=isGreen?'#5DCAA5':'#85B7EB'; ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  function drawHands(progress, shakeAmt){
+    mctx.clearRect(0,0,220,100);
+    if(progress<=0) return;
+
+    const midX=110, midY=52;
+    const maxReach=72;
+    const reach=maxReach*progress;
+    const shake=shakeAmt*(Math.sin(t*0.4)*4);
+    const handY=midY+shake;
+
+    // Arms
+    function drawArm(fromX, toX, isGreen){
+      const color=isGreen?'#085041':'#0C447C';
+      const border=isGreen?'#1D9E75':'#378ADD';
+      const dir=fromX<toX?1:-1;
+      mctx.save();
+      mctx.beginPath();
+      mctx.moveTo(fromX, midY+8);
+      mctx.lineTo(toX+dir*18, handY+8);
+      mctx.lineTo(toX+dir*18, handY-8);
+      mctx.lineTo(fromX, midY-8);
+      mctx.closePath();
+      mctx.fillStyle=color;
+      mctx.fill();
+      mctx.strokeStyle=border;
+      mctx.lineWidth=1.5;
+      mctx.stroke();
+      mctx.restore();
+    }
+
+    const lx=midX-reach, rx=midX+reach;
+    drawArm(lx-18, midX-4, true);
+    drawArm(rx+18, midX+4, false);
+
+    // Handclasp
+    if(progress>0.85){
+      const hp=Math.min((progress-0.85)/0.15,1);
+      const hx=midX, hy=handY;
+      mctx.save();
+      mctx.beginPath();
+      mctx.moveTo(hx-2,hy-14*hp);
+      mctx.lineTo(hx+12,hy-10*hp);
+      mctx.lineTo(hx+16,hy-4*hp);
+      mctx.lineTo(hx+14,hy+2);
+      mctx.lineTo(hx+8,hy+6);
+      mctx.lineTo(hx-2,hy+6);
+      mctx.lineTo(hx-14,hy+2);
+      mctx.lineTo(hx-16,hy-4*hp);
+      mctx.lineTo(hx-12,hy-10*hp);
+      mctx.closePath();
+      mctx.fillStyle='#1D9E75';
+      mctx.fill();
+      mctx.strokeStyle='#5DCAA5';
+      mctx.lineWidth=1.5;
+      mctx.stroke();
+
+      // Thumb arc
+      mctx.beginPath();
+      mctx.moveTo(hx-14,hy+2);
+      mctx.bezierCurveTo(hx-10,hy+14,hx+10,hy+14,hx+14,hy+2);
+      mctx.strokeStyle='#5DCAA5';
+      mctx.lineWidth=1.2;
+      mctx.stroke();
+
+      // Finger lines
+      for(let i=-2;i<=2;i++){
+        mctx.beginPath();
+        mctx.moveTo(hx+i*5, hy-4);
+        mctx.lineTo(hx+i*5, hy-14*hp);
+        mctx.strokeStyle='rgba(93,202,165,0.35)';
+        mctx.lineWidth=3;
+        mctx.lineCap='round';
+        mctx.stroke();
+      }
+      mctx.restore();
+    }
+
+    // Sparks
+    if(progress>=1 && shakeAmt>0){
+      const sparks=[[-22,-18],[22,-18],[0,-28],[-30,-8],[30,-8],[-15,-25],[15,-25]];
+      sparks.forEach(function(s,i){
+        const sp=(Math.sin(t*0.3+i)*0.5+0.5);
+        mctx.beginPath();
+        mctx.arc(midX+s[0],midY+s[1],2.5*sp,0,Math.PI*2);
+        mctx.fillStyle=i%2===0?'#5DCAA5':'#FAC775';
+        mctx.globalAlpha=sp*0.9;
+        mctx.fill();
+        mctx.globalAlpha=1;
+      });
+    }
+  }
+
+  function setPositions(posAx, posBx){
+    agentA.style.left = posAx + 'px';
+    agentB.style.left = posBx + 'px';
+  }
+
+  let outerAngle=0, innerAngle=0;
+  const roA=document.getElementById('roA'), riA=document.getElementById('riA');
+  const roB=document.getElementById('roB'), riB=document.getElementById('riB');
+
+  function loop(){
+    t++;
+    phaseT++;
+    outerAngle+=0.13; innerAngle+=0.07;
+
+    roA.style.transform='rotate('+outerAngle+'deg)'; roA.style.transformOrigin='60px 60px';
+    riA.style.transform='rotate('+innerAngle+'deg)'; riA.style.transformOrigin='60px 60px';
+    roB.style.transform='rotate('+outerAngle+'deg)'; roB.style.transformOrigin='60px 60px';
+    riB.style.transform='rotate('+innerAngle+'deg)'; riB.style.transformOrigin='60px 60px';
+
+    const ehA=getBlink(blinkA);
+    const ehB=getBlink(blinkB);
+    drawFace(ctxA,t,ehA,true);
+    drawFace(ctxB,t,ehB,false);
+
+    // Phase logic
+    if(phase===PHASE.WALK_IN){
+      const p=ease(Math.min(phaseT/DUR.WALK_IN,1));
+      setPositions(lerp(startA,meetA,p), lerp(startB,meetB,p));
+      drawHands(0,0);
+      burstEl.style.opacity=0;
+      if(p<0.5) statusBar.textContent='Agents approaching...';
+      else statusBar.textContent='Verifying TBN certificates...';
+      if(phaseT>=DUR.WALK_IN){phase=PHASE.REACH;phaseT=0;}
+    }
+    else if(phase===PHASE.REACH){
+      setPositions(meetA,meetB);
+      const p=ease(Math.min(phaseT/DUR.REACH,1));
+      drawHands(p,0);
+      statusBar.textContent='Extending for handshake...';
+      if(phaseT>=DUR.REACH){phase=PHASE.SHAKE;phaseT=0;}
+    }
+    else if(phase===PHASE.SHAKE){
+      setPositions(meetA,meetB);
+      drawHands(1, Math.min(phaseT/10,1));
+      statusBar.textContent='TBN handshake in progress!';
+      if(phaseT>=DUR.SHAKE){phase=PHASE.HOLD;phaseT=0;}
+    }
+    else if(phase===PHASE.HOLD){
+      setPositions(meetA,meetB);
+      drawHands(1,1);
+      burstEl.style.opacity=Math.min(phaseT/15,1);
+      statusBar.textContent='✓ Trust established!';
+      if(phaseT>=DUR.HOLD){phase=PHASE.RETRACT;phaseT=0;}
+    }
+    else if(phase===PHASE.RETRACT){
+      setPositions(meetA,meetB);
+      const p=1-ease(Math.min(phaseT/DUR.RETRACT,1));
+      drawHands(p,0);
+      burstEl.style.opacity=Math.max(0, 1-phaseT/20);
+      statusBar.textContent='Handshake complete.';
+      if(phaseT>=DUR.RETRACT){phase=PHASE.WALK_BACK;phaseT=0;}
+    }
+    else if(phase===PHASE.WALK_BACK){
+      const p=ease(Math.min(phaseT/DUR.WALK_BACK,1));
+      setPositions(lerp(meetA,startA,p), lerp(meetB,startB,p));
+      drawHands(0,0);
+      burstEl.style.opacity=0;
+      statusBar.textContent='Agents returning...';
+      if(phaseT>=DUR.WALK_BACK){phase=PHASE.PAUSE;phaseT=0;}
+    }
+    else if(phase===PHASE.PAUSE){
+      setPositions(startA,startB);
+      drawHands(0,0);
+      statusBar.textContent='';
+      if(phaseT>=DUR.PAUSE){phase=PHASE.WALK_IN;phaseT=0;}
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  // Initial position
+  setPositions(startA, startB);
+  loop();
+})();
+</script>
+
+</body>
+</html>
