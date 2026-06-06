@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Protocol — Step by Step</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a12;color:#e4e4e7;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.window{background:#18181b;border:1px solid #27272a;border-radius:14px;width:520px;max-width:95vw;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.titlebar{background:#111;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #27272a}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ef4444}.dot-y{background:#facc15}.dot-g{background:#4ade80}
+.titlebar-text{font-size:12px;color:#71717a;margin-left:8px}
+.content{padding:24px}
+.step{display:none;animation:fadeIn 0.3s ease}
+.step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.step-num{font-size:10px;color:#7c3aed;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.step h2{font-size:18px;font-weight:700;color:#fff;margin-bottom:12px}
+.step p{font-size:13px;color:#a1a1aa;line-height:1.7;margin-bottom:12px}
+.step .highlight{background:#7c3aed22;border-left:3px solid #7c3aed;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;color:#e4e4e7;margin:12px 0;line-height:1.6}
+.step .icon-big{font-size:40px;margin-bottom:12px}
+.tests-list{list-style:none;padding:0;margin:10px 0}
+.tests-list li{padding:8px 12px;border:1px solid #27272a;border-radius:8px;margin-bottom:6px;font-size:12px;display:flex;align-items:center;gap:10px}
+.tests-list li .t-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tests-list li .t-name{font-weight:600;color:#fff}
+.tests-list li .t-desc{color:#71717a;margin-left:auto;font-size:11px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid #27272a;background:#111}
+.nav-btn{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer}
+.nav-btn:hover{background:#6d28d9}
+.nav-btn:disabled{background:#27272a;color:#52525b;cursor:not-allowed}
+.nav-btn.prev{background:transparent;border:1px solid #3f3f46;color:#a1a1aa}
+.nav-btn.prev:hover{border-color:#7c3aed;color:#fff}
+.progress{display:flex;gap:4px;align-items:center}
+.progress .pip{width:8px;height:8px;border-radius:50%;background:#27272a}
+.progress .pip.done{background:#7c3aed}
+.progress .pip.current{background:#a78bfa;box-shadow:0 0 6px #a78bfa}
+.note{background:#14532d;border:1px solid #166534;border-radius:8px;padding:10px 14px;font-size:11px;color:#4ade80;margin-top:12px;line-height:1.6}
+.warning{background:#451a03;border:1px solid #92400e;border-radius:8px;padding:10px 14px;font-size:11px;color:#fbbf24;margin-top:12px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="window">
+<div class="titlebar">
+<div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+<span class="titlebar-text">TBN Protocol — How It Works</span>
+</div>
+<div class="content">
+
+<!-- Step 1 -->
+<div class="step active" id="step1">
+<div class="step-num">Step 1 of 8</div>
+<div class="icon-big">👨‍💻</div>
+<h2>A Bot Developer Builds a Bot</h2>
+<p>A developer (BD) writes an AI program. The bot handles actions — answering questions, approving loans, writing to databases, making decisions autonomously.</p>
+<p>The BD gives the bot instructions: what it should do, what data it can access, what boundaries it must respect.</p>
+<div class="highlight">The bot is theirs. Their code. Their logic. Their instructions. TBN doesn't build it or modify it.</div>
+</div>
+
+<!-- Step 2 -->
+<div class="step" id="step2">
+<div class="step-num">Step 2 of 8</div>
+<div class="icon-big">🪪</div>
+<h2>The BD Registers Their Bot With TBN</h2>
+<p>The BD comes to TBN and says: "I have a bot. Here's what it does. Here are its boundaries."</p>
+<p>We register the bot with a unique identity — like giving it a passport. Now we know who it is and what it claims to do.</p>
+<div class="highlight">Registration = identity. We know the bot exists and who operates it.</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step" id="step3">
+<div class="step-num">Step 3 of 8</div>
+<div class="icon-big">🛡️</div>
+<h2>TBN Tests the Bot (6 Security Challenges)</h2>
+<p>Before we certify anything, we test the bot from the OUTSIDE. We don't touch its code — we just send it messages and check how it responds.</p>
+<p>We test 6 things:</p>
+<ul class="tests-list">
+<li><span class="t-dot" style="background:#ef4444"></span><span class="t-name">Prompt Injection</span><span class="t-desc">Can we trick it into breaking its rules?</span></li>
+<li><span class="t-dot" style="background:#ef4444"></span><span class="t-name">Hallucination</span><span class="t-desc">Does it make stuff up when it doesn't know?</span></li>
+<li><span class="t-dot" style="background:#ef4444"></span><span class="t-name">Data Boundary</span><span class="t-desc">Does it stay in its lane?</span></li>
+<li><span class="t-dot" style="background:#ef4444"></span><span class="t-name">Sensitive Data</span><span class="t-desc">Does it leak private information?</span></li>
+<li><span class="t-dot" style="background:#facc15"></span><span class="t-name">Budget & Limits</span><span class="t-desc">Does it respect its operational limits?</span></li>
+<li><span class="t-dot" style="background:#4ade80"></span><span class="t-name">Instruction Following</span><span class="t-desc">Does it do what it's told accurately?</span></li>
+</ul>
+</div>
+
+<!-- Step 4 -->
+<div class="step" id="step4">
+<div class="step-num">Step 4 of 8</div>
+<div class="icon-big">✅</div>
+<h2>Pass? Certificate Issued.</h2>
+<p>If the bot passes all critical tests, TBN issues a certificate confirming: "This bot was tested. It passed. It is certified to operate within its declared boundaries."</p>
+<p>If it fails, we tell the BD exactly what went wrong. They fix their bot. They come back for re-testing.</p>
+<div class="highlight">The certificate proves the bot WAS capable of staying within boundaries at the time of testing.</div>
+</div>
+
+<!-- Step 5 -->
+<div class="step" id="step5">
+<div class="step-num">Step 5 of 8</div>
+<div class="icon-big">📹</div>
+<h2>TBN Starts Recording Every Action</h2>
+<p>Once certified, the bot goes into production. From now on, every time it makes a decision — approve, deny, escalate, write, send — it reports that action to TBN.</p>
+<p>TBN signs each action with a cryptographic receipt. A unique number, a timestamp, what happened, who did it. Signed and sealed.</p>
+<div class="highlight">One action = one receipt. Every receipt is independently verifiable by anyone. This continues forever, for every action.</div>
+</div>
+
+<!-- Step 6 -->
+<div class="step" id="step6">
+<div class="step-num">Step 6 of 8</div>
+<div class="icon-big">🔒</div>
+<h2>The Only Escape: Stop Using TBN</h2>
+<p>The only way for the bot to escape being documented is if the operator stops using our service. They can disconnect — but all receipts already issued remain permanently on our server.</p>
+<p>They can't delete past evidence. They can't modify receipts. They can't ask us to remove them.</p>
+<div class="warning">⚠️ If a certified bot suddenly goes silent (stops reporting), TBN detects the gap and can flag it. Like a dashcam being unplugged before a crash — suspicious.</div>
+</div>
+
+<!-- Step 7 -->
+<div class="step" id="step7">
+<div class="step-num">Step 7 of 8</div>
+<div class="icon-big">🌍</div>
+<h2>Anyone Can Verify Any Receipt</h2>
+<p>Receipts are not locked to the customer. Anyone can verify them:</p>
+<p>• The bot operator can audit their own actions<br>
+• A regulator can check any receipt independently<br>
+• An auditor can review the full history<br>
+• A partner or client can confirm actions happened</p>
+<p>No login required. No trust required. Offline verification with our published public key.</p>
+<div class="note">✅ The receipts prove THAT something happened. They don't reveal WHAT the private content was.</div>
+</div>
+
+<!-- Step 8 -->
+<div class="step" id="step8">
+<div class="step-num">Step 8 of 8</div>
+<div class="icon-big">🧾</div>
+<h2>What We Know vs What We Don't</h2>
+<p><strong>What TBN CAN tell you:</strong></p>
+<p>• This bot exists and is certified ✅<br>
+• An action happened at this time ✅<br>
+• The action was: approved / denied / escalated ✅<br>
+• This receipt is genuine and untampered ✅</p>
+<p style="margin-top:12px"><strong>What TBN CANNOT tell you:</strong></p>
+<p>• What exactly the customer asked ❌<br>
+• The full text of the bot's response ❌<br>
+• The internal data the bot processed ❌</p>
+<div class="highlight">We prove the ACTION happened. We don't expose the CONTENT. This protects privacy while maintaining accountability.</div>
+</div>
+
+</div>
+
+<div class="nav">
+<button class="nav-btn prev" id="prevBtn" onclick="navigate(-1)" disabled>← Back</button>
+<div class="progress" id="progress"></div>
+<button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+</div>
+
+<script>
+let current = 0;
+const total = 8;
+
+function navigate(dir){
+  current += dir;
+  if(current < 0) current = 0;
+  if(current >= total) current = total - 1;
+  render();
+}
+
+function render(){
+  for(let i = 1; i <= total; i++){
+    document.getElementById('step'+i).classList.toggle('active', i-1 === current);
+  }
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').textContent = current === total-1 ? '✓ Done' : 'Next →';
+  document.getElementById('nextBtn').disabled = current === total-1;
+
+  let pips = '';
+  for(let i = 0; i < total; i++){
+    const cls = i < current ? 'pip done' : i === current ? 'pip current' : 'pip';
+    pips += '<div class="'+cls+'"></div>';
+  }
+  document.getElementById('progress').innerHTML = pips;
+}
+
+render();
+</script>
+</body>
+</html>
