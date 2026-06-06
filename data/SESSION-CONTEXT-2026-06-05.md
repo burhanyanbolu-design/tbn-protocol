@@ -1,4 +1,127 @@
-# Session Context — 5 June 2026 (Landing Page Animation + Business Development)
+# Session Context — 5-6 June 2026 (Landing Page Animation + Business Development + Documentation)
+
+## What Was Done This Session (continued from Friday evening into Saturday)
+
+### ✅ TBN Handshake Animation — Built & Deployed to Landing Page
+- Built cinematic agent handshake animation (v1 → v6)
+- Deployed to tbn.hardinai.co.uk hero section
+- Agents walk from edges, handshake, particle burst, walk back
+
+### ✅ Landing Page Updates
+- Removed "Console" button (internal admin — not public)
+- Changed to "Demo" button linking to /demo
+- Embedded full 8-step "How It Works" explainer directly on landing page (below 3-card summary)
+- Added /how-it-works route as standalone page too
+
+### ✅ hardinai.co.uk — Pen Testing Service Added
+- Service card #10: "PENETRATION TESTING" 
+- Industry card #06: "Cybersecurity & Penetration Testing"
+- SEO keywords updated for pen testing
+- TBN Protocol button fixed → links to tbn.hardinai.co.uk (not /demo)
+- Pushed to GitHub Pages repo (burhanyanbolu-design/hardinai.co.uk)
+- **NOTE:** hardinai.co.uk served via GitHub Pages, not Lightsail
+
+### ✅ Documentation Created
+- `data/bot-anatomy-and-tbn-governance.md` — Full technical + conceptual guide (13 parts)
+- `data/tbn-explained-plain-language.md` — Plain language walkthrough
+- `demo/tbn-step-by-step.html` — Interactive 8-step click-through
+- `demo/tbn-leaflet.html` — Printable one-page leaflet (all 8 steps on 1 page)
+- `demo/tbn-leaflet-web.html` — Web version (dark theme, vertical scroll)
+- `demo/tbn-visual-explainer.html` — Visual infographic with analogies
+
+### ✅ Provisional Patent Document Drafted
+- `data/patent-provisional-tbn-protocol.md`
+- Ready to file at IPO.gov.uk when service is back online
+- Cost: £30 | Deadline: Before May 3, 2027
+
+### ✅ Referral Split Demo Built
+- `demo/referral-split-demo.html` — Interactive SplitPay concept demo
+- Split contracts + payment simulation + TBN receipts
+
+### ✅ Logo & Product Image Generated
+- `demo/tbn-logo-256.png` — 256x256 square logo
+- `demo/tbn-product-800x450.png` — 16:9 product image
+
+---
+
+## Business Development
+
+### Dharani Sri Penumacha (Pen Tester) — CONFIRMED ✅
+- Said yes to freelancing on pen test engagements
+- Ready to subcontract
+
+### Slava Shestakovskyi (Obriy AI) — CALL BOOKED ✅
+- Monday 8 June, 12:00-12:30 BST, Google Meet
+- $500K funded, GovTech pilot, Glovo pilot
+- Partnership angle: his agents + TBN certification
+
+### YC Application — REJECTED
+- Not selected for Summer 2026 interview
+- Apply again Winter 2027 with revenue + multiple partners
+- Over 50% of funded companies are repeat applicants
+
+### Google for Startups Cloud — FIXED ✅
+- Created Google account with info@hardinai.co.uk
+- Set up GCP billing, replied with screenshot
+- Waiting for $100K+ credits approval
+
+### Web Summit Lisbon — November 9-12, 2026 ✅
+- 4 days, MEO Arena, startup stand confirmed
+
+---
+
+## Key Learnings This Session
+
+### TBN Product (deepened understanding):
+- TBN records and signs what the bot did (independent witness)
+- TBN does NOT stop/guide/modify the bot
+- Security challenges = one-time test (driving test)
+- Attestation = every action forever (dashcam)
+- Boundaries are declared by BD, tested by TBN, recorded ongoing
+- Only escape: stop using the service (but past receipts remain)
+- Biggest weakness: selective reporting → solved by governance-layer integration (Shango model)
+- Receipts prove THAT action happened, not WHAT the content was (privacy)
+
+### Red Team Against TBN:
+- Silence the recorder → gap detection
+- Selective reporting → governance layer reports, not operator
+- DDoS → redundancy + queuing
+- Forge receipts → cryptographically impossible
+- Tamper receipts → signature fails
+- Steal key → revoke + reissue
+
+### Business Model Options:
+- TBN Certify (self-service) — customer tests own bot
+- TBN Govern (done-for-you) — we add governance layer + certify (premium)
+- Referral split product — future Phase 2
+
+---
+
+## Infrastructure Notes
+- hardinai.co.uk: GitHub Pages (185.199.108.153)
+- tbn.hardinai.co.uk: AWS Lightsail (3.11.229.68) → Flask/Gunicorn port 5004
+- /how-it-works route added to server.py
+- GCP backup planned when credits arrive
+
+---
+
+## Git Commits This Session
+- ce10cb6 — Add referral split commission demo
+- 79e347c — Add pen testing service and SEO to hardinai.co.uk
+- a80ac2e — Add penetration testing service, fix TBN link (GitHub Pages)
+- 0f213a7 — Update session context + provisional patent draft
+- 70021f4 — Add TBN how-it-works explainer pages
+- d89cf3d — Add remaining explainer files
+- 6043de8 — Embed 8-step explainer on landing page
+
+---
+
+## TODO / Next Actions
+- [ ] Slava call Monday 12:00 BST
+- [ ] Send pen test scoping questions to client
+- [ ] File provisional patent (IPO site down — try Monday)
+- [ ] Get Dharani's rate for pen test scope
+- [ ] Follow up Nishaan (ActTrident) + Adem (Beyond Guard)
 
 ## What Was Done This Session
 
