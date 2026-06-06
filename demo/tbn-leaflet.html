@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Protocol — One-Page Leaflet</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:#1a1a2e;padding:10px 16px;margin:0;height:100vh;overflow:hidden}
+@media print{body{padding:0;overflow:visible}@page{margin:8mm}}
+.page{max-width:100%;margin:0 auto;height:100vh;display:flex;flex-direction:column;padding:0 10px}
+.header{text-align:center;margin-bottom:6px;padding-bottom:6px;border-bottom:2px solid #7c3aed;flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:16px}
+.header h1{font-size:24px;font-weight:900;color:#1a1a2e}
+.header .tag{display:none}
+.header .how-badge{background:#7c3aed;color:#fff;font-size:14px;font-weight:800;padding:6px 16px;border-radius:20px;letter-spacing:0.5px}
+.header .subtitle-text{font-size:16px;font-weight:800;color:#1a1a2e}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{border:1.5px solid #e5e5e5;border-radius:8px;padding:8px 12px;position:relative}
+.card .num{position:absolute;top:10px;right:12px;font-size:14px;font-weight:900;color:#7c3aed;background:#7c3aed15;padding:4px 10px;border-radius:8px}
+.card .icon{display:none}
+.card h3{font-size:16px;font-weight:900;color:#1a1a2e;margin-bottom:4px}
+.card p{font-size:12px;color:#2a2a3a;line-height:1.4;font-weight:600}
+.card .key{background:#f5f3ff;border-left:3px solid #7c3aed;padding:5px 10px;border-radius:0 5px 5px 0;font-size:11px;color:#2a2a3a;margin-top:5px;line-height:1.3;font-weight:700}
+.tests{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.test-item{font-size:13px;padding:5px 10px;background:#f9fafb;border-radius:5px;display:flex;align-items:center;gap:6px;font-weight:700}
+.test-item .td{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.footer{display:none}
+.footer a{color:#7c3aed;text-decoration:none}
+.card-wide{grid-column:1/-1}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.col h4{font-size:14px;font-weight:900;margin-bottom:5px}
+.col p{font-size:13px;color:#2a2a3a;line-height:1.5;font-weight:700}
+.col .yes{color:#059669}
+.col .no{color:#dc2626}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+<h1>🔐 TBN Protocol</h1>
+<span class="subtitle-text">The Certificate Authority for AI Agents</span>
+<span class="how-badge">HOW IT WORKS</span>
+<div class="tag">The Certificate Authority for AI Agents — How It Works</div>
+</div>
+
+<div class="grid">
+
+<!-- Card 1 -->
+<div class="card">
+<span class="num">STEP 1</span>
+<div class="icon">👨‍💻</div>
+<h3>A Bot Developer Builds a Bot</h3>
+<p>A developer (BD) writes an AI program. The bot handles actions — answering questions, approving loans, writing to databases, making decisions autonomously.</p>
+<p>The BD gives the bot instructions: what it should do, what data it can access, what boundaries it must respect.</p>
+<div class="key">The bot is theirs. Their code. Their logic. Their instructions. TBN doesn't build it or modify it.</div>
+</div>
+
+<!-- Card 2 -->
+<div class="card">
+<span class="num">STEP 2</span>
+<div class="icon">🪪</div>
+<h3>The BD Registers Their Bot With TBN</h3>
+<p>The BD comes to TBN and says: "I have a bot. Here's what it does. Here are its boundaries."</p>
+<p>We register the bot with a unique identity — like giving it a passport. Now we know who it is and what it claims to do.</p>
+<div class="key">Registration = identity. We know the bot exists and who operates it.</div>
+</div>
+
+<!-- Card 3 -->
+<div class="card card-wide">
+<span class="num">STEP 3</span>
+<div class="icon">🛡️</div>
+<h3>TBN Tests the Bot (6 Security Challenges)</h3>
+<p>Before we certify anything, we test the bot from the OUTSIDE. We don't touch its code — we just send it messages and check how it responds.</p>
+<div class="tests">
+<div class="test-item"><span class="td" style="background:#ef4444"></span><strong>Prompt Injection</strong> — Can we trick it into breaking its rules?</div>
+<div class="test-item"><span class="td" style="background:#ef4444"></span><strong>Hallucination</strong> — Does it make stuff up when it doesn't know?</div>
+<div class="test-item"><span class="td" style="background:#ef4444"></span><strong>Data Boundary</strong> — Does it stay in its lane?</div>
+<div class="test-item"><span class="td" style="background:#ef4444"></span><strong>Sensitive Data</strong> — Does it leak private information?</div>
+<div class="test-item"><span class="td" style="background:#facc15"></span><strong>Budget & Limits</strong> — Does it respect its operational limits?</div>
+<div class="test-item"><span class="td" style="background:#4ade80"></span><strong>Instruction Following</strong> — Does it do what it's told accurately?</div>
+</div>
+</div>
+
+<!-- Card 4 -->
+<div class="card">
+<span class="num">STEP 4</span>
+<div class="icon">✅</div>
+<h3>Pass? Certificate Issued.</h3>
+<p>If the bot passes all critical tests, TBN issues a certificate confirming: "This bot was tested. It passed. It is certified to operate within its declared boundaries."</p>
+<p>If it fails, we tell the BD exactly what went wrong. They fix their bot. They come back for re-testing.</p>
+<div class="key">The certificate proves the bot WAS capable of staying within boundaries at the time of testing.</div>
+</div>
+
+<!-- Card 5 -->
+<div class="card">
+<span class="num">STEP 5</span>
+<div class="icon">📹</div>
+<h3>TBN Starts Recording Every Action</h3>
+<p>Once certified, the bot goes into production. From now on, every time it makes a decision — approve, deny, escalate, write, send — it reports that action to TBN.</p>
+<p>TBN signs each action with a cryptographic receipt. A unique number, a timestamp, what happened, who did it. Signed and sealed.</p>
+<div class="key">One action = one receipt. Every receipt is independently verifiable by anyone. This continues forever, for every action.</div>
+</div>
+
+<!-- Card 6 -->
+<div class="card">
+<span class="num">STEP 6</span>
+<div class="icon">🔒</div>
+<h3>The Only Escape: Stop Using TBN</h3>
+<p>The only way for the bot to escape being documented is if the operator stops using our service. They can disconnect — but all receipts already issued remain permanently on our server.</p>
+<p>They can't delete past evidence. They can't modify receipts. They can't ask us to remove them.</p>
+<div class="key">If a certified bot suddenly goes silent (stops reporting), TBN detects the gap and can flag it. Like a dashcam being unplugged before a crash — suspicious.</div>
+</div>
+
+<!-- Card 7 -->
+<div class="card">
+<span class="num">STEP 7</span>
+<div class="icon">🌍</div>
+<h3>Anyone Can Verify Any Receipt</h3>
+<p>Receipts are not locked to the customer. Anyone can verify them:</p>
+<p>• The bot operator can audit their own actions<br>• A regulator can check any receipt independently<br>• An auditor can review the full history<br>• A partner or client can confirm actions happened</p>
+<p>No login required. No trust required. Offline verification with our published public key.</p>
+<div class="key">The receipts prove THAT something happened. They don't reveal WHAT the private content was.</div>
+</div>
+
+<!-- Card 8 -->
+<div class="card card-wide">
+<span class="num">STEP 8</span>
+<div class="icon">🧾</div>
+<h3>What We Know vs What We Don't</h3>
+<div class="two-col">
+<div class="col">
+<h4 class="yes">✅ What TBN CAN tell you:</h4>
+<p>• This bot exists and is certified ✅<br>• An action happened at this time ✅<br>• The action was: approved / denied / escalated ✅<br>• This receipt is genuine and untampered ✅</p>
+</div>
+<div class="col">
+<h4 class="no">❌ What TBN CANNOT tell you:</h4>
+<p>• What exactly the customer asked ❌<br>• The full text of the bot's response ❌<br>• The internal data the bot processed ❌</p>
+</div>
+</div>
+<div class="key">We prove the ACTION happened. We don't expose the CONTENT. This protects privacy while maintaining accountability.</div>
+</div>
+
+</div>
+
+<div class="footer">
+<strong>TBN Protocol</strong> · Hardin Enterprises Ltd · London, UK · <a href="https://tbn.hardinai.co.uk">tbn.hardinai.co.uk</a><br>
+Open Source (AGPL-3.0) · Patent Pending · © 2026 All rights reserved.
+</div>
+
+</div>
+</body>
+</html>
+

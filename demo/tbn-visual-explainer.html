@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TBN Protocol — Visual Explainer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a12;color:#e4e4e7;padding:40px 20px}
+.page{max-width:900px;margin:0 auto}
+h1{font-size:32px;font-weight:900;text-align:center;margin-bottom:6px;color:#fff}
+.tagline{text-align:center;color:#a78bfa;font-size:14px;margin-bottom:40px;font-weight:500}
+.section{margin-bottom:50px}
+.section-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:20px;padding-left:12px;border-left:3px solid #7c3aed}
+
+/* Analogy boxes */
+.analogy-row{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:12px;margin-bottom:16px}
+.analogy-box{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:16px;text-align:center}
+.analogy-box .icon{font-size:36px;margin-bottom:8px}
+.analogy-box .label{font-size:11px;color:#71717a;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.analogy-box .title{font-size:15px;font-weight:700;color:#fff}
+.analogy-box .desc{font-size:12px;color:#a1a1aa;margin-top:4px;line-height:1.5}
+.equals{font-size:24px;color:#7c3aed;text-align:center;font-weight:800}
+
+/* Flow diagram */
+.flow{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin:20px 0}
+.flow-step{background:#18181b;border:1px solid #27272a;border-radius:10px;padding:14px 16px;text-align:center;min-width:130px}
+.flow-step .num{font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:4px}
+.flow-step .icon{font-size:28px;margin-bottom:6px}
+.flow-step .name{font-size:12px;font-weight:600;color:#fff}
+.flow-step .sub{font-size:10px;color:#71717a;margin-top:3px}
+.flow-arrow{font-size:20px;color:#3f3f46;padding:0 4px}
+
+/* Comparison table */
+.compare{width:100%;border-collapse:collapse;margin:16px 0}
+.compare th{background:#1f1f23;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:#71717a;text-align:left;border-bottom:1px solid #27272a}
+.compare td{padding:10px 12px;font-size:13px;border-bottom:1px solid #1f1f23}
+.compare .yes{color:#4ade80;font-weight:700}
+.compare .no{color:#ef4444;font-weight:700}
+.compare .maybe{color:#facc15}
+
+/* Big analogy */
+.big-analogy{background:linear-gradient(135deg,#1a1440,#0f0c24);border:1px solid #3f3f46;border-radius:16px;padding:30px;text-align:center;margin:20px 0}
+.big-analogy .emoji{font-size:50px;margin-bottom:12px}
+.big-analogy h3{font-size:18px;color:#fff;margin-bottom:8px}
+.big-analogy p{font-size:13px;color:#a1a1aa;line-height:1.7;max-width:600px;margin:0 auto}
+
+/* Governance stack */
+.stack{display:flex;flex-direction:column;gap:0;margin:20px auto;max-width:500px}
+.stack-layer{padding:16px 20px;text-align:center;border:1px solid #27272a;position:relative}
+.stack-layer:first-child{border-radius:12px 12px 0 0}
+.stack-layer:last-child{border-radius:0 0 12px 12px}
+.stack-layer .layer-num{font-size:10px;color:#71717a;position:absolute;left:12px;top:50%;transform:translateY(-50%)}
+.stack-layer .layer-name{font-size:14px;font-weight:700;color:#fff}
+.stack-layer .layer-who{font-size:11px;color:#a1a1aa;margin-top:2px}
+.stack-0{background:#0f172a}
+.stack-1{background:#1e1b4b}
+.stack-2{background:#14532d;border-color:#166534}
+.stack-3{background:#451a03}
+
+/* The 6 tests */
+.tests-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+@media(max-width:600px){.tests-grid{grid-template-columns:1fr 1fr}}
+.test-card{background:#18181b;border:1px solid #27272a;border-radius:10px;padding:14px;text-align:center}
+.test-card .t-icon{font-size:24px;margin-bottom:6px}
+.test-card .t-name{font-size:11px;font-weight:700;color:#fff}
+.test-card .t-q{font-size:10px;color:#71717a;margin-top:4px;font-style:italic}
+
+.footer-note{text-align:center;color:#52525b;font-size:11px;margin-top:40px;padding-top:20px;border-top:1px solid #1f1f23}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>🔐 TBN Protocol</h1>
+<p class="tagline">The Certificate Authority for AI Agents — Visual Explainer</p>
+
+<!-- SECTION 1: The One-Line Explanation -->
+<div class="section">
+<div class="section-title">What Does TBN Do? (One Sentence)</div>
+<div class="big-analogy">
+<div class="emoji">📹</div>
+<h3>"We record and sign what the bot did."</h3>
+<p>TBN is an independent witness. We don't build the bot. We don't run the bot. We don't stop the bot. We <strong>record every decision it makes</strong> and sign it with cryptographic proof that anyone can verify.</p>
+</div>
+</div>
+
+<!-- SECTION 2: Real-World Analogies -->
+<div class="section">
+<div class="section-title">Analogies That Explain TBN</div>
+
+<div class="analogy-row">
+<div class="analogy-box">
+<div class="icon">🚗</div>
+<div class="label">Real World</div>
+<div class="title">Driving Licence + Dashcam</div>
+<div class="desc">Take the test once (licence). Every trip recorded (dashcam).</div>
+</div>
+<div class="equals">=</div>
+<div class="analogy-box">
+<div class="icon">🤖</div>
+<div class="label">TBN</div>
+<div class="title">Security Challenges + Receipts</div>
+<div class="desc">Pass 6 tests once (certificate). Every action recorded (receipt).</div>
+</div>
+</div>
+
+<div class="analogy-row">
+<div class="analogy-box">
+<div class="icon">✈️</div>
+<div class="label">Real World</div>
+<div class="title">Flight Black Box</div>
+<div class="desc">Records everything. Can't be tampered with. Used when things go wrong.</div>
+</div>
+<div class="equals">=</div>
+<div class="analogy-box">
+<div class="icon">🔐</div>
+<div class="label">TBN</div>
+<div class="title">Cryptographic Receipts</div>
+<div class="desc">Every decision signed. Can't be edited. Proof when auditors ask.</div>
+</div>
+</div>
+
+<div class="analogy-row">
+<div class="analogy-box">
+<div class="icon">🏥</div>
+<div class="label">Real World</div>
+<div class="title">Medical Records</div>
+<div class="desc">Doctor treats you. Hospital records what happened. Independent proof.</div>
+</div>
+<div class="equals">=</div>
+<div class="analogy-box">
+<div class="icon">📋</div>
+<div class="label">TBN</div>
+<div class="title">Action Attestation</div>
+<div class="desc">Bot makes decisions. TBN records what happened. Independent proof.</div>
+</div>
+</div>
+
+<div class="analogy-row">
+<div class="analogy-box">
+<div class="icon">🔒</div>
+<div class="label">Real World</div>
+<div class="title">SSL Certificate (HTTPS)</div>
+<div class="desc">Proves a website is who it claims to be. Issued by a trusted authority.</div>
+</div>
+<div class="equals">=</div>
+<div class="analogy-box">
+<div class="icon">🛡️</div>
+<div class="label">TBN</div>
+<div class="title">Agent Certificate</div>
+<div class="desc">Proves a bot is who it claims to be. Issued by TBN after testing.</div>
+</div>
+</div>
+</div>
+
+<!-- SECTION 3: The 3-Phase Process -->
+<div class="section">
+<div class="section-title">How TBN Works (3 Phases)</div>
+<div class="flow">
+<div class="flow-step">
+<div class="num">PHASE 1</div>
+<div class="icon">🪪</div>
+<div class="name">Register & Test</div>
+<div class="sub">Bot registers. TBN runs 6 security tests from outside.</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-step">
+<div class="num">PHASE 2</div>
+<div class="icon">✅</div>
+<div class="name">Certify</div>
+<div class="sub">Bot passes? Certificate issued. Fails? Fix & retry.</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-step">
+<div class="num">PHASE 3</div>
+<div class="icon">📝</div>
+<div class="name">Attest (Ongoing)</div>
+<div class="sub">Every action → signed receipt. Forever. Verifiable by anyone.</div>
+</div>
+</div>
+</div>
+
+<!-- SECTION 4: The 6 Security Tests -->
+<div class="section">
+<div class="section-title">The 6 Security Challenges (TBN's MOT Test)</div>
+<div class="tests-grid">
+<div class="test-card">
+<div class="t-icon">🔴</div>
+<div class="t-name">Prompt Injection</div>
+<div class="t-q">"Can we trick it into breaking its rules?"</div>
+</div>
+<div class="test-card">
+<div class="t-icon">🔴</div>
+<div class="t-name">Hallucination</div>
+<div class="t-q">"Does it make stuff up when it doesn't know?"</div>
+</div>
+<div class="test-card">
+<div class="t-icon">🔴</div>
+<div class="t-name">Data Boundary</div>
+<div class="t-q">"Does it stay in its lane?"</div>
+</div>
+<div class="test-card">
+<div class="t-icon">🔴</div>
+<div class="t-name">Sensitive Data</div>
+<div class="t-q">"Does it leak private information?"</div>
+</div>
+<div class="test-card">
+<div class="t-icon">🟡</div>
+<div class="t-name">Budget & Permissions</div>
+<div class="t-q">"Does it respect its limits?"</div>
+</div>
+<div class="test-card">
+<div class="t-icon">🟢</div>
+<div class="t-name">Instruction Following</div>
+<div class="t-q">"Does it do what it's told?"</div>
+</div>
+</div>
+<p style="text-align:center;font-size:11px;color:#71717a;margin-top:8px">🔴 = Critical (must pass) · 🟡 = High · 🟢 = Medium</p>
+</div>
+
+<!-- SECTION 5: Governance Stack -->
+<div class="section">
+<div class="section-title">The Governance Stack — Who Does What</div>
+<div class="stack">
+<div class="stack-layer stack-3">
+<span class="layer-num">L3</span>
+<div class="layer-name">👨‍⚖️ Regulator / Auditor</div>
+<div class="layer-who">Checks the proof. "Show me the evidence."</div>
+</div>
+<div class="stack-layer stack-2">
+<span class="layer-num">L2</span>
+<div class="layer-name">🔐 TBN Protocol</div>
+<div class="layer-who">Records & proves. Independent cryptographic witness.</div>
+</div>
+<div class="stack-layer stack-1">
+<span class="layer-num">L1</span>
+<div class="layer-name">🛡️ Guardrail (Beyond Guard / ActTrident / Shango)</div>
+<div class="layer-who">Decides if action is allowed. Blocks if not.</div>
+</div>
+<div class="stack-layer stack-0">
+<span class="layer-num">L0</span>
+<div class="layer-name">🤖 The Bot</div>
+<div class="layer-who">Does the action. Makes decisions autonomously.</div>
+</div>
+</div>
+<p style="text-align:center;font-size:12px;color:#a1a1aa;margin-top:12px"><strong>Key:</strong> Guardrails = bouncer (blocks). TBN = body-cam (records). Regulator = judge (reviews footage).</p>
+</div>
+
+<!-- SECTION 6: Before & After Comparison -->
+<div class="section">
+<div class="section-title">Before TBN vs After TBN</div>
+<table class="compare">
+<tr><th></th><th>Without TBN</th><th>With TBN</th></tr>
+<tr><td>Bot has rules</td><td class="maybe">Maybe</td><td class="yes">✅ Required to pass tests</td></tr>
+<tr><td>Proof it follows rules</td><td class="no">❌ None</td><td class="yes">✅ Every action receipted</td></tr>
+<tr><td>Independent verification</td><td class="no">❌ Self-reported logs</td><td class="yes">✅ Third-party signed</td></tr>
+<tr><td>Auditor can check</td><td class="no">❌ "Trust us"</td><td class="yes">✅ "Verify it yourself"</td></tr>
+<tr><td>Tamper-proof record</td><td class="no">❌ Logs can be edited</td><td class="yes">✅ Cryptographic signature</td></tr>
+<tr><td>Offline verification</td><td class="no">❌ Need access to system</td><td class="yes">✅ Public key, no trust needed</td></tr>
+</table>
+</div>
+
+<!-- SECTION 7: One Diagram -->
+<div class="section">
+<div class="section-title">How a Receipt Gets Created</div>
+<div class="flow">
+<div class="flow-step">
+<div class="icon">🤖</div>
+<div class="name">Bot Acts</div>
+<div class="sub">"I approved this loan"</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-step">
+<div class="icon">📡</div>
+<div class="name">Calls TBN</div>
+<div class="sub">1 API call with action details</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-step">
+<div class="icon">🔏</div>
+<div class="name">TBN Signs</div>
+<div class="sub">RSA-PSS SHA-256 signature</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-step">
+<div class="icon">🧾</div>
+<div class="name">Receipt Issued</div>
+<div class="sub">Unique ID, immutable, verifiable</div>
+</div>
+</div>
+<p style="text-align:center;font-size:11px;color:#71717a;margin-top:8px">Anyone can verify: GET /api/v1/verify/{receipt_id} — or offline with the public key.</p>
+</div>
+
+<!-- SECTION 8: The Core Pitch -->
+<div class="section">
+<div class="big-analogy" style="border-color:#166534">
+<div class="emoji">💡</div>
+<h3>The One Question TBN Answers</h3>
+<p style="font-size:16px;color:#4ade80;font-weight:600;margin-bottom:8px">"Prove what your AI did."</p>
+<p>When the regulator asks, when the auditor checks, when the customer demands proof — TBN provides an independent, cryptographic, tamper-proof receipt for every decision your AI agent made. Verifiable by anyone. No trust required.</p>
+</div>
+</div>
+
+<div class="footer-note">
+TBN Protocol · Hardin Enterprises Ltd · London, UK · tbn.hardinai.co.uk<br>
+© 2026 All rights reserved. Open source (AGPL-3.0). Patent pending.
+</div>
+
+</div>
+</body>
+</html>
