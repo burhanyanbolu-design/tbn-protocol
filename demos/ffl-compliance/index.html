@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FFL Compliance — Firearms Inventory & Tracking</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.header{background:#1e293b;border-bottom:1px solid #334155;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:18px;font-weight:700;color:#fff}
+.header .badge{font-size:10px;background:#059669;color:#fff;padding:3px 8px;border-radius:10px;font-weight:600}
+.nav{display:flex;gap:0;background:#1e293b;border-bottom:1px solid #334155;overflow-x:auto}
+.nav button{background:none;border:none;color:#94a3b8;padding:12px 18px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+.nav button.active{color:#fff;border-bottom-color:#7c3aed}
+.nav button:hover{color:#fff}
+.content{padding:20px;max-width:900px;margin:0 auto}
+.card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px;margin-bottom:16px}
+.card h2{font-size:16px;font-weight:700;margin-bottom:14px;color:#fff}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+label{display:block;font-size:11px;color:#94a3b8;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+input,select{width:100%;background:#0f172a;border:1px solid #334155;border-radius:6px;padding:10px 12px;color:#e2e8f0;font-size:14px}
+input:focus,select:focus{outline:none;border-color:#7c3aed}
+.btn{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:14px}
+.btn:hover{background:#6d28d9}
+.btn-outline{background:transparent;border:1px solid #334155;color:#94a3b8}
+.btn-outline:hover{border-color:#7c3aed;color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
+.stat{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:14px;text-align:center}
+.stat .num{font-size:28px;font-weight:800;color:#fff}
+.stat .lbl{font-size:11px;color:#64748b;margin-top:2px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 10px;color:#64748b;font-weight:600;border-bottom:1px solid #334155;font-size:10px;text-transform:uppercase}
+td{padding:8px 10px;border-bottom:1px solid #1e293b;color:#cbd5e1}
+tr:hover td{background:#1e293b}
+.receipt-badge{font-size:9px;background:#059669;color:#fff;padding:2px 6px;border-radius:4px;font-weight:600}
+.empty{text-align:center;color:#475569;padding:30px;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>🔫 FFL Compliance System</h1>
+<span class="badge">TBN CERTIFIED</span>
+</div>
+
+<div class="nav">
+<button class="active" onclick="showTab('dashboard')">Dashboard</button>
+<button onclick="showTab('import')">Log Import</button>
+<button onclick="showTab('manufacture')">Log Manufacture</button>
+<button onclick="showTab('sell')">Log Sale</button>
+<button onclick="showTab('inventory')">Inventory</button>
+<button onclick="showTab('reports')">ATF Reports</button>
+</div>
+
+<div class="content">
+
+<!-- Dashboard -->
+<div id="tab-dashboard">
+<div class="stats">
+<div class="stat"><div class="num" id="totalFirearms">0</div><div class="lbl">Total Firearms</div></div>
+<div class="stat"><div class="num" id="totalImported">0</div><div class="lbl">Imported</div></div>
+<div class="stat"><div class="num" id="totalSold">0</div><div class="lbl">Sold / Disposed</div></div>
+</div>
+<div class="card">
+<h2>Recent Activity</h2>
+<div id="recentActivity" class="empty">No records yet — start by logging an import or manufacture.</div>
+</div>
+</div>
+
+<!-- Log Import -->
+<div id="tab-import" style="display:none">
+<div class="card">
+<h2>Log Imported Firearm</h2>
+<div class="form-grid">
+<div><label>Serial Number *</label><input type="text" id="imp-serial" placeholder="e.g. TR-2024-00145"></div>
+<div><label>Model *</label><input type="text" id="imp-model" placeholder="e.g. TP9 SFx"></div>
+<div><label>Manufacturer *</label><input type="text" id="imp-manufacturer" placeholder="e.g. Canik"></div>
+<div><label>Type *</label><select id="imp-type"><option>Pistol</option><option>Rifle</option><option>Shotgun</option><option>Revolver</option><option>Other</option></select></div>
+<div><label>Caliber / Gauge *</label><input type="text" id="imp-caliber" placeholder="e.g. 9mm"></div>
+<div><label>Country of Origin</label><input type="text" id="imp-country" value="Türkiye" readonly></div>
+<div><label>Date Imported *</label><input type="date" id="imp-date"></div>
+<div><label>ATF Form 6 Permit #</label><input type="text" id="imp-permit" placeholder="Import permit number"></div>
+<div style="grid-column:1/-1"><label>Supplier (Overseas)</label><input type="text" id="imp-supplier" placeholder="e.g. Samsun Yurt Savunma"></div>
+</div>
+<button class="btn" onclick="logImport()">✓ Log Import + Issue TBN Receipt</button>
+</div>
+</div>
+
+<!-- Log Manufacture -->
+<div id="tab-manufacture" style="display:none">
+<div class="card">
+<h2>Log Manufactured Firearm</h2>
+<div class="form-grid">
+<div><label>Serial Number *</label><input type="text" id="mfg-serial" placeholder="Assign serial number"></div>
+<div><label>Model *</label><input type="text" id="mfg-model" placeholder="Model name/number"></div>
+<div><label>Type *</label><select id="mfg-type"><option>Pistol</option><option>Rifle</option><option>Shotgun</option><option>Revolver</option><option>Other</option></select></div>
+<div><label>Caliber / Gauge *</label><input type="text" id="mfg-caliber" placeholder="e.g. .45 ACP"></div>
+<div><label>Date Manufactured *</label><input type="date" id="mfg-date"></div>
+<div><label>Your Importer/Manufacturer Mark</label><input type="text" id="mfg-mark" placeholder="e.g. Altan Arms LLC, Las Vegas NV"></div>
+</div>
+<button class="btn" onclick="logManufacture()">✓ Log Manufacture + Issue TBN Receipt</button>
+</div>
+</div>
+
+<!-- Log Sale -->
+<div id="tab-sell" style="display:none">
+<div class="card">
+<h2>Log Sale / Disposition (FFL-to-FFL)</h2>
+<div class="form-grid">
+<div><label>Serial Number *</label><input type="text" id="sell-serial" placeholder="Serial of firearm being sold"></div>
+<div><label>Buyer FFL Number *</label><input type="text" id="sell-ffl" placeholder="Buyer's FFL license number"></div>
+<div><label>Buyer Company Name *</label><input type="text" id="sell-company" placeholder="e.g. Smith's Gun Shop"></div>
+<div><label>Buyer City / State *</label><input type="text" id="sell-location" placeholder="e.g. Phoenix, AZ"></div>
+<div><label>Date of Sale *</label><input type="date" id="sell-date"></div>
+<div><label>Notes</label><input type="text" id="sell-notes" placeholder="Optional notes"></div>
+</div>
+<button class="btn" onclick="logSale()">✓ Log Sale + Issue TBN Receipt</button>
+</div>
+</div>
+
+<!-- Inventory -->
+<div id="tab-inventory" style="display:none">
+<div class="card">
+<h2>Current Inventory</h2>
+<div><label>Search</label><input type="text" id="searchBox" placeholder="Search by serial, model, or manufacturer..." oninput="renderInventory()"></div>
+<div class="table-wrap" style="margin-top:14px">
+<table>
+<thead><tr><th>Serial</th><th>Model</th><th>Type</th><th>Caliber</th><th>Source</th><th>Date In</th><th>Status</th><th>TBN</th></tr></thead>
+<tbody id="inventoryBody"><tr><td colspan="8" class="empty">No firearms logged yet.</td></tr></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- ATF Reports -->
+<div id="tab-reports" style="display:none">
+<div class="card">
+<h2>ATF Reports</h2>
+<p style="color:#94a3b8;font-size:13px;margin-bottom:14px">Generate compliance reports for ATF inspection.</p>
+<button class="btn btn-outline" onclick="generateADBook()">📋 Export A&D Bound Book (PDF-ready)</button>
+<button class="btn btn-outline" style="margin-top:8px" onclick="generateForm5()">📊 Generate Annual Manufacturing Report (Form 5)</button>
+<button class="btn btn-outline" style="margin-top:8px" onclick="generateImportLog()">📦 Export Import Log with Permit Numbers</button>
+<div id="reportOutput" style="margin-top:14px;font-family:monospace;font-size:11px;color:#94a3b8;white-space:pre-wrap"></div>
+</div>
+</div>
+
+</div>
+
+<script>
+let firearms = JSON.parse(localStorage.getItem('ffl_firearms') || '[]');
+let activity = JSON.parse(localStorage.getItem('ffl_activity') || '[]');
+
+function showTab(name){
+  document.querySelectorAll('[id^="tab-"]').forEach(el=>el.style.display='none');
+  document.getElementById('tab-'+name).style.display='block';
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  if(name==='inventory') renderInventory();
+  if(name==='dashboard') renderDashboard();
+}
+
+function save(){
+  localStorage.setItem('ffl_firearms', JSON.stringify(firearms));
+  localStorage.setItem('ffl_activity', JSON.stringify(activity));
+}
+
+function tbnReceipt(){
+  return 'tbn_ffl_' + Math.random().toString(36).substr(2,12);
+}
+
+function logImport(){
+  const f={
+    serial: document.getElementById('imp-serial').value.trim(),
+    model: document.getElementById('imp-model').value.trim(),
+    manufacturer: document.getElementById('imp-manufacturer').value.trim(),
+    type: document.getElementById('imp-type').value,
+    caliber: document.getElementById('imp-caliber').value.trim(),
+    country: 'Türkiye',
+    dateIn: document.getElementById('imp-date').value,
+    permit: document.getElementById('imp-permit').value.trim(),
+    supplier: document.getElementById('imp-supplier').value.trim(),
+    source: 'imported',
+    status: 'in-stock',
+    receipt: tbnReceipt(),
+    loggedAt: new Date().toISOString()
+  };
+  if(!f.serial||!f.model||!f.manufacturer||!f.caliber||!f.dateIn){alert('Fill all required fields');return;}
+  firearms.push(f);
+  activity.unshift({type:'import',desc:'Imported '+f.model+' ('+f.serial+')',time:new Date().toLocaleString(),receipt:f.receipt});
+  save(); renderDashboard();
+  alert('✓ Import logged. TBN Receipt: '+f.receipt);
+  document.querySelectorAll('#tab-import input').forEach(i=>{if(!i.readOnly)i.value='';});
+}
+
+function logManufacture(){
+  const f={
+    serial: document.getElementById('mfg-serial').value.trim(),
+    model: document.getElementById('mfg-model').value.trim(),
+    manufacturer: document.getElementById('mfg-mark').value.trim() || 'Self',
+    type: document.getElementById('mfg-type').value,
+    caliber: document.getElementById('mfg-caliber').value.trim(),
+    country: 'USA',
+    dateIn: document.getElementById('mfg-date').value,
+    source: 'manufactured',
+    status: 'in-stock',
+    receipt: tbnReceipt(),
+    loggedAt: new Date().toISOString()
+  };
+  if(!f.serial||!f.model||!f.caliber||!f.dateIn){alert('Fill all required fields');return;}
+  firearms.push(f);
+  activity.unshift({type:'manufacture',desc:'Manufactured '+f.model+' ('+f.serial+')',time:new Date().toLocaleString(),receipt:f.receipt});
+  save(); renderDashboard();
+  alert('✓ Manufacture logged. TBN Receipt: '+f.receipt);
+  document.querySelectorAll('#tab-manufacture input').forEach(i=>i.value='');
+}
+
+function logSale(){
+  const serial = document.getElementById('sell-serial').value.trim();
+  const idx = firearms.findIndex(f=>f.serial===serial && f.status==='in-stock');
+  if(idx===-1){alert('Firearm not found in inventory or already sold');return;}
+  const ffl = document.getElementById('sell-ffl').value.trim();
+  const company = document.getElementById('sell-company').value.trim();
+  const location = document.getElementById('sell-location').value.trim();
+  const date = document.getElementById('sell-date').value;
+  if(!serial||!ffl||!company||!date){alert('Fill all required fields');return;}
+  const receipt = tbnReceipt();
+  firearms[idx].status='sold';
+  firearms[idx].soldTo={ffl,company,location,date};
+  firearms[idx].saleReceipt=receipt;
+  activity.unshift({type:'sale',desc:'Sold '+firearms[idx].model+' ('+serial+') to '+company,time:new Date().toLocaleString(),receipt});
+  save(); renderDashboard();
+  alert('✓ Sale logged. TBN Receipt: '+receipt);
+  document.querySelectorAll('#tab-sell input').forEach(i=>i.value='');
+}
+
+function renderDashboard(){
+  document.getElementById('totalFirearms').textContent=firearms.length;
+  document.getElementById('totalImported').textContent=firearms.filter(f=>f.source==='imported').length;
+  document.getElementById('totalSold').textContent=firearms.filter(f=>f.status==='sold').length;
+  const el=document.getElementById('recentActivity');
+  if(activity.length===0){el.innerHTML='<div class="empty">No records yet.</div>';return;}
+  el.innerHTML=activity.slice(0,10).map(a=>'<div style="padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px"><span style="color:#64748b">'+a.time+'</span> — '+a.desc+' <span class="receipt-badge">'+a.receipt+'</span></div>').join('');
+}
+
+function renderInventory(){
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  const filtered=firearms.filter(f=>(f.serial+f.model+f.manufacturer).toLowerCase().includes(q));
+  const body=document.getElementById('inventoryBody');
+  if(filtered.length===0){body.innerHTML='<tr><td colspan="8" class="empty">No matches.</td></tr>';return;}
+  body.innerHTML=filtered.map(f=>'<tr><td><strong>'+f.serial+'</strong></td><td>'+f.model+'</td><td>'+f.type+'</td><td>'+f.caliber+'</td><td>'+f.source+'</td><td>'+f.dateIn+'</td><td>'+(f.status==='sold'?'<span style="color:#ef4444">SOLD</span>':'<span style="color:#4ade80">IN STOCK</span>')+'</td><td><span class="receipt-badge">'+f.receipt+'</span></td></tr>').join('');
+}
+
+function generateADBook(){
+  let txt='=== A&D BOUND BOOK ===\nGenerated: '+new Date().toLocaleString()+'\n\n';
+  txt+='ACQUISITIONS:\n'+'-'.repeat(60)+'\n';
+  firearms.forEach(f=>{
+    txt+=f.dateIn+' | '+f.serial+' | '+f.model+' | '+f.type+' | '+f.caliber+' | '+f.manufacturer+' | '+f.country+' | Source: '+f.source+' | TBN: '+f.receipt+'\n';
+  });
+  txt+='\nDISPOSITIONS:\n'+'-'.repeat(60)+'\n';
+  firearms.filter(f=>f.status==='sold').forEach(f=>{
+    txt+=f.soldTo.date+' | '+f.serial+' | '+f.model+' | Sold to: '+f.soldTo.company+' (FFL: '+f.soldTo.ffl+') | '+f.soldTo.location+' | TBN: '+f.saleReceipt+'\n';
+  });
+  document.getElementById('reportOutput').textContent=txt;
+}
+
+function generateForm5(){
+  const mfg=firearms.filter(f=>f.source==='manufactured');
+  let txt='=== ATF FORM 5 — ANNUAL MANUFACTURING REPORT ===\nGenerated: '+new Date().toLocaleString()+'\n\n';
+  txt+='Total Manufactured: '+mfg.length+'\n\n';
+  const byType={};
+  mfg.forEach(f=>{byType[f.type]=(byType[f.type]||0)+1;});
+  Object.entries(byType).forEach(([t,c])=>{txt+=t+': '+c+'\n';});
+  txt+='\nDETAIL:\n'+'-'.repeat(60)+'\n';
+  mfg.forEach(f=>{txt+=f.dateIn+' | '+f.serial+' | '+f.model+' | '+f.type+' | '+f.caliber+' | TBN: '+f.receipt+'\n';});
+  document.getElementById('reportOutput').textContent=txt;
+}
+
+function generateImportLog(){
+  const imp=firearms.filter(f=>f.source==='imported');
+  let txt='=== IMPORT LOG ===\nGenerated: '+new Date().toLocaleString()+'\n\n';
+  txt+='Total Imported: '+imp.length+'\nCountry: Türkiye\n\n';
+  imp.forEach(f=>{txt+=f.dateIn+' | '+f.serial+' | '+f.model+' | '+f.manufacturer+' | Permit: '+(f.permit||'N/A')+' | Supplier: '+(f.supplier||'N/A')+' | TBN: '+f.receipt+'\n';});
+  document.getElementById('reportOutput').textContent=txt;
+}
+
+renderDashboard();
+</script>
+</body>
+</html>
