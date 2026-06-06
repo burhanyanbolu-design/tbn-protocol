@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SplitPay — Instant Referral Commission Splitting</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a12;color:#e4e4e7;min-height:100vh;padding:20px}
+.container{max-width:900px;margin:0 auto}
+h1{font-size:28px;font-weight:800;text-align:center;margin-bottom:6px;color:#fff}
+.subtitle{text-align:center;color:#71717a;font-size:14px;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.card{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:20px}
+.card h3{font-size:14px;color:#a78bfa;margin-bottom:12px;font-weight:600;letter-spacing:0.5px}
+label{display:block;font-size:12px;color:#71717a;margin-bottom:4px;margin-top:10px}
+input,select{width:100%;background:#0a0a12;border:1px solid #3f3f46;border-radius:6px;padding:8px 10px;color:#e4e4e7;font-size:13px;margin-bottom:4px}
+input:focus,select:focus{outline:none;border-color:#7c3aed}
+.btn{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;margin-top:12px;width:100%}
+.btn:hover{background:#6d28d9}
+.btn-green{background:#059669}.btn-green:hover{background:#047857}
+.btn-red{background:#dc2626}.btn-red:hover{background:#b91c1c}
+.split-list{margin-top:10px}
+.split-item{display:flex;justify-content:space-between;align-items:center;background:#0a0a12;border:1px solid #27272a;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:12px}
+.split-item .name{color:#e4e4e7;font-weight:500}
+.split-item .pct{color:#4ade80;font-weight:700}
+.split-item .acc{color:#71717a;font-size:11px}
+.tx-log{background:#0a0a12;border:1px solid #27272a;border-radius:8px;padding:12px;max-height:300px;overflow-y:auto;font-family:'Courier New',monospace;font-size:11px;line-height:1.8}
+.tx-entry{border-bottom:1px solid #1f1f23;padding:6px 0}
+.tx-entry:last-child{border:none}
+.tx-amount{color:#4ade80;font-weight:700}
+.tx-split{color:#a78bfa}
+.tx-time{color:#52525b}
+.tx-receipt{color:#facc15;font-size:10px}
+.flow-visual{text-align:center;padding:20px;margin-bottom:20px;background:#18181b;border:1px solid #27272a;border-radius:12px}
+.flow-visual .step{display:inline-block;padding:8px 14px;border-radius:20px;font-size:11px;font-weight:600;margin:0 4px}
+.flow-visual .arrow{color:#52525b;font-size:16px;margin:0 2px}
+.step-pay{background:#7c3aed33;color:#a78bfa;border:1px solid #7c3aed55}
+.step-detect{background:#06b6d433;color:#67e8f9;border:1px solid #06b6d455}
+.step-split{background:#05966933;color:#4ade80;border:1px solid #05966955}
+.step-receipt{background:#d9770633;color:#facc15;border:1px solid #d9770655}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:#18181b;border:1px solid #27272a;border-radius:8px;padding:12px;text-align:center}
+.stat .num{font-size:22px;font-weight:800;color:#fff}
+.stat .lbl{font-size:10px;color:#71717a;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>⚡ SplitPay</h1>
+<p class="subtitle">Instant Referral Commission Splitting — Powered by TBN Protocol</p>
+
+<div class="flow-visual">
+<span class="step step-pay">💳 Payment In</span>
+<span class="arrow">→</span>
+<span class="step step-detect">🔍 Contract Match</span>
+<span class="arrow">→</span>
+<span class="step step-split">💰 Auto Split</span>
+<span class="arrow">→</span>
+<span class="step step-receipt">🔐 TBN Receipt</span>
+</div>
+
+<div class="stats">
+<div class="stat"><div class="num" id="statTotal">£0</div><div class="lbl">Total Received</div></div>
+<div class="stat"><div class="num" id="statSplits">0</div><div class="lbl">Splits Executed</div></div>
+<div class="stat"><div class="num" id="statPaid">£0</div><div class="lbl">Commissions Paid</div></div>
+<div class="stat"><div class="num" id="statKept">£0</div><div class="lbl">You Keep</div></div>
+</div>
+
+<div class="grid">
+<div class="card">
+<h3>📋 SPLIT CONTRACTS</h3>
+<label>Product Code / Reference</label>
+<input type="text" id="contractRef" placeholder="e.g. PRODUCT-A">
+<label>Referrer Name</label>
+<input type="text" id="contractName" placeholder="e.g. John Smith">
+<label>Referrer Account (sort-acc)</label>
+<input type="text" id="contractAcc" placeholder="e.g. 20-45-12 / 12345678">
+<label>Commission %</label>
+<input type="number" id="contractPct" placeholder="10" min="1" max="50">
+<button class="btn" onclick="addContract()">+ Add Split Contract</button>
+<div class="split-list" id="contractList"></div>
+</div>
+
+<div class="card">
+<h3>💳 SIMULATE PAYMENT</h3>
+<label>From (Customer)</label>
+<input type="text" id="payFrom" placeholder="e.g. Acme Corp">
+<label>Amount (£)</label>
+<input type="number" id="payAmount" placeholder="100" min="1">
+<label>Reference / Product Code</label>
+<input type="text" id="payRef" placeholder="e.g. PRODUCT-A">
+<button class="btn btn-green" onclick="simulatePayment()">⚡ Process Payment</button>
+<p style="margin-top:8px;font-size:11px;color:#52525b">If reference matches a contract → auto-split. If not → full amount kept.</p>
+</div>
+</div>
+
+<div class="card">
+<h3>📜 TRANSACTION LOG (with TBN Receipts)</h3>
+<div class="tx-log" id="txLog">
+<div style="color:#52525b;text-align:center;padding:20px">No transactions yet — add a contract and simulate a payment above</div>
+</div>
+</div>
+</div>
+
+<script>
+let contracts = [];
+let txCount = 0;
+let totalReceived = 0;
+let totalPaid = 0;
+let totalKept = 0;
+
+function addContract(){
+  const ref = document.getElementById('contractRef').value.trim().toUpperCase();
+  const name = document.getElementById('contractName').value.trim();
+  const acc = document.getElementById('contractAcc').value.trim();
+  const pct = parseInt(document.getElementById('contractPct').value);
+  if(!ref||!name||!acc||!pct){alert('Fill all fields');return;}
+  contracts.push({ref,name,acc,pct});
+  renderContracts();
+  document.getElementById('contractRef').value='';
+  document.getElementById('contractName').value='';
+  document.getElementById('contractAcc').value='';
+  document.getElementById('contractPct').value='';
+}
+
+function renderContracts(){
+  const el = document.getElementById('contractList');
+  if(contracts.length===0){el.innerHTML='';return;}
+  el.innerHTML=contracts.map((c,i)=>`
+    <div class="split-item">
+      <div><div class="name">${c.name}</div><div class="acc">${c.acc} · Ref: ${c.ref}</div></div>
+      <div class="pct">${c.pct}%</div>
+    </div>
+  `).join('');
+}
+
+function simulatePayment(){
+  const from = document.getElementById('payFrom').value.trim() || 'Unknown';
+  const amount = parseFloat(document.getElementById('payAmount').value);
+  const ref = document.getElementById('payRef').value.trim().toUpperCase();
+  if(!amount||amount<=0){alert('Enter a valid amount');return;}
+
+  txCount++;
+  totalReceived += amount;
+  const time = new Date().toLocaleTimeString();
+  const receiptId = 'tbn_sp_' + Math.random().toString(36).substr(2,12);
+
+  // Check for matching contract
+  const match = contracts.find(c=>c.ref===ref);
+  let logHtml = '';
+
+  if(match){
+    const commission = (amount * match.pct / 100);
+    const kept = amount - commission;
+    totalPaid += commission;
+    totalKept += kept;
+
+    logHtml = `
+      <div class="tx-entry">
+        <div><span class="tx-time">${time}</span> · Payment from <b>${from}</b></div>
+        <div>Amount: <span class="tx-amount">£${amount.toFixed(2)}</span> · Ref: ${ref}</div>
+        <div class="tx-split">✓ CONTRACT MATCHED → ${match.pct}% (£${commission.toFixed(2)}) → ${match.name} (${match.acc})</div>
+        <div>You keep: <span class="tx-amount">£${kept.toFixed(2)}</span></div>
+        <div class="tx-receipt">🔐 TBN Receipt: ${receiptId} · Split verified & signed</div>
+      </div>
+    `;
+  } else {
+    totalKept += amount;
+    logHtml = `
+      <div class="tx-entry">
+        <div><span class="tx-time">${time}</span> · Payment from <b>${from}</b></div>
+        <div>Amount: <span class="tx-amount">£${amount.toFixed(2)}</span> · Ref: ${ref||'(none)'}</div>
+        <div style="color:#71717a">— No contract matched. Full amount retained.</div>
+        <div class="tx-receipt">🔐 TBN Receipt: ${receiptId} · No-split recorded</div>
+      </div>
+    `;
+  }
+
+  const log = document.getElementById('txLog');
+  if(txCount===1) log.innerHTML='';
+  log.innerHTML = logHtml + log.innerHTML;
+
+  // Update stats
+  document.getElementById('statTotal').textContent = '£'+totalReceived.toFixed(0);
+  document.getElementById('statSplits').textContent = contracts.filter(c=>c.ref===ref).length>0 ? txCount : document.getElementById('statSplits').textContent;
+  document.getElementById('statPaid').textContent = '£'+totalPaid.toFixed(2);
+  document.getElementById('statKept').textContent = '£'+totalKept.toFixed(2);
+
+  // Clear form
+  document.getElementById('payFrom').value='';
+  document.getElementById('payAmount').value='';
+  document.getElementById('payRef').value='';
+}
+</script>
+</body>
+</html>
