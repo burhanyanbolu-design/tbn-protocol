@@ -1,0 +1,463 @@
+
+<style>
+  .wrap{background:#26215C;border-radius:16px;padding:0;position:relative;overflow:hidden;height:420px;}
+  .dot-grid{position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle,#534AB7 1px,transparent 1px);background-size:28px 28px;opacity:0.15;pointer-events:none;}
+  .fh{position:absolute;font-family:'Courier New',monospace;font-size:10px;color:#534AB7;opacity:0.4;animation:drift 7s ease-in-out infinite;pointer-events:none;}
+  @keyframes drift{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-8px);opacity:.12}}
+  .label-tag{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;}
+  .label-name{font-family:sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;color:#7F77DD;text-transform:uppercase;}
+  .cert-pill{font-family:'Courier New',monospace;font-size:9px;color:#5DCAA5;background:#04342C;border:0.5px solid #1D9E75;border-radius:10px;padding:2px 8px;letter-spacing:1px;}
+  .status-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(30,25,80,0.85);padding:10px 20px;font-family:'Courier New',monospace;font-size:11px;color:#AFA9EC;letter-spacing:1px;text-align:center;border-top:0.5px solid #3C3489;}
+  .cert-popup{position:absolute;background:#04342C;border:1px solid #1D9E75;border-radius:10px;padding:8px 14px;font-family:'Courier New',monospace;font-size:10px;color:#5DCAA5;pointer-events:none;text-align:center;line-height:1.6;transition:opacity 0.3s;}
+  .rec-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#E24B4A;margin-right:6px;animation:recblink 0.8s ease-in-out infinite;}
+  @keyframes recblink{0%,100%{opacity:1}50%{opacity:0.2}}
+</style>
+
+<div class="wrap" id="mainWrap">
+  <div class="dot-grid"></div>
+  <span class="fh" style="top:12px;left:60px;animation-delay:0s">7F3A·B91C</span>
+  <span class="fh" style="top:40px;right:55px;animation-delay:1.2s">F4A1·2D7C</span>
+  <span class="fh" style="bottom:48px;left:38px;animation-delay:2s">C038·91BE</span>
+  <span class="fh" style="bottom:55px;right:38px;animation-delay:0.7s">8E53·3C8B</span>
+
+  <canvas id="mainCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas>
+
+  <div class="label-tag" id="labelA" style="top:18px;">
+    <span class="label-name">Agent</span>
+    <span class="cert-pill">TBN·CERTIFIED</span>
+  </div>
+  <div class="label-tag" id="labelB" style="top:18px;">
+    <span class="label-name">Validator</span>
+    <span class="cert-pill">TBN·CERTIFIED</span>
+  </div>
+
+  <div class="cert-popup" id="certPop" style="opacity:0;min-width:160px;"></div>
+
+  <div class="status-bar" id="statusBar">Initialising TBN Protocol...</div>
+</div>
+
+<script>
+(function(){
+  const wrap = document.getElementById('mainWrap');
+  const canvas = document.getElementById('mainCanvas');
+  const ctx = canvas.getContext('2d');
+  const labelA = document.getElementById('labelA');
+  const labelB = document.getElementById('labelB');
+  const certPop = document.getElementById('certPop');
+  const statusBar = document.getElementById('statusBar');
+
+  let W, H;
+  function resize(){
+    W = wrap.offsetWidth; H = wrap.offsetHeight;
+    canvas.width = W; canvas.height = H;
+  }
+  resize();
+
+  const PATH_POINTS = [
+    {x:0.12, y:0.72},
+    {x:0.25, y:0.72},
+    {x:0.28, y:0.55},
+    {x:0.38, y:0.55},
+    {x:0.42, y:0.40},
+    {x:0.55, y:0.40},
+    {x:0.58, y:0.58},
+    {x:0.70, y:0.58},
+    {x:0.73, y:0.42},
+    {x:0.85, y:0.42},
+  ];
+
+  const CERT_EVENTS = [
+    {t:0.25, label:'Action verified\nHash: 7F3A·B91C', offsetX:-90, offsetY:-60},
+    {t:0.55, label:'Action certified\nHash: F4A1·2D7C', offsetX:20, offsetY:-65},
+    {t:0.82, label:'Action signed\nHash: 8E53·3C8B', offsetX:-80, offsetY:-60},
+  ];
+
+  const WAYPOINTS = [
+    {t:0.0, icon:'⬛', label:'Start'},
+    {t:0.45, icon:'⬛', label:'Node A'},
+    {t:1.0, icon:'⬛', label:'Destination'},
+  ];
+
+  let blinkA={s:0,tm:0,nx:160}, blinkB={s:0,tm:0,nx:220};
+  let tick=0;
+  let progress=0;
+  let certShow=null, certOpacity=0;
+  const TOTAL_TICKS = 480;
+
+  function getBlink(b){
+    b.tm++;
+    if(b.s===0&&b.tm>=b.nx){b.s=1;b.tm=0;}
+    if(b.s===1&&b.tm>=5){b.s=2;b.tm=0;}
+    if(b.s===2&&b.tm>=5){b.s=0;b.tm=0;b.nx=120+Math.random()*100;}
+    if(b.s===0)return 9;
+    if(b.s===1)return Math.max(0.5,9-(b.tm/5)*8.5);
+    return Math.max(0.5,(b.tm/5)*9);
+  }
+
+  function getPathPos(t){
+    const n=PATH_POINTS.length-1;
+    const seg=Math.min(Math.floor(t*n),n-1);
+    const lt=(t*n)-seg;
+    const a=PATH_POINTS[seg], b=PATH_POINTS[seg+1];
+    return {x:a.x+(b.x-a.x)*lt, y:a.y+(b.y-a.y)*lt};
+  }
+
+  function drawPath(){
+    ctx.save();
+    ctx.strokeStyle='#3C3489';
+    ctx.lineWidth=2;
+    ctx.setLineDash([8,6]);
+    ctx.beginPath();
+    ctx.moveTo(PATH_POINTS[0].x*W, PATH_POINTS[0].y*H);
+    for(let i=1;i<PATH_POINTS.length;i++){
+      ctx.lineTo(PATH_POINTS[i].x*W, PATH_POINTS[i].y*H);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    const glowP = PATH_POINTS.slice(0, Math.ceil(progress*(PATH_POINTS.length-1))+1);
+    const frac = (progress*(PATH_POINTS.length-1)) % 1;
+    const lastFull = Math.floor(progress*(PATH_POINTS.length-1));
+    ctx.save();
+    ctx.strokeStyle='#1D9E75';
+    ctx.lineWidth=2.5;
+    ctx.beginPath();
+    ctx.moveTo(PATH_POINTS[0].x*W, PATH_POINTS[0].y*H);
+    for(let i=1;i<=lastFull&&i<PATH_POINTS.length;i++){
+      ctx.lineTo(PATH_POINTS[i].x*W, PATH_POINTS[i].y*H);
+    }
+    if(lastFull<PATH_POINTS.length-1){
+      const ap=PATH_POINTS[lastFull], bp=PATH_POINTS[Math.min(lastFull+1,PATH_POINTS.length-1)];
+      ctx.lineTo((ap.x+(bp.x-ap.x)*frac)*W,(ap.y+(bp.y-ap.y)*frac)*H);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    const mapNodes = [
+      {x:0.12,y:0.72,label:'Start',color:'#534AB7'},
+      {x:0.42,y:0.40,label:'Node A',color:'#378ADD'},
+      {x:0.73,y:0.42,label:'Node B',color:'#378ADD'},
+      {x:0.85,y:0.42,label:'End',color:'#1D9E75'},
+    ];
+    mapNodes.forEach(n=>{
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(n.x*W, n.y*H, 8, 0, Math.PI*2);
+      ctx.fillStyle=n.color;
+      ctx.fill();
+      ctx.strokeStyle='#EEEDFE';
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+      ctx.restore();
+      ctx.save();
+      ctx.font='10px Courier New';
+      ctx.fillStyle='#7F77DD';
+      ctx.textAlign='center';
+      ctx.fillText(n.label, n.x*W, n.y*H+20);
+      ctx.restore();
+    });
+  }
+
+  function drawRings(cx2, cy2, r, outerA2, innerA2, isGreen, ringScale){
+    const outerR=r*ringScale, innerR=r*ringScale*0.82;
+    ctx.save();
+    ctx.translate(cx2, cy2);
+    ctx.rotate(outerA2);
+    ctx.beginPath();
+    ctx.arc(0,0,outerR,0,Math.PI*2);
+    ctx.strokeStyle='#534AB7';
+    ctx.lineWidth=1;
+    ctx.stroke();
+    ctx.font=`${Math.max(6,6.5*ringScale)}px Courier New`;
+    ctx.fillStyle=isGreen?'#1D9E75':'#378ADD';
+    ctx.textAlign='center';
+    const outerText='TBN·PROTOCOL · CERT:tbn-va-2ca4ef68 · RSA-PSS · v1.0 · ';
+    const chars=outerText.length;
+    for(let i=0;i<chars;i++){
+      const angle=(i/chars)*Math.PI*2-Math.PI/2;
+      ctx.save();
+      ctx.rotate(angle);
+      ctx.translate(0,-outerR);
+      ctx.rotate(Math.PI/2);
+      ctx.fillText(outerText[i],0,0);
+      ctx.restore();
+    }
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(cx2, cy2);
+    ctx.rotate(innerA2);
+    ctx.beginPath();
+    ctx.arc(0,0,innerR,0,Math.PI*2);
+    ctx.strokeStyle='#3C3489';
+    ctx.lineWidth=0.8;
+    ctx.stroke();
+    ctx.font=`${Math.max(6,6*ringScale)}px Courier New`;
+    ctx.fillStyle='#534AB7';
+    const innerText='7F3A·B91C·F4A1·2D7C·8E53·C038·A271·';
+    const ichars=innerText.length;
+    for(let i=0;i<ichars;i++){
+      const angle=(i/ichars)*Math.PI*2-Math.PI/2;
+      ctx.save();
+      ctx.rotate(angle);
+      ctx.translate(0,-innerR);
+      ctx.rotate(Math.PI/2);
+      ctx.fillText(innerText[i],0,0);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function drawFace(cx2, cy2, eyeH, isGreen, headR){
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx2,cy2,headR,0,Math.PI*2);
+    ctx.fillStyle=isGreen?'#085041':'#0C447C';
+    ctx.fill();
+    ctx.strokeStyle=isGreen?'#1D9E75':'#378ADD';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx2,cy2,headR-headR*0.17,0,Math.PI*2);
+    ctx.strokeStyle=isGreen?'#0F6E56':'#185FA5';
+    ctx.lineWidth=0.8;
+    ctx.stroke();
+    const scanY=cy2-headR+((tick*1.1)%(headR*2));
+    if(scanY>cy2-headR&&scanY<cy2+headR){
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx2,cy2,headR-2,0,Math.PI*2);
+      ctx.clip();
+      ctx.beginPath();
+      ctx.moveTo(cx2-headR,scanY);
+      ctx.lineTo(cx2+headR,scanY);
+      ctx.strokeStyle=isGreen?'rgba(29,158,117,0.18)':'rgba(55,138,221,0.18)';
+      ctx.lineWidth=5;
+      ctx.stroke();
+      ctx.restore();
+    }
+    const eyeY=cy2-headR*0.25;
+    const eox=headR*0.32;
+    [-eox,eox].forEach(ox=>{
+      ctx.beginPath();
+      ctx.ellipse(cx2+ox,eyeY,headR*0.17,eyeH*(headR/30),0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#9FE1CB':'#85B7EB';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx2+ox+headR*0.06,eyeY-headR*0.06,headR*0.07,headR*0.07,0,0,Math.PI*2);
+      ctx.fillStyle='#E1F5EE';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx2+ox,eyeY,headR*0.1,eyeH*(headR/30)*0.55,0,0,Math.PI*2);
+      ctx.fillStyle=isGreen?'#085041':'#042C53';
+      ctx.fill();
+    });
+    const smileR=headR*0.38;
+    ctx.beginPath();
+    ctx.arc(cx2,cy2+headR*0.25,smileR,0.2*Math.PI,0.8*Math.PI);
+    ctx.strokeStyle=isGreen?'#5DCAA5':'#85B7EB';
+    ctx.lineWidth=2;
+    ctx.lineCap='round';
+    ctx.stroke();
+    const aBaseY=cy2-headR;
+    ctx.beginPath();
+    ctx.moveTo(cx2,aBaseY);
+    ctx.lineTo(cx2,aBaseY-headR*0.45);
+    ctx.strokeStyle=isGreen?'#1D9E75':'#378ADD';
+    ctx.lineWidth=1.8;
+    ctx.stroke();
+    const pulse=0.75+0.25*Math.sin(tick*0.09);
+    ctx.beginPath();
+    ctx.arc(cx2,aBaseY-headR*0.6,headR*0.14*pulse,0,Math.PI*2);
+    ctx.fillStyle=isGreen?'#5DCAA5':'#85B7EB';
+    ctx.fill();
+    [-headR+1,headR-1].forEach((ox,i)=>{
+      const ex=cx2+ox;
+      ctx.beginPath();
+      ctx.rect(ex+(i===0?-headR*0.18:0),cy2-headR*0.18,headR*0.18,headR*0.38);
+      ctx.fillStyle=isGreen?'#085041':'#0C447C';
+      ctx.fill();
+      ctx.strokeStyle=isGreen?'#1D9E75':'#378ADD';
+      ctx.lineWidth=1.2;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.rect(ex+(i===0?-headR*0.14:headR*0.04),cy2-headR*0.1,headR*0.07,headR*0.22);
+      ctx.fillStyle=isGreen?'#5DCAA5':'#85B7EB';
+      ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  function drawCamera(bx, by, headR, pointing){
+    const cr=headR;
+    const armLen=headR*1.6;
+    const handX=bx+pointing*armLen;
+    const handY=by-headR*0.15;
+
+    ctx.save();
+    ctx.strokeStyle='#378ADD';
+    ctx.lineWidth=3;
+    ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(bx+pointing*headR*0.85, by-headR*0.1);
+    ctx.lineTo(handX-pointing*12, handY);
+    ctx.stroke();
+    ctx.restore();
+
+    const camW=28, camH=18;
+    ctx.save();
+    ctx.fillStyle='#185FA5';
+    ctx.strokeStyle='#85B7EB';
+    ctx.lineWidth=1.5;
+    const cx3=handX+pointing*4;
+    roundRect(ctx, cx3-camW/2, handY-camH/2, camW, camH, 4);
+    ctx.fill(); ctx.stroke();
+
+    ctx.fillStyle='#0C447C';
+    roundRect(ctx, cx3+pointing*2-5, handY-6, 10, 12, 3);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(cx3-pointing*camW/2-2, handY-4);
+    ctx.lineTo(cx3-pointing*camW/2-8, handY-7);
+    ctx.lineTo(cx3-pointing*camW/2-8, handY+7);
+    ctx.lineTo(cx3-pointing*camW/2-2, handY+4);
+    ctx.fillStyle='#185FA5';
+    ctx.fill();
+    ctx.strokeStyle='#85B7EB';
+    ctx.lineWidth=1;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx3+pointing*8, handY, 5, 0, Math.PI*2);
+    ctx.fillStyle='#9FE1CB';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx3+pointing*8-1.5, handY-1.5, 1.5, 0, Math.PI*2);
+    ctx.fillStyle='#E1F5EE';
+    ctx.fill();
+
+    const recOn = Math.sin(tick*0.15)>0;
+    if(recOn){
+      ctx.beginPath();
+      ctx.arc(cx3-pointing*6, handY-camH/2+5, 3, 0, Math.PI*2);
+      ctx.fillStyle='#E24B4A';
+      ctx.fill();
+    }
+
+    const beamLen=pointing*(W*0.45);
+    ctx.save();
+    ctx.strokeStyle='rgba(55,138,221,0.12)';
+    ctx.lineWidth=12;
+    ctx.beginPath();
+    ctx.moveTo(cx3+pointing*14, handY);
+    ctx.lineTo(cx3+beamLen, handY);
+    ctx.stroke();
+    ctx.strokeStyle='rgba(55,138,221,0.2)';
+    ctx.lineWidth=3;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function roundRect(ctx2, x, y, w, h, r){
+    ctx2.beginPath();
+    ctx2.moveTo(x+r,y);
+    ctx2.lineTo(x+w-r,y);
+    ctx2.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx2.lineTo(x+w,y+h-r);
+    ctx2.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx2.lineTo(x+r,y+h);
+    ctx2.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx2.lineTo(x,y+r);
+    ctx2.quadraticCurveTo(x,y,x+r,y);
+    ctx2.closePath();
+  }
+
+  let outerAng=0, innerAng=0;
+
+  const statuses=[
+    'Agent navigating TBN-verified path...',
+    'Validator recording agent actions...',
+    'Action intercepted — certifying...',
+    'TBN hash stamp applied...',
+    'Continuing surveillance...',
+    'Second action detected — validating...',
+    'Certificate issued...',
+    'Final action — signing...',
+    'All actions certified by TBN Protocol.',
+  ];
+
+  function getStatus(p){
+    if(p<0.15) return statuses[0];
+    if(p<0.22) return statuses[1];
+    if(p<0.32) return statuses[2];
+    if(p<0.40) return statuses[3];
+    if(p<0.48) return statuses[4];
+    if(p<0.60) return statuses[5];
+    if(p<0.70) return statuses[6];
+    if(p<0.82) return statuses[4];
+    if(p<0.92) return statuses[7];
+    return statuses[8];
+  }
+
+  function loop(){
+    tick++;
+    outerAng+=0.013; innerAng+=0.007;
+    progress = (tick % TOTAL_TICKS) / TOTAL_TICKS;
+
+    ctx.clearRect(0,0,W,H);
+
+    drawPath();
+
+    const agentPos = getPathPos(progress);
+    const ax=agentPos.x*W, ay=agentPos.y*H;
+    const headR=22;
+    const ringScale=2.5;
+    const bob=Math.sin(tick*0.06)*2;
+
+    drawRings(ax, ay+bob, headR, outerAng, innerAng, true, ringScale);
+    drawFace(ax, ay+bob, getBlink(blinkA), true, headR);
+
+    const valX=W*0.88, valY=H*0.68;
+    const vHeadR=22;
+    const vBob=Math.sin(tick*0.05+1)*2;
+    drawRings(valX, valY+vBob, vHeadR, -outerAng*0.8, -innerAng*0.8, false, ringScale);
+    drawFace(valX, valY+vBob, getBlink(blinkB), false, vHeadR);
+    drawCamera(valX, valY+vBob, vHeadR, -1);
+
+    labelA.style.left=(ax-55)+'px';
+    labelA.style.top=(ay+bob-headR*ringScale-52)+'px';
+    labelB.style.left=(valX-55)+'px';
+    labelB.style.top=(valY+vBob-vHeadR*ringScale-52)+'px';
+
+    let activeCert=null;
+    CERT_EVENTS.forEach(ev=>{
+      if(Math.abs(progress-ev.t)<0.07){
+        activeCert=ev;
+      }
+    });
+
+    if(activeCert){
+      certOpacity=Math.min(certOpacity+0.08,1);
+      const popX=ax+activeCert.offsetX;
+      const popY=ay+bob+activeCert.offsetY;
+      certPop.style.left=Math.max(8,Math.min(popX,W-180))+'px';
+      certPop.style.top=Math.max(8,popY)+'px';
+      certPop.style.opacity=certOpacity;
+      certPop.innerHTML='<span class="rec-dot"></span>CERTIFYING<br>'+activeCert.label.replace('\n','<br>');
+    } else {
+      certOpacity=Math.max(certOpacity-0.05,0);
+      certPop.style.opacity=certOpacity;
+    }
+
+    statusBar.textContent=getStatus(progress);
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+</script>
