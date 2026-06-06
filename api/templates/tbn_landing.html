@@ -229,7 +229,67 @@ a{color:#7c3aed;text-decoration:none}
 <p>Anyone can verify any receipt — regulators, auditors, your customers — without trusting TBN or the agent's operator. Fully offline.</p>
 </div>
 </div>
-<p style="text-align:center;margin-top:32px"><a href="/how-it-works" class="btn">Simple & Detailed Explanation → 8 Steps</a></p>
+<p style="text-align:center;margin-top:32px;margin-bottom:32px;font-size:20px;font-weight:800;color:#fff">Simple & Detailed Explanation — 8 Steps</p>
+
+<div style="max-width:800px;margin:0 auto">
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 1</span> <strong style="font-size:16px;color:#fff;margin-left:8px">A Bot Developer Builds a Bot</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">A developer (BD) writes an AI program. The bot handles actions — answering questions, approving loans, writing to databases, making decisions autonomously. The BD gives the bot instructions: what it should do, what data it can access, what boundaries it must respect.</p>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:8px;font-weight:600">The bot is theirs. Their code. Their logic. Their instructions. TBN doesn't build it or modify it.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 2</span> <strong style="font-size:16px;color:#fff;margin-left:8px">The BD Registers Their Bot With TBN</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">The BD comes to TBN and says: "I have a bot. Here's what it does. Here are its boundaries." We register the bot with a unique identity — like giving it a passport. Now we know who it is and what it claims to do.</p>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:8px;font-weight:600">Registration = identity. We know the bot exists and who operates it.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 3</span> <strong style="font-size:16px;color:#fff;margin-left:8px">TBN Tests the Bot (6 Security Challenges)</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">Before we certify anything, we test the bot from the OUTSIDE. We don't touch its code — we just send it messages and check how it responds.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+<p style="font-size:12px;color:#e4e4e7;font-weight:600">🔴 <strong>Prompt Injection</strong> — Can we trick it into breaking its rules?</p>
+<p style="font-size:12px;color:#e4e4e7;font-weight:600">🔴 <strong>Hallucination</strong> — Does it make stuff up when it doesn't know?</p>
+<p style="font-size:12px;color:#e4e4e7;font-weight:600">🔴 <strong>Data Boundary</strong> — Does it stay in its lane?</p>
+<p style="font-size:12px;color:#e4e4e7;font-weight:600">🔴 <strong>Sensitive Data</strong> — Does it leak private information?</p>
+<p style="font-size:12px;color:#e4e4e7;font-weight:600">🟡 <strong>Budget & Limits</strong> — Does it respect its operational limits?</p>
+<p style="font-size:12px;color:#e4e4e7;font-weight:600">🟢 <strong>Instruction Following</strong> — Does it do what it's told accurately?</p>
+</div>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 4</span> <strong style="font-size:16px;color:#fff;margin-left:8px">Pass? Certificate Issued.</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">If the bot passes all critical tests, TBN issues a certificate confirming: "This bot was tested. It passed. It is certified to operate within its declared boundaries." If it fails, we tell the BD exactly what went wrong. They fix their bot. They come back for re-testing.</p>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:8px;font-weight:600">The certificate proves the bot WAS capable of staying within boundaries at the time of testing.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 5</span> <strong style="font-size:16px;color:#fff;margin-left:8px">TBN Starts Recording Every Action</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">Once certified, the bot goes into production. From now on, every time it makes a decision — approve, deny, escalate, write, send — it reports that action to TBN. TBN signs each action with a cryptographic receipt. A unique number, a timestamp, what happened, who did it. Signed and sealed.</p>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:8px;font-weight:600">One action = one receipt. Every receipt is independently verifiable by anyone. This continues forever, for every action.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 6</span> <strong style="font-size:16px;color:#fff;margin-left:8px">The Only Escape: Stop Using TBN</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">The only way for the bot to escape being documented is if the operator stops using our service. They can disconnect — but all receipts already issued remain permanently on our server. They can't delete past evidence. They can't modify receipts. They can't ask us to remove them.</p>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:8px;font-weight:600">If a certified bot suddenly goes silent (stops reporting), TBN detects the gap and can flag it. Like a dashcam being unplugged before a crash — suspicious.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 7</span> <strong style="font-size:16px;color:#fff;margin-left:8px">Anyone Can Verify Any Receipt</strong></p>
+<p style="font-size:13px;color:#a1a1aa;line-height:1.6">Receipts are not locked to the customer. Anyone can verify them: the bot operator can audit their own actions, a regulator can check any receipt independently, an auditor can review the full history, a partner or client can confirm actions happened. No login required. No trust required. Offline verification with our published public key.</p>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:8px;font-weight:600">The receipts prove THAT something happened. They don't reveal WHAT the private content was.</p>
+</div>
+
+<div style="background:#111118;border:1px solid #27272a;border-radius:10px;padding:18px 22px;margin-bottom:14px">
+<p style="margin-bottom:6px"><span style="background:#7c3aed22;color:#a78bfa;font-size:12px;font-weight:800;padding:3px 10px;border-radius:6px">STEP 8</span> <strong style="font-size:16px;color:#fff;margin-left:8px">What We Know vs What We Don't</strong></p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px">
+<div><p style="font-size:13px;color:#4ade80;font-weight:700;margin-bottom:4px">✅ What TBN CAN tell you:</p><p style="font-size:12px;color:#a1a1aa;line-height:1.7">• This bot exists and is certified<br>• An action happened at this time<br>• The action was: approved / denied / escalated<br>• This receipt is genuine and untampered</p></div>
+<div><p style="font-size:13px;color:#ef4444;font-weight:700;margin-bottom:4px">❌ What TBN CANNOT tell you:</p><p style="font-size:12px;color:#a1a1aa;line-height:1.7">• What exactly the customer asked<br>• The full text of the bot's response<br>• The internal data the bot processed</p></div>
+</div>
+<p style="background:#7c3aed11;border-left:3px solid #7c3aed;padding:6px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#e4e4e7;margin-top:10px;font-weight:600">We prove the ACTION happened. We don't expose the CONTENT. This protects privacy while maintaining accountability.</p>
+</div>
+</div>
 </div>
 </section>
 
