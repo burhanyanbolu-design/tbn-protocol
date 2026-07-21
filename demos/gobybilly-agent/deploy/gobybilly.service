@@ -1,0 +1,20 @@
+[Unit]
+Description=Go By Billy — OpenAI-powered customer agent, governed by TBN Protocol
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+# WorkingDirectory is /opt/tbn-protocol (not the agent's own folder) so
+# compliance.py's TBN signing key lookups (relative paths in tbn_signing.py:
+# data/tbn_signing_key.pem) resolve against the real TBN data/ directory.
+WorkingDirectory=/opt/tbn-protocol
+EnvironmentFile=/opt/gobybilly-agent/gobybilly.env
+ExecStart=/usr/bin/python3 /opt/gobybilly-agent/server.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
