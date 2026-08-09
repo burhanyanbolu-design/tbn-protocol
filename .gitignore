@@ -90,3 +90,8 @@ data/ph2004-*
 docs/TBN-Shango-Partnership-Agreement-v2.md
 gen_ishaan_key.py
 data/api_keys.json
+
+# -- Hakan Cendik / Angora Shipping EU emissions costing work (third party, real vessel/captain data) --
+data/requirement-hakan-*.md
+data/anka-dream-*
+data/*.mycarbons
