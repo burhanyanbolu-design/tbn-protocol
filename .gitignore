@@ -116,3 +116,63 @@ video-agent/
 # BACKUPS
 *.bak
 *.backup
+
+# -- Kiro workspace (server IP, SSH command, PEM key path, partnership strategy,
+#    family medical information) --
+# Was tracked in this public AGPL repo until 10 Aug 2026 (untracked via
+# git rm --cached, then a full history rewrite via git filter-repo). This
+# rule stops it being re-added by accident. NOTE: also re-added twice this
+# session after being lost to an uncommitted-.gitignore mistake during that
+# same rewrite -- if this comment reappears missing, check for the same cause
+# before re-adding blind.
+.kiro/
+
+# -- Shango register bundle and correspondence (third parties, un-agreed disclosures) --
+# Ishaan's register, its amendment log, the consent ledger, extracted PDFs and
+# our own replies about defects on either side, before either party has agreed
+# they are publishable. Contains named reviewers -- Ahmad Abby, Brad Wolfe,
+# Mayur Agnihotri, Piotr Reder, Tim Zlomke, Hooman Parta, Ali Bagheri, Won Jung,
+# Paul Knowles -- Mayur's consent outstanding, Piotr gets the named cut first.
+data/shango-register-seq13/
+data/shango-register-*.txt
+data/shango-reconciliation-*.txt
+Shango_Disagreement_Register*.pdf
+Hardin_AI_reconciliation_*.pdf
+data/reply-ishaan-*.md
+data/register-merkle-construction-defects.md
+data/email-ishaan-*.md
+
+# -- NOT ignored, deliberately: data/spec-tbn-receipt-1.md --
+# The frozen receipt construction specification MUST be committed and pushed.
+# Its digest is bound into signed receipts, and section 0 states that the
+# digest resolves from any clone or mirror without depending on Hardin
+# remaining reachable. That claim is only true once it is actually in the
+# public repo. Do not add it here.
+
+# -- Client / prospect commercial material (third parties, public repo) --
+# Angora Shipping is a named third party and PH2004 is somebody else's
+# proprietary product. Requirement notes name their people, mailboxes, vessels
+# and internal folder structure. Nothing here has publication consent.
+data/requirement-ph2004-*.md
+data/angora-*
+data/ph2004-*
+
+# -- WARNING: gitignore rules cannot un-track a file that is ALREADY tracked --
+# .kiro/steering/server-info.md and .kiro/hooks/tbn-data-verify.kiro.hook were
+# both tracked and published on origin/main until 10 Aug 2026. Same defect
+# class as data/api_keys.json. Fixed via git rm --cached + a full history
+# rewrite (git filter-repo) across all branches, force-pushed. History no
+# longer contains any of: .kiro/steering/server-info.md,
+# .kiro/hooks/tbn-data-verify.kiro.hook, data/api_keys.json,
+# docs/TBN-Shango-Partnership-Agreement-v2.md, gen_ishaan_key.py. Verified via
+# the GitHub API directly (contents endpoint returns 404 on all 3 branches for
+# all 5 paths), not just local checks. This comment stays as a marker of what
+# was done and why, in case anyone is tempted to re-add these files thinking
+# the ignore rule alone is protection -- it is not, for a file already tracked.
+
+# -- Signed partnership agreement (Ishaan/Shango), was tracked+public since 22 May --
+# Full commercial terms: revenue split, non-compete, both signatures. Untracked
+# on Burhan's go 9 Aug; his email is still ishaan@shango.io in this file's own
+# text, so it stays out even after the address correction to team@shango.in.
+docs/TBN-Shango-Partnership-Agreement-v2.md
+gen_ishaan_key.py
