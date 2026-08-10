@@ -95,3 +95,10 @@ data/api_keys.json
 data/requirement-hakan-*.md
 data/anka-dream-*
 data/*.mycarbons
+
+# -- Commercial / partnership terms (third parties, revenue splits) --
+# Names Ishaan Ghosh / Shango, unnamed client organisations, and revenue
+# split terms. The repo is public. Added 11 Aug 2026 at the same time the
+# first such file was created, not after -- same discipline as the .kiro/
+# and register rules above.
+data/COMMERCIAL-*.md
