@@ -1,0 +1,53 @@
+{
+  "erratum_id": "GATE2-ERR-001",
+  "issued": "2026-08-12T02:36:08.282114+00:00",
+  "issued_by": "Hardin Enterprises Ltd (Hardin AI Solutions)",
+  "status": "amendment — supersedes wording only; no sealed artefact modified",
+  "amends": {
+    "control_reference": "RB-07",
+    "file": "RB-07-control-artefact-mapping.json",
+    "packages": [
+      "data/gate2",
+      "data/gate2-final-package"
+    ],
+    "artefact": "artefacts/hallucination_gate_v2.2.0.json",
+    "artefact_sha256_at_time_of_amendment": "ed5af08225e3cfd1a4b050d58041c8adc87399309e9d9d471fd9836c99a2ee6e",
+    "seal_verified_intact": true,
+    "sealed_files_modified": false
+  },
+  "original_wording": "Traced directly to verify_answer() in api/answer_verification.py, live in production. Real thresholds (min_score=50, pass_threshold=80) and fail-safe passthrough behaviour confirmed against the source code.",
+  "finding": "The phrase 'fail-safe passthrough' is inaccurate and misleading in the safety direction. verify_answer() fails OPEN, not safe: on any internal failure (missing API key, transport error, malformed verifier output, timeout) it returns the unmodified answer. A reader of a control described as a 'hallucination gate' would reasonably infer that the system abstains when it cannot verify. It does not — it answers. Until 12 Aug 2026 the resulting record was also INDISTINGUISHABLE from a record produced by a successful check, so a reply nobody verified could not be told apart from a verified one after the fact.",
+  "behaviour_before_amendment": {
+    "on_verifier_failure": "answer returned unchanged; verified=False; no state field",
+    "record_written": "none — api/calibrated_claims.py returned early and persisted nothing",
+    "consequence": "absence of a check left no trace; silence was indistinguishable from a pass"
+  },
+  "behaviour_after_code_change": {
+    "effective": "2026-08-12",
+    "states": {
+      "grounded": "check ran; answer adequately supported",
+      "failed_grounding": "check ran; answer not supported (abstain path)",
+      "not_checked": "check did not run — DEFAULT, so the honest state is assumed rather than the flattering one"
+    },
+    "record_written": "a signed record is now persisted even when the check did not run (claim_record_id 'tbn_claim_unchecked_...', state 'not_checked', with not_checked_reason), so the absence of a check is itself evidence",
+    "fail_direction_unchanged": "the system still ANSWERS rather than abstaining when the verifier is unavailable; what changed is that this is now recorded and visible. Callers may opt into refusing to answer (see HBC_G6_REQUIRED in the heathrowblackcabs agent) but that is a per-product decision, not core behaviour."
+  },
+  "corrected_wording_for_future_packages": "Traced directly to verify_answer() in api/answer_verification.py, live in production. Real thresholds (min_score=50, pass_threshold=80) confirmed against the source code. The gate FAILS OPEN: if verification cannot be completed the answer is returned unverified rather than withheld. Such turns are recorded with an explicit state of 'not_checked' and a stated reason, and are distinguishable from verified turns in the signed record. Abstention occurs only when a check RUNS and the grounding score falls below min_score.",
+  "code_changes": [
+    {
+      "file": "api/answer_verification.py",
+      "change": "added explicit 'state' to every return; pass-through now state='not_checked'",
+      "backup": "api/answer_verification.py.bak-g6state-20260812-023351"
+    },
+    {
+      "file": "api/calibrated_claims.py",
+      "change": "no longer returns without writing when unverified; persists a signed not_checked record via _record_not_checked(); state added to summaries",
+      "backup": "api/calibrated_claims.py.bak-g6state-20260812-023351"
+    }
+  ],
+  "provenance_of_finding": "Identified 11-12 Aug 2026 while wiring G6 into a new customer agent, and sharpened by a defect-register exchange with Shango (Ishaan Ghosh) which adopted the same three-state schema for attribution on the same day. The generalised statement of the defect class, from that exchange: the failure is not that unchecked items exist, but that silence converts them into settled ones with nothing recording the conversion.",
+  "signature_algorithm": "RSA-PSS-SHA256",
+  "public_key_endpoint": "https://tbn.hardinai.co.uk/api/signing/public-key",
+  "erratum_sha256": "4b1051e40a5bdeaa9f09661e6ba5c912931fbd2affed6070c1f9930b34b770d4",
+  "signature": "O5wsY9mS4XRTBcyqEmptH1SkvAxaNjUPp+wcRtTQ6RlG1/lzqfBGVOZsKd1jMqMxnl9vGJp9YPFmBYdHYGHp46aRzwzsJGif9lgWQB9bsLjvy/t0X8MqZuoEotVbsF6NCCsTVgOxuw75WPJhaqMeCGpDHVGISgKVIHDKueute3wEOl2ZzhmNsp1x7FhLkZfNt2QiKNwZwfqdM9nOObID553EYWKcv1ptfFtzY142ALTaSWu2dITHtJgl7S6+DZiIs6frapHwqQNVPsJ7vLSXGdMOkM4O+NmTh9AVAA0v0qvsio8T89alHIu7J78QlXcMvUuG21Oi36tJ//YUvHsrhQ=="
+}

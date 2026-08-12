@@ -77,18 +77,70 @@ SCHEMA_FIELD_SETS = {
 
 SUPPORTED_SCHEMAS = (SCHEMA_2_0, SCHEMA_2_1, SCHEMA_2_2, SCHEMA_2_3)
 
+# ── Required fields PER SCHEMA ─────────────────────────────────────────
+# Added 12 Aug 2026 after a live regression: verify_receipt() held ONE flat
+# required-field set including `rfc3161` and applied it to every schema. When
+# /api/v2/verify was pointed at this module's issuer, all 4,165 historical
+# receipts began failing with "Missing fields: ['rfc3161']" — a field that does
+# not exist before 2.2. A verifier that rejects valid historical evidence is the
+# same defect as one that cannot verify its own issuer, pointed the other way.
+#
+# These sets are MEASURED from the 4,165 receipts on disk, not assumed:
+#   2.0 — 3,932 receipts: the base set; rfc3161 present in SOME only (optional)
+#   2.1 —   233 receipts: base + tsa_anchored in EVERY one; no rfc3161
+# and they agree with SCHEMA_FIELD_SETS above.
+#
+# Lives here because a per-schema requirement is part of what a schema label
+# MEANS, and this module exists so no other file keeps its own copy.
+BASE_REQUIRED_FIELDS = (
+    "schema_version", "receipt_id", "key_id", "agent_id", "action",
+    "input_hash", "output_hash", "controls", "timestamp", "prev_hash",
+    "chain_index", "receipt_hash", "algorithm", "signature",
+)
+
+# SCHEMA_EXTRA_REQUIRED is defined below CONSTRUCTION_FIELDS, because 2.3's
+# extras include them and this module must not keep a second copy of that tuple.
+
 # Fields that exist only from 2.3. Absent in earlier receipts, which is correct
 # and not a failure — but REQUIRED from 2.3, because a construction identifier
 # that can be omitted is not an identifier.
 CONSTRUCTION_FIELDS = ("construction", "construction_spec",
                        "merkle_construction", "run_id")
 
+SCHEMA_EXTRA_REQUIRED = {
+    SCHEMA_2_0: (),                              # rfc3161 present in SOME only
+    SCHEMA_2_1: ("tsa_anchored",),               # measured: in all 233 on disk
+    SCHEMA_2_2: ("rfc3161",),                    # replaced tsa_anchored
+    SCHEMA_2_3: ("rfc3161",) + CONSTRUCTION_FIELDS,
+}
+
+
+def required_fields_for(schema_version: str) -> set:
+    """Fields a receipt of this schema MUST carry.
+
+    Raises KeyError for an unrecognised schema on purpose: a caller that has not
+    already rejected an unknown schema must not be silently handed the base set,
+    which would verify a receipt whose rules are unknown.
+    """
+    return set(BASE_REQUIRED_FIELDS) | set(SCHEMA_EXTRA_REQUIRED[schema_version])
+
 
 def spec_digest_from_disk(path: str = None) -> str:
     """Digest of the frozen spec, normalising CRLF to LF per section 0 of that
     document. LF because that is what git stores; a Windows checkout materialises
-    CRLF and hashes to a different, wrong value — 194 bytes longer for the same
-    file."""
+    CRLF and hashes to a different, wrong value — 213 bytes longer for the same
+    file (9,767 vs 9,554), one extra byte per line ending across 213 lines.
+
+    NOTE: section 0 of the frozen spec states 194 rather than 213. That figure
+    was evidently computed on a draft before the document reached its final
+    length. The spec is FROZEN and cannot be corrected by editing — doing so
+    would change its digest and retrospectively break the binding in every
+    receipt already signed — so the correction is recorded in
+    data/errata/TBN-RECEIPT-1-ERR-001-*.json. The stated RULE in section 0 is
+    correct and unambiguous; only the illustrative byte count is wrong, so
+    verifiability is unaffected. This docstring carries the right number
+    because, unlike the spec, it is editable.
+    """
     p = path or CONSTRUCTION_SPEC_PATH
     with open(p, "rb") as f:
         raw = f.read()

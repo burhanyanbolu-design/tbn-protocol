@@ -1,0 +1,48 @@
+{
+  "erratum_id": "TBN-RECEIPT-1-ERR-001",
+  "issued": "2026-08-12T03:24:50.565598+00:00",
+  "issued_by": "Hardin Enterprises Ltd (Hardin AI Solutions)",
+  "status": "erratum — illustrative figure only; the stated rule is unaffected",
+  "amends": {
+    "document": "data/spec-tbn-receipt-1.md",
+    "construction": "tbn/receipt/1",
+    "construction_spec": "sha256:08d6fb20645ba9357c1a3e87debc71bbb7d141521859e2ed001613c7d5077df7",
+    "section": "0. HOW THIS DOCUMENT'S OWN DIGEST IS COMPUTED",
+    "document_is_frozen": true,
+    "document_modified": false,
+    "why_not_edited": "The digest of this document is written into every receipt signed under construction tbn/receipt/1. Editing it would change that digest and retrospectively break the binding in receipts already issued, which is precisely what the FROZEN status exists to prevent."
+  },
+  "original_wording": "This is the form git stores in its object database, and it is stated explicitly because a checkout on Windows may materialise the file with CRLF, which yields a different and wrong digest — the same file, 194 bytes longer.",
+  "correction": {
+    "stated": "194 bytes longer",
+    "actual": "213 bytes longer",
+    "measured": {
+      "lf_normalised_bytes": 9554,
+      "crlf_checkout_bytes": 9767,
+      "difference": 213,
+      "crlf_line_endings": 213,
+      "explanation": "one additional 0x0D byte per line ending"
+    },
+    "probable_cause": "the figure was computed on a draft before the document reached its final length, and was not recomputed before freezing"
+  },
+  "materiality": {
+    "rule_affected": false,
+    "verifiability_affected": false,
+    "assessment": "Section 0 states the RULE correctly and unambiguously: normalise all line endings to LF, removing any CR immediately preceding an LF, then SHA-256 the resulting UTF-8 bytes. Any verifier following that rule reproduces the bound digest exactly, on any platform. Only the illustrative byte count in the explanatory clause is wrong. No receipt's verifiability is affected and no digest changes."
+  },
+  "verification_performed": {
+    "lf_normalised_digest": "sha256:08d6fb20645ba9357c1a3e87debc71bbb7d141521859e2ed001613c7d5077df7",
+    "matches_bound_construction_spec": true,
+    "note": "Confirms the rule works as written and that this erratum concerns the prose only."
+  },
+  "related_code_change": {
+    "file": "api/tbn_construction.py",
+    "function": "spec_digest_from_disk",
+    "change": "docstring corrected to 213 bytes and annotated to point at this erratum. Code is editable; the spec is not."
+  },
+  "provenance_of_finding": "Found 12 Aug 2026 while designing receipt supersession. A raw SHA-256 of the working-tree spec did not match CONSTRUCTION_SPEC, which prompted a check: the cause was a CRLF checkout on Windows, exactly the case section 0 was written to pre-empt. The rule held; the byte count did not.",
+  "signature_algorithm": "RSA-PSS-SHA256",
+  "public_key_endpoint": "https://tbn.hardinai.co.uk/api/signing/public-key",
+  "erratum_sha256": "e1992582af876834b7c21357a934097e873ea3321f0a2c9b09ad1eba33582073",
+  "signature": "df7lCRicwF/rgw/e8hy+6yiTzjoZv9HsoF4kaXNh2zgYMIjIzkvQqkGx8riBA3lSakpZhc71/IAEuYN/vZawp6dnk9DI9KbU+xQF5AR/wkXJlfdQU8BoSL5TnvB79lhDoXQZAwbCgFPB7XR1ShivI/IJs8nCFFmvxBgy1sCzcUMho7BHCr3kl17uZL++WX42bMqWHfEKNA9LntuhsoO72pHS7ZjeILN47KrErLxXFsEbXPK4U92ZSnitkfZ59f0c07mNOkQovXmEDRY9inKVr52noWcF7BvG3VPE/USU9GsRmRx8ZoYDjbqEpt04cGDjSa3f19uvUCVBnDhbf7NFZw=="
+}
