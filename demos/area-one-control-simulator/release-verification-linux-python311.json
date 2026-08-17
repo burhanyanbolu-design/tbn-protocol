@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "detail": "sha256:98e01a5d7654266cde12aee0058bf8ca9a8d48ae61aff96320a4be7858812cf6; size=132341",
+      "name": "artifact_checksum",
+      "passed": true
+    },
+    {
+      "detail": "compiled_files=10",
+      "name": "source_compilation",
+      "passed": true
+    },
+    {
+      "detail": "tests=144",
+      "name": "source_tests",
+      "passed": true
+    },
+    {
+      "detail": "build==1.5.0, colorama==0.4.6, packaging==26.0, pyproject-hooks==1.2.0",
+      "name": "build_tool_versions",
+      "passed": true
+    },
+    {
+      "detail": "builds=2; sha256:98e01a5d7654266cde12aee0058bf8ca9a8d48ae61aff96320a4be7858812cf6; epoch=1767225600",
+      "name": "reproducible_build",
+      "passed": true
+    },
+    {
+      "detail": "locked_packages=14; cli=0.1.0; bundle_valid=true",
+      "name": "clean_install_and_fixture",
+      "passed": true
+    }
+  ],
+  "distribution": {
+    "name": "area-one-evidence-verifier",
+    "version": "0.1.0",
+    "wheel": "area_one_evidence_verifier-0.1.0-py3-none-any.whl",
+    "wheel_sha256": "sha256:98e01a5d7654266cde12aee0058bf8ca9a8d48ae61aff96320a4be7858812cf6"
+  },
+  "environment": {
+    "implementation": "CPython",
+    "machine": "x86_64",
+    "python_version": "3.11.16",
+    "release": "6.18.33.2-microsoft-standard-WSL2",
+    "system": "Linux"
+  },
+  "limitations": [
+    "This report covers only the named interpreter and operating system.",
+    "The release wheel is not published to PyPI and has no production signature.",
+    "RFC 3161 verification does not perform CRL or OCSP checks."
+  ],
+  "report_hash": "sha256:e6660e9bfbe5a9f73998f324cbe5835e49047d1c39a60b5f77afb4841a989b4e",
+  "schema_version": "area-one-release-verification/1.0",
+  "verdict": "passed"
+}

@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1.7
+FROM --platform=linux/amd64 python:3.13.7-slim-bookworm@sha256:781449467ffb6f04218f09b1ecdcdc7d22b289ee5da9ec498b024e24ad7a6db7
+
+ENV OMP_NUM_THREADS=1 \
+    OPENBLAS_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1 \
+    VECLIB_MAXIMUM_THREADS=1 \
+    NUMEXPR_NUM_THREADS=1 \
+    PYTHONHASHSEED=0 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /opt/area-one
+COPY requirements-research.lock /tmp/requirements-research.lock
+RUN python -m pip install --no-cache-dir --require-hashes --only-binary=:all: --no-deps \
+        -r /tmp/requirements-research.lock \
+    && python -c "import numpy,threadpoolctl; assert numpy.__version__=='2.4.2'; assert threadpoolctl.__version__=='3.6.0'"
+COPY . /opt/area-one
+
+CMD ["python", "-m", "unittest", "-v", "test_pair_scatter_runtime.py", "test_pair_scatter_shards.py", "test_pair_scatter_pipeline_benchmark.py", "test_pair_scatter_kernels.py", "test_pair_scatter_development_benchmark.py"]

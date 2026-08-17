@@ -1,0 +1,10 @@
+{
+  "expected_checkpoint_hash": "sha256:57a88cbc9f3605ea1294232360aa2ed8cabb0d89d15f86d6f73d2a7e75363011",
+  "expected_issuer_trust_hash": "sha256:c06763c8bbe77750c912cde0dca7fdd6ba76c586b020c676fb1244ab9b38c97a",
+  "expected_report_hash": "sha256:368122498686b446dc00d496e28fd00a3a97cd64e7c9ea5193a8c648faabb640",
+  "expected_tsa_root_sha256": "sha256:a6379e7cecc05faa3cbf076013d745e327bbbaa38c0b9af22469d4701d18aabc",
+  "expected_witness_policy_hash": "sha256:ffbca3acf215a28c9702e84ace9d0bf76de8c97eb1eaca73d6356f911783d033",
+  "fixture_only": true,
+  "private_keys_persisted": false,
+  "rfc3161_granted_at": "2026-08-15T03:33:25Z"
+}

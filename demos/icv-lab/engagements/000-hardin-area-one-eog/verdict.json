@@ -1,0 +1,68 @@
+{
+  "schema_version": "icv-verdict/1.0",
+  "engagement_id": "000-hardin-area-one-eog",
+  "client": "Hardin Enterprises UK Limited (self-audit)",
+  "claim": "The Elastic Overlapping Grid genuine overlap matching produces a measurable transport advantage in a discrete-time coined quantum walk.",
+  "domain": "quantum walks / discrete-time coined walk on C_R box C_w",
+  "date_opened": "2026-08-15",
+  "date_closed": "2026-08-17",
+  "verdict": "FALSIFIED",
+  "verdict_plain": "The genuine matching is not special. It was outperformed by 94 of 100 deliberately wrong rewirings.",
+  "checks": {
+    "criterion_satisfiability": {
+      "result": "FAIL",
+      "detail": "Frozen criterion 3 requires per-grid positive fraction > 3/5. A proven parity selection rule caps it at 23/47 = 0.4894 and 31/63 = 0.4921 on the two doubly even held-out grids, at any horizon or parameter. Criterion 2 also fails at even horizon. Unreachable by construction, independent of mechanism quality."
+    },
+    "control_ranking": {
+      "result": "FAIL",
+      "detail": "Genuine matching ranked 95 of 101 families on development aggregate median, the 6th percentile. 94 controls scored higher. 80 beat it on median and feasibility simultaneously. Protocol required rank <= 10; failed by 85 places.",
+      "genuine_aggregate_median": "0.00060741042468487674",
+      "best_control": "control-018",
+      "best_control_aggregate_median": "0.0024265285908328937",
+      "best_control_ratio": "3.995x",
+      "genuine_rank": 95,
+      "families": 101
+    },
+    "effect_size_triage": {
+      "result": "FAIL",
+      "detail": "Measured effect 0.0006 to 0.0024 in probability against a declared tail gate of 0.02, a thirty-fold mismatch. Not estimated before the laboratory was built; this was the root planning error."
+    },
+    "independent_reconstruction": {
+      "result": "PASS",
+      "detail": "Independent verifier imports no producer evolution code and reconstructs every lift, quantile, positive count, rank and threshold decision, comparing the canonical summary byte for byte. Numerical invariants: max norm drift 1.9984014443252818e-15, probability-bound error 0, direct/derived amplitude error 2.2204460492503131e-16."
+    },
+    "holdout_discipline": {
+      "result": "PASS",
+      "detail": "lock_accesses=0 and heldout_accesses=0. The held-out set was never touched, so the falsification cost no holdout budget and the data remains usable."
+    }
+  },
+  "structural_no_go_theorems": [
+    "Candidate 1 rejected: development tail q10 -0.020494795710597848 below frozen -0.02 floor.",
+    "Candidate 2 not promoted: best feasible effect too small, selection would have been on discovery data.",
+    "Candidate 3: quotient lift is label-degenerate; separation required artificial fingerprints or pendant anchors.",
+    "Candidate 4: equal-layer double cover forces even nullity, so exact nullity one is impossible.",
+    "Candidate 5: passed zero-mode and 357-case non-isomorphism gates, then failed the strict endpoint quotient because endpoint-seeded refinement is discrete.",
+    "Candidate 6: canonical Hodge-Dirac incidence gives nullity n+7, and native plaquettes still leave nullity 9."
+  ],
+  "generalizable_findings": [
+    "Permuting a matching is close to a relabelling, so candidate and controls are near-identical systems and no observable has much to detect.",
+    "A discriminator common to candidate and controls cannot separate them under any analytic function of the Hamiltonian.",
+    "Strict quotient compressibility and control distinguishability pull against each other; satisfying both forces artificial structure.",
+    "Position colour (r+c) mod 2 is exactly conserved iff both R and w are even, producing a selection rule that can penalise the very mechanism under test.",
+    "Known quantum-walk speedups arise from engineered graphs such as glued trees, not from naturally occurring data-structure graphs."
+  ],
+  "artifacts": {
+    "frozen_protocol_bytes": 46074,
+    "frozen_protocol_sha256": "9710588a73381b2599233a7fefeab17e4dcf0e2bea26b8e845dcd048c6d355be",
+    "t9_development_artifact_sha256": "69a922211e9adf7b8c37050e0390e4aaab1ad0436f46faed9962f14640e34302",
+    "falsification_report_sha256": "8bab5f9c09bb014f0c1cedecbf8f0cc3c58329d2960a40014b46ebb2513311e5",
+    "parity_theorem_sha256": "c479457eb77c2177e4a5cb374298fb88cad52b14bf73cc205fe5f775df2cdfc0",
+    "closure_knowledge_sha256": "778583ec9c6c21089e1c7d181bb13ed74ccb218583281bb0154890b073840c8a"
+  },
+  "laboratory": {
+    "focused_tests_passed": 210,
+    "environment": "digest-pinned Linux/amd64 image, CPython 3.13.7, NumPy 2.4.2, single-threaded pools",
+    "closed_schemas": 8
+  },
+  "boundary": "Falsifies the declared operator class on development data. Does not invalidate quantum walks, does not invalidate EOG as a classical data structure, and asserts no advantage, novelty, hardware value or commercial claim. Never published, advertised or submitted to any funder."
+}

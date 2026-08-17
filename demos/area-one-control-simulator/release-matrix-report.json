@@ -1,0 +1,64 @@
+{
+  "coverage": {
+    "linux_python_minors": [
+      "3.11",
+      "3.12",
+      "3.13"
+    ],
+    "windows_python_minors": [
+      "3.13"
+    ]
+  },
+  "limitations": [
+    "Windows Python 3.11 and 3.12 were unavailable and were not tested.",
+    "Linux checks ran in Docker Desktop on its WSL2 Linux engine.",
+    "No macOS environment was tested.",
+    "The wheel has no production release signature and is not on PyPI."
+  ],
+  "matrix_hash": "sha256:c7465a6a0fe4221ef921eb490290996dab80625f04d87a573b2c36232026744c",
+  "schema_version": "area-one-release-matrix/1.0",
+  "targets": [
+    {
+      "environment_report": "release-verification-linux-python311.json",
+      "environment_report_hash": "sha256:e6660e9bfbe5a9f73998f324cbe5835e49047d1c39a60b5f77afb4841a989b4e",
+      "machine": "x86_64",
+      "python_implementation": "CPython",
+      "python_version": "3.11.16",
+      "system": "Linux",
+      "system_release": "6.18.33.2-microsoft-standard-WSL2",
+      "target": "linux-python31116"
+    },
+    {
+      "environment_report": "release-verification-linux-python312.json",
+      "environment_report_hash": "sha256:2e9b2a13a35ce653ed373fb8d35fb12a4fd841b08d687ed073ce0407b6de4cb4",
+      "machine": "x86_64",
+      "python_implementation": "CPython",
+      "python_version": "3.12.14",
+      "system": "Linux",
+      "system_release": "6.18.33.2-microsoft-standard-WSL2",
+      "target": "linux-python31214"
+    },
+    {
+      "environment_report": "release-verification-linux-python313.json",
+      "environment_report_hash": "sha256:a420a022f110eb235ce576849f5a12b1bbc322e76a4c126c57f4ba42176a30e1",
+      "machine": "x86_64",
+      "python_implementation": "CPython",
+      "python_version": "3.13.15",
+      "system": "Linux",
+      "system_release": "6.18.33.2-microsoft-standard-WSL2",
+      "target": "linux-python31315"
+    },
+    {
+      "environment_report": "release-verification-windows-python313.json",
+      "environment_report_hash": "sha256:c91b0906677326a7a553ef6b140abebd82dc6948423ed8e2868d2ab4e0479f43",
+      "machine": "AMD64",
+      "python_implementation": "CPython",
+      "python_version": "3.13.14",
+      "system": "Windows",
+      "system_release": "11",
+      "target": "windows-python31314"
+    }
+  ],
+  "verdict": "passed",
+  "wheel_sha256": "sha256:98e01a5d7654266cde12aee0058bf8ca9a8d48ae61aff96320a4be7858812cf6"
+}

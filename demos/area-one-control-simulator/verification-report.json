@@ -1,0 +1,120 @@
+{
+  "checks": {
+    "absorbing_boundary_declared_non_unitary": true,
+    "exact_probability_accounting": true,
+    "monte_carlo_within_three_standard_errors": true,
+    "operator_unitary": true,
+    "periodic_boundary_unitary": true,
+    "reflective_boundary_unitary": true,
+    "topology_absorption_matches": true,
+    "topology_amplitudes_match": true
+  },
+  "configuration": {
+    "evolution_steps": 12,
+    "noise_probability": 0.1,
+    "rows": 5,
+    "seed": 20260815,
+    "start": {
+      "column": 0,
+      "row": 0
+    },
+    "step": 3,
+    "terminal": {
+      "column": 0,
+      "row": 1
+    },
+    "tolerance": 1e-12,
+    "trajectories": 1000,
+    "width": 4
+  },
+  "report_hash": "sha256:368122498686b446dc00d496e28fd00a3a97cd64e7c9ea5193a8c648faabb640",
+  "results": {
+    "boundaries": {
+      "absorbing": {
+        "boundary_loss": 0.9963344931602478,
+        "classification": "non-unitary",
+        "final_norm": 0.0036655068397521973,
+        "maximum_u_dagger_u_error": 0.5
+      },
+      "periodic": {
+        "boundary_loss": 0.0,
+        "classification": "unitary",
+        "final_norm": 1.0,
+        "maximum_u_dagger_u_error": 0.0
+      },
+      "reflective": {
+        "boundary_loss": 0.0,
+        "classification": "unitary",
+        "final_norm": 1.0,
+        "maximum_u_dagger_u_error": 0.0
+      }
+    },
+    "coordinate_identity": {
+      "full_coordinate_states": 20,
+      "ordinary_indexed_nodes": 20,
+      "unique_display_labels": 16
+    },
+    "measurement_protocols": [
+      {
+        "conditional_mean_detection_step": 5.449310597727806,
+        "interval": 1,
+        "measurement_checks": 12,
+        "name": "repeated",
+        "terminal_probability": 0.800108015537262
+      },
+      {
+        "conditional_mean_detection_step": 7.8878400079214055,
+        "interval": 3,
+        "measurement_checks": 4,
+        "name": "every-3",
+        "terminal_probability": 0.23476451635360718
+      },
+      {
+        "conditional_mean_detection_step": 12.0,
+        "interval": 12,
+        "measurement_checks": 1,
+        "name": "final-only",
+        "terminal_probability": 0.1043059229850769
+      }
+    ],
+    "operator": {
+      "hilbert_dimension": 80,
+      "maximum_u_dagger_u_error": 0.0
+    },
+    "phase_noise": {
+      "absolute_sampling_error": 0.0010803817390775405,
+      "confidence_95": [
+        0.5399169307654529,
+        0.5478018540436597
+      ],
+      "exact_absorption": 0.5449397741436338,
+      "exact_normalized_l1_coherence": 0.013372639449160662,
+      "exact_purity": 0.018625931903918133,
+      "exact_survival": 0.45506022585636613,
+      "monte_carlo_absorption": 0.5438593924045563,
+      "standard_error": 0.0020114600199507195
+    },
+    "topology_baseline": {
+      "eog_absorption": 0.800108015537262,
+      "indexed_absorption": 0.800108015537262,
+      "maximum_amplitude_difference": 0.0
+    }
+  },
+  "schema_version": "area-one-verification-report/1.0",
+  "verdict": {
+    "not_supported": [
+      "This is a classical software simulation, not execution on quantum hardware.",
+      "The Grover walk and phase-noise channel are established baseline models.",
+      "EOG display labels are metadata and do not change the quantum dynamics.",
+      "Logical operation counts are not compiled device gate counts.",
+      "The toy phase-noise model is not calibrated to a physical device.",
+      "Passing checks does not establish quantum advantage, novelty or market demand."
+    ],
+    "passed": true,
+    "supported": [
+      "The configured software operator satisfies the numerical checks.",
+      "The declared measurement and boundary semantics are reproducible.",
+      "The Monte Carlo sampler agrees with its exact toy-channel oracle."
+    ]
+  }
+}
