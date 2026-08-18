@@ -208,3 +208,76 @@ Quantum work continues as **study only**, not a deliverable, alongside StanfordO
 Estimate effect size before building infrastructure. Rank the deliberately wrong versions first. A discriminator common to candidate and controls proves nothing. Check that success criteria are satisfiable before freezing them. Distinguish not-proven from disproven. Never present the parity-protected `s=3` exact-zero median as mechanism evidence. Never edit the frozen protocol or lower the `-0.02` floor.
 
 Session closed cleanly. It was a genuine falsification obtained with an untouched holdout, which is a stronger scientific position than an unverified positive.
+---
+
+## POST-CLOSURE ANALYSIS 2026-08-17 — inverse conditions and strategy options
+
+Burhan asked three questions after the closure that produced genuinely new results.
+
+### 1. Does the quantum walk need the pair gate? No.
+
+A discrete-time walk is coin plus shift; spatial search adds only an oracle. The pair layer `P` was an optional additive term proposed by Kiro, so the burden of proving it moved an observable was always on it. It never did.
+
+### 2. Inverse analysis — the question that should have been asked first
+
+Burhan asked whether the conditions for success could be **derived** rather than guessed. Candidates 1-6 were all forward attempts. The inverse problem had never been stated. Four necessary conditions were derived:
+
+- **N1 non-isomorphism.** If genuine and control are endpoint-fixing isomorphic then `<b|f(H_id)|a> = <b|f(H_pi)|a>` for every analytic `f`, so dynamics are provably identical. Candidate 3 balanced failed this; Candidate 5 passed for all 119 controls.
+- **N2 discriminator not shared.** Candidates 3 and 5 both built zero modes common to all 120 matchings via `c=B1`, carrying zero information.
+- **N3 rewired edges must be load-bearing. NEWLY FOUND FAILURE.** Exact combinatorial check: the native torus `C_6 square C_w` wraps in the column direction, so it **already** joins column `0` to column `w-1` at all `6` rows, independently of any matching. Verified `6 of 6` wraparound edges present on every grid, and `a`-to-`b` remains **reachable with all five pair edges deleted** on all three grids. None of the 5 matching edges coincides exactly with a native edge, but they are redundant as a route. The mechanism under test was never on the critical path. This is a deeper cause than "small perturbation" and was a ten-line check never run across six candidates.
+- **N4 advantage must be quantum, not topological. NEVER TESTED.** No classical comparator was ever run; the frozen protocol explicitly deferred it.
+
+Consequence: the seam was redundant with the wraparound, so no pairing could be load-bearing and any gate placed there was pre-emptively diluted. The specific fix for N3 is to remove the column wraparound, making the grid a cylinder or strip so the seam becomes a genuine cut. Honest catch: that makes the **pairing** matter but not **quantum** matter, since a classical walk would see the same difference. Design: `data/area-one-inverse-conditions-for-a-distinguishable-gate-2026-08-17.md`, 7,110 bytes, SHA-256 `85c3696e4398f002b0daf3a1bfb38c105335973ba3a9446f3cbb3fdf86f04345`.
+
+### 3. Strategy — where the mathematics actually lands
+
+Recorded in `data/area-one-post-closure-strategy-options-2026-08-17.md`, 9,347 bytes, SHA-256 `31533f97cc682d58fe0bfe84d45d4d2f7d739c3aeb0b4b0a525c0da9821b74b4`.
+
+Key content. Candidate 6 built a chain complex with `partial_1 partial_2 = 0` and Betti numbers `(1,7,1)`, which **is** the structure of CSS/homological codes: the native torus is a toric code with `2` logical qubits and the seams raise it to `7`, giving rate about `0.108` for `s=4` against the toric `0.033`. The filed obstruction is, in coding language, the encoding rate. Probable killer is distance: an uncapped seam closes a length-3 cycle implying a weight-3 logical operator and distance near `3`. Estimate only, and directly computable.
+
+Also recorded: `P` is literally a beamsplitter, so disjoint pair layers are Reck/Clements interferometer meshes, and multi-particle interference depends on permanents, so the pairing could matter for two or more photons where it provably did not for one. Matchgate resemblance noted as superficial and not to be oversold.
+
+Component roles ranked by fit and competition: surface-code decoding (highest fit, severe competition), routing and mapping (high fit, active), minor embedding for Ising machines and annealers (high fit, weaker incumbents), tensor-network ordering (severe competition), and verification/provenance via ICV (already built, no agreed standard exists).
+
+Open versus closed recorded explicitly: platforms, codes, architecture, useful applications and benchmarking standards are genuinely open; unitarity, no-cloning, Grover `sqrt(N)` optimality via BBBV, and the threshold theorem are closed by proof. Advocacy cannot move a proven lower bound, including for our own proposals.
+
+On lobbying: do not lobby physics, do participate in standards, where no accepted procedure exists for independently verifying an advantage claim. Venues to verify before approach: NPL, NQCC (already in orbit via SparQ), IEEE quantum working groups, ISO/IEC JTC 1. Our rare credential is a pipeline that falsified its own author's project with an untouched holdout.
+
+Ranked: (1) verification and standards, (2) minor embedding or routing, (3) homological code distance as one cheap decisive calculation, (4) new paradigm, longest odds.
+
+### Standing discipline carried forward
+
+Measure the incumbent first. Effect size before infrastructure. Ask the control question on day one, namely whether any competent index would do this or specifically an elastic overlapping one. Verify criteria are satisfiable before freezing. Do not let belief precede measurement.
+
+No build, simulation, protocol, staging, commit or push was authorized or performed by this analysis. Temporary verification scripts were deleted. Nothing staged, no Python processes.
+---
+
+## MODELLING ERROR FOUND 2026-08-17 — the tested graph was probably not EOG
+
+Burhan supplied the actual EOG label chart, which exposed a modelling error that materially qualifies the falsification.
+
+Chart verified exactly: `L(r,c) = 5r + c`; every overlap shares a label, `L(r,5) = L(r+1,0)` for `r=0..4`; steps are right `+1`, down `+5`, diagonal `+6`; the diagonal is `L(r,r)=6r` giving `0,6,12,18,24,30` and reversing symmetrically as `30,24,18,12,6,0`; 36 grid cells carry only **31 distinct labels**; `sqrt(31)=5.57` against a 5-step diagonal crossing. Burhan's arithmetic and reading were correct.
+
+**Error 1.** A shared label means the two cells are the **same item**, an identity or quotient. We modelled them as two distinct basis states coupled by a `2x2` gate `P`. Coupling two nodes is not identifying them.
+
+**Error 2.** Our torus wrapped in both directions, so entrance `(0,0)` to exit `(5,s)` was only **2 steps** apart: row `min(5,1)=1` plus column `min(5,1)=1`. There was essentially no journey for any mechanism to influence.
+
+Exact shortest paths, label `0` to label `30`:
+
+| model | nodes | distance | after removing overlap mechanism |
+|---|---:|---:|---:|
+| plain strip, no wraparound | 36 | 10 | 10 |
+| **identified, as the chart specifies** | **31** | **6** | 10 un-glued |
+| **torus with 5 pair edges, what we tested** | 36 | **2** | **2** |
+
+So in the correctly identified model the overlaps **are load-bearing**, `6` versus `10`, which **passes condition N3** that our tested model failed. On our torus, deleting all five pair edges changed the distance not at all.
+
+**Does not change.** The falsification stands for the family actually tested: genuine matching ranked 95 of 101 on that declared torus family.
+
+**Does change.** The tested graph was very likely **not EOG**. Do not say "EOG has no quantum advantage." The defensible statement is that a torus-with-extra-edges surrogate, with a redundant seam and endpoints two steps apart, showed no advantage.
+
+**Still open for the corrected model:** N1 non-isomorphism on identified graphs, N2, and critically **N4 quantum versus classical**, since a shorter path helps a classical walk equally. Distance `6` versus `10` is a classical topological gain and must not be reported as quantum. The roughly square-root crossing is generic to folding a line into two dimensions.
+
+**Mandatory first test before any further work:** build the identified graph for all 120 pairings and measure collapsed node count and entrance-to-exit distance for each. If the genuine pairing is not distinguished, stop — otherwise the same trap recurs. Only then N1, then a classical comparator for N4.
+
+Design: `data/area-one-modelling-error-shared-label-identity-2026-08-17.md`, 5,776 bytes, SHA-256 `240d6834f834020d5bd737d2f991a24e082ca86ca0f23a769277ced954ddb4fd`. Temporary script deleted. No source or test file added, nothing staged, no commit or push.
