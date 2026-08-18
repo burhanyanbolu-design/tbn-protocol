@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICV Lab &mdash; Independent Claim Verification</title>
+<style>
+:root{
+  --bg:#0f1115; --panel:#171a21; --line:#242833; --txt:#e6e6e6; --dim:#8b95a5;
+  --ok:#7fe0a0; --okbg:#16301f; --bad:#ff8f8f; --badbg:#3b1d1d;
+  --warn:#f0cf7a; --warnbg:#332a12; --idle:#8b95a5; --idlebg:#22262f;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:28px;background:var(--bg);color:var(--txt);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+h1{font-size:21px;margin:0 0 4px}
+.sub{color:var(--dim);font-size:13px;margin-bottom:22px}
+.wrap{display:grid;grid-template-columns:minmax(320px,1fr) minmax(340px,1.15fr);
+  gap:18px;align-items:start}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--dim);margin:0 0 12px;font-weight:600}
+textarea{width:100%;height:260px;background:#0d0f13;color:#cfd6e0;border:1px solid var(--line);
+  border-radius:8px;padding:12px;font:12.5px/1.5 ui-monospace,Consolas,monospace;resize:vertical}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;align-items:center}
+button{background:#243044;color:#dce6f5;border:1px solid #33425c;border-radius:7px;
+  padding:9px 15px;font-size:13.5px;cursor:pointer;font-family:inherit}
+button:hover{background:#2b3a52}
+button.primary{background:#1d4d33;border-color:#2a6b47;color:#c9f5d9;font-weight:600}
+button.primary:hover{background:#236040}
+input[type=file]{font-size:12.5px;color:var(--dim)}
+.hint{color:var(--dim);font-size:12px;margin-top:9px}
+.verdict{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:14px;border-radius:8px;margin-bottom:14px}
+.verdict .lab{font-size:19px;font-weight:700;letter-spacing:.4px}
+.verdict .msg{font-size:13px;opacity:.92}
+.FALSIFIED{background:var(--badbg);color:var(--bad);border:1px solid #5c2b2b}
+.SUPPORTED{background:var(--okbg);color:var(--ok);border:1px solid #24512f}
+.INCONCLUSIVE{background:var(--warnbg);color:var(--warn);border:1px solid #57471c}
+.NOT_DISTINCTIVE{background:var(--warnbg);color:var(--warn);border:1px solid #57471c}
+.NOT_TESTABLE{background:var(--badbg);color:var(--bad);border:1px solid #5c2b2b}
+table{border-collapse:collapse;width:100%}
+td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:top;font-size:13px}
+td.n{width:170px;color:#9aa4b2}
+td.r{width:80px}
+.b{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.3px}
+.PASS{background:var(--okbg);color:var(--ok)}
+.FAIL{background:var(--badbg);color:var(--bad)}
+.PARTIAL{background:var(--warnbg);color:var(--warn)}
+.NOT_RUN{background:var(--idlebg);color:var(--idle)}
+.meta{color:var(--dim);font-size:12px;margin-top:14px;border-top:1px solid var(--line);
+  padding-top:11px;word-break:break-all}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:11.5px}
+.bar{height:8px;background:#0d0f13;border:1px solid var(--line);border-radius:5px;
+  overflow:hidden;margin-top:8px}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,#7fe0a0,#f0cf7a,#ff8f8f)}
+.placeholder{color:var(--dim);font-size:13px;text-align:center;padding:34px 10px}
+details{margin-top:12px}
+summary{cursor:pointer;color:var(--dim);font-size:12.5px}
+pre{background:#0d0f13;border:1px solid var(--line);border-radius:7px;padding:11px;
+  overflow:auto;font-size:11.5px;color:#b9c2d0;margin:9px 0 0}
+.page{max-width:1180px;margin:0 auto}
+.lede{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:20px 22px;margin-bottom:18px}
+.lede p{margin:0 0 11px;max-width:76ch}
+.lede p:last-child{margin-bottom:0}
+.q{border-left:3px solid #33425c;padding:2px 0 2px 14px;color:#c7cdd6;font-style:italic}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px;
+  margin-top:20px}
+.grid3 .box{background:#13161c;border:1px solid var(--line);border-radius:9px;padding:15px}
+.grid3 h3{margin:0 0 7px;font-size:13.5px;color:#dbe3ee}
+.grid3 p{margin:0;font-size:12.8px;color:#a7b1c0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;
+  border-radius:50%;background:#243044;color:#c9d6ea;font-size:11px;font-weight:700;
+  margin-right:7px}
+.info{margin-top:18px}
+.info h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);
+  margin:0 0 12px;font-weight:600}
+.info h3{font-size:14px;margin:18px 0 7px;color:#dbe3ee}
+.info p,.info li{font-size:13.2px;color:#b3bcc9;max-width:82ch}
+.info ul{margin:8px 0 0;padding-left:20px}
+.info li{margin-bottom:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.yes li{color:#bfe6cc}
+.no li{color:#e8bcbc}
+table.spec td{font-size:12.6px}
+table.spec td:first-child{color:#9aa4b2;width:150px;font-family:ui-monospace,Consolas,monospace}
+.foot{color:var(--dim);font-size:12px;margin-top:22px;border-top:1px solid var(--line);
+  padding-top:14px;max-width:90ch}
+.foot a{color:#8fb4dd}
+.tag{display:inline-block;background:var(--idlebg);color:var(--idle);font-size:11px;
+  padding:3px 9px;border-radius:20px;margin-left:8px;vertical-align:middle;letter-spacing:.3px}
+</style>
+</head>
+<body>
+<div class="page">
+<h1>ICV Lab &mdash; Independent Claim Verification <span class="tag">free tool</span></h1>
+<div class="sub">Structural verification for computational research claims. Runs entirely in your browser &mdash; nothing is uploaded.</div>
+
+<div class="lede">
+  <p>Most computational claims are published with the author's own measurement and no independent
+  check against alternatives. The number is usually correct. The problem is that nobody asked
+  whether a <em>deliberately wrong</em> version would have scored just as well.</p>
+  <p class="q">If this claim were wrong, would this experiment have caught it?</p>
+  <p>That is the only question this tool answers. It re-measures a submitted claim from the raw
+  structure, builds a population of matched control variants, and reports where the real one
+  ranks among them. A claim that cannot beat its own controls has not been demonstrated,
+  regardless of how carefully it was measured.</p>
+
+  <div class="grid3">
+    <div class="box">
+      <h3><span class="num">1</span>Independent measurement</h3>
+      <p>We recompute the claimed value from the submitted structure. The claimant's own number is
+      never trusted, only checked. Getting this right is necessary and not sufficient.</p>
+    </div>
+    <div class="box">
+      <h3><span class="num">2</span>Matched controls</h3>
+      <p>Variants are built by degree-preserving double-edge swaps, so every control has the
+      <em>identical degree sequence</em> as the submission. Not a straw man &mdash; a fair rival.</p>
+    </div>
+    <div class="box">
+      <h3><span class="num">3</span>Ranking</h3>
+      <p>The real structure is ranked against the controls on the claimant's own declared metric,
+      with ties counted separately. Rank is the result; the raw value is not.</p>
+    </div>
+    <div class="box">
+      <h3><span class="num">4</span>Declared pass rule</h3>
+      <p>The claimant states their own success threshold before testing. We do not invent the bar,
+      and we do not move it afterwards.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h2>Submission</h2>
+    <textarea id="src" spellcheck="false" placeholder="Paste the submitted JSON here..."></textarea>
+    <div class="row">
+      <button class="primary" id="run">Run verification</button>
+      <button id="example">Load example</button>
+      <button id="selfaudit" title="Our own claim, tested by our own tool">Load our self-audit</button>
+      <input type="file" id="file" accept=".json,application/json">
+    </div>
+    <div class="hint">The claimant declares their own metric and pass rule. We measure it
+      independently and rank it against matched controls with identical degrees.</div>
+    <details>
+      <summary>What the format looks like</summary>
+      <pre id="fmt"></pre>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Result</h2>
+    <div id="out"><div class="placeholder">No submission tested yet.</div></div>
+  </div>
+</div>
+
+<div class="card info">
+  <h2>What this does and does not do</h2>
+  <div class="two">
+    <div>
+      <h3>It does</h3>
+      <ul class="yes">
+        <li>Re-measure a claim independently from the submitted structure.</li>
+        <li>Build matched controls with an identical degree sequence.</li>
+        <li>Report the claim's rank and percentile among those controls.</li>
+        <li>Fingerprint the exact bytes submitted, with SHA-256.</li>
+        <li>Fail closed. Malformed or unmeasurable input returns
+            <b>NOT TESTABLE</b> with a specific reason, never a guess.</li>
+        <li>Give a reproducible result. The control generator is seeded, so the
+            same submission yields the same verdict.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>It does not</h3>
+      <ul class="no">
+        <li>Simulate anyone's algorithm, physics, or runtime behaviour.</li>
+        <li>Verify quantum advantage, speedup, or hardware performance.</li>
+        <li>Audit source code, security, or correctness of an implementation.</li>
+        <li>Issue a certification, accreditation, or endorsement of any kind.</li>
+        <li>Prove a claim true. A <b>SUPPORTED</b> verdict means the experiment
+            could have caught the error and did not, which is weaker than proof.</li>
+        <li>Replace peer review or domain expertise.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Verdicts</h3>
+  <ul>
+    <li><b>SUPPORTED</b> &mdash; the claimed value reproduced, and the structure met the
+        claimant's declared rank threshold against matched controls.</li>
+    <li><b>FALSIFIED</b> &mdash; the declared threshold was not met. Note this can happen
+        even when the claimed number is perfectly correct, which is the most common
+        and most useful outcome.</li>
+    <li><b>INCONCLUSIVE</b> &mdash; the test could run but the pass rule was unsupported
+        or indeterminate.</li>
+    <li><b>NOT TESTABLE</b> &mdash; the submission could not be measured as supplied.</li>
+  </ul>
+
+  <h3>Supported metrics</h3>
+  <table class="spec">
+    <tr><td>endpoint_distance</td><td>Shortest path in hops between two declared nodes.
+      Objective is normally <span class="mono">minimise</span>.</td></tr>
+    <tr><td>quotient_cells</td><td>Cell count of the coarsest exact equitable partition,
+      seeded from the two endpoints. Detects whether a structure admits a genuine
+      quotient or refines to discrete. Objective is normally
+      <span class="mono">minimise</span>.</td></tr>
+  </table>
+  <p style="margin-top:10px">Anything else returns <b>NOT TESTABLE</b>. Additional metrics can be
+  added on request; each needs its own adapter and an agreed definition before use.</p>
+
+  <h3>Submission format</h3>
+  <pre id="fmt2"></pre>
+  <p><span class="mono">controls</span> defaults to 200. Node identifiers may be any JSON value
+  that compares equal consistently; integers are recommended. Self-loops and malformed edges
+  are rejected at intake.</p>
+
+  <h3>Why matched controls, specifically</h3>
+  <p>Comparing a structure against a random graph proves very little, because a random graph
+  usually differs in degree distribution and therefore in trivial ways. Degree-preserving
+  double-edge swaps hold every node's degree fixed while rewiring who connects to whom. What
+  remains is the thing actually being claimed: the <em>arrangement</em>. If the arrangement
+  matters, it will beat its own rewirings. If it does not, it will not.</p>
+
+  <h3>Our own claim, tested by this tool</h3>
+  <p>We built this after applying the same process to our own research. Our Elastic Overlapping
+  Grid structure was measured correctly at a corner-to-corner distance of 6, and it still ranked
+  <b>195th of 201</b> against matched controls, because most rewirings did better. We closed that
+  research line as a result. The <b>Load our self-audit</b> button above reproduces that verdict
+  in your browser, and you are welcome to check it.</p>
+  <p>A verification service that has never returned a negative &mdash; including against its own
+  author &mdash; is not evidence of anything. This is ours, on the record.</p>
+
+  <h3>Privacy</h3>
+  <p>All computation happens locally in your browser using JavaScript embedded in this page.
+  Submissions are not transmitted, stored, or logged by us, and the page makes no network
+  requests after loading. You may save this file and run it fully offline. If you are handling
+  unpublished work, verify this yourself with your browser's developer tools before use.</p>
+
+  <h3>Scope and status</h3>
+  <p>This is a free structural tool, offered as-is with no warranty. It is pre-revenue and has
+  no delivered commercial engagements. Nothing here constitutes a certification, professional
+  advice, or a guarantee of fitness for any purpose. Results depend entirely on the metric and
+  threshold the claimant declares.</p>
+
+  <div class="foot">
+    ICV Lab &middot; Hardin Enterprises UK Ltd &middot; United Kingdom<br>
+    Enquiries: <a href="mailto:burhan@hardinai.co.uk">burhan@hardinai.co.uk</a><br>
+    To request an additional metric, describe the measure and the pass rule you intend to declare.
+  </div>
+</div>
+</div>
+
+<script>
+"use strict";
+/* ---------------- compact SHA-256 so the fingerprint works offline ------- */
+function sha256(bytes){
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+  0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+  0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+  0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+  0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  let H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const ml=bytes.length*8;
+  const withPad=[...bytes,0x80];
+  while(withPad.length%64!==56) withPad.push(0);
+  for(let i=7;i>=0;i--) withPad.push((ml/Math.pow(2,i*8))&0xff);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  for(let off=0;off<withPad.length;off+=64){
+    const w=new Array(64);
+    for(let i=0;i<16;i++){const j=off+i*4;
+      w[i]=((withPad[j]<<24)|(withPad[j+1]<<16)|(withPad[j+2]<<8)|withPad[j+3])>>>0;}
+    for(let i=16;i<64;i++){
+      const s0=(rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3))>>>0;
+      const s1=(rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10))>>>0;
+      w[i]=(w[i-16]+s0+w[i-7]+s1)>>>0;}
+    let [a,b,c,d,e,f,g,h]=H;
+    for(let i=0;i<64;i++){
+      const S1=(rr(e,6)^rr(e,11)^rr(e,25))>>>0;
+      const ch=((e&f)^((~e)&g))>>>0;
+      const t1=(h+S1+ch+K[i]+w[i])>>>0;
+      const S0=(rr(a,2)^rr(a,13)^rr(a,22))>>>0;
+      const mj=((a&b)^(a&c)^(b&c))>>>0;
+      const t2=(S0+mj)>>>0;
+      h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0;}
+    H=[(H[0]+a)>>>0,(H[1]+b)>>>0,(H[2]+c)>>>0,(H[3]+d)>>>0,
+       (H[4]+e)>>>0,(H[5]+f)>>>0,(H[6]+g)>>>0,(H[7]+h)>>>0];
+  }
+  return H.map(x=>x.toString(16).padStart(8,'0')).join('');
+}
+
+/* ---------------- graph helpers, mirroring icv_runner.py ---------------- */
+const REQUIRED=['submission_id','claimant','claim','graph','endpoints','metric',
+  'objective','claimed_value','success_rule'];
+const METRICS=['endpoint_distance','quotient_cells'];
+
+function toAdj(edges){
+  const adj=new Map();
+  for(const e of edges){
+    if(!Array.isArray(e)||e.length!==2) throw new Error('edge '+JSON.stringify(e)+' is not a pair');
+    const [a,b]=e;
+    if(a===b) throw new Error('self-loop at '+a);
+    if(!adj.has(a)) adj.set(a,new Set());
+    if(!adj.has(b)) adj.set(b,new Set());
+    adj.get(a).add(b); adj.get(b).add(a);
+  }
+  return adj;
+}
+
+function endpointDistance(adj,start,goal){
+  if(!adj.has(start)||!adj.has(goal)) return null;
+  if(start===goal) return 0;
+  const seen=new Set([start]); let frontier=[start],d=0;
+  while(frontier.length){
+    const next=[];
+    for(const x of frontier) for(const y of adj.get(x)){
+      if(y===goal) return d+1;
+      if(!seen.has(y)){seen.add(y);next.push(y);} }
+    frontier=next; d++;
+  }
+  return null;
+}
+
+function quotientCells(adj,seeds){
+  let colour=new Map(); for(const v of adj.keys()) colour.set(v,0);
+  seeds.forEach((s,i)=>{ if(colour.has(s)) colour.set(s,i+1); });
+  for(let guard=0;guard<500;guard++){
+    const sig=new Map();
+    for(const v of adj.keys()){
+      const cnt=new Map();
+      for(const w of adj.get(v)) cnt.set(colour.get(w),(cnt.get(colour.get(w))||0)+1);
+      const key=colour.get(v)+'|'+[...cnt.entries()].sort((p,q)=>p[0]-q[0]).map(p=>p[0]+':'+p[1]).join(',');
+      sig.set(v,key);
+    }
+    const groups=new Map();
+    for(const [v,k] of sig){ if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(v); }
+    const before=new Set(colour.values()).size;
+    if(groups.size===before) return groups.size;
+    const keys=[...groups.keys()].sort();
+    const next=new Map();
+    keys.forEach((k,i)=>groups.get(k).forEach(v=>next.set(v,i)));
+    colour=next;
+  }
+  return new Set(colour.values()).size;
+}
+
+function measure(adj,sub){
+  return sub.metric==='endpoint_distance'
+    ? endpointDistance(adj,sub.endpoints.start,sub.endpoints.goal)
+    : quotientCells(adj,[sub.endpoints.start,sub.endpoints.goal]);
+}
+
+/* seeded RNG so results are reproducible */
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+
+function rewire(edges,rand,swaps){
+  const e=edges.map(x=>[x[0],x[1]]);
+  const key=(a,b)=>a<b?a+'~'+b:b+'~'+a;
+  const es=new Set(e.map(x=>key(x[0],x[1])));
+  let done=0;
+  for(let t=0;t<swaps*25 && done<swaps;t++){
+    const i=Math.floor(rand()*e.length), j=Math.floor(rand()*e.length);
+    if(i===j) continue;
+    const [a,b]=e[i],[c,d]=e[j];
+    if(new Set([a,b,c,d]).size<4) continue;
+    const k1=key(a,d),k2=key(c,b);
+    if(es.has(k1)||es.has(k2)) continue;
+    es.delete(key(a,b)); es.delete(key(c,d));
+    e[i]=[a,d]; e[j]=[c,b]; es.add(k1); es.add(k2); done++;
+  }
+  return {edges:e,done};
+}
+
+/* ---------------- the verification run ---------------- */
+function verify(text){
+  const bytes=new TextEncoder().encode(text);
+  const digest=sha256(Array.from(bytes));
+  let sub;
+  try{ sub=JSON.parse(text); }
+  catch(err){ return {fatal:'Not valid JSON: '+err.message,digest}; }
+  const missing=REQUIRED.filter(k=>!(k in sub));
+  if(missing.length) return {fatal:'Missing fields: '+missing.join(', '),digest};
+  if(!METRICS.includes(sub.metric))
+    return {fatal:'Metric "'+sub.metric+'" not supported. Use: '+METRICS.join(' or '),digest};
+  if(!['minimise','maximise'].includes(sub.objective))
+    return {fatal:'objective must be "minimise" or "maximise"',digest};
+  const edges=sub.graph&&sub.graph.edges;
+  if(!edges||!edges.length) return {fatal:'graph.edges is empty or absent',digest};
+
+  let adj,observed;
+  try{ adj=toAdj(edges); observed=measure(adj,sub); }
+  catch(err){ return {fatal:err.message,digest}; }
+  if(observed===null)
+    return {fatal:'Metric could not be computed &mdash; endpoints absent or unreachable',digest};
+
+  const claimOk = observed===sub.claimed_value;
+  const nCtl=Math.max(1,parseInt(sub.controls||200,10));
+  const rand=rng(20260817);
+  const swaps=Math.max(1,Math.floor(edges.length/2));
+  const values=[]; let degenerate=0;
+  for(let i=0;i<nCtl;i++){
+    const r=rewire(edges,rand,swaps);
+    if(r.done===0){degenerate++;continue;}
+    const v=measure(toAdj(r.edges),sub);
+    if(v!==null) values.push(v);
+  }
+  const min = sub.objective==='minimise';
+  const beat=values.filter(v=>min? v<observed : v>observed).length;
+  const ties=values.filter(v=>v===observed).length;
+  const worse=values.length-beat-ties;
+  const rank=beat+1, total=values.length+1;
+
+  /* distinctiveness: how much of the field matches or beats the submission?
+     rank alone is misleading when ties dominate. */
+  const matchedOrBetter=beat+ties;
+  const mobPct = values.length ? matchedOrBetter/values.length : 1;
+  const distinct = 1-mobPct;
+  let distRes;
+  if(mobPct>=0.50) distRes='FAIL';
+  else if(mobPct>=0.20) distRes='PARTIAL';
+  else distRes='PASS';
+  const saturated = (beat===0 && ties>0 && mobPct>=0.20);
+
+  const rule=sub.success_rule||{};
+  let passed=null, ruleText='unsupported rule "'+rule.type+'"';
+  if(rule.type==='rank_at_most'){ passed = rank<=parseInt(rule.value,10);
+    ruleText='rank &le; '+rule.value; }
+
+  const sorted=[...values].sort((a,b)=>a-b);
+  const spread = sorted.length
+    ? 'controls ranged '+sorted[0]+' to '+sorted[sorted.length-1]+
+      ', median '+sorted[Math.floor(sorted.length/2)]
+    : 'no controls measured';
+
+  const checks=[
+    ['intake_wellformed','PASS',
+     'valid UTF-8 JSON, all required fields present, '+edges.length+
+     ' edges, sha256 '+digest.slice(0,16)],
+    ['claim_reproduced',claimOk?'PASS':'FAIL',
+     'claimed '+sub.metric+' = '+sub.claimed_value+
+     '; independently measured '+observed],
+    ['matched_controls', values.length>=Math.max(10,nCtl/2)?'PASS':'PARTIAL',
+     values.length+' degree-preserving control variants built and measured'+
+     (degenerate? ' ('+degenerate+' attempts produced no valid swap)':'')+
+     '. '+spread],
+    ['control_ranking', passed===null?'NOT_RUN':(passed?'PASS':'FAIL'),
+     'rank '+rank+' of '+total+' ('+beat+' better, '+ties+' tied, '+worse+
+     ' worse); rule: '+ruleText],
+    ['distinctiveness', distRes,
+     Math.round(mobPct*100)+'% of controls matched or beat this result'+
+     (distRes==='FAIL'
+       ? '. The specific arrangement is <b>not</b> what produces the value &mdash; '+
+         'most rewirings achieve it too'+
+         (saturated? ', and no control can beat it because the value is already at the'+
+                     ' achievable limit, so rank is uninformative here':'')+'.'
+       : distRes==='PARTIAL'
+         ? '. A substantial share of the field matches it, so the arrangement is only'+
+           ' weakly responsible.'
+         : '. The arrangement, not the graph in general, produces the result.')]
+  ];
+
+  let verdict;
+  if(!claimOk) verdict='FALSIFIED';
+  else if(passed===false) verdict='FALSIFIED';
+  else if(passed===null) verdict='INCONCLUSIVE';
+  else if(distRes==='FAIL') verdict='NOT_DISTINCTIVE';
+  else verdict='SUPPORTED';
+
+  const plain =
+    verdict==='NOT_DISTINCTIVE'
+      ? 'Rank '+rank+' of '+total+', but '+Math.round(mobPct*100)+
+        '% of controls matched or beat it. Passing the rank rule here means little.'
+      : verdict==='FALSIFIED' && !claimOk
+        ? 'The claimed value did not reproduce: claimed '+sub.claimed_value+
+          ', measured '+observed+'.'
+        : 'Ranked '+rank+' of '+total+' against matched controls; '+
+          Math.round(mobPct*100)+'% matched or beat it.';
+
+  return {sub,digest,checks,verdict,rank,total,beat,ties,worse,observed,claimOk,
+    mobPct,distinct,plain};
+}
+
+/* ---------------- rendering ---------------- */
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function render(r){
+  const out=document.getElementById('out');
+  if(r.fatal){
+    out.innerHTML='<div class="verdict NOT_TESTABLE"><span class="lab">NOT TESTABLE</span>'+
+      '<span class="msg">'+r.fatal+'</span></div>'+
+      '<div class="meta">submission sha256<br><span class="mono">'+esc(r.digest)+'</span></div>';
+    return;
+  }
+  const pct = Math.round(100*(1-r.mobPct));
+  let h='<div class="verdict '+r.verdict+'"><span class="lab">'+
+    r.verdict.replace(/_/g,' ')+'</span>'+
+    '<span class="msg">'+esc(r.plain)+'</span></div>';
+  h+='<table>';
+  for(const [name,res,detail] of r.checks){
+    h+='<tr><td class="n">'+esc(name.replace(/_/g,' '))+'</td>'+
+       '<td class="r"><span class="b '+res+'">'+res+'</span></td>'+
+       '<td>'+detail+'</td></tr>';
+  }
+  h+='</table>';
+  h+='<div class="meta">controls this result beats outright: <b>'+pct+'%</b>'+
+     '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+     '<span style="font-size:11.5px">Ties count against the claim. Beating 90% or more'+
+     ' means the arrangement is doing the work; near 0% means almost any rewiring'+
+     ' would serve equally well.</span></div>';
+  h+='<div class="meta">'+esc(r.sub.claimant)+' &mdash; '+esc(r.sub.claim)+
+     '<br><br>submission sha256<br><span class="mono">'+esc(r.digest)+'</span></div>';
+  out.innerHTML=h;
+}
+
+/* ---------------- example submission: neutral synthetic network ----------
+   A 24-node ring with four long chords. Nothing proprietary; it exists only
+   to demonstrate the tool. claimed_value is computed so the arithmetic is
+   honest and the "claim reproduced" check is meaningful.               */
+function exampleJSON(){
+  const N=24, edges=[];
+  for(let i=0;i<N;i++) edges.push([i,(i+1)%N]);
+  for(const [a,b] of [[0,12],[3,15],[6,18],[9,21]]) edges.push([a,b]);
+  edges.sort((p,q)=>p[0]-q[0]||p[1]-q[1]);
+  const measured=endpointDistance(toAdj(edges),0,13);
+  return JSON.stringify({
+    submission_id:'example-001',
+    claimant:'Example Submission (synthetic network)',
+    claim:'our chord placement reaches the target node in fewer hops than alternative wirings',
+    graph:{edges},
+    endpoints:{start:0,goal:13},
+    metric:'endpoint_distance',
+    objective:'minimise',
+    claimed_value:measured,
+    success_rule:{type:'rank_at_most',value:20},
+    controls:200
+  },null,2);
+}
+
+/* ---------- our own claim, submitted to our own tool: a 6x6 EOG box ------ */
+function selfAuditJSON(){
+  const n=6,s=n-1,lab=(r,c)=>s*r+c, set=new Set();
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++)
+    for(const [dr,dc] of [[0,1],[1,0]]){
+      const nr=r+dr,nc=c+dc;
+      if(nr<n&&nc<n){ const a=lab(r,c),b=lab(nr,nc);
+        if(a!==b) set.add(Math.min(a,b)+','+Math.max(a,b)); }
+    }
+  const edges=[...set].map(x=>x.split(',').map(Number))
+    .sort((p,q)=>p[0]-q[0]||p[1]-q[1]);
+  const measured=endpointDistance(toAdj(edges),0,30);
+  return JSON.stringify({
+    submission_id:'hardin-eog-self-audit',
+    claimant:'Hardin Enterprises UK Ltd (our own claim)',
+    claim:'our Elastic Overlapping Grid wiring reaches the far corner in fewer steps than alternative wirings',
+    graph:{edges},
+    endpoints:{start:0,goal:30},
+    metric:'endpoint_distance',
+    objective:'minimise',
+    claimed_value:measured,
+    success_rule:{type:'rank_at_most',value:10},
+    controls:200
+  },null,2);
+}
+
+const FORMAT_DOC=
+`{
+  "submission_id": "acme-001",
+  "claimant": "Acme Research",
+  "claim": "our wiring reaches the target faster",
+  "graph":     { "edges": [[0,1],[1,2]] },
+  "endpoints": { "start": 0, "goal": 30 },
+  "metric": "endpoint_distance" | "quotient_cells",
+  "objective": "minimise" | "maximise",
+  "claimed_value": 6,
+  "success_rule": { "type": "rank_at_most", "value": 10 },
+  "controls": 200
+}`;
+document.getElementById('fmt').textContent=FORMAT_DOC;
+document.getElementById('fmt2').textContent=FORMAT_DOC;
+
+document.getElementById('run').onclick=()=>{
+  const t=document.getElementById('src').value.trim();
+  if(!t){ render({fatal:'Nothing to test &mdash; paste a submission or load the example.',
+    digest:sha256([])}); return; }
+  render(verify(t));
+};
+document.getElementById('example').onclick=()=>{
+  document.getElementById('src').value=exampleJSON();
+};
+document.getElementById('selfaudit').onclick=()=>{
+  const t=selfAuditJSON();
+  document.getElementById('src').value=t;
+  render(verify(t));
+};
+document.getElementById('file').onchange=ev=>{
+  const f=ev.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ document.getElementById('src').value=rd.result;
+    render(verify(rd.result)); };
+  rd.readAsText(f);
+};
+</script>
+</body>
+</html>
