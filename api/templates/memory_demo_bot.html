@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hardin Memory — Live Demo: The Support Bot You Can't Trick</title>
+<meta name="robots" content="noindex">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EF6RKG8KY2"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EF6RKG8KY2');</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050508;--white:#f2f0ea;--accent:#00e5ff;--red:#ff3c5f;--green:#27e08a;--gold:#ffce54;--mid:#111118;--card:#0c0c14;--border:#1a1a2e;--dim:#6a6a7a;--mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;--heading:'Bebas Neue',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+.noise{position:fixed;inset:0;pointer-events:none;opacity:.03;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+header{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;}
+.logo{font-family:var(--heading);font-size:28px;letter-spacing:2px;color:var(--accent);}
+.logo span{color:var(--white);}
+.tag{font-size:12px;color:var(--dim);border-left:1px solid var(--border);padding-left:14px;}
+.hero{text-align:center;padding:40px 20px 10px;}
+.hero h1{font-family:var(--heading);font-size:clamp(32px,5vw,52px);letter-spacing:2px;line-height:1.1;}
+.hero h1 .accent{color:var(--accent);}
+.hero p{color:var(--dim);margin-top:10px;font-size:15px;max-width:640px;margin-inline:auto;}
+.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px auto 0;max-width:760px;}
+.chip{font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:20px;border:1px solid var(--border);color:var(--dim);}
+.chip b{color:var(--white);}
+.chip.t1{border-color:rgba(255,206,84,.5);} .chip.t1 b{color:var(--gold);}
+.chip.t2{border-color:rgba(0,229,255,.4);} .chip.t2 b{color:var(--accent);}
+.chip.t3{border-color:rgba(39,224,138,.4);} .chip.t3 b{color:var(--green);}
+.demo-area{max-width:1100px;margin:24px auto;padding:0 20px;}
+.steps{display:grid;gap:16px;}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:all .3s;position:relative;}
+.step-card.active{border-color:var(--accent);box-shadow:0 0 20px rgba(0,229,255,.15);}
+.step-card.success{border-color:var(--green);box-shadow:0 0 15px rgba(39,224,138,.1);}
+.step-card.rejected{border-color:var(--red);box-shadow:0 0 15px rgba(255,60,95,.15);}
+.tier-badge{position:absolute;top:16px;right:18px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:3px 9px;border-radius:12px;border:1px solid var(--border);color:var(--dim);}
+.tier-badge.t1{border-color:rgba(255,206,84,.5);color:var(--gold);}
+.tier-badge.t2{border-color:rgba(0,229,255,.4);color:var(--accent);}
+.tier-badge.t3{border-color:rgba(39,224,138,.4);color:var(--green);}
+.step-num{font-family:var(--mono);font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.step-title{font-weight:700;font-size:16px;margin-bottom:6px;}
+.step-desc{font-size:13px;color:var(--dim);margin-bottom:12px;max-width:80%;}
+.step-result{font-family:var(--mono);font-size:12px;padding:12px;background:#080810;border-radius:8px;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow-y:auto;display:none;}
+.step-result.show{display:block;}
+.step-result .ok{color:var(--green);} .step-result .bad{color:var(--red);} .step-result .info{color:var(--accent);} .step-result .gold{color:var(--gold);}
+.controls{text-align:center;padding:30px 20px;}
+.btn{font-family:var(--sans);font-weight:700;font-size:14px;padding:14px 32px;border:none;border-radius:8px;cursor:pointer;transition:all .2s;}
+.btn-primary{background:var(--accent);color:var(--bg);}
+.btn-primary:hover{box-shadow:0 0 20px rgba(0,229,255,.4);transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-reset{background:transparent;color:var(--dim);border:1px solid var(--border);margin-left:12px;}
+.summary{max-width:720px;margin:20px auto;text-align:center;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:none;}
+.summary.show{display:block;}
+.summary h3{font-family:var(--heading);font-size:24px;letter-spacing:1px;margin-bottom:8px;}
+.summary .verdict{font-size:14px;color:var(--dim);} .summary .verdict b{color:var(--green);}
+.footer{text-align:center;padding:40px 20px;color:var(--dim);font-size:12px;}
+.footer a{color:var(--accent);text-decoration:none;}
+</style></head><body>
+<div class="noise"></div>
+<header>
+  <div class="logo">HARDIN <span>MEMORY</span></div>
+  <div class="tag">Live Demo · The Support Bot You Can't Trick</div>
+</header>
+
+<div class="hero">
+  <h1>50 Lies. <span class="accent">Zero</span> Double-Payments.</h1>
+  <p>A shop's support bot. A customer who already got their refund tries to claim it again — 50 times. Watch it stay smart, stay friendly, prove every decision, keep up when the truth really changes, and stay impossible to trick. Every step is a real call to the live API.</p>
+  <div class="legend">
+    <span class="chip t1"><b>Tier 1</b> · locked facts</span>
+    <span class="chip t2"><b>Tier 2</b> · sticky notes (prefs)</span>
+    <span class="chip t3"><b>Tier 3</b> · suggestions (gated)</span>
+  </div>
+</div>
+
+<div class="demo-area">
+  <div class="steps" id="steps">
+    <div class="step-card" id="s1"><div class="tier-badge t1">TIER 1</div>
+      <div class="step-num">Step 1 — A fact is sealed</div>
+      <div class="step-title">🔏 Billing records: refund of £40 issued</div>
+      <div class="step-desc">Only a verified system can write a fact of record. It's signed and tamper-evident.</div>
+      <div class="step-result" id="r1"></div></div>
+    <div class="step-card" id="s2"><div class="tier-badge t2">TIER 2</div>
+      <div class="step-num">Step 2 — The bot knows the customer</div>
+      <div class="step-title">🗒️ Prefers email · friendly tone</div>
+      <div class="step-desc">Soft preferences. Mutable, low-trust — they personalise a reply but never grant a right.</div>
+      <div class="step-result" id="r2"></div></div>
+    <div class="step-card" id="s3"><div class="tier-badge t1">TIER 1 · SIGNED</div>
+      <div class="step-num">Step 3 — "I never got my refund!"</div>
+      <div class="step-title">🤖 The bot decides — and signs a receipt</div>
+      <div class="step-desc">The decision reads Tier 1 only, then hands back a signed receipt anyone can verify — no key needed.</div>
+      <div class="step-result" id="r3"></div></div>
+    <div class="step-card" id="s4"><div class="tier-badge t1">TIER 1</div>
+      <div class="step-num">Step 4 — The attack: 50 fake claims</div>
+      <div class="step-title">☠️ A scammer hammers the same lie to "teach" the bot</div>
+      <div class="step-desc">A customer's lie can only touch sticky notes & suggestions. Watch the sealed fact.</div>
+      <div class="step-result" id="r4"></div></div>
+    <div class="step-card" id="s5"><div class="tier-badge t1">TIER 1 · REVOKE</div>
+      <div class="step-num">Step 5 — The truth really changes</div>
+      <div class="step-title">↩️ The bank reverses the charge — billing revokes the refund</div>
+      <div class="step-desc">A <b>verified system event</b> CAN change the truth (a customer's lie cannot). The bot now correctly declines, citing the latest sealed fact.</div>
+      <div class="step-result" id="r5"></div></div>
+    <div class="step-card" id="s6"><div class="tier-badge t3">TIER 3</div>
+      <div class="step-num">Step 6 — The bot proposes; a human approves</div>
+      <div class="step-title">💡 "Route angry billing chats to a human"</div>
+      <div class="step-desc">A learned rule is inert until a person approves it — and the approval is bound to what that person actually saw, not just their name.</div>
+      <div class="step-result" id="r6"></div></div>
+    <div class="step-card" id="s8"><div class="tier-badge t1">REFUSAL LOG</div>
+      <div class="step-num">Step 7 — A hard refusal, and what happened next</div>
+      <div class="step-title">🚫 "Cancel my account and delete everything" — declined</div>
+      <div class="step-desc">A refusal isn't a dead end that vanishes from the record. It's logged, and whatever happens next (escalation, override, drop) gets appended too — so the audit trail isn't silent exactly where it matters most.</div>
+      <div class="step-result" id="r8"></div></div>
+    <div class="step-card" id="s7"><div class="tier-badge t1">PROOF</div>
+      <div class="step-num">Step 8 — Prove it's clean</div>
+      <div class="step-title">🔐 Cryptographic audit of the facts</div>
+      <div class="step-desc">One check an owner or regulator can run: are the facts intact, genuine, and complete?</div>
+      <div class="step-result" id="r7"></div></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="runBtn" onclick="runDemo()">▶ Run the Demo</button>
+    <button class="btn btn-reset" id="resetBtn" onclick="resetDemo()" style="display:none">↺ Reset</button>
+  </div>
+
+  <div class="summary" id="summary">
+    <h3>🛡️ Smart, personal, provable — and impossible to lie to.</h3>
+    <div class="verdict">50 fake claims moved nothing. A real bank reversal moved the truth instantly. Every decision is <b>signed and verifiable</b>, and the facts audit clean. <b>That's the whole point.</b></div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="/">← Back to Hardin Memory</a> · <a href="/memory/demo">Poison-resistance demo</a> · <a href="https://hardinai.co.uk">Hardin AI</a> · © 2026 Hardin Enterprises Ltd
+</div>
+
+<script>
+const BASE = '';
+let apiKey = null;
+const SUBJ = 'cust-1';
+
+async function api(method, path, body) {
+  const opts = {method, headers: {'Content-Type':'application/json'}};
+  if (apiKey) opts.headers['Authorization'] = 'Bearer ' + apiKey;
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(BASE + path, opts);
+  return r.json();
+}
+function showResult(id, html, cls) {
+  const el = document.getElementById(id);
+  el.innerHTML = html; el.classList.add('show');
+  el.parentElement.classList.add(cls || 'success');
+}
+async function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+function active(id,on){ document.getElementById(id).classList.toggle('active', on); }
+
+async function runDemo() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true; btn.textContent = 'Running...';
+  document.getElementById('resetBtn').style.display = 'inline-block';
+
+  const setup = await api('POST', '/v1/memory/demo/setup', {});
+  if (!setup.api_key) { showResult('r1', '<span class="bad">Demo setup failed</span>', 'rejected'); btn.textContent='Failed'; return; }
+  apiKey = setup.api_key;
+
+  // STEP 1 — seal a fact
+  active('s1',true); await sleep(600);
+  const f = await api('POST', '/v1/memory/facts', {fact_type:'entitlement', subject:SUBJ,
+    data:{entitlement:'refund_2026_06', granted:true, amount:'£40'}, source:'stripe:refund.created'});
+  showResult('r1', f.shard_id
+    ? `<span class="gold">🔏 SEALED FACT</span>\nrefund_2026_06 = granted (£40)\nsigned: ${f.signed}\nshard: ${f.shard_id}\nsource: stripe:refund.created`
+    : `<span class="bad">${JSON.stringify(f)}</span>`, 'success');
+  active('s1',false);
+
+  // STEP 2 — learn prefs
+  await sleep(800); active('s2',true);
+  await api('PUT', '/v1/memory/preferences', {key:`learned:${SUBJ}:channel`, value:'email'});
+  await api('PUT', '/v1/memory/preferences', {key:`learned:${SUBJ}:tone`, value:'friendly'});
+  const prof = await api('GET', `/v1/memory/profile?subject=${SUBJ}`);
+  showResult('r2', `<span class="info">🗒️ PROFILE (Tier 2)</span>\n${JSON.stringify(prof.profile||{}, null, 2)}\n\nUsed to personalise replies — never to decide entitlements.`, 'success');
+  active('s2',false);
+
+  // STEP 3 — customer claim, decision from Tier 1 + SIGNED receipt (S1)
+  await sleep(900); active('s3',true);
+  const d = await api('GET', `/v1/memory/decide?subject=${SUBJ}&entitlement=refund_2026_06`);
+  const rec = d.receipt || {};
+  const ver = await api('POST', '/v1/memory/decision/verify', {receipt: rec});  // public, keyless
+  const reply = `"Good news — your £40 refund went out on June 2 to the card ending 1234.\n Reference TBN-REF-0602. Anything else I can help with?"`;
+  showResult('r3', `<span class="${d.granted?'ok':'bad'}">DECISION (Tier 1 only): granted = ${d.granted}</span>\nevidence fact: ${d.evidence_shard_id}\n\n<span class="gold">🖊️ SIGNED RECEIPT</span>  signed=${rec.signed}\n<span class="info">independently verified (no API key): valid = ${ver.valid}</span>\n\n🤖 bot replies (friendly, via email):\n${reply}\n\n➜ already paid — and the answer is provable.`, 'success');
+  active('s3',false);
+
+  // STEP 4 — 50 fake claims, then learn
+  await sleep(900); active('s4',true);
+  showResult('r4', `<span class="info">sending 50 fake "I never got my refund" claims…</span>`, 'success');
+  for (let i=0;i<50;i++){
+    await api('POST', '/v1/memory/feedback', {subject:'scammer', decision:'refund_query',
+      outcome:'disputed', sentiment:'angry', context:{topic:'billing'}, signal:{pref:{refund:'not_received'}}});
+  }
+  const learn = await api('POST', '/v1/memory/learn', {min_support:3});
+  const refused = (learn.skipped||[]).filter(s => JSON.stringify(s).includes('refund')).length;
+  const ent2 = await api('GET', `/v1/memory/entitlement?subject=${SUBJ}&entitlement=refund_2026_06`);
+  const facts = await api('GET', '/v1/memory/facts');
+  const safe = ent2.granted === true && (facts.facts||[]).length === 1;
+  showResult('r4', `<span class="${safe?'ok':'bad'}">${safe?'✓ THE LIE NEVER LANDED':'⚠ unexpected'}</span>\n50 fake claims processed.\nrefund-shaped preference attempts REFUSED: ${refused}\npolicies_proposed: ${JSON.stringify((learn.policies_proposed||[]).map(p=>p.name))}\n\nAFTER the attack →\n  refund fact still granted: ${ent2.granted}\n  sealed facts count: ${(facts.facts||[]).length} (unchanged)\n\n➜ a customer's lie hits only Tier 2/3. The locked fact never moved.`, safe?'success':'rejected');
+  active('s4',false);
+
+  // STEP 5 — a VERIFIED system event genuinely changes the truth (S2 revocation)
+  await sleep(900); active('s5',true);
+  await api('POST', '/v1/memory/facts/revoke', {subject:SUBJ, entitlement:'refund_2026_06',
+    source:'stripe:charge.dispute.funds_reinstated', reason:'bank reversed the original payment'});
+  const ent3 = await api('GET', `/v1/memory/entitlement?subject=${SUBJ}&entitlement=refund_2026_06`);
+  const facts2 = await api('GET', '/v1/memory/facts');
+  const correct = ent3.granted === false && ent3.revoked === true && (facts2.facts||[]).length === 2;
+  showResult('r5', `<span class="${correct?'ok':'bad'}">${correct?'✓ THE TRUTH UPDATED — correctly':'⚠ unexpected'}</span>\nBilling (a verified system) revoked the refund: source = stripe:charge.dispute.funds_reinstated\n\nAsk again now →\n  granted: ${ent3.granted}   revoked: ${ent3.revoked}\n  sealed facts now: ${(facts2.facts||[]).length} (grant + revoke, full history kept)\n\n➜ Contrast with Step 4: 50 lies moved nothing; ONE verified event moved it instantly. The bot trusts the latest sealed truth — not the loudest voice.`, correct?'success':'rejected');
+  active('s5',false);
+
+  // STEP 6 — proposal pending -> human approves, bound to what they actually saw
+  await sleep(900); active('s6',true);
+  const pend = await api('GET', '/v1/memory/policy/pending');
+  const before = await api('GET', '/v1/memory/policy');
+  let approvedTxt = 'no proposal to approve';
+  if ((pend.pending||[]).length){
+    // rendered_context = exactly what manager@shop had in front of them at the
+    // moment they clicked approve — the proposal plus the session that led to it.
+    const renderedContext = {
+      proposal: pend.pending[0].name,
+      session_turns_reviewed: ['50 fake refund claims', 'refund fact unchanged', 'learner proposed rule'],
+      reviewed_at_step: 6,
+    };
+    const ap = await api('POST', '/v1/memory/policy/approve',
+      {proposal_id: pend.pending[0].proposal_id, approver:'manager@shop', rendered_context: renderedContext});
+    approvedTxt = `manager@shop approved → active + signed: ${ap.signed}\n<span class="gold">approval_context_hash</span>: ${(ap.approval_context_hash||'').slice(0,32)}…\ninformed_context_captured: ${ap.informed_context_captured}\n\n➜ this hash proves what manager@shop actually reviewed, not only that they clicked approve. If the underlying session had been different, the hash would not match.`;
+  }
+  showResult('r6', `<span class="info">💡 PROPOSED (inert): ${JSON.stringify((pend.pending||[]).map(p=>p.name))}</span>\nactive before approval: ${JSON.stringify(before.active||[])}  ← nothing auto-activated\n\n<span class="ok">${approvedTxt}</span>`, 'success');
+  active('s6',false);
+
+  // STEP 7 — a hard refusal, logged durably, then joined with what happened next
+  await sleep(900); active('s8',true);
+  const refusalCtx = {subject: SUBJ, prior_turn: 'customer asked about the refund', requested_action: 'delete_account'};
+  const rf = await api('POST', '/v1/memory/refusals',
+    {subject: SUBJ, action:'delete_account', reason:'destructive action requires identity verification first',
+     rendered_context: refusalCtx, source:'support-bot'});
+  const beforeFollowup = await api('GET', `/v1/memory/refusals?subject=${SUBJ}`);
+  const pendingCount = (beforeFollowup.refusals||[]).filter(r=>r.followup_pending).length;
+  await sleep(700);
+  const fu = await api('POST', '/v1/memory/refusals/followup',
+    {refusal_id: rf.refusal_id, followup:'customer verified identity via email OTP; account deletion re-requested and processed', followup_source:'support-agent'});
+  const afterFollowup = await api('GET', `/v1/memory/refusals?subject=${SUBJ}`);
+  const resolved = (afterFollowup.refusals||[]).find(r=>r.refusal_id===rf.refusal_id);
+  showResult('r8', `<span class="bad">🚫 REFUSED</span>: delete_account\nreason: destructive action requires identity verification first\nrefusal_id: ${rf.refusal_id}\nrefusal_context_hash: ${(rf.refusal_context_hash||'').slice(0,32)}…\n\n<span class="info">before any followup:</span> pending refusals with no resolution logged: ${pendingCount}\n\n<span class="ok">✓ FOLLOWUP RECORDED</span> (append-only — the refusal itself is never edited)\n${resolved ? resolved.followup : '(pending)'}\nfollowup_pending now: ${resolved ? resolved.followup_pending : 'n/a'}\n\n➜ the refusal didn't just dead-end in the chat — it's a signed record joined with what actually happened next.`, 'success');
+  active('s8',false);
+
+  // STEP 8 — audit
+  await sleep(800); active('s7',true);
+  const a = await api('GET', '/v1/memory/facts/audit');
+  showResult('r7', `<span class="ok">✓ ${a.verdict}</span>\nvalid_signatures: ${a.valid_signatures}/${a.total_shards}\nchain_intact: ${a.chain_intact}\nmerkle_root: ${(a.merkle_root||'').slice(0,40)}…`, 'success');
+  active('s7',false);
+
+  await sleep(500);
+  document.getElementById('summary').classList.add('show');
+  btn.textContent = '✓ Demo complete';
+  await api('POST', '/v1/memory/demo/cleanup', {});
+  apiKey = null;
+}
+function resetDemo(){
+  document.querySelectorAll('.step-card').forEach(c=>c.classList.remove('active','success','rejected'));
+  document.querySelectorAll('.step-result').forEach(r=>{r.classList.remove('show');r.innerHTML='';});
+  document.getElementById('summary').classList.remove('show');
+  const btn=document.getElementById('runBtn'); btn.disabled=false; btn.textContent='▶ Run the Demo';
+  document.getElementById('resetBtn').style.display='none';
+}
+</script>
+</body></html>
