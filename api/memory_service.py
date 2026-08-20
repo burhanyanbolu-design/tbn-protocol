@@ -109,7 +109,7 @@ def _principal(tenant: dict) -> dict:
 
 
 def _shadow_sync(authority_db: str, principal: dict) -> dict:
-    if area_five_shadow is None or not area_five_shadow.enabled():
+    if area_five_shadow is None or not area_five_shadow.enabled(principal):
         return {"status": "disabled"}
     try:
         return area_five_shadow.sync(authority_db, principal)
@@ -378,7 +378,7 @@ def recall(tenant: dict, query: str, k: int = 5) -> dict:
                 "error_code": code, "authorized": False}
 
     routed = None
-    if area_five_shadow is not None and area_five_shadow.enabled() \
+    if area_five_shadow is not None and area_five_shadow.enabled(principal) \
             and shadow_status.get("status") in ("current", "rebuilt"):
         try:
             routed = area_five_shadow.route(query, k, principal)
