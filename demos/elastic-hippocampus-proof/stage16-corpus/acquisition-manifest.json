@@ -1,0 +1,108 @@
+{
+  "artifact_count": 6,
+  "artifacts": [
+    {
+      "artifact_id": "rfc791",
+      "byte_size": 94892,
+      "media_type": "text/plain",
+      "publisher": "RFC Editor",
+      "raw_file": "rfc791.txt",
+      "retrieval_utc": "2026-08-19T17:40:09Z",
+      "retrieved_url": "https://www.rfc-editor.org/rfc/rfc791.txt",
+      "rights_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+      "sha256": "6cfb387fcecfc1b72f2f69343c5b6951b5d263d708162e2b5c66ab8f394f6265",
+      "title": "Internet Protocol",
+      "url": "https://www.rfc-editor.org/rfc/rfc791.txt",
+      "version": "RFC 791"
+    },
+    {
+      "artifact_id": "rfc2131",
+      "byte_size": 113738,
+      "media_type": "text/plain",
+      "publisher": "RFC Editor",
+      "raw_file": "rfc2131.txt",
+      "retrieval_utc": "2026-08-19T17:40:09Z",
+      "retrieved_url": "https://www.rfc-editor.org/rfc/rfc2131.txt",
+      "rights_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+      "sha256": "a043b705785b81762505ded4cf71d61392b2b1da2b4ce1e32c13bc984de5f4a5",
+      "title": "Dynamic Host Configuration Protocol",
+      "url": "https://www.rfc-editor.org/rfc/rfc2131.txt",
+      "version": "RFC 2131"
+    },
+    {
+      "artifact_id": "rfc5849",
+      "byte_size": 80786,
+      "media_type": "text/plain",
+      "publisher": "RFC Editor",
+      "raw_file": "rfc5849.txt",
+      "retrieval_utc": "2026-08-19T17:40:10Z",
+      "retrieved_url": "https://www.rfc-editor.org/rfc/rfc5849.txt",
+      "rights_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+      "sha256": "89e6fca18e4028c8b684e9b53a113acfdd0e5267a6c52f29e295a88eeea31441",
+      "title": "The OAuth 1.0 Protocol",
+      "url": "https://www.rfc-editor.org/rfc/rfc5849.txt",
+      "version": "RFC 5849"
+    },
+    {
+      "artifact_id": "rfc6376",
+      "byte_size": 176999,
+      "media_type": "text/plain",
+      "publisher": "RFC Editor",
+      "raw_file": "rfc6376.txt",
+      "retrieval_utc": "2026-08-19T17:40:10Z",
+      "retrieved_url": "https://www.rfc-editor.org/rfc/rfc6376.txt",
+      "rights_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+      "sha256": "00ae1e26aa19e0b8a6087435a524d23e824e2c31ebd62544dd714923bf8553f0",
+      "title": "DomainKeys Identified Mail (DKIM) Signatures",
+      "url": "https://www.rfc-editor.org/rfc/rfc6376.txt",
+      "version": "RFC 6376"
+    },
+    {
+      "artifact_id": "rfc7230",
+      "byte_size": 205947,
+      "media_type": "text/plain",
+      "publisher": "RFC Editor",
+      "raw_file": "rfc7230.txt",
+      "retrieval_utc": "2026-08-19T17:40:11Z",
+      "retrieved_url": "https://www.rfc-editor.org/rfc/rfc7230.txt",
+      "rights_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+      "sha256": "c7fdc8bebdf1f8195f731592c47f5ea822b489436fd905b01b55ef531fca4120",
+      "title": "Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing",
+      "url": "https://www.rfc-editor.org/rfc/rfc7230.txt",
+      "version": "RFC 7230"
+    },
+    {
+      "artifact_id": "rfc3261",
+      "byte_size": 647976,
+      "media_type": "text/plain",
+      "publisher": "RFC Editor",
+      "raw_file": "rfc3261.txt",
+      "retrieval_utc": "2026-08-19T17:40:12Z",
+      "retrieved_url": "https://www.rfc-editor.org/rfc/rfc3261.txt",
+      "rights_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+      "sha256": "d513777f77fea01a4de9c0a2d9d6713cb53b8231f1b7a2ab56705f8d51b066dc",
+      "title": "SIP: Session Initiation Protocol",
+      "url": "https://www.rfc-editor.org/rfc/rfc3261.txt",
+      "version": "RFC 3261"
+    }
+  ],
+  "schema_version": 1,
+  "stage": 16,
+  "state": "complete",
+  "total_bytes": 1320338,
+  "transport": {
+    "allowed_hosts": [
+      "www.rfc-editor.org"
+    ],
+    "content_types": {
+      "html": "text/html",
+      "txt": "text/plain"
+    },
+    "https_only": true,
+    "max_bytes_per_artifact": 5242880,
+    "max_total_bytes": 31457280,
+    "sequential": true,
+    "timeout_seconds": 30,
+    "user_agent": "Stage16ConfirmationAcquirer/1.0"
+  }
+}

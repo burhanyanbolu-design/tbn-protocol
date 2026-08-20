@@ -1,0 +1,13 @@
+{
+  "corpus_merkle_root": "2ad8b7fd4debf50e26041f80b658a34a902d45d97063d3266e12654d4cc6d9db",
+  "intended_output": "C:\\Users\\Burhan Yanbolu\\OneDrive\\Desktop\\tbn-protocol\\data\\elastic-hippocampus-stage-sixteen-held-out-2026-08-13.json",
+  "labels_sha256": "1c6a6632ad3bbaf7193b1587d92ad02ea52b12c2bbd151fc43d430c2b02bf9e4",
+  "policy": "one score only; never delete or bypass this lock",
+  "pool_sha256": "f85be158f85011586c5c3e408df7e5e4f1fbe1254a8e36e33951a78f68b42918",
+  "proposal_sha256": "457d81bd2a9553c10e63df68310c85f00a2662b4cd6f62e3daf430d6db198e19",
+  "review_sha256": "e7f70120f5a7ebebb82d1a892649d03a9fb3576aeba4cc7a1d496c56cca26262",
+  "schema_version": 1,
+  "sealed_predictions_sha256": "c613f99a605519ce1b7d1d791511008e993fbd309729d9befac3dd01fb20093f",
+  "stage": 16,
+  "state": "score_consumed"
+}

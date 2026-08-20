@@ -1,0 +1,17 @@
+{
+  "acquisition_manifest_sha256": "1b78110938a6acfe80502e18a2947a644875261a3c61f8429018d5d88d816ec5",
+  "corpus_merkle_root": "2ad8b7fd4debf50e26041f80b658a34a902d45d97063d3266e12654d4cc6d9db",
+  "forbidden_outputs": [
+    "adjudication-pool.json",
+    "adjudication-review.json",
+    "blind-label-proposal.json",
+    "relevance-labels.json"
+  ],
+  "outputs": {
+    "chunks.json": "3cdfd7a4b40d5127d13723fb22968f79ed2fafd7a6b895113f900dba51b8fea7",
+    "runtime-inventory.json": "822b866fe02d020623656215a3d9ac817c6179999b00db6ae236abc11ab9867c"
+  },
+  "schema_version": 1,
+  "stage": 16,
+  "state": "complete"
+}

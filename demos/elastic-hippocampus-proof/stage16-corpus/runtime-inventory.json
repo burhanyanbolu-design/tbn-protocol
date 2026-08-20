@@ -1,0 +1,35 @@
+{
+  "candidate_generation": false,
+  "confirmation": "Offline preparation reads only completed local acquisition and creates no adjudication or label artifact.",
+  "network_step": false,
+  "numpy": "2.4.2",
+  "python": "3.13.14",
+  "resource_preflight": {
+    "analyzed_terms": 176081,
+    "artifact_count": 6,
+    "chunk_count": 918,
+    "estimated_lsa_working_bytes_upper_bound": 20001224,
+    "estimated_sparse_matrix_bytes_upper_bound": 2824648,
+    "limits": {
+      "max_analyzed_terms": 5000000,
+      "max_chunks": 20000,
+      "max_features": 250000,
+      "max_lsa_working_bytes": 536870912,
+      "max_sparse_matrix_bytes": 536870912,
+      "max_total_raw_bytes": 31457280
+    },
+    "lsa_components": 64,
+    "network_step": false,
+    "status": "PASS",
+    "tfidf_matrix_dimensions": [
+      918,
+      7469
+    ],
+    "tfidf_matrix_features": 7469,
+    "tfidf_matrix_rows": 918,
+    "total_raw_bytes": 1320338
+  },
+  "schema_version": 1,
+  "sklearn": "1.8.0",
+  "stage": 16
+}
