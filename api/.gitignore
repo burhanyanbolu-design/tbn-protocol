@@ -1,0 +1,5 @@
+# Secrets — NEVER commit
+*.pem
+.env
+data/hardin_filter/*signing_key*.pem
+data/hardin_filter/*signing_public*.pem
