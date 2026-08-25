@@ -1,0 +1,5 @@
+# Never commit private signing keys
+data/tbn_signing_key.pem
+
+__pycache__/
+*.pyc

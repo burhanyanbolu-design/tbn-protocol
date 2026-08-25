@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TBN Materials Research Agent — Local Demo</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    background: #0a0e14;
+    color: #e4e4e7;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 32px;
+  }
+  h1 {
+    color: #67e8f9;
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: #71717a;
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .badge-local {
+    background: rgba(103, 232, 249, 0.12);
+    color: #67e8f9;
+    border: 1px solid rgba(103, 232, 249, 0.3);
+  }
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: #12161f;
+    border: 1px solid #1f2430;
+    border-radius: 10px;
+    padding: 18px 24px;
+    min-width: 160px;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #67e8f9;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: #a1a1aa;
+    margin-top: 4px;
+  }
+  .stat-value.green { color: #4ade80; }
+  .stat-value.amber { color: #fbbf24; }
+  section {
+    background: #12161f;
+    border: 1px solid #1f2430;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+  section h2 {
+    color: #e4e4e7;
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #1f2430;
+    padding-bottom: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    text-align: left;
+    color: #71717a;
+    font-weight: 600;
+    padding: 8px 10px;
+    border-bottom: 1px solid #1f2430;
+    white-space: nowrap;
+  }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #171b26;
+    white-space: nowrap;
+  }
+  tr:hover td { background: #171b26; }
+  .rank { color: #71717a; width: 30px; }
+  .score-perfect { color: #4ade80; font-weight: 700; }
+  .score-ok { color: #fbbf24; }
+  .score-bad { color: #f87171; }
+  .mono { font-family: 'Consolas', monospace; font-size: 12px; }
+  .verified-yes { color: #4ade80; }
+  .verified-no { color: #f87171; }
+  .empty-state {
+    color: #71717a;
+    font-style: italic;
+    padding: 20px 0;
+  }
+  .search-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #171b26;
+    font-size: 13px;
+  }
+  .search-row:last-child { border-bottom: none; }
+  .footer-note {
+    color: #52525b;
+    font-size: 12px;
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  .search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .search-form input[type=text] {
+    background: #0a0e14;
+    border: 1px solid #2a2f3d;
+    color: #e4e4e7;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Consolas', monospace;
+    flex: 1;
+    max-width: 320px;
+  }
+  .search-form input[type=text]:focus {
+    outline: none;
+    border-color: #67e8f9;
+  }
+  .search-form button {
+    background: #67e8f9;
+    color: #0a0e14;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .search-form button:hover { background: #93f1fc; }
+  .search-hint {
+    color: #52525b;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .flash-error {
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    color: #f87171;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .flash-ok {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.35);
+    color: #4ade80;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<h1>TBN Materials Research Agent <span class="badge badge-local">LOCAL DEMO — NOT LIVE PRODUCTION</span></h1>
+<div class="subtitle">Signed, memory-backed search of the Materials Project database for stable, metallic qubit-candidate compounds.</div>
+
+{% if search_error %}
+<div class="flash-error">⚠ {{ search_error }}</div>
+{% endif %}
+{% if search_ran %}
+<div class="flash-ok">✓ Search complete for: {{ search_ran }} — league table updated below.</div>
+{% endif %}
+
+<section>
+  <h2 style="margin-bottom:10px;">Run a new search</h2>
+  <form class="search-form" method="POST" action="/search">
+    <input type="text" name="elements" placeholder="e.g. Ta N   or   Nb Ti" autofocus>
+    <button type="submit">Search</button>
+  </form>
+  <div class="search-hint">Enter 1–4 element symbols separated by spaces or commas (real symbols, e.g. Ta, N, Nb, Ti). Runs a live query against Materials Project — takes a few seconds.</div>
+</section>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-value">{{ total_candidates }}</div>
+    <div class="stat-label">Distinct candidates found ({{ shown_candidates }} shown, {{ disqualified_count }} disqualified)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value green">{{ best_count }}</div>
+    <div class="stat-label">Perfect score (stable + metallic + practical)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ searches|length }}</div>
+    <div class="stat-label">Searches run</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value {{ 'green' if verified_count == total_receipts and total_receipts > 0 else 'amber' }}">
+      {{ verified_count }}/{{ total_receipts }}
+    </div>
+    <div class="stat-label">Receipts independently verified</div>
+  </div>
+</div>
+
+<section>
+  <h2>League Table — Top Candidates (ranked by score, lower is better)</h2>
+  {% if entries %}
+  <table>
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th>Material ID</th>
+        <th>Formula</th>
+        <th>Score</th>
+        <th>E above hull</th>
+        <th>Band gap</th>
+        <th>Crystal system</th>
+        <th>Notes</th>
+        <th>Found via</th>
+        <th>First seen</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in entries[:50] %}
+      <tr>
+        <td class="rank">{{ loop.index }}</td>
+        <td class="mono">{{ e.material_id }}</td>
+        <td>{{ e.formula }}</td>
+        <td class="{{ 'score-perfect' if e.score == 0.0 else ('score-ok' if e.score < 1.0 else 'score-bad') }}">
+          {{ "%.4f"|format(e.score) }}
+        </td>
+        <td>{{ "%.4f"|format(e.energy_above_hull) }}</td>
+        <td>{{ "%.4f"|format(e.band_gap) }}</td>
+        <td>{{ e.crystal_system }}</td>
+        <td style="color:#fbbf24;">{{ e.practicality_notes|join('; ') if e.practicality_notes else '' }}</td>
+        <td class="mono">{{ e.found_via_search }}</td>
+        <td class="mono">{{ e.first_seen[:10] if e.first_seen else '' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">No searches run yet. Run: python materials_agent.py &lt;Element1&gt; &lt;Element2&gt; ...</div>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Signed Search Receipts (RSA-PSS-SHA256, independently verified on load)</h2>
+  {% if receipts %}
+  <table>
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Elements searched</th>
+        <th>Results found</th>
+        <th>Signature (prefix)</th>
+        <th>Verified</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in receipts %}
+      <tr>
+        <td class="mono">{{ r.timestamp[:19] }}</td>
+        <td>{{ r.elements_searched|join(', ') }}</td>
+        <td>{{ r.result_count }}</td>
+        <td class="mono">{{ r.signature[:32] }}...</td>
+        <td class="{{ 'verified-yes' if r._verified else 'verified-no' }}">
+          {{ '✓ authentic' if r._verified else '✗ FAILED' }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">No receipts recorded yet.</div>
+  {% endif %}
+</section>
+
+<section>
+  <h2>Search History (agent memory)</h2>
+  {% if searches %}
+  {% for s in searches %}
+  <div class="search-row">
+    <span class="mono">{{ s.elements|join('-') }}</span>
+    <span>{{ s.result_count }} results</span>
+    <span class="mono">{{ s.searched_at[:19] }}</span>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="empty-state">No search history yet.</div>
+  {% endif %}
+</section>
+
+<div class="footer-note">
+  This page reads local files only (materials_league_table.json, materials_agent_receipts.jsonl,
+  materials_agent_memory.json) generated by materials_agent.py. It is not connected to the live
+  production TBN server, Agent Network, or Hardin AI Labs. Score = energy_above_hull, +10 penalty
+  if the compound is not metallic (band_gap != 0). Lower score is better; 0.0000 means the compound
+  is a real, stable, naturally-occurring, metallic structure — the category needed for superconducting
+  qubit material candidates. This reflects known-materials-database stability only, not measured or
+  simulated qubit coherence.
+</div>
+
+</body>
+</html>
