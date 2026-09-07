@@ -52,6 +52,10 @@ from api.hardin_aso import hardin_aso
 # running their own AI agents. No self-serve pricing: every company's agent
 # estate is different, so it's scoped per engagement after a conversation,
 # not sold as a fixed-price tier (same reasoning as pqc_scanner).
+from api.seo import seo
+# Host-aware sitemap.xml / robots.txt for every subdomain (certify, tbn,
+# memory, knowmyresults, haso). Was written but never registered here before
+# now — every domain's /sitemap.xml and /robots.txt was 404ing in production.
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
@@ -82,6 +86,7 @@ app.register_blueprint(compliance_drift, url_prefix="/api/compliance")
 app.register_blueprint(prospects_bp)
 app.register_blueprint(digiemu_bp, url_prefix="/api/digiemu")
 app.register_blueprint(hardin_aso)
+app.register_blueprint(seo)
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
