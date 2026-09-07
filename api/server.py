@@ -36,6 +36,11 @@ from api.certification import certification
 from api.governance import governance
 from api.billing import billing
 from api.governance_engine import governance_engine
+from api.pqc_scanner import pqc_scanner
+# NOTE: pqc_scanner_checkout (self-serve Stripe) is deliberately NOT registered.
+# PQC migration pricing is scoped per engagement after an assessment, not sold
+# as a fixed-price self-serve product. File retained in case a self-serve tier
+# is ever wanted.
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates")
@@ -44,6 +49,7 @@ app.register_blueprint(certification,      url_prefix="/certification")
 app.register_blueprint(governance,         url_prefix="/governance")
 app.register_blueprint(billing,            url_prefix="/api/billing")
 app.register_blueprint(governance_engine,  url_prefix="/api/govern")
+app.register_blueprint(pqc_scanner)
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"

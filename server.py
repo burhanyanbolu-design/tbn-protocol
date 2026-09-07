@@ -46,6 +46,12 @@ from api.webhooks import webhooks
 from api.compliance_drift import compliance_drift
 from api.prospects import prospects_bp
 from api.digiemu_interop import digiemu_bp
+from api.hardin_aso import hardin_aso
+# HASO (Hardin Agent Security Operations) — enquiry-only landing page for the
+# agent governance/security product built on TBN Protocol, for companies
+# running their own AI agents. No self-serve pricing: every company's agent
+# estate is different, so it's scoped per engagement after a conversation,
+# not sold as a fixed-price tier (same reasoning as pqc_scanner).
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
@@ -75,6 +81,7 @@ app.register_blueprint(webhooks, url_prefix="/api/webhooks")
 app.register_blueprint(compliance_drift, url_prefix="/api/compliance")
 app.register_blueprint(prospects_bp)
 app.register_blueprint(digiemu_bp, url_prefix="/api/digiemu")
+app.register_blueprint(hardin_aso)
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
