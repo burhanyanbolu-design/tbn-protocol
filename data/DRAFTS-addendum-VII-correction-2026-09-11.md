@@ -79,9 +79,41 @@ Burhan
 Concept DOI (always share this one): `10.5281/zenodo.22352839`
 v2 version DOI (now superseded): `10.5281/zenodo.22682956`
 
-**Upload the whole `demo/eqccm/zenodo_package/` directory.**
+### Steps
 
-Version description:
+1. Go to the record → **New version** (preserves the concept DOI)
+2. **Remove** the old file `EQCCM-feasibility-study-v2-2026-09-09.zip`
+3. **Upload** `demo/eqccm/EQCCM-feasibility-study-v3-2026-09-11.zip` (88 KB, 16 files)
+4. **Replace the whole Description field** with section 3b below —
+   important, because the current description *asserts the withdrawn claim*
+   in its final paragraph and says "six times (seven as of v2)"
+5. Publication date → 2026-09-11
+6. Leave the **title unchanged** ("...the six things we got wrong") so
+   existing citations and links stay coherent. The six refers to the original
+   study; the addendum count lives in the description.
+7. Publish
+
+### 3b. FULL REPLACEMENT for the Description field
+
+Zenodo accepts HTML here. Paste this in place of the entire existing text.
+
+```html
+<p>A feasibility study testing whether quantum circuits can be constructed where exact classical simulation cost grows much faster than the physical circuit depth needed to run them, using output-aware tensor-network contraction validated against two real IBM Quantum hardware jobs (dadm3mjdd5gc73d7gvjg, dadm9qdnj4cs73ae2teg; 40,960 shots total).</p>
+
+<p>The honest conclusion is no &mdash; not on any hardware available today. Reaching that conclusion required correcting the study's own conclusions eight times as of v3, including withdrawing an entire addendum two days after publishing it. Those corrections, and the measurements behind them, are the primary contribution.</p>
+
+<p>Key measured results: classical contraction cost scales as 2^w with measured exponent 1.984; effective two-qubit error on IBM's Heron architecture is gate-local at 0.845%, reproducible across two independent jobs; memory is not a binding constraint once slicing is applied (1.00-3.18x FLOP penalty); connectivity degree, not planarity, is the dominant topological lever; standard error suppression (dynamical decoupling + twirling) made fidelity worse on this circuit class; qubit count sets a hard ceiling on achievable classical hardness (2^n).</p>
+
+<p>This is a feasibility study, not an advantage claim: no quantum advantage, no novel algorithm (frontier contraction is textbook variable elimination), and no verified large-width result are claimed. Full reproducibility scripts included.</p>
+
+<p><strong>Version 3 (11 September 2026) WITHDRAWS Addendum VI.</strong> The v2 addendum claimed amplitude-magnitude pruning reached ~1e-4 accuracy while retaining 0.01% of frontier configurations (104 of 1,048,576 at w=20), roughly 14,000x faster than exact contraction, with accuracy improving as width grew. That result was an artefact of reporting absolute error only. The pruned computation returned essentially no signal, and because the true amplitudes are themselves ~1e-4, an output of near-zero registered as a small absolute error. The headline figure reproduces exactly (1.459e-4), but max|exact| at that point is 1.4685e-4 &mdash; a relative error of 99.4%. The "error improves monotonically with width" finding falls with it: absolute error was tracking the shrinking amplitude scale, not approximation quality. Decisively, no threshold both saves work and stays correct &mdash; where pruning is faithful it retains the full frontier and removes nothing; where it removes anything meaningful the relative error is ~100%. The two regions do not overlap.</p>
+
+<p>Also withdrawn: the v2 consequence for the classical hardness argument. Approximate classical cost is NOT shown to be below 2^w by this evidence. Note the direction of the correction &mdash; Addendum VI argued <em>against</em> this study's own hardness claim, so withdrawing it restores the 2^w position rather than weakening it.</p>
+
+<p>Version 3 adds Addendum VII with the full correction, a read-only audit script that reproduces it against the unmodified original code, and an independent null result from running the same test on the real 156-qubit ibm_fez heavy-hex coupling map (pruning does not compound there; single-qubit rotations regenerate the dropped configurations, and at usable thresholds it is slower than not pruning). All exact results are unaffected &mdash; banded_scaling.py involves no pruning, and the 2^w scaling with exponent 1.984 stands. Addendum VI is preserved unedited so the withdrawn claim remains reproducible and the correction independently checkable. Scope limit stated plainly: only the naive global-magnitude cutoff was tested; SVD/bond-dimension truncation is far stronger and remains untested, so the honest claim is "the naive shortcut fails", not "no shortcut exists". No additional quantum time used; programme total remains 2 jobs, 40,960 shots.</p>
+```
+
+### 3c. Optional "version notes" / changelog field, if you use one
 
 ```
 v3 — WITHDRAWS Addendum VI.
