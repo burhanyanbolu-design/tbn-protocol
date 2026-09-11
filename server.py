@@ -56,6 +56,26 @@ from api.seo import seo
 # Host-aware sitemap.xml / robots.txt for every subdomain (certify, tbn,
 # memory, knowmyresults, haso). Was written but never registered here before
 # now — every domain's /sitemap.xml and /robots.txt was 404ing in production.
+from api.hardinai_labs import hardinai_labs
+from api.hardinai_labs_digest import hardinai_labs_digest
+# HardinAI Labs — governed agent-intelligence knowledge base + its recurring
+# digest report. Both fully built (ingestion, research-signal detection,
+# TBN-relevance flagging, health checks) but never registered here — every
+# /api/hardinai-labs/* route was 404ing in production. Both share the
+# "/api/hardinai-labs" URL prefix by design; their sub-paths don't collide.
+from api.health_agent import health_agent
+# Health Agent + Trusted Memory (/v1/memory/*) + Company automation. Fixes
+# memory.hardinai.co.uk and knowmyresults.com/.co.uk/.org/.store, none of
+# which were reachable before now — /memory and /interpret 404'd because
+# this blueprint was never registered, despite being fully built (including
+# a live Stripe price for the KnowMyResults product). User explicitly
+# confirmed registering this, aware it turns on real checkout + admin
+# routes that have been dormant.
+from api.agent_factory import agent_factory
+from api.auth_routes import auth_pages
+# TBN Agent Factory (one-click governed agent creation) + its auth/landing
+# pages. Fixes tbnagentfactory.hardinai.co.uk, which 404'd because neither
+# blueprint was registered. No billing found in this pair.
 
 # ── App setup ────────────────────────────────────────
 app = Flask(__name__, template_folder="api/templates", static_folder="api/static")
@@ -87,6 +107,11 @@ app.register_blueprint(prospects_bp)
 app.register_blueprint(digiemu_bp, url_prefix="/api/digiemu")
 app.register_blueprint(hardin_aso)
 app.register_blueprint(seo)
+app.register_blueprint(hardinai_labs)
+app.register_blueprint(hardinai_labs_digest)
+app.register_blueprint(health_agent)
+app.register_blueprint(agent_factory)
+app.register_blueprint(auth_pages)
 
 # ── Logging ──────────────────────────────────────────
 is_production = os.environ.get("TBN_ENV") == "production"
