@@ -933,6 +933,18 @@ ADDENDUM VI — AMPLITUDE-MAGNITUDE PRUNING OF THE ACTIVE FRONTIER
 Added 2026-09-09. Classical only. No quantum time used; total for the whole
 programme remains 2 jobs, 40,960 shots.
 
+*** WITHDRAWN 2026-09-11 — SEE ADDENDUM VII BEFORE READING ANY NUMBER BELOW ***
+The §46 accuracy result is an ARTEFACT of reporting absolute error only. The
+errors quoted below are approximately equal to the largest amplitude being
+computed, i.e. ~100% relative error: the pruned computation returns essentially
+no signal. The "error improves monotonically with width" finding is therefore
+withdrawn, as is the §46 consequence for the hardness argument. §45's framing
+of the question and the Stage 1 exactness check (threshold 0.0) still stand.
+The text below is preserved UNCHANGED for the record — it is not edited, only
+superseded. Reproduce the correction with:
+    python demo/eqccm/addendum_vi_relative_error_audit.py
+*** END WITHDRAWAL NOTICE ***
+
 45. THE QUESTION, AND WHY IT MATTERS TO §41
 §41 recorded that no verified large-width result exists, because beyond width
 ~50 the ideal amplitudes cannot be computed classically — and flagged that any
@@ -1072,3 +1084,189 @@ this addendum's finding that the programme's own 2^w cost figure describes only
 the exact regime and overstates the cost of an approximate adversary.
 
 End of addendum VI
+
+ADDENDUM VII — ADDENDUM VI IS WITHDRAWN: AN ABSOLUTE-ERROR ARTEFACT
+==================================================================
+Added 2026-09-11. Classical only. No quantum time used; total for the whole
+programme remains 2 jobs, 40,960 shots.
+
+47. THE CORRECTION
+Addendum VI (published 2026-09-09, Zenodo v2, version DOI
+10.5281/zenodo.22682956) reported that amplitude-magnitude pruning reached
+~1.5e-04 accuracy while retaining 0.01% of frontier configurations, roughly
+14,000x faster than exact contraction, and that accuracy IMPROVED as width
+grew. That result is withdrawn. It is an artefact of reporting absolute error
+without reference to the scale of the amplitudes being computed.
+
+HOW THE ERROR WAS FOUND
+Not by re-reading Addendum VI. It surfaced while testing the very item §46
+listed as most worth doing next: "the same sweep on the §39 topologies,
+especially real heavy-hex" (demo/eqccm/heavyhex_pruned.py, new, does not
+modify banded_scaling*.py).
+
+The heavy-hex sweep produced an error curve that flattened at 5.933e-03 across
+thresholds 0.1 through 0.9 — the same PLATEAU shape §46 had reported and
+interpreted as graceful degradation. Rather than accept the plateau, its
+absolute value was compared against the amplitude scale. max|reference| was
+5.932987e-03. The plateau was not a floor: the pruned computation was returning
+EXACTLY ZERO, and a zero answer registers as a small absolute error whenever
+the true amplitudes are themselves small.
+
+Addendum VI's amplitudes are of order 1e-04 and its quoted errors are of order
+1e-04 to 3e-03 — the same order of magnitude. That prompted a direct audit.
+
+THE AUDIT (demo/eqccm/addendum_vi_relative_error_audit.py, read-only)
+banded_scaling.py and banded_scaling_pruned.py are imported, never modified, so
+the published numbers remain reproducible exactly as published and this
+correction can be checked independently against them.
+
+Reproducing the published configuration (n=26, 5 open outputs, threshold 0.9):
+
+  w    max|exact|   max|pruned|   abs_err     published    rel_err   verdict
+  ---  -----------  ------------  ----------  -----------  --------  ---------
+  8    2.5561e-04   3.7253e-06    2.572e-04   3.550e-03    1.0061    NO SIGNAL
+  12   2.0784e-04   9.7074e-07    2.070e-04   3.312e-03    0.9959    NO SIGNAL
+  16   6.1955e-05   5.4330e-06    5.902e-05   7.188e-04    0.9527    NO SIGNAL
+  20   1.4685e-04   5.4330e-06    1.459e-04   1.459e-04    0.9938    NO SIGNAL
+
+The w=20 row reproduces the published figure EXACTLY — abs_err 1.459e-04 with
+104 configurations retained. This is therefore the same computation, newly
+measured against the amplitude scale, not a different setup. Its relative error
+is 99.4%. The pruned output's own scale is 5.43e-06, about 3.7% of truth.
+
+Note abs_err ~= max|exact| on every row (ratios 1.006, 0.996, 0.953, 0.994).
+That is the arithmetic signature of an output near zero, and it is the whole
+explanation of the withdrawn finding.
+
+WHY "ERROR IMPROVES WITH WIDTH" WAS AN ARTEFACT
+Because abs_err ~= max|exact| always, absolute error tracked the AMPLITUDE
+SCALE. The amplitude scale shrinks as width grows (2.56e-04 at w=8 down to
+1.47e-04 at w=20 in the audited configuration). So absolute error shrank with
+width. The 24x "improvement" from w=8 to w=20 was measuring the amplitudes
+getting smaller, never the approximation getting better. Relative error is
+~99% at every width tested.
+
+Likewise, §46's "the error curve is a PLATEAU, not a cliff" is the signature of
+total signal loss, not of graceful degradation. The plateau sits at
+abs_err = max|exact| precisely because the answer is ~0.
+
+THERE IS NO USABLE OPERATING POINT
+The decisive check. Sweeping thresholds at n=26, w=12 (2^w = 4,096):
+
+  threshold  abs_err     rel_err   kept    kept/2^w  verdict
+  ---------  ----------  --------  ------  --------  --------------
+  0.0        0.000e+00   0.0000    8,192   2.0000    faithful
+  1e-06      0.000e+00   0.0000    8,192   2.0000    faithful
+  1e-05      0.000e+00   0.0000    8,192   2.0000    faithful
+  1e-04      1.432e-09   0.0000    8,192   2.0000    usable (<0.1%)
+  1e-03      9.851e-08   0.0005    8,192   2.0000    usable (<0.1%)
+  1e-02      4.693e-06   0.0226    8,192   2.0000    badly degraded
+  0.05       4.859e-05   0.2338    8,190   1.9995    badly degraded
+  0.20       2.230e-04   1.0730    4,202   1.0259    NO SIGNAL
+  0.50       2.134e-04   1.0268    686     0.1675    NO SIGNAL
+  0.90       2.070e-04   0.9959    72      0.0176    NO SIGNAL
+
+Every faithful row retains ~2.0 x 2^w — the full frontier plus the transient
+doubling already documented in §46. Pruning removes NOTHING there. Every row
+that removes a meaningful number of configurations has ~100% relative error.
+The two regions do not overlap. Reproduced at w=16 with the same structure.
+
+The published "0.01% of configurations, ~14,000x faster" therefore belongs
+entirely to the no-signal region. The speed/accuracy pairing does not exist.
+
+48. THE SAME TEST ON REAL HEAVY-HEX — INDEPENDENT NULL RESULT
+demo/eqccm/heavyhex_pruned.py, on the cached real ibm_fez coupling map (156
+qubits, 176 edges, metadata only, no quantum time). Because heavy-hex is
+degree-3 and planar, a single CZ layer has trivial treewidth; width is bought
+by DEPTH, so the state carried is a space-time frontier, not a spatial cut.
+This is why the banded elimination order does not transfer directly.
+
+Stage 1 (mechanism, threshold 0.0): exact against a dense statevector
+reference at n=8/10/12 and depths 1/2/3 — max_abs_err 6.9e-18 to 4.9e-17,
+five orders inside the 1e-12 bar. The mechanism is correct.
+
+Stage 2, two configurations (12 qubits/depth 3/11 CZ gates, and 16 qubits/
+depth 6/30 CZ gates): pruning yields nothing.
+
+  * Pruning does not compound. After each prune, the single-qubit rotations
+    regenerate the configurations just dropped — measured refill factor up to
+    2048x at n=12 and 284x at n=16. Peak memory stays at the full space
+    regardless of threshold.
+  * At thresholds that preserve any signal it is SLOWER than not pruning
+    (12.99 s vs 11.36 s baseline at n=16), because the bookkeeping is paid on
+    a state that never shrinks.
+  * Signal is destroyed outright at threshold >= 0.1 (output exactly zero).
+
+Structural reason, and the contrast with the banded family: there, the frontier
+GREW incrementally and pruning suppressed its growth. Here every qubit is
+rotated every layer, so the frontier is the full patch width at every time
+boundary by construction. There is no growth for pruning to suppress.
+
+A further cause of signal destruction, applicable to both families: the readout
+fixes most qubits to a specific output pattern, and a GLOBAL magnitude cutoff
+is blind to which configurations the caller actually needs. It will happily
+delete the entire set matching the requested pattern.
+
+49. CONSEQUENCES FOR THE LEDGER
+WITHDRAWN:
+  * §46's accuracy figures and the monotone-improvement-with-width finding.
+  * §46's "CONSEQUENCE FOR THE HARDNESS ARGUMENT — AGAINST OUR OWN CASE". It
+    was derived from the withdrawn numbers. Approximate classical cost is NOT
+    shown to be below 2^w by this evidence. Note the direction: the withdrawn
+    addendum argued AGAINST this programme's own hardness claim, so retracting
+    it RESTORES the §20/§42 position rather than weakening it.
+  * The §46 seventh correction, which asserted that the 2^w figure overstates
+    the cost of an approximate adversary.
+
+STANDS UNCHANGED:
+  * All exact results. banded_scaling.py involves no pruning and is untouched.
+    §18-§44, the 2^w scaling and the measured exponent 1.984 are unaffected.
+  * §45's framing of the question, and the Stage 1 exactness check at
+    threshold 0.0 (0.000e+00 agreement). Stage 1 tested the mechanism and the
+    mechanism was correct. The two-stage discipline worked exactly as designed:
+    it just cannot catch an error in the METRIC used at Stage 2.
+
+NEWLY ESTABLISHED, AND NARROW:
+  * Naive amplitude-magnitude pruning fails on BOTH the banded family and real
+    heavy-hex — destroying the answer wherever it saves work. The most obvious
+    cheap classical attack on the 2^w figure is now tested and closed, with a
+    reproducible script. This is a small positive brick for the hardness side.
+  * Scope limit, stated plainly: only the NAIVE global-magnitude cutoff was
+    tested. Proper SVD/bond-dimension truncation is far stronger and remains
+    UNTESTED. The honest claim is "the naive shortcut fails", NOT "no shortcut
+    exists".
+
+50. THE METHODOLOGICAL LESSON — NOW THE ACTUAL RESULT OF THIS LINE OF WORK
+An accuracy claim must be quoted RELATIVE to the scale of the quantity being
+computed, and an approximation must be shown to return a NON-ZERO answer.
+Reporting absolute error alone allowed an output of exactly zero to be
+published as a 1e-04 accuracy, and allowed shrinking amplitudes to be read as
+improving precision.
+
+This was foreseeable from inside the record. §46's own closing bullets noted
+that "§10 already showed relative error on small observables is misleading" —
+the risk of the absolute/relative distinction was already known, and was
+applied in one direction but not the other. §10's lesson was not carried into
+the metric used to judge §46.
+
+Both pruning scripts now report relative error alongside absolute, and raise an
+explicit DEAD flag when the returned amplitudes are identically zero, so this
+class of error cannot recur silently.
+
+Corrections and self-limiting findings now total eight: the six of §44, minus
+Addendum VI's (withdrawn above), plus three from this addendum — the absolute-
+error artefact itself, the heavy-hex null result, and the metric lesson of §50.
+
+WHAT WOULD BE WORTH TESTING NEXT (not done)
+  * SVD / bond-dimension truncation, the real adversary this line of work has
+    not yet faced. Until that is tested, no hardness claim should treat the
+    approximate regime as closed.
+  * error behaviour on observables rather than raw amplitudes (§46 listed this
+    too; still not done, and now clearly more important than it looked)
+  * a readout-aware pruning rule, since a global cutoff is provably blind to
+    which configurations the caller needs
+  * level-dependent thresholds per the original A_{L+1} = A_L / s^2 idea —
+    still deferred, and now lower priority: the fixed-threshold result shows
+    the failure is structural, not a matter of tuning
+
+End of addendum VII

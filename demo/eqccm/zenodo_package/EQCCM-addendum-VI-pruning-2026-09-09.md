@@ -1,5 +1,33 @@
 # Addendum VI — Amplitude-magnitude pruning, and a seventh correction
 
+> # ⚠️ WITHDRAWN — 11 September 2026
+>
+> **Do not cite any accuracy figure in this document.** Read
+> `EQCCM-addendum-VII-correction-2026-09-11.md` first.
+>
+> The accuracy result below is an **artefact of reporting absolute error
+> only**. The quoted errors are approximately equal to the largest amplitude
+> being computed — about **100% relative error**. The pruned computation
+> returns essentially no signal. Specifically, the headline w=20 figure
+> (1.459×10⁻⁴ on 104 of 1,048,576 configurations) reproduces exactly, but
+> `max|exact|` at that point is 1.4685×10⁻⁴, making the relative error 99.4%.
+>
+> Consequently withdrawn: the "error improves monotonically with width"
+> finding (absolute error was tracking the shrinking amplitude scale, not
+> approximation quality), the "plateau not a cliff" reading (that plateau is
+> the signature of total signal loss), and the seventh correction regarding
+> the hardness argument.
+>
+> Still standing: the framing of the question, and the Stage 1 exactness
+> check at threshold 0.0. The exact results in `banded_scaling.py` involve no
+> pruning and are entirely unaffected.
+>
+> This document is preserved **unedited** so the original claim remains
+> reproducible and the correction independently checkable:
+> ```
+> python addendum_vi_relative_error_audit.py
+> ```
+
 **A follow-up to "We tried to find quantum advantage. Here are the six things we got wrong."**
 
 Hardin AI Solutions · 9 September 2026
