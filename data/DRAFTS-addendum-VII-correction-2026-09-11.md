@@ -148,13 +148,20 @@ and the correction independently checkable.
 
 ---
 
-## 4. Checklist
+## 4. Checklist — ALL COMPLETE 11/12 Sept 2026
 
-- [ ] Push `tbn-protocol` (record + scripts + package)
-- [ ] Push + deploy `hardinai.co.uk` (blog post correction)
-- [ ] Zenodo v3 — new version under the same concept DOI
-- [ ] LinkedIn reply under own comment (draft 1)
-- [ ] DM Sophie (draft 2) — necessary: she was sent the DOI
+- [x] Push `tbn-protocol` — commits b5ee5e4, 367741e, d3a2ecc
+- [x] Push + deploy `hardinai.co.uk` — commit 8d69ee7, GitHub Pages,
+      verified live (correction box + 99.4% + 1.4685e-4 serving; old
+      "still produced an answer accurate" line gone)
+- [x] Zenodo v3 published — version DOI 10.5281/zenodo.22716258,
+      concept DOI 10.5281/zenodo.22352839 now resolves to it.
+      Verified via API: single v3 zip (90,504 bytes), description contains
+      the withdrawal, no longer contains "improves monotonically as width
+      grows". Publication date saved as 2026-09-12 (published after
+      midnight UTC) — cosmetic, metadata still editable.
+- [x] LinkedIn reply posted under own comment (draft 1)
+- [x] DM Sophie sent (draft 2)
 - [x] Dikran — NOT sent, confirmed 11 Sept. No correction needed.
       **Do not reuse the "Addendum VI vindicates your critique" line** if you
       reply to him later. It no longer does — that line was built on the
