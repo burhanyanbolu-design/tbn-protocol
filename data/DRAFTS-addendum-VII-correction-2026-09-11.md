@@ -55,7 +55,7 @@ Hi Sophie,
 
 Following up on your manuscript question, and leading with a correction.
 
-The record is on Zenodo under concept DOI 10.5281/zenodo.22352839. I'm publishing v3 tonight, and you should know why: it withdraws an addendum I published on the 9th, which means the version you'd have landed on from that link contains a claim I've now retracted.
+The record is on Zenodo under concept DOI 10.5281/zenodo.22352839, which now resolves to v3. I've just published that version, and you should know why: it withdraws an addendum I published on the 9th. If you followed the link before tonight, you'd have landed on a claim I've since retracted.
 
 What went wrong. I reported a pruning shortcut reaching ~1e-4 accuracy while keeping 0.01% of configurations. I had measured absolute error only. The amplitudes are themselves around 1e-4, so an output of roughly zero registered as a small error. The figure reproduces exactly — 1.459e-4 at width 20 — but the largest amplitude there is 1.4685e-4. Relative error 99.4%. It was deleting the answer, not approximating it. The "accuracy improves with width" claim went the same way: absolute error was tracking the shrinking amplitude scale.
 
